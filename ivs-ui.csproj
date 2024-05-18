@@ -12,5 +12,11 @@
   <ItemGroup>
     <PackageReference Include="MudBlazor" Version="6.*" />
   </ItemGroup>
+
+  
+  <ItemGroup>
+    <ProjectReference Include="..\ivs-ui.Domain\ivs-ui.Domain.csproj" />
+    <ProjectReference Include="..\ivs-ui.infrastructure\ivs-ui.Infrastructure.csproj" />
+  </ItemGroup>
   
 </Project>

@@ -1,0 +1,86 @@
+﻿@page "/accounts/signup"
+@using ivs_ui.Domain.Models.ViewModels.Accounts
+
+<PageTitle>Iv's - Sign up</PageTitle>
+
+
+<MudContainer>
+    <br />
+
+   <center>
+        <MudPaper Elevation="3" Outlined="false" MaxWidth="500px" Square="false" Class="ma-2 pa-10">
+            <div style="text-align:left">
+
+                <div id="reg-title">Hey there! Tell us about yourself.</div>
+                <br />
+                <div id="reg-sub-title">Already have an account? <MudLink Color="Color.Warning" style="font-weight: bolder; text-decoration: none" Href="/accounts/login">Login</MudLink></div>
+
+               <br /><br />
+
+                <EditForm Model="@model" OnValidSubmit="ActionCreateCompany">
+                    <DataAnnotationsValidator />
+                    
+                    <MudTextField Label="Fullname" HelperText="Enter your fullname" @bind-Value="model.Fullname" For="@(() => model.Fullname)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                    
+                    <MudTextField InputType="InputType.Email" Label="Email" HelperText="Enter your email" @bind-Value="model.Email" For="@(() => model.Email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+
+                    <MudTextField InputType="@PasswordInput" Label="Password" HelperText="Enter your password" @bind-Value="model.Password" For="@(() => model.Password)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
+                    
+                    <MudTextField InputType="@PasswordInput" Label="Comfirm Password" HelperText="Confirm your password" @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
+
+                    <MudSelect T="string" Label="Organisation Type" Variant="Variant.Outlined" @bind-Value="model.Organisation_id">
+
+                       
+                    </MudSelect>
+
+                    <br />
+
+                    <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                        @if (_processing)
+                        {
+                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                            <MudText Class="ms-2">Processing</MudText>
+                        }
+                        else
+                        {
+                            <MudText><b>Register</b></MudText>
+                        }
+                    </MudButton>
+                </EditForm>
+
+            </div>
+        </MudPaper>
+   </center>
+</MudContainer>
+
+@code {
+
+    private bool _processing = false;
+    [SupplyParameterFromForm] public SignUpVM? model { get; set; }
+    protected override void OnInitialized() => model ??= new();
+
+    bool isShow;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    void ButtoShowPasswordClick()
+    {
+        @if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+    private async Task ActionCreateCompany()
+    {
+        StateHasChanged();
+    }
+}

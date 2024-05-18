@@ -41,10 +41,14 @@
     color: #56375C
 }
 
+    #logoTitle > a {
+        color: #56375C
+    }
 
-#titleOne, #titleFour {
-    color: #e18501f7
-}
+
+    #titleOne, #titleFour {
+        color: #e18501f7
+    }
 
 #homeSubTitle {
     font-size: 1.2rem;
@@ -69,4 +73,16 @@
     height: 50px;
     text-transform: none;
     font-weight: bolder;
+}
+
+#reg-title {
+    font-family: "Akaya Telivigala";
+    font-weight: 600;
+    font-size: 1.8em;
+    color: #56375C;
+}
+
+
+#reg-sub-title {
+    font-weight: 500;
 }
