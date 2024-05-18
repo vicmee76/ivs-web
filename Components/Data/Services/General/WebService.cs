@@ -10,7 +10,7 @@ namespace ivs_ui.Components.Data.Services.General
 
         public async Task<RestResponse> Call(string apiPathUrl, string absoluteUrl, Method method, dynamic body, Dictionary<string, string>? headers = null, Dictionary<string, string>? queryParameter = null)
         {
-            var options = new RestClientOptions(_config.GetValue<string>("ExinoApi:BaseUri") ?? "") { MaxTimeout = -1, };
+            var options = new RestClientOptions(_config.GetValue<string>("IvsApi:BaseUri") ?? "") { MaxTimeout = -1, };
             var client = new RestClient(options);
             var request = new RestRequest(string.Concat(apiPathUrl, absoluteUrl), method);
 

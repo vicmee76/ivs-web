@@ -1,4 +1,6 @@
 ﻿@page "/accounts/signup"
+@using ivs_ui.Domain.Interfaces.Organisations
+@using ivs_ui.Domain.Models.Dtos.Organisations
 @using ivs_ui.Domain.Models.ViewModels.Accounts
 
 <PageTitle>Iv's - Sign up</PageTitle>
@@ -26,10 +28,16 @@
 
                     <MudTextField InputType="@PasswordInput" Label="Password" HelperText="Enter your password" @bind-Value="model.Password" For="@(() => model.Password)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
                     
-                    <MudTextField InputType="@PasswordInput" Label="Comfirm Password" HelperText="Confirm your password" @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
+                    <MudTextField InputType="@PasswordInput" Label="Confirm Password" HelperText="Confirm your password" @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
 
                     <MudSelect T="string" Label="Organisation Type" Variant="Variant.Outlined" @bind-Value="model.Organisation_id">
-
+                        @if (_orgs != null)
+                        {
+                            foreach (var com in _orgs)
+                            {
+                                <MudSelectItem Value="@(com._id.ToString())"> @(com.name)</MudSelectItem>
+                            }
+                        }
                        
                     </MudSelect>
 
@@ -55,15 +63,24 @@
 
 @code {
 
-    private bool _processing = false;
+    [Inject] IOrganisationService? _organisationService { get; set; }
     [SupplyParameterFromForm] public SignUpVM? model { get; set; }
-    protected override void OnInitialized() => model ??= new();
 
     bool isShow;
+    private bool _processing = false;
+    IEnumerable<GetOrganisationsDto> _orgs = new List<GetOrganisationsDto>();
     InputType PasswordInput = InputType.Password;
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
-   
+
+    protected async override void OnInitialized()
+    {
+        model = new SignUpVM();
+        var res = await _organisationService.GetOrganisations();
+        _orgs = res.result.data ?? new List<GetOrganisationsDto>();
+    }
+
+
     private async Task ActionCreateCompany()                          
     {
         StateHasChanged();

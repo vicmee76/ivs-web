@@ -1,5 +1,9 @@
 using ivs_ui.Components;
 using ivs_ui.Components.Data.Helpers;
+using ivs_ui.Components.Data.Services.General;
+using ivs_ui.Components.Data.Services.Organisations;
+using ivs_ui.Domain.Interfaces.General;
+using ivs_ui.Domain.Interfaces.Organisations;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +13,9 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddMudServices();
+
+builder.Services.AddScoped<IWebService, WebService>();
+builder.Services.AddTransient<IOrganisationService, OrganisationService>();
 
 var app = builder.Build();
 
