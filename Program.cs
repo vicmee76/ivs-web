@@ -1,4 +1,5 @@
 using ivs_ui.Components;
+using ivs_ui.Components.Data.Helpers;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
 }
 
+app.UseMiddleware<GlobalExceptionHandler>();
 app.UseStaticFiles();
 app.UseAntiforgery();
 

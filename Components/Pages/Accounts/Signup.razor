@@ -63,9 +63,16 @@
     InputType PasswordInput = InputType.Password;
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
+   
+    private async Task ActionCreateCompany()                          
+    {
+        StateHasChanged();
+    }
+
+
     void ButtoShowPasswordClick()
     {
-        @if (isShow)
+        if (isShow)
         {
             isShow = false;
             PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
@@ -77,10 +84,5 @@
             PasswordInputIcon = Icons.Material.Filled.Visibility;
             PasswordInput = InputType.Text;
         }
-    }
-
-    private async Task ActionCreateCompany()                          
-    {
-        StateHasChanged();
     }
 }
