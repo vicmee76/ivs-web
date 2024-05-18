@@ -1,0 +1,30 @@
+﻿/* Media query for screens smaller than 768px */
+@media screen and (max-width: 768px) {
+    #HomeTitle {
+        font-size: 3.2rem;
+        line-height: 1.4;
+        font-weight: 600;
+        /*color: #011b33;*/
+        text-align: center;
+        align-content: center;
+        font-family: "Akaya Telivigala", system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+        color: #56375C
+    }
+
+
+    #homeSubTitle {
+        font-size: 0.9rem;
+        line-height: 30px;
+        font-family: Roboto;
+        margin-top: 25px;
+        font-weight: 500;
+    }
+
+    #homeButtons{
+        text-align: center;
+    }
+
+    #btnBrightColor{
+        margin-bottom:10px;
+    }
+}

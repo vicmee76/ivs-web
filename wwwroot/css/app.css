@@ -1,0 +1,72 @@
+/*
+	This CSS file matches the color scheme from MudBlazor to Bootstrap when utilized for authentication.
+	The file remains available at all times for demonstration purposes,
+	but it is exclusively employed in the 'App.razor' component when authentication is enabled.
+*/
+
+.btn-primary {
+    text-transform: uppercase;
+    --bs-btn-bg: var(--mud-palette-primary) !important;
+    --bs-btn-hover-bg: var(--mud-palette-primary-darken) !important;
+}
+
+.nav-pills {
+    --bs-nav-pills-link-active-bg: var(--mud-palette-primary) !important;
+}
+
+.nav {
+    --bs-nav-link-color: var(--mud-palette-primary) !important;
+    --bs-nav-link-hover-color: var(--mud-palette-primary-darken) !important;
+}
+
+#HomeTitle {
+    font-size: 5.7rem;
+    line-height: 1.4;
+    font-weight: 600;
+    /*color: #011b33;*/
+    text-align: left;
+    height: 400px;
+    align-content: center;
+    font-family: "Akaya Telivigala", system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+    color: #56375C
+}
+
+
+#logoTitle {
+    font-family: "Akaya Telivigala", system-ui;
+    font-weight: 900;
+    font-style: normal;
+    font-size: 2.7rem;
+    letter-spacing: 3px;
+    color: #56375C
+}
+
+
+#titleOne, #titleFour {
+    color: #e18501f7
+}
+
+#homeSubTitle {
+    font-size: 1.2rem;
+    line-height: 30px;
+    font-family: Roboto;
+    margin-top: 25px;
+    font-weight: 600;
+    color: #56375C
+}
+
+
+#btnDarkColor {
+    background-color: #56375C;
+    color: white;
+    height: 50px;
+    text-transform: none;
+    font-weight: bolder;
+}
+
+#btnBrightColor {
+    color: #e18501f7;
+    height: 50px;
+    text-transform: none;
+    font-weight: bolder;
+}
