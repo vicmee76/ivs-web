@@ -18,10 +18,5 @@
   <ItemGroup>
     <ProjectReference Include="..\ivs-ui.Domain\ivs-ui.Domain.csproj" />
   </ItemGroup>
-
-  
-  <ItemGroup>
-    <Folder Include="Components\Data\Services\Accounts\" />
-  </ItemGroup>
   
 </Project>

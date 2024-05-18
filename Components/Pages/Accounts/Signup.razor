@@ -1,4 +1,6 @@
 ﻿@page "/accounts/signup"
+@using ivs_ui.Domain.Constants
+@using ivs_ui.Domain.Interfaces.Accounts
 @using ivs_ui.Domain.Interfaces.Organisations
 @using ivs_ui.Domain.Models.Dtos.Organisations
 @using ivs_ui.Domain.Models.ViewModels.Accounts
@@ -19,18 +21,18 @@
 
                <br /><br />
 
-                <EditForm Model="@model" OnValidSubmit="ActionCreateCompany">
+                <EditForm Model="@model" OnValidSubmit="ActionRegister">
                     <DataAnnotationsValidator />
                     
-                    <MudTextField Label="Fullname" HelperText="Enter your fullname" @bind-Value="model.Fullname" For="@(() => model.Fullname)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                    <MudTextField Label="Fullname"  HelperText="Enter your fullname" @bind-Value="model.fullname" For="@(() => model.fullname)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
                     
-                    <MudTextField InputType="InputType.Email" Label="Email" HelperText="Enter your email" @bind-Value="model.Email" For="@(() => model.Email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                    <MudTextField InputType="InputType.Email"  Label="Email" HelperText="Enter your email" @bind-Value="model.email" For="@(() => model.email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
 
-                    <MudTextField InputType="@PasswordInput" Label="Password" HelperText="Enter your password" @bind-Value="model.Password" For="@(() => model.Password)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
+                    <MudTextField InputType="@PasswordInput" Label="Password" HelperText="Enter your password" @bind-Value="model.password" For="@(() => model.password)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
                     
-                    <MudTextField InputType="@PasswordInput" Label="Confirm Password" HelperText="Confirm your password" @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
+                    <MudTextField InputType="@PasswordInput"  Label="Confirm Password" HelperText="Confirm your password" @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
 
-                    <MudSelect T="string" Label="Organisation Type" Variant="Variant.Outlined" @bind-Value="model.Organisation_id">
+                    <MudSelect T="string" Label="Organisation Type" Variant="Variant.Outlined" @bind-Value="model.organisation_id">
                         @if (_orgs != null)
                         {
                             foreach (var com in _orgs)
@@ -38,8 +40,10 @@
                                 <MudSelectItem Value="@(com._id.ToString())"> @(com.name)</MudSelectItem>
                             }
                         }
-                       
                     </MudSelect>
+
+                    <br />
+                    <MudCheckBox T="bool" @bind-Value="model.hasAgreed" Required="true" RequiredError="You must agree" Label="Agree to terms and conditions!" />
 
                     <br />
 
@@ -64,6 +68,8 @@
 @code {
 
     [Inject] IOrganisationService? _organisationService { get; set; }
+    [Inject] IUserService? _userService { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
     [SupplyParameterFromForm] public SignUpVM? model { get; set; }
 
     bool isShow;
@@ -81,8 +87,19 @@
     }
 
 
-    private async Task ActionCreateCompany()                          
+    private async Task ActionRegister()                          
     {
+        _processing = true;
+        var res = await _userService.CreateUser(model);
+        if (res.result != null && res.result.code == ResponseCodes.ResponseCode_Created)
+        {
+
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+        }
+        _processing = false;
         StateHasChanged();
     }
 
