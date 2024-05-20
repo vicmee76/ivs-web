@@ -12,7 +12,7 @@
     <br />
 
    <center>
-        <MudPaper Elevation="3" Outlined="false" MaxWidth="500px" Square="false" Class="ma-2 pa-10">
+        <MudPaper Elevation="0" Outlined="false" MaxWidth="650px" Square="false" Class="ma-2 pa-10">
             <div style="text-align:left">
 
                 <div id="reg-title">Hey there! Tell us about yourself.</div>
@@ -70,6 +70,7 @@
     [Inject] IOrganisationService? _organisationService { get; set; }
     [Inject] IUserService? _userService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
     [SupplyParameterFromForm] public SignUpVM? model { get; set; }
 
     bool isShow;
@@ -91,9 +92,10 @@
     {
         _processing = true;
         var res = await _userService.CreateUser(model);
-        if (res.result != null && res.result.code == ResponseCodes.ResponseCode_Created)
+        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Created || res.result.code == ResponseCodes.ResponseCode_Successful))
         {
-
+            _snackbar.Add(res.result.message, Severity.Success);
+            _navigate.NavigateTo($"/accounts/activate-account/{res.result.data}");
         }
         else
         {

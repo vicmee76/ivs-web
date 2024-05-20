@@ -1,0 +1,48 @@
+﻿@page "/accounts/activate-account"
+@page "/accounts/activate-account/{id}"
+@using ivs_ui.Domain.Models.ViewModels.Accounts
+
+<PageTitle>Iv's - Activate Account</PageTitle>
+
+
+<MudContainer>
+
+    <center>
+        <MudPaper Elevation="0" Outlined="false" MaxWidth="650px" Square="false" Class="ma-2 pa-10">
+
+            <div style="text-align:left">
+
+                <div id="reg-title">Activate your account</div>
+                <br />
+                <div id="reg-sub-title">We sent an activation code to your email address. Please enter code to verify your account.</div>
+
+                <br /><br />
+
+                <EditForm Model="@model" OnValidSubmit="ActionActivateAccount">
+
+                    </EditForm>
+
+            </div>
+        </MudPaper>
+    </center>
+
+</MudContainer>
+
+@code {
+
+    [Parameter] public string? Id { get; set; }
+    [SupplyParameterFromForm] public ActivateAccountVM? model { get; set; }
+
+
+    protected async override void OnInitialized()
+    {
+        model = new ActivateAccountVM();
+    }
+
+
+
+    private async Task ActionActivateAccount()
+    {
+        
+    }
+}

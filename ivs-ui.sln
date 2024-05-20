@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ivs-ui", "ivs-ui.csproj", "{B8703D91-05F5-4D55-8D6C-60E8A6D0FEF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ivs-ui.Domain", "..\ivs-ui.Domain\ivs-ui.Domain.csproj", "{0BB869FC-D15B-463E-AD20-8B3AD2F5AB04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ivs-ui.Domain", "..\ivs-ui.Domain\ivs-ui.Domain.csproj", "{0BB869FC-D15B-463E-AD20-8B3AD2F5AB04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
