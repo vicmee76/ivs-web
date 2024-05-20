@@ -70,8 +70,8 @@
 
     private bool _processing = false;
     private bool _resendProcessing = false;
-    [Inject] ISnackbar? _snackbar { get; set; }
-    [Inject] IUserService? _userService { get; set; }
+    [Inject] ISnackbar _snackbar { get; set; }
+    [Inject] IUserService _userService { get; set; }
     [Parameter] public string? Id { get; set; }
     [SupplyParameterFromForm] public ActivateAccountVM? model { get; set; }
 
@@ -94,7 +94,7 @@
         if(string.IsNullOrEmpty(Id))
             _snackbar.Add("Invalid ID passed", Severity.Error);
 
-        var res = await _userService.ResendVerificationCode(Id);
+        var res = await _userService.ResendVerificationCode(Id) ?? new();
         if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Successful))
         {
             _snackbar.Add(res.result.message, Severity.Success);
