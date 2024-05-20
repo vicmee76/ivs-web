@@ -1,4 +1,5 @@
-﻿using ivs_ui.Domain.Constants;
+﻿using ivs_ui.Components.Pages.Accounts;
+using ivs_ui.Domain.Constants;
 using ivs_ui.Domain.Interfaces.Accounts;
 using ivs_ui.Domain.Interfaces.General;
 using ivs_ui.Domain.Models.Dtos.Organisations;
@@ -20,9 +21,17 @@ namespace ivs_ui.Components.Data.Services.Accounts
             var content = res.result;
             if (content?.code != ResponseCodes.ResponseCode_Created)
                 return res;
+            return res;
+        }
 
-            var myJsonResponse = content?.data.ToString().Trim().TrimStart('{').TrimEnd('}');
-            res.result.data = JsonConvert.DeserializeObject<List<string>>(myJsonResponse);
+
+        public async Task<ResponseObject> ResendVerificationCode(string userId)
+        {
+            var response = await _webService.Call(apiUrl, $"/resend-verification-code/{userId}", Method.Put, null);
+            var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+            var content = res.result;
+            if (content?.code != ResponseCodes.ResponseCode_Successful)
+                return res;
             return res;
         }
     }
