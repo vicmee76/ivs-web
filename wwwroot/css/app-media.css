@@ -27,4 +27,8 @@
     #btnBrightColor{
         margin-bottom:10px;
     }
+
+    #reg-title {
+        font-size: 1.5em;
+    }
 }

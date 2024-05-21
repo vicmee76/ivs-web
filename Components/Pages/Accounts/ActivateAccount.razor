@@ -1,0 +1,142 @@
+﻿@page "/accounts/activate-account"
+@page "/accounts/activate-account/{id}"
+@using Blazored.LocalStorage
+@using Microsoft.AspNetCore.Components.Authorization
+@using Newtonsoft.Json
+@using ivs_ui.Components.Data.Services.General
+@using ivs_ui.Domain.Constants
+@using ivs_ui.Domain.Interfaces.Accounts
+@using ivs_ui.Domain.Models.Dtos.Accounts
+@using ivs_ui.Domain.Models.ViewModels.Accounts
+
+<PageTitle>Iv's - Activate Account</PageTitle>
+
+
+<MudContainer>
+
+    <center>
+        <MudPaper Elevation="0" Outlined="false" MaxWidth="650px" Square="false" Class="ma-2 pa-10">
+
+            <div style="text-align:left">
+
+                <div id="reg-title">Activate your account</div>
+                <br />
+                <div id="reg-sub-title">We sent an activation code to your email address. Please enter code to verify your account.</div>
+
+                <br /><br />
+
+                <EditForm Model="@model" OnValidSubmit="ActionActivateAccount">
+                    <DataAnnotationsValidator />
+
+                    <MudTextField Label="Activation Code" HelperText="Enter code" @bind-Value="model.verificationToken" For="@(() => model.verificationToken)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+
+
+                    <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                        @if (_processing)
+                        {
+                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                            <MudText Class="ms-2">Processing</MudText>
+                        }
+                        else
+                        {
+                            <MudText><b>Activate Account</b></MudText>
+                        }
+                    </MudButton>
+
+                    <br /><br />
+
+                    <div id="sub-title-2">Didn't get an activation code, click 
+                        
+                        <MudButton Variant="Variant.Text" Size="Size.Small" style="font-weight: bolder; text-decoration: none" Color="Color.Warning" OnClick="ActionResendVerificationCode">
+
+                            @if (_resendProcessing)
+                            {
+                                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                <MudText Class="ms-2">Processing</MudText>
+                            }
+                            else
+                            {
+                                <MudText><b>Here</b></MudText>
+                            }
+
+                    </MudButton>
+                        to get a new code
+                    </div>
+
+                </EditForm>
+
+            </div>
+        </MudPaper>
+    </center>
+
+</MudContainer>
+
+@code {
+
+  
+    [Inject] ISnackbar _snackbar { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] IAccountService _accountrService { get; set; }
+    [Inject] ILocalStorageService _localStorageService { get; set; }
+    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+    [Parameter] public string? Id { get; set; }
+    [SupplyParameterFromForm] public ActivateAccountVM? model { get; set; }
+
+    private bool _processing = false;
+    private bool _resendProcessing = false;
+
+    protected async override void OnInitialized()
+    {
+        model = new ActivateAccountVM();
+    }
+
+
+
+    private async Task ActionActivateAccount()
+    {
+        _processing = true;
+        if (string.IsNullOrEmpty(Id))
+            _snackbar.Add("Invalid ID passed", Severity.Error);
+
+        var res = await _accountrService.VerifyAccount(Id, model) ?? new();
+        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Successful))
+        {
+            await _localStorageService.SetItemAsync("AccessToken", res.result.token);
+            await _localStorageService.SetItemAsync(Id, res.result.data[0]);
+            await _authStateProvider.GetAuthenticationStateAsync();
+            _navigate.NavigateTo($"/");
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+        }
+        _resendProcessing = false;
+        StateHasChanged();
+        
+
+        _processing = false;
+    }
+
+    private async Task ActionResendVerificationCode()
+    {
+        _resendProcessing = true;
+        if(string.IsNullOrEmpty(Id))
+            _snackbar.Add("Invalid ID passed", Severity.Error);
+
+        var res = await _accountrService.ResendVerificationCode(Id) ?? new();
+        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Successful))
+        {
+            _snackbar.Add(res.result.message, Severity.Success);
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+        }
+        _resendProcessing = false;
+        StateHasChanged();
+    }
+
+
+
+
+}
