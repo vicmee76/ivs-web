@@ -1,7 +1,12 @@
 ﻿@page "/accounts/activate-account"
 @page "/accounts/activate-account/{id}"
+@using Blazored.LocalStorage
+@using Microsoft.AspNetCore.Components.Authorization
+@using Newtonsoft.Json
+@using ivs_ui.Components.Data.Services.General
 @using ivs_ui.Domain.Constants
 @using ivs_ui.Domain.Interfaces.Accounts
+@using ivs_ui.Domain.Models.Dtos.Accounts
 @using ivs_ui.Domain.Models.ViewModels.Accounts
 
 <PageTitle>Iv's - Activate Account</PageTitle>
@@ -68,13 +73,17 @@
 
 @code {
 
-    private bool _processing = false;
-    private bool _resendProcessing = false;
+  
     [Inject] ISnackbar _snackbar { get; set; }
-    [Inject] IUserService _userService { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] IAccountService _accountrService { get; set; }
+    [Inject] ILocalStorageService _localStorageService { get; set; }
+    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
     [Parameter] public string? Id { get; set; }
     [SupplyParameterFromForm] public ActivateAccountVM? model { get; set; }
 
+    private bool _processing = false;
+    private bool _resendProcessing = false;
 
     protected async override void OnInitialized()
     {
@@ -85,7 +94,27 @@
 
     private async Task ActionActivateAccount()
     {
+        _processing = true;
+        if (string.IsNullOrEmpty(Id))
+            _snackbar.Add("Invalid ID passed", Severity.Error);
 
+        var res = await _accountrService.VerifyAccount(Id, model) ?? new();
+        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Successful))
+        {
+            await _localStorageService.SetItemAsync("AccessToken", res.result.token);
+            await _localStorageService.SetItemAsync(Id, res.result.data[0]);
+            await _authStateProvider.GetAuthenticationStateAsync();
+            _navigate.NavigateTo($"/");
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+        }
+        _resendProcessing = false;
+        StateHasChanged();
+        
+
+        _processing = false;
     }
 
     private async Task ActionResendVerificationCode()
@@ -94,7 +123,7 @@
         if(string.IsNullOrEmpty(Id))
             _snackbar.Add("Invalid ID passed", Severity.Error);
 
-        var res = await _userService.ResendVerificationCode(Id) ?? new();
+        var res = await _accountrService.ResendVerificationCode(Id) ?? new();
         if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Successful))
         {
             _snackbar.Add(res.result.message, Severity.Success);

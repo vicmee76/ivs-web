@@ -1,4 +1,4 @@
-﻿using Blazored.LocalStorage;
+﻿using Blazored.SessionStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -8,19 +8,31 @@ namespace ivs_ui.Components.Data.Services.General
 {
     public class AuthStateProvider : AuthenticationStateProvider
     {
-        private readonly ILocalStorageService _localStorage;
+        private readonly ISessionStorageService _sessionStorageService;
         private readonly HttpClient _http;
+        private ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
 
-        public AuthStateProvider(ILocalStorageService localStorage, HttpClient http)
+        public AuthStateProvider(HttpClient http, ISessionStorageService sessionStorageService)
         {
-            _localStorage = localStorage;
+            _sessionStorageService = sessionStorageService ?? throw new ArgumentNullException(nameof(sessionStorageService));
             _http = http;
         }
-
+       
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            string token = await _localStorage.GetItemAsStringAsync("token") ?? string.Empty;
+            string token = string.Empty;
+            await _sessionStorageService.SetItemAsync("AccessToken", string.Empty)!;
+            var hasKey = await _sessionStorageService.ContainKeyAsync("AccessToken")!;
+            if (hasKey)
+            {
+                token = await _sessionStorageService.GetItemAsync<string>("AccessToken");
+
+            }
+            else
+            {
+                return new AuthenticationState(_anonymous);
+            }
 
             var identity = new ClaimsIdentity();
             _http.DefaultRequestHeaders.Authorization = null;

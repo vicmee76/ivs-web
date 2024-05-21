@@ -39,9 +39,10 @@
         </MudMenu>
 
         <MudSpacer />
-            
-        <MudButton Variant="Variant.Text" Href="/" Style="font-weight:700; color:#D2654C" Class="ma-5">Login</MudButton>
-        <MudButton Variant="Variant.Text" Href="/accounts/signup" Style="font-weight:700;" Class="ma-3">Sign up</MudButton>
+            <AuthorizeView>
+                <MudButton Variant="Variant.Text" Href="/" Style="font-weight:700; color:#D2654C" Class="ma-5">Login</MudButton>
+                <MudButton Variant="Variant.Text" Href="/accounts/signup" Style="font-weight:700;" Class="ma-3">Sign up</MudButton>
+            </AuthorizeView>
     </div>
 
     <div class="d-flex d-md-none relative mud-width-full mud-height-full">

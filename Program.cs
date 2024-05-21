@@ -1,11 +1,12 @@
+using Blazored.SessionStorage;
 using ivs_ui.Components;
-using ivs_ui.Components.Data.Helpers;
 using ivs_ui.Components.Data.Services.Accounts;
 using ivs_ui.Components.Data.Services.General;
 using ivs_ui.Components.Data.Services.Organisations;
 using ivs_ui.Domain.Interfaces.Accounts;
 using ivs_ui.Domain.Interfaces.General;
 using ivs_ui.Domain.Interfaces.Organisations;
+using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using MudBlazor.Services;
 
@@ -27,9 +28,16 @@ builder.Services.AddMudServices(config =>
     config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
 });
 
+
+
 builder.Services.AddScoped<IWebService, WebService>();
 builder.Services.AddTransient<IOrganisationService, OrganisationService>();
-builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IAccountService, AccountService>();
+builder.Services.AddHttpClient<AuthenticationStateProvider, AuthStateProvider>();
+
+builder.Services.AddAuthorizationCore();
+builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddBlazoredSessionStorage();
 
 var app = builder.Build();
 
@@ -39,9 +47,12 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
 }
 
-app.UseMiddleware<GlobalExceptionHandler>();
+//app.UseMiddleware<GlobalExceptionHandler>();
 app.UseStaticFiles();
 app.UseAntiforgery();
+app.UseAuthorization();
+
+
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();

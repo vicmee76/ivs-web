@@ -14,13 +14,13 @@ namespace ivs_ui.Components.Data.Services.General
             var client = new RestClient(options);
             var request = new RestRequest(string.Concat(apiPathUrl, absoluteUrl), method);
 
+            request.AddHeader("Content-Type", "application/json");
+
             if (headers != null)
                 foreach (var header in headers) { request.AddHeader(header.Key, header.Value); }
 
             if (queryParameter != null)
                 foreach (var query in queryParameter) { request.AddQueryParameter(query.Key, query.Value); }
-
-            request.AddHeader("Content-Type", "application/json");
 
             if (body != null)
             {
