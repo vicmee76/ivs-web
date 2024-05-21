@@ -1,0 +1,124 @@
+﻿@page "/accounts/signup"
+@using ivs_ui.Domain.Constants
+@using ivs_ui.Domain.Interfaces.Accounts
+@using ivs_ui.Domain.Interfaces.Organisations
+@using ivs_ui.Domain.Models.Dtos.Organisations
+@using ivs_ui.Domain.Models.ViewModels.Accounts
+
+<PageTitle>Iv's - Sign up</PageTitle>
+
+
+<MudContainer>
+    <br />
+
+   <center>
+        <MudPaper Elevation="0" Outlined="false" MaxWidth="650px" Square="false" Class="ma-2 pa-10">
+            <div style="text-align:left">
+
+                <div id="reg-title">Hey there! Tell us about yourself.</div>
+                <br />
+                <div id="reg-sub-title">Already have an account? <MudLink Color="Color.Warning" style="font-weight: bolder; text-decoration: none" Href="/accounts/login">Login</MudLink></div>
+
+               <br /><br />
+
+                <EditForm Model="@model" OnValidSubmit="ActionRegister">
+                    <DataAnnotationsValidator />
+                    
+                    <MudTextField Label="Fullname"  HelperText="Enter your fullname" @bind-Value="model.fullname" For="@(() => model.fullname)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                    
+                    <MudTextField InputType="InputType.Email"  Label="Email" HelperText="Enter your email" @bind-Value="model.email" For="@(() => model.email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+
+                    <MudTextField InputType="@PasswordInput" Label="Password" HelperText="Enter your password" @bind-Value="model.password" For="@(() => model.password)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
+                    
+                    <MudTextField InputType="@PasswordInput"  Label="Confirm Password" HelperText="Confirm your password" @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
+
+                    <MudSelect T="string" Label="Organisation Type" Variant="Variant.Outlined" @bind-Value="model.organisation_id">
+                        @if (_orgs != null)
+                        {
+                            foreach (var com in _orgs)
+                            {
+                                <MudSelectItem Value="@(com._id.ToString())"> @(com.name)</MudSelectItem>
+                            }
+                        }
+                    </MudSelect>
+
+                    <br />
+                    <MudCheckBox T="bool" @bind-Value="model.hasAgreed" Required="true" RequiredError="You must agree" Label="Agree to terms and conditions!" />
+
+                    <br />
+
+                    <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                        @if (_processing)
+                        {
+                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                            <MudText Class="ms-2">Processing</MudText>
+                        }
+                        else
+                        {
+                            <MudText><b>Register</b></MudText>
+                        }
+                    </MudButton>
+                </EditForm>
+
+            </div>
+        </MudPaper>
+   </center>
+</MudContainer>
+
+@code {
+
+    [Inject] IOrganisationService? _organisationService { get; set; }
+    [Inject] IAccountService? _accountService { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+    [SupplyParameterFromForm] public SignUpVM? model { get; set; }
+
+    bool isShow;
+    private bool _processing = false;
+    IEnumerable<GetOrganisationsDto> _orgs = new List<GetOrganisationsDto>();
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+
+    protected async override void OnInitialized()
+    {
+        model = new SignUpVM();
+        var res = await _organisationService.GetOrganisations();
+        _orgs = res.result.data ?? new List<GetOrganisationsDto>();
+    }
+
+
+    private async Task ActionRegister()                          
+    {
+        _processing = true;
+        var res = await _accountService.CreateUser(model);
+        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Created || res.result.code == ResponseCodes.ResponseCode_Successful))
+        {
+            _snackbar.Add(res.result.message, Severity.Success);
+            _navigate.NavigateTo($"/accounts/activate-account/{res.result.data}");
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+        }
+        _processing = false;
+        StateHasChanged();
+    }
+
+
+    void ButtoShowPasswordClick()
+    {
+        if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+}
