@@ -1,41 +1,116 @@
 ﻿@page "/accounts/login"
 
 
-<MudContainer>
+<style>
 
-    <center>
-        <MudPaper Elevation="0" Outlined="false" MaxWidth="550px" Square="false" Class="ma-2 pa-10">
-            <div style="text-align:left">
+    * {
+        box-sizing: border-box;
+    }
 
-                <div id="Login-title">Welcome Back!</div>
+    /* Create two unequal columns that floats next to each other */
+    .column {
+        float: left;
+        padding: 10px;
+        height: 500px; /* Should be removed. Only for demonstration */
+        align-content:center;
+    }
+
+    .left {
+        width: 60%;
+    }
+
+    .right {
+        width: 40%;
+        padding:30px;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+
+    body, html {
+        height: 100%;
+        margin: 0;
+    }
+
+    .login-container {
+        width: 55% ;
+        height: auto; /* You can adjust this as needed */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 20px;
+        background-color: #f9f9f9;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+
+    
+</style>
+
+<MudContainer >
+
+
+    <div class="login-container">
+       
+
+
+            <div class="row">
+            <div class="column left" style="background-image:url('/wwwroot/images/logos/ivss.png'); background-color:#f3dff6;  height: 500px;">
+
+                <div id="login-middle-title">Glad to see you! </div>
+
                 <br />
-                <div id="reg-sub-title">Already have an account? <MudLink Color="Color.Warning" style="font-weight: bolder; text-decoration: none" Href="/accounts/login">Login</MudLink></div>
 
-                <br />
+                <div id="login-sub-title">Unlock Your World - Sign in to access your account and all event features</div>
 
-                <EditForm Model="@model" OnValidSubmit="ActionLogin">
-                    <DataAnnotationsValidator />
+                </div>
 
-                    <MudTextField InputType="InputType.Email" Label="Email" HelperText="Enter your email" @bind-Value="model.email" For="@(() => model.email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
 
-                    <MudTextField InputType="@PasswordInput" Label="Password" HelperText="Enter your password" @bind-Value="model.password" For="@(() => model.password)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
+                <div class="column right" style="">
 
-                    <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
-                        @if (_processing)
-                        {
-                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                            <MudText Class="ms-2">Processing</MudText>
-                        }
-                        else
-                        {
-                            <MudText><b>Login</b></MudText>
-                        }
-                    </MudButton>
-                </EditForm>
+                    <div style="text-align:left">
 
-            </div>
-        </MudPaper>
-    </center>
+                        <div id="login-title">Hello! </div>
+                        <br />
+                        <div id="login-sub-title">Login to continue to your</div>
+
+                        <br /><br />
+
+                        <EditForm Model="@model" OnValidSubmit="ActionLogin">
+                            <DataAnnotationsValidator />
+
+                            <MudTextField InputType="InputType.Email" Label="Email" HelperText="Enter your email" @bind-Value="model.Email" For="@(() => model.Email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+
+                            <MudTextField InputType="@PasswordInput" Label="Password" HelperText="Enter your password" @bind-Value="model.Password" For="@(() => model.Password)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
+
+                        <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#56375C" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                                @if (_processing)
+                                {
+                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                    <MudText Class="ms-2">Processing</MudText>
+                                }
+                                else
+                                {
+                                    <MudText><b>Login</b></MudText>
+                                }
+                            </MudButton>
+                        </EditForm>
+
+                    </div>
+                </div>
+            </div> 
+
+
+       
+    </div>
+    
+    
 </MudContainer>
 
 @code{
