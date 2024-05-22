@@ -4,7 +4,7 @@
 <MudContainer>
 
     <center>
-        <MudPaper Elevation="0" Outlined="false" MaxWidth="650px" Square="false" Class="ma-2 pa-10">
+        <MudPaper Elevation="0" Outlined="false" MaxWidth="550px" Square="false" Class="ma-2 pa-10">
             <div style="text-align:left">
 
                 <div id="Login-title">Welcome Back!</div>
@@ -19,10 +19,6 @@
                     <MudTextField InputType="InputType.Email" Label="Email" HelperText="Enter your email" @bind-Value="model.email" For="@(() => model.email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
 
                     <MudTextField InputType="@PasswordInput" Label="Password" HelperText="Enter your password" @bind-Value="model.password" For="@(() => model.password)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
-
-                    <br />
-                    <MudCheckBox T="bool" @bind-Value="model.hasAgreed" Required="true" RequiredError="You must agree" Label="Agree to terms and conditions!" />
-
 
                     <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
                         @if (_processing)
@@ -44,8 +40,39 @@
 
 @code{
 
+    [Inject] IAccountService? _accountService { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+    [SupplyParameterFromForm] public LoginVM? model { get; set; }
+
+     bool isShow;
+    private bool _processing = false;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    protected async override void OnInitialized()
+    {
+        model = new LoginVM();
+    }
 
     private async Task ActionLogin(){
 
+    }
+
+
+    void ButtoShowPasswordClick()
+    {
+        if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
     }
 }
