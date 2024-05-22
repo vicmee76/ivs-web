@@ -33,16 +33,23 @@
             <MudButton Color="Color.Inherit" Href="/" Class="ma-5" Style="font-weight:bold;">Home</MudButton>
             <MudButton Color="Color.Inherit" Href="/features" Class="ma-5" Style="font-weight:bold;">All Events</MudButton>
             <MudMenu Color="Color.Inherit" Class="ma-5" Label="Us" Style="font-weight:bold;" EndIcon="@Icons.Material.Filled.ArrowDropDown" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
-            <MudMenuItem Href="/action">Action</MudMenuItem>
-            <MudMenuItem Href="/another-action">Another action</MudMenuItem>
-            <MudMenuItem Href="/something-else-here">Something else here</MudMenuItem>
+            <MudMenuItem Href="/action">About us</MudMenuItem>
+            <MudMenuItem Href="/another-action">Contact us</MudMenuItem>
+            <MudMenuItem Href="/something-else-here">FAQ</MudMenuItem>
         </MudMenu>
 
         <MudSpacer />
             <AuthorizeView>
-                <MudButton Variant="Variant.Text" Href="/" Style="font-weight:700; color:#D2654C" Class="ma-5">Login</MudButton>
-                <MudButton Variant="Variant.Text" Href="/accounts/signup" Style="font-weight:700;" Class="ma-3">Sign up</MudButton>
+                <NotAuthorized>
+                    <MudButton Variant="Variant.Text" Href="/accounts/login" Style="font-weight:700; color:#D2654C" Class="ma-5">Login</MudButton>
+                    <MudButton Variant="Variant.Text" Href="/accounts/signup" Style="font-weight:700;" Class="ma-3">Sign up</MudButton>
+                </NotAuthorized>
+                <Authorized>
+                    <MudButton Variant="Variant.Text" Href="/accounts/logout" Style="font-weight:700; color:#D2654C" Class="ma-3">Log out</MudButton>
+                </Authorized>
             </AuthorizeView>
+
+            
     </div>
 
     <div class="d-flex d-md-none relative mud-width-full mud-height-full">
@@ -62,9 +69,19 @@
                         <MudNavMenu>
                             <MudNavLink Href="/">Home</MudNavLink>
                             <MudNavLink Href="/">All Events</MudNavLink>
-                            <MudNavLink Href="/pricing">Us</MudNavLink>
-                            <MudNavLink Href="/pricing">Login</MudNavLink>
-                            <MudNavLink Href="/pricing">Sing up</MudNavLink>
+                            <MudNavLink Href="/">About Us</MudNavLink>
+                            <MudNavLink Href="/">Contact Us</MudNavLink>
+                            <MudNavLink Href="/">FAQ</MudNavLink>
+                            
+                                <AuthorizeView>
+                                    <NotAuthorized>
+                                        <MudNavLink Href="/accounts/login">Login</MudNavLink>
+                                        <MudNavLink Href="/accounts/signup">Sing up</MudNavLink>
+                                    </NotAuthorized>
+                                    <Authorized>
+                                        <MudNavLink Href="/accounts/logout">Log Out</MudNavLink>
+                                    </Authorized>
+                                </AuthorizeView>
                         </MudNavMenu>
                     </div>
                 </ChildContent>

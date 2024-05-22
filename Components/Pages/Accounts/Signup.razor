@@ -1,15 +1,9 @@
 ﻿@page "/accounts/signup"
-@using ivs_ui.Domain.Constants
-@using ivs_ui.Domain.Interfaces.Accounts
-@using ivs_ui.Domain.Interfaces.Organisations
-@using ivs_ui.Domain.Models.Dtos.Organisations
-@using ivs_ui.Domain.Models.ViewModels.Accounts
 
 <PageTitle>Iv's - Sign up</PageTitle>
 
 
 <MudContainer>
-    <br />
 
    <center>
         <MudPaper Elevation="0" Outlined="false" MaxWidth="650px" Square="false" Class="ma-2 pa-10">
@@ -19,7 +13,7 @@
                 <br />
                 <div id="reg-sub-title">Already have an account? <MudLink Color="Color.Warning" style="font-weight: bolder; text-decoration: none" Href="/accounts/login">Login</MudLink></div>
 
-               <br /><br />
+               <br />
 
                 <EditForm Model="@model" OnValidSubmit="ActionRegister">
                     <DataAnnotationsValidator />
@@ -45,7 +39,6 @@
                     <br />
                     <MudCheckBox T="bool" @bind-Value="model.hasAgreed" Required="true" RequiredError="You must agree" Label="Agree to terms and conditions!" />
 
-                    <br />
 
                     <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
                         @if (_processing)

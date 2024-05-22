@@ -39,15 +39,31 @@ namespace ivs_ui.Components.Data.Services.Accounts
 
         public async Task<ResponseObject> VerifyAccount(string userId, ActivateAccountVM model)
         {
-            var response = await _webService.Call(apiUrl, $"/verify-account/{userId}", Method.Put, model);
-            var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
-            var content = res.result;
-            if (content?.code != ResponseCodes.ResponseCode_Successful)
-                return res;
+            try
+            {
 
-            var myJsonResponse = res.result.data.ToString().Trim().TrimStart('{').TrimEnd('}');
-            res.result.data = JsonConvert.DeserializeObject<List<UserDto>>(myJsonResponse);
-            return res;
+                var response = await _webService.Call(apiUrl, $"/verify-account/{userId}", Method.Put, model);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res.result;
+                if (content?.code != ResponseCodes.ResponseCode_Successful)
+                    return res;
+
+                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
+                res.result.data = JsonConvert.DeserializeObject<UserDto>(content.data.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        success =false,
+                        code = 500,
+                        message = "Error! Something went wrong, please try agian later"
+                    }
+                };
+            }
         }
     }
 }

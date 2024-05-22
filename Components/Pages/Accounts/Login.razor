@@ -1,0 +1,51 @@
+﻿@page "/accounts/login"
+
+
+<MudContainer>
+
+    <center>
+        <MudPaper Elevation="0" Outlined="false" MaxWidth="650px" Square="false" Class="ma-2 pa-10">
+            <div style="text-align:left">
+
+                <div id="Login-title">Welcome Back!</div>
+                <br />
+                <div id="reg-sub-title">Already have an account? <MudLink Color="Color.Warning" style="font-weight: bolder; text-decoration: none" Href="/accounts/login">Login</MudLink></div>
+
+                <br />
+
+                <EditForm Model="@model" OnValidSubmit="ActionLogin">
+                    <DataAnnotationsValidator />
+
+                    <MudTextField InputType="InputType.Email" Label="Email" HelperText="Enter your email" @bind-Value="model.email" For="@(() => model.email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+
+                    <MudTextField InputType="@PasswordInput" Label="Password" HelperText="Enter your password" @bind-Value="model.password" For="@(() => model.password)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
+
+                    <br />
+                    <MudCheckBox T="bool" @bind-Value="model.hasAgreed" Required="true" RequiredError="You must agree" Label="Agree to terms and conditions!" />
+
+
+                    <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                        @if (_processing)
+                        {
+                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                            <MudText Class="ms-2">Processing</MudText>
+                        }
+                        else
+                        {
+                            <MudText><b>Login</b></MudText>
+                        }
+                    </MudButton>
+                </EditForm>
+
+            </div>
+        </MudPaper>
+    </center>
+</MudContainer>
+
+@code{
+
+
+    private async Task ActionLogin(){
+
+    }
+}

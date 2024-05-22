@@ -15,11 +15,11 @@
     <link href="/css/app.css" rel="stylesheet" />
     <link href="/css/app-media.css" rel="stylesheet" />
 	
-    <HeadOutlet @rendermode="@InteractiveServer" />
+    <HeadOutlet @rendermode="new InteractiveServerRenderMode(false)" />
 </head>
 
 <body>
-    <Routes @rendermode="@InteractiveServer" />
+    <Routes @rendermode="new InteractiveServerRenderMode(false)" />
     <script src="_framework/blazor.web.js"></script>
 	<script src="_content/MudBlazor/MudBlazor.min.js"></script>
 </body>
