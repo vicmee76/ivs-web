@@ -17,7 +17,6 @@
 
 <MudContainer >
 
-
     <div class="login-container">
 
             <div class="row">
@@ -84,6 +83,11 @@
     protected async override void OnInitialized()
     {
         model = new LoginVM();
+        var checkSession = await _sessionStorageService.GetItemAsync<string>("AccessToken");
+        if (!string.IsNullOrEmpty(checkSession))
+        {
+            _navigate.NavigateTo("/");
+        }
     }
 
     private async Task ActionLogin()
