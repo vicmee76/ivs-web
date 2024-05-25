@@ -1,0 +1,137 @@
+﻿@page "/accounts/login"
+
+<PageTitle>Iv's - Login</PageTitle>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body, html {
+        height: 100%;
+        margin: 0;
+    }
+
+</style>
+
+<MudContainer >
+
+    <div class="login-container">
+
+            <div class="row">
+                <div class="column right" style="">
+
+                    <div style="text-align:left">
+
+                        <div id="login-title">Welcome Back! </div>
+                        <br />
+                        <div id="login-sub-title">Login to continue.</div>
+
+                        <br /><br />
+
+                        <EditForm Model="@model" OnValidSubmit="ActionLogin">
+                            <DataAnnotationsValidator />
+
+                            <MudTextField InputType="InputType.Email" Label="Email" HelperText="Enter your email" @bind-Value="model.email" For="@(() => model.email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+
+                            <MudTextField InputType="@PasswordInput" Label="Password" HelperText="Enter your password" @bind-Value="model.password" For="@(() => model.password)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
+                            <MudSpacer></MudSpacer>
+                        <div id="forgot-password-div">
+                            <a href="">Forgot password</a>
+                        </div>
+                        <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#56375C" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                                @if (_processing)
+                                {
+                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                    <MudText Class="ms-2">Processing</MudText>
+                                }
+                                else
+                                {
+                                    <MudText><b>Login</b></MudText>
+                                }
+                            </MudButton>
+                        </EditForm>
+
+                        <br />
+
+                    <div id="login-sinup-div">
+                        Already have an account <a href="/accounts/signup">Sign up</a>
+                       </div>
+
+                    </div>
+                </div>
+
+            <div class="column left" id="transparent-image" style="">
+
+                <div id="login-middle-title">Hello, Glad to see you! </div>
+
+
+            </div>
+        </div>
+    </div>
+    
+    
+</MudContainer>
+
+@code{
+
+    [Inject] IAccountService? _accountService { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+    [Inject] ISessionStorageService _sessionStorageService { get; set; }
+    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+
+    [Inject] NavigationManager? _navigate { get; set; }
+    [SupplyParameterFromForm] public LoginVM? model { get; set; }
+
+    bool isShow;
+    private bool _processing = false;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    protected async override void OnInitialized()
+    {
+        model = new LoginVM();
+        var checkSession = await _sessionStorageService.GetItemAsync<string>("AccessToken");
+        if (!string.IsNullOrEmpty(checkSession))
+        {
+            _navigate.NavigateTo("/");
+        }
+    }
+
+    private async Task ActionLogin()
+    {
+        _processing = true;
+        var res = await _accountService.Login(model);
+        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Successful))
+        {
+            await _sessionStorageService.SetItemAsync("AccessToken", res.result.token);
+            await _sessionStorageService.SetItemAsync(res.result.data._id, res.result.data);
+            await _authStateProvider.GetAuthenticationStateAsync();
+            _navigate.NavigateTo("/", true);
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+        }
+        _processing = false;
+        StateHasChanged();
+    }
+
+
+    void ButtoShowPasswordClick()
+    {
+        if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+}

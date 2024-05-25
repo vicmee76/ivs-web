@@ -31,4 +31,32 @@
     #reg-title {
         font-size: 1.5em;
     }
+
+    .login-container {
+        width: 100%;
+        height: auto;
+        position: absolute;
+        top: 43%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 2px;
+        background-color: inherit;
+    }
+
+
+    .column {
+        float: none;
+        padding: 10px;
+        height: 500px;
+        align-content: center;
+    }
+
+    .left {
+       display:none;
+    }
+
+    .right {
+        width: 100%;
+        padding: 40px;
+    }
 }

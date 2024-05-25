@@ -97,3 +97,101 @@
     font-size: 16px;
     font-weight:500;
 }
+
+#txt-activate-account-input{
+    font-weight : bold;
+    font-size: 20px;
+    letter-spacing : 30px;
+    text-align:center;
+}
+
+#login-title {
+    font-family: "Akaya Telivigala", system-ui;
+    font-weight: bold;
+    font-size: 30px;
+    color: #e18501f7;
+    text-align: center;
+}
+
+
+#login-sub-title{
+    font-size:14px;
+    font-weight:600;
+    text-align:center;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+
+
+#login-middle-title {
+    font-family: "Akaya Telivigala", system-ui;
+    font-weight: bold;
+    font-size: 35px;
+    text-align: center;
+    color: #56375C;
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.4);
+}
+
+#transparent-image {
+    height: 600px;
+    background-color: #f3dff6;
+}
+
+
+.login-container {
+    width: 55%;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.column {
+    float: left;
+    padding: 10px;
+    height: 500px; 
+    align-content: center;
+}
+
+.left {
+    width: 60%;
+}
+
+.right {
+    width: 40%;
+    padding: 30px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+#forgot-password-div {
+    text-align: right;
+}
+
+#forgot-password-div > a {
+    font-size: 12px;
+    color: #e18501f7;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+#login-sinup-div {
+    text-align: center;
+    font-weight:500;
+}
+
+    #login-sinup-div > a {
+        text-decoration: none;
+        cursor: pointer;
+        color: #e18501f7;
+    }

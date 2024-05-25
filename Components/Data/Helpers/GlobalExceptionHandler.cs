@@ -1,4 +1,6 @@
-﻿namespace ivs_ui.Components.Data.Helpers
+﻿using ivs_ui.Domain.Constants;
+
+namespace ivs_ui.Components.Data.Helpers
 {
     public class GlobalExceptionHandler(RequestDelegate next, ILogger<GlobalExceptionHandler> logger)
     {
@@ -13,7 +15,15 @@
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Exception occurred: {Message}", exception.Message);
+                _logger.LogError(exception, "Exception occurred: {Message}", exception);
+
+                new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong, please try agian later"
+                    }
+                };
             }
         }
        
