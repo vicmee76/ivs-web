@@ -45,7 +45,7 @@
                     <MudButton Variant="Variant.Text" Href="/accounts/signup" Style="font-weight:700;" Class="ma-3">Sign up</MudButton>
                 </NotAuthorized>
                 <Authorized>
-                    <MudButton Variant="Variant.Text" Href="/accounts/logout" Style="font-weight:700; color:#D2654C" Class="ma-3">Log out</MudButton>
+                    <MudButton Variant="Variant.Text" OnClick="ActionLogOut" Style="font-weight:700; color:#D2654C" Class="ma-3">Log out</MudButton>
                 </Authorized>
             </AuthorizeView>
 
@@ -99,11 +99,23 @@
 </MudLayout>
 
 @code {
+
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] ISessionStorageService _sessionStorageService { get; set; }
+    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+
     private bool _drawerOpen = true;
 
     private void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    private async Task ActionLogOut()
+    {
+        await _sessionStorageService.ClearAsync();
+        await _authStateProvider.GetAuthenticationStateAsync();
+        _navigate.NavigateTo("/", true);
     }
 
     MudTheme MuudstrapTheme = new MudTheme()
