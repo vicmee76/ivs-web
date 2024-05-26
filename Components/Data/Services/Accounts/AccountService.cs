@@ -8,6 +8,7 @@ using ivs_ui.Domain.Models.Dtos.Organisations;
 using ivs_ui.Domain.Models.ViewModels.Accounts;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Reflection;
 
 namespace ivs_ui.Components.Data.Services.Accounts
 {
@@ -92,6 +93,60 @@ namespace ivs_ui.Components.Data.Services.Accounts
             }
         }
 
+        public async Task<ResponseObject> ResetPassword(string id, ForgotPasswordVM model)
+        {
+            try
+            {
+                var response = await _webService.Call(apiUsersUrl, $"/forgot-password/{id}", Method.Put, model);
+                    var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res.result;
+                if (content?.code != ResponseCodes.ResponseCode_Successful)
+                    return res;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        success = false,
+                        code = 500,
+                        message = "Error! Something went wrong, please try agian later"
+                    }
+                };
+            }
+        }
+
+
+
+        public async Task<ResponseObject> SendForgotPasswordToken(string email)
+        {
+            try
+            {
+                var response = await _webService.Call(apiUsersUrl, $"/send-forgot-password-token/{email}", Method.Put, null);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res.result;
+                if (content?.code != ResponseCodes.ResponseCode_Successful)
+                    return res;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        success = false,
+                        code = 500,
+                        message = "Error! Something went wrong, please try agian later"
+                    }
+                };
+            }
+        }
+
+
+
 
         public async Task<ResponseObject> VerifyAccount(string userId, ActivateAccountVM model)
         {
@@ -120,5 +175,8 @@ namespace ivs_ui.Components.Data.Services.Accounts
                 };
             }
         }
+
+
+
     }
 }
