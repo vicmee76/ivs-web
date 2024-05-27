@@ -2,6 +2,62 @@
 
 <PageTitle>Iv's - Create New Event</PageTitle>
 
+<br />
+<MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+
+    <MudPaper Elevation="0">
+        <MudToolBar>
+           
+                <MudText><b style="color:#56375C">Create New Event</b></MudText>
+            
+            <MudSpacer />
+            <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+        </MudToolBar>
+    </MudPaper>
+
+    <br />
+
+    <MudCard Elevation="0">
+        <MudCardHeader>
+            <CardHeaderContent>
+
+            </CardHeaderContent>
+            <CardHeaderActions>
+                
+            </CardHeaderActions>
+        </MudCardHeader>
+        <MudCardContent>
+
+
+
+
+        </MudCardContent>
+    </MudCard>
+
+</MudContainer>
+
+
+
+
 @code {
 
+    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+    AuthUser authUser = new AuthUser();
+
+    private string userId { get; set; }
+
+    protected async override void OnInitialized()
+    {
+        var state = await _authStateProvider.GetAuthenticationStateAsync();
+        var auth = await authUser.GetAuthUserAsync(state);
+
+        userId = auth.Id;
+        StateHasChanged();
+    }
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Dashboard", href: "/events/dashboard"),
+        new BreadcrumbItem("Create Event", href: null, disabled: true)
+    };
 }

@@ -15,15 +15,18 @@ namespace ivs_ui.Components.Data.Helpers
             var claims = state.User.Claims.ToList();
 
             var userId = claims[0].Value;
+            var email = claims[1].Value;
             var fullname = claims[2].Value;
-            var email = claims[3].Value;
+           
             var sentenceCase = GeneralClass.ToSentenceCase(fullname);
+            var split = sentenceCase.Split(' ');
 
             var userAuth = new UserAuthDto()
             {
                 Id = userId,
                 Fullname = fullname,
                 Email = email,
+                FirstName = split[0].ToString(),
                 SentenceCaseFullName = sentenceCase,
             };
 
