@@ -107,10 +107,10 @@
         var res = await _accountService.Login(model);
         if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Successful))
         {
+            //var userid = res.result.data._id;
             await _sessionStorageService.SetItemAsync("AccessToken", res.result.token);
-            await _sessionStorageService.SetItemAsync(res.result.data._id, res.result.data);
             await _authStateProvider.GetAuthenticationStateAsync();
-            _navigate.NavigateTo("/", true);
+            _navigate.NavigateTo("/events/dashboard", true);
         }
         else
         {

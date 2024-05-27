@@ -195,3 +195,15 @@
         cursor: pointer;
         color: #e18501f7;
     }
+
+.mud-icon-button:focus-visible, .mud-icon-button:active {
+    background-color: rgb(255 243 225);
+}
+
+#btn-create-event {
+    color: #e18501f7;
+}
+
+    #btn-create-event :hover {
+        color:#56375C ;
+    }

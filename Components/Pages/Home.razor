@@ -1,8 +1,9 @@
 ﻿@page "/"
+@page "/home"
 
 <PageTitle>Iv's - Home</PageTitle>
+ <MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
 
-<MudContainer>
 <MudGrid>
     
     <MudItem xs="12">
@@ -29,7 +30,7 @@
                         </MudButton>
                     </NotAuthorized>
                     <Authorized>
-                        <MudButton Variant="Variant.Filled" id="btnDarkColor" Href="/events/signup" Size="Size.Large">
+                        <MudButton Variant="Variant.Filled" id="btnDarkColor" Href="/events/create-event" Size="Size.Large">
                             Create Your Event
                         </MudButton>
                     </Authorized>
@@ -43,6 +44,7 @@
 </MudGrid>
 
 </MudContainer>
+
 
 
 <br /><br /><br />
