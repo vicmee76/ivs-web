@@ -23,7 +23,7 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var token = _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
                 var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
 
                 var response = await _webService.Call(apiUrl, "/", Method.Get, null, headers);

@@ -2,9 +2,11 @@ using Blazored.SessionStorage;
 using ivs_ui.Components;
 using ivs_ui.Components.Data.Helpers;
 using ivs_ui.Components.Data.Services.Accounts;
+using ivs_ui.Components.Data.Services.Events;
 using ivs_ui.Components.Data.Services.General;
 using ivs_ui.Components.Data.Services.Organisations;
 using ivs_ui.Domain.Interfaces.Accounts;
+using ivs_ui.Domain.Interfaces.Events;
 using ivs_ui.Domain.Interfaces.General;
 using ivs_ui.Domain.Interfaces.Organisations;
 using Microsoft.AspNetCore.Authentication;
@@ -42,11 +44,12 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddBlazoredSessionStorage();
 
 
-
+builder.Services.AddHttpClient<AuthenticationStateProvider, AuthStateProvider>();
 builder.Services.AddScoped<IWebService, WebService>();
 builder.Services.AddTransient<IOrganisationService, OrganisationService>();
 builder.Services.AddTransient<IAccountService, AccountService>();
-builder.Services.AddHttpClient<AuthenticationStateProvider, AuthStateProvider>();
+builder.Services.AddTransient<IEventTypeService, EventTypeService>();
+
 
 
 
