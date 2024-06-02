@@ -94,7 +94,7 @@
     protected async override void OnInitialized()
     {
         model = new LoginVM();
-        var checkSession = await _sessionStorageService.GetItemAsync<string>("AccessToken");
+        var checkSession = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
         if (!string.IsNullOrEmpty(checkSession))
         {
             _navigate.NavigateTo("/");
@@ -108,7 +108,7 @@
         if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Successful))
         {
             //var userid = res.result.data._id;
-            await _sessionStorageService.SetItemAsync("AccessToken", res.result.token);
+            await _sessionStorageService.SetItemAsync(Tokens.TokenName, res.result.token);
             await _authStateProvider.GetAuthenticationStateAsync();
             _navigate.NavigateTo("/events/dashboard", true);
         }

@@ -80,7 +80,7 @@
     {
         model = new SignUpVM();
 
-        var checkSession = await _sessionStorageService.GetItemAsync<string>("AccessToken");
+        var checkSession = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
         if (!string.IsNullOrEmpty(checkSession))
         {
             _navigate.NavigateTo("/");

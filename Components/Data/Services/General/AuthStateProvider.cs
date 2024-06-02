@@ -1,4 +1,5 @@
 ﻿using Blazored.SessionStorage;
+using ivs_ui.Domain.Constants;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
@@ -22,10 +23,10 @@ namespace ivs_ui.Components.Data.Services.General
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             string token = string.Empty;
-            var hasKey = await _sessionStorageService.ContainKeyAsync("AccessToken")!;
+            var hasKey = await _sessionStorageService.ContainKeyAsync(Tokens.TokenName)!;
             if (hasKey)
             {
-                token = await _sessionStorageService.GetItemAsync<string>("AccessToken");
+                token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
             }
             else
             {
@@ -36,7 +37,7 @@ namespace ivs_ui.Components.Data.Services.General
             _http.DefaultRequestHeaders.Authorization = null;
 
             if (!string.IsNullOrEmpty(token))
-                identity = new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt");
+                identity = new ClaimsIdentity(ParseClaimsFromJwt(token), Tokens.JwtName);
             
              _anonymous = new ClaimsPrincipal(identity);
             var state = new AuthenticationState(_anonymous);
