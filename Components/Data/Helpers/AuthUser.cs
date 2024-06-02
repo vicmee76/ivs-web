@@ -13,9 +13,6 @@ namespace ivs_ui.Components.Data.Helpers
         public async Task<UserAuthDto> GetAuthUserAsync(AuthenticationState state)
         {
             var claims = state.User.Claims.ToList();
-
-            var userId = claims[0].Value;
-            var email = claims[1].Value;
             var fullname = claims[2].Value;
            
             var sentenceCase = GeneralClass.ToSentenceCase(fullname);
@@ -23,9 +20,10 @@ namespace ivs_ui.Components.Data.Helpers
 
             var userAuth = new UserAuthDto()
             {
-                Id = userId,
+                Id = claims[0].Value,
                 Fullname = fullname,
-                Email = email,
+                Email = claims[1].Value,
+                Role = claims[3].Value,
                 FirstName = split[0].ToString(),
                 SentenceCaseFullName = sentenceCase,
             };

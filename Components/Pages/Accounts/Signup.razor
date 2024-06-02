@@ -85,8 +85,11 @@
         {
             _navigate.NavigateTo("/");
         }
-        var res = await _organisationService.GetOrganisations();
-        _orgs = res.result.data ?? new List<GetOrganisationsDto>();
+        else
+        {
+            var res = await _organisationService.GetOrganisations();
+            _orgs = res.result.data ?? new List<GetOrganisationsDto>();
+        }
     }
 
 

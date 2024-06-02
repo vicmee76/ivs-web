@@ -96,7 +96,7 @@
             await _sessionStorageService.SetItemAsync("AccessToken", res.result.token);
             await _sessionStorageService.SetItemAsync(Id, res.result.data);
             await _authStateProvider.GetAuthenticationStateAsync();
-            _navigate.NavigateTo("/", true);
+            _navigate.NavigateTo("/events/dashboard", true);
         }
         else
         {

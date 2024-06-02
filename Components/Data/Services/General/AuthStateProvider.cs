@@ -1,4 +1,5 @@
 ﻿using Blazored.SessionStorage;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 using System.Text.Json;
@@ -44,12 +45,31 @@ namespace ivs_ui.Components.Data.Services.General
             return state;
         }
 
+
+       
+
+
         public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
         {
+            var claims = new List<Claim>();
             var payload = jwt.Split('.')[1];
             var jsonBytes = ParseBase64WithoutPadding(payload);
             var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
-            return keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()));
+            // var K = keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()));
+
+            keyValuePairs.TryGetValue("role", out object roles);
+
+            if (roles != null)
+            {
+                var obj = roles.ToString().Split(':');
+                claims.Add(new Claim(ClaimTypes.Role, obj[0].ToString()));
+                keyValuePairs.Remove(ClaimTypes.Role);
+            }
+
+            claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
+            return claims;
+
+           // return K;
         }
 
         private static byte[] ParseBase64WithoutPadding(string base64)

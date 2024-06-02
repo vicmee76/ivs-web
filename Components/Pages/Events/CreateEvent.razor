@@ -2,39 +2,73 @@
 
 <PageTitle>Iv's - Create New Event</PageTitle>
 
+
+
 <br />
-<MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+<AuthorizeView>
+    <NotAuthorized>
+        No Access 
+    </NotAuthorized>
 
-    <MudPaper Elevation="0">
-        <MudToolBar>
-           
-                <MudText><b style="color:#56375C">Create New Event</b></MudText>
-            
-            <MudSpacer />
-            <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
-        </MudToolBar>
-    </MudPaper>
+    <Authorized>
+        <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
 
-    <br />
+            <MudPaper Elevation="0">
+                <MudToolBar>
 
-    <MudCard Elevation="0">
-        <MudCardHeader>
-            <CardHeaderContent>
+                    <MudText><b style="color:#56375C">Create New Event</b></MudText>
 
-            </CardHeaderContent>
-            <CardHeaderActions>
-                
-            </CardHeaderActions>
-        </MudCardHeader>
-        <MudCardContent>
+                    <MudSpacer />
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                </MudToolBar>
+            </MudPaper>
+
+            <br />
+
+            <MudCard Elevation="0">
+                <MudCardHeader>
+                    <CardHeaderContent>
+
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
 
 
+                    <EditForm Model="@model" OnValidSubmit="ActionLogin">
+                        <DataAnnotationsValidator />
+
+                        <MudTextField InputType="InputType.Email" Label="Email" HelperText="Enter your email" @bind-Value="model.email" For="@(() => model.email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+
+                        <MudTextField InputType="@PasswordInput" Label="Password" HelperText="Enter your password" @bind-Value="model.password" For="@(() => model.password)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
+                        <MudSpacer></MudSpacer>
+
+                        <div id="forgot-password-div">
+                            <a href="/accounts/send-forgot-password-token">Forgot password</a>
+                        </div>
+
+                        <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#56375C" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                            @if (_processing)
+                            {
+                                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                <MudText Class="ms-2">Processing</MudText>
+                            }
+                            else
+                            {
+                                <MudText><b>Login</b></MudText>
+                            }
+                        </MudButton>
+                    </EditForm>
 
 
-        </MudCardContent>
-    </MudCard>
+                </MudCardContent>
+            </MudCard>
 
-</MudContainer>
+        </MudContainer>
+    </Authorized>
+</AuthorizeView>
 
 
 
@@ -42,16 +76,24 @@
 @code {
 
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
-    AuthUser authUser = new AuthUser();
+    [Inject] NavigationManager? _navigate { get; set; }
 
+    AuthUser authUser = new AuthUser();
     private string userId { get; set; }
 
     protected async override void OnInitialized()
     {
         var state = await _authStateProvider.GetAuthenticationStateAsync();
-        var auth = await authUser.GetAuthUserAsync(state);
 
-        userId = auth.Id;
+        if (!state.User.Identity.IsAuthenticated)
+        {
+            _navigate.NavigateTo("/accounts/login");
+        }
+        else
+        {
+            var auth = await authUser.GetAuthUserAsync(state);
+            userId = auth.Id;
+        }
         StateHasChanged();
     }
 

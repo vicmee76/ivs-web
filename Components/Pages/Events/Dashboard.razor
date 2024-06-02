@@ -2,44 +2,54 @@
 
 <PageTitle>Iv's - Dashboard</PageTitle>
 
-<br />
- <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
 
-    <MudPaper Elevation="0">
-        <MudToolBar>
-            @if (fullname != null)
-            {
-                <MudText><b style="color:#56375C">Hi, @fullname</b></MudText>
-            }
-            <MudSpacer />
-            <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
-        </MudToolBar>
-    </MudPaper>
+<AuthorizeView Roles="User,Admin">
+    <NotAuthorized>
+        No Access
+    </NotAuthorized>
+    <Authorized>
 
-    <br /> 
+        <br />
+        <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
 
-    <MudCard Elevation="0">
-        <MudCardHeader>
-            <CardHeaderContent>
-               
-            </CardHeaderContent>
-            <CardHeaderActions>
-                <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.AddCircle" Size="Size.Small" Href="/events/create-event" Color="Color.Secondary">Create Event</MudButton>
-            </CardHeaderActions>
-        </MudCardHeader>
-        <MudCardContent>
-           
-            
+            <MudPaper Elevation="0">
+                <MudToolBar>
+                    @if (fullname != null)
+                    {
+                        <MudText><b style="color:#56375C">Hi, @fullname</b></MudText>
+                    }
+                    <MudSpacer />
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                </MudToolBar>
+            </MudPaper>
+
+            <br />
+
+            <MudCard Elevation="0">
+                <MudCardHeader>
+                    <CardHeaderContent>
+
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.AddCircle" Size="Size.Small" Href="/events/create-event" Color="Color.Secondary">Create Event</MudButton>
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
 
 
-        </MudCardContent>
-    </MudCard>
 
-</MudContainer>
+
+                </MudCardContent>
+            </MudCard>
+
+        </MudContainer>
+    </Authorized>
+</AuthorizeView>
 
 @code {
 
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
     AuthUser authUser = new AuthUser();
 
     private string fullname { get; set; }
@@ -48,11 +58,20 @@
     protected async override void OnInitialized()
     {
         var state = await _authStateProvider.GetAuthenticationStateAsync();
-        var auth = await authUser.GetAuthUserAsync(state);
 
-        userId = auth.Id;
-        fullname = auth.SentenceCaseFullName;
-        StateHasChanged();
+        if (!state.User.Identity.IsAuthenticated)
+        {
+            _navigate.NavigateTo("/accounts/login");
+        }
+        else
+        {
+            var auth = await authUser.GetAuthUserAsync(state);
+            userId = auth.Id;
+            fullname = auth.SentenceCaseFullName;
+            StateHasChanged();
+        }
+
+       
     }
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
