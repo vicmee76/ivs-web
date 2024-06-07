@@ -1,0 +1,194 @@
+﻿@page "/events/upload-banner/{id}"
+
+<PageTitle>Iv's - Upload Event Banner</PageTitle>
+
+<br />
+
+<AuthorizeView>
+
+    <NotAuthorized>
+        No Access
+    </NotAuthorized>
+
+
+    <Authorized Context="cntx">
+
+        <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+
+            <MudPaper Elevation="0">
+                <MudToolBar>
+
+                    <MudText><b style="color:#56375C">Upload Your Banner for -- <b>@eventName</b></b></MudText>
+
+                </MudToolBar>
+
+            </MudPaper>
+        </MudContainer>
+
+        <br /><br />
+
+          <MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
+
+              <MudGrid>
+
+                <MudItem xs="12" sm="12" md="12" lg="5">
+                    <MudStack Style="width:100%">
+                        <MudFileUpload T="IBrowserFile"
+                                       OnFilesChanged="OnInputFileChanged"
+                                       Hidden="@false"
+                                       InputClass="absolute mud-width-full mud-height-full overflow-hidden z-20"
+                                       InputStyle="opacity:0"
+                                       @ondragenter="@SetDragClass"
+                                       @ondragleave="@ClearDragClass"
+                                       @ondragend="@ClearDragClass">
+                            <ButtonTemplate>
+                                <MudPaper Height="100px"
+                                          Outlined="true"
+                                          Class="@_dragClass">
+                                    <MudText Typo="Typo.h6">
+                                        Drag and drop files here or click
+                                    </MudText>
+                                    @foreach (var file in _fileNames)
+                                    {
+                                        <MudChip Color="Color.Dark" Text="@file" />
+                                    }
+                                </MudPaper>
+                                <MudToolBar DisableGutters="true"
+                                            Class="relative d-flex justify-end gap-4 z-30">
+                                    <MudButton HtmlTag="label"
+                                               Color="Color.Primary"
+                                               for="@context.Id"
+                                               Variant="Variant.Outlined">
+                                        Open file picker
+                                    </MudButton>
+                                    <MudButton OnClick="@Upload"
+                                               Color="Color.Primary"
+                                               Disabled="@(!_fileNames.Any())"
+                                               Variant="Variant.Filled">
+                                        Upload
+                                    </MudButton>
+                                    <MudButton OnClick="@Clear"
+                                               Color="Color.Error"
+                                               Disabled="@(!_fileNames.Any())"
+                                               Variant="Variant.Filled">
+                                        Clear
+                                    </MudButton>
+                                </MudToolBar>
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </MudStack>
+                </MudItem>
+
+
+                <MudItem xs="12" sm="12" md="12" lg="7" Style="text-align:center">
+
+                    <MudText Typo="Typo.h6">
+                        Banner preview
+                    </MudText>
+
+                    <br />
+
+                    <div>
+                        @if (imageData != null)
+                        {
+                            <MudImage Fluid="true" Src="@imageData" Alt="BannerPreview" Class="rounded-lg img" Width="559" />
+                        }
+                    </div>
+
+                </MudItem>
+
+              </MudGrid>
+           
+          </MudContainer>
+
+    </Authorized>
+
+</AuthorizeView>
+
+@code {
+
+    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+    [Inject] IEventService _eventService { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+    [Parameter] public string? id { get; set; }
+
+    AuthUser authUser = new AuthUser();
+    private string userId { get; set; }
+    private string imageData { get; set; }
+    private string eventName { get; set; }
+    private const string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full z-10";
+    private string _dragClass = DefaultDragClass;
+    private List<string> _fileNames = new();
+
+    protected async override void OnInitialized()
+    {
+
+        var state = await _authStateProvider.GetAuthenticationStateAsync();
+
+        if (!state.User.Identity.IsAuthenticated)
+        {
+            _navigate.NavigateTo("/accounts/login");
+        }
+        else
+        {
+            var auth = await authUser.GetAuthUserAsync(state);
+            userId = auth.Id;
+
+            var res = await _eventService.GetEventMetaData(id);
+            if(res.result.code == ResponseCodes.ResponseCode_Ok)
+            {
+                eventName = res.result.data.eventName;
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+        StateHasChanged();
+
+    }
+
+    private async Task Clear()
+    {
+        _fileNames.Clear();
+        imageData = string.Empty;
+        ClearDragClass();
+        await Task.Delay(100);
+    }
+
+    private async void OnInputFileChanged(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            ClearDragClass();
+            var files = e.GetMultipleFiles();
+            _fileNames = new List<string>();
+            imageData = string.Empty;
+            foreach (var file in files)
+            {
+                _fileNames.Add(file.Name);
+                var formart = file.ContentType;
+                var buffer = new byte[file.Size];
+                await file.OpenReadStream(file.Size).ReadExactlyAsync(buffer);
+                imageData = $"data:{formart};base64,{Convert.ToBase64String(buffer)}";
+            }
+            StateHasChanged();
+        }
+        catch(Exception ex)
+        {
+            
+        }
+    }
+
+    private void Upload()
+    {
+       
+    }
+
+    private void SetDragClass()
+        => _dragClass = $"{DefaultDragClass} mud-border-primary";
+
+    private void ClearDragClass()
+        => _dragClass = DefaultDragClass;
+}

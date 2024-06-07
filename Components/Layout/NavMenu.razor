@@ -1,0 +1,48 @@
+﻿<MudPaper Width="" Elevation="0" Style="font-size:12px; font-weight:bold" Class="py-2">
+    <MudNavMenu Color="Color.Secondary" Margin="Margin.Normal"  Bordered="true">
+
+        <MudNavLink Href="/home" Style="font-weight:bold">Home</MudNavLink>
+
+        <MudNavLink Href="/settings/companies/allcompanies">Discovery</MudNavLink>
+
+        <MudNavLink Href="/events/dashboard">Dashboard</MudNavLink>
+
+        <MudNavGroup Title="Events" Icon="" Expanded="false" Class="">
+            <MudNavLink Href="/events/create-event">Create Event</MudNavLink>
+            <MudNavLink Href="/events/my-events">My Event</MudNavLink>
+        </MudNavGroup>
+
+        <MudNavGroup Title="Account Settings" Icon="" Expanded="false" Class="">
+            <MudNavLink Href="/settings/companies/allcompanies">Profile</MudNavLink>
+            <MudNavLink Href="/settings/companies/allcompanies">Change Password</MudNavLink>
+            <MudNavLink Href="/settings/file-type/">My Logins</MudNavLink>
+        </MudNavGroup>
+
+        <MudNavLink Href="/about-us">About Us</MudNavLink>
+
+        <MudNavLink Href="/contact-us">Contact Us</MudNavLink>
+
+        <MudNavLink Href="/faq">FAQ</MudNavLink>
+
+        <MudNavLink OnClick="ActionLogOut">Log out </MudNavLink>
+          
+    </MudNavMenu>
+</MudPaper>
+
+
+
+@code{
+
+
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] ISessionStorageService _sessionStorageService { get; set; }
+    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+
+    private async Task ActionLogOut()
+    {
+        await _sessionStorageService.ClearAsync();
+        await _authStateProvider.GetAuthenticationStateAsync();
+        _navigate.NavigateTo("/", true);
+    }
+
+}
