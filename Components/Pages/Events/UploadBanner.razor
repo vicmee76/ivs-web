@@ -32,51 +32,44 @@
               <MudGrid>
 
                 <MudItem xs="12" sm="12" md="12" lg="5">
+
                     <MudStack Style="width:100%">
                         <MudFileUpload T="IBrowserFile"
                                        OnFilesChanged="OnInputFileChanged"
                                        Hidden="@false"
+                                       Accept=".png, .jpg, .jpeg"
                                        InputClass="absolute mud-width-full mud-height-full overflow-hidden z-20"
                                        InputStyle="opacity:0"
                                        @ondragenter="@SetDragClass"
                                        @ondragleave="@ClearDragClass"
                                        @ondragend="@ClearDragClass">
                             <ButtonTemplate>
-                                <MudPaper Height="100px"
-                                          Outlined="true"
-                                          Class="@_dragClass">
+
+                                <MudPaper Height="100px" Outlined="true"Class="@_dragClass">
                                     <MudText Typo="Typo.h6">
                                         Drag and drop files here or click
                                     </MudText>
                                     @foreach (var file in _fileNames)
                                     {
-                                        <MudChip Color="Color.Dark" Text="@file" />
+                                        <MudChip Color="Color.Secondary" Text="@file" />
                                     }
                                 </MudPaper>
-                                <MudToolBar DisableGutters="true"
-                                            Class="relative d-flex justify-end gap-4 z-30">
-                                    <MudButton HtmlTag="label"
-                                               Color="Color.Primary"
-                                               for="@context.Id"
-                                               Variant="Variant.Outlined">
-                                        Open file picker
-                                    </MudButton>
-                                    <MudButton OnClick="@Upload"
-                                               Color="Color.Primary"
-                                               Disabled="@(!_fileNames.Any())"
-                                               Variant="Variant.Filled">
-                                        Upload
-                                    </MudButton>
-                                    <MudButton OnClick="@Clear"
-                                               Color="Color.Error"
-                                               Disabled="@(!_fileNames.Any())"
-                                               Variant="Variant.Filled">
-                                        Clear
-                                    </MudButton>
+
+                                <MudToolBar DisableGutters="true" Class="relative d-flex justify-end gap-4 z-30">
+                                    
+                                    <MudButton HtmlTag="label" Color="Color.Primary" for="@context.Id" Icon="@Icons.Material.Filled.Image" Variant="Variant.Outlined"> Browse </MudButton>
+                                    
+                                    <MudButton OnClick="@(async () => await Upload())" Style="background-color:#56375C; color:white" Disabled="@(!_fileNames.Any())" Variant="Variant.Filled"> Upload & Continue </MudButton>
+                                    
+                                    <MudButton OnClick="@Clear" Color="Color.Error" Disabled="@(!_fileNames.Any())" Variant="Variant.Outlined"> Clear </MudButton>
+
+                                    <MudButton OnClick="@Clear" Color="Color.Warning" Variant="Variant.Filled"> Skip </MudButton>
                                 </MudToolBar>
+
                             </ButtonTemplate>
                         </MudFileUpload>
                     </MudStack>
+
                 </MudItem>
 
 
@@ -120,6 +113,10 @@
     private const string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full z-10";
     private string _dragClass = DefaultDragClass;
     private List<string> _fileNames = new();
+    private MudForm form;
+    private UploadBodyVM model = new();
+    private UploadFileVM fileModel = new();
+    private IBrowserFile imageFile;
 
     protected async override void OnInitialized()
     {
@@ -167,23 +164,46 @@
             imageData = string.Empty;
             foreach (var file in files)
             {
-                _fileNames.Add(file.Name);
                 var formart = file.ContentType;
                 var buffer = new byte[file.Size];
+
+
+                _fileNames.Add(file.Name);
+               
                 await file.OpenReadStream(file.Size).ReadExactlyAsync(buffer);
                 imageData = $"data:{formart};base64,{Convert.ToBase64String(buffer)}";
+                model.ivsEventId = id;
+                imageFile = file;
+                fileModel.fileData = buffer;
+                fileModel.fileName = file.Name;
             }
             StateHasChanged();
         }
         catch(Exception ex)
         {
-            
+
         }
     }
 
-    private void Upload()
+    private async Task Upload()
     {
-       
+        if (imageFile != null)
+        {
+            var res = await _eventService.UploadEventBanner(model, fileModel);
+            if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Ok))
+            {
+                _snackbar.Add(res.result.message, Severity.Success);
+                _navigate.NavigateTo($"/events/upload-banner/{res.result.data._id}");
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+        else
+        {
+            _snackbar.Add("Please select and image to upload", Severity.Error);
+        }
     }
 
     private void SetDragClass()
