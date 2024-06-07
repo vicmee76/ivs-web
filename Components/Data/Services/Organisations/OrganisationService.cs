@@ -19,7 +19,7 @@ namespace ivs_ui.Components.Data.Services.Organisations
                 var response = await _webService.Call(apiUrl, "", Method.Get, null, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Successful)
+                if (content?.code != ResponseCodes.ResponseCode_Ok)
                     return new ResponseObject();
 
                 var myJsonResponse = content?.data.ToString().Trim().TrimStart('{').TrimEnd('}');

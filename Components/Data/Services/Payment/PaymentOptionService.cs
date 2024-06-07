@@ -24,7 +24,7 @@ namespace ivs_ui.Components.Data.Services.Payment
                 var response = await _webService.Call(apiUrl, "get-all-payment-options", Method.Get, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Successful)
+                if (content?.code != ResponseCodes.ResponseCode_Ok)
                     return new ResponseObject();
 
                 var myJsonResponse = content?.data.ToString().Trim().TrimStart('{').TrimEnd('}');

@@ -49,7 +49,7 @@ namespace ivs_ui.Components.Data.Services.Accounts
                 var response = await _webService.Call(apiLoginUrl, $"/login-user", Method.Post, model);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Successful)
+                if (content?.code != ResponseCodes.ResponseCode_Ok)
                     return res;
 
                 var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
@@ -77,7 +77,7 @@ namespace ivs_ui.Components.Data.Services.Accounts
                 var response = await _webService.Call(apiUsersUrl, $"/resend-verification-code/{userId}", Method.Put, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Successful)
+                if (content?.code != ResponseCodes.ResponseCode_Ok)
                     return res;
                 return res;
             }
@@ -100,7 +100,7 @@ namespace ivs_ui.Components.Data.Services.Accounts
                 var response = await _webService.Call(apiUsersUrl, $"/forgot-password/{id}", Method.Put, model);
                     var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Successful)
+                if (content?.code != ResponseCodes.ResponseCode_Ok)
                     return res;
                 return res;
             }
@@ -127,7 +127,7 @@ namespace ivs_ui.Components.Data.Services.Accounts
                 var response = await _webService.Call(apiUsersUrl, $"/send-forgot-password-token/{email}", Method.Put, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Successful)
+                if (content?.code != ResponseCodes.ResponseCode_Ok)
                     return res;
                 return res;
             }
@@ -155,7 +155,7 @@ namespace ivs_ui.Components.Data.Services.Accounts
                 var response = await _webService.Call(apiUsersUrl, $"/verify-account/{userId}", Method.Put, model);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Successful)
+                if (content?.code != ResponseCodes.ResponseCode_Ok)
                     return res;
 
                 var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');

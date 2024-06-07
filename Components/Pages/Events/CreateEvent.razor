@@ -5,7 +5,7 @@
 <br />
 <AuthorizeView>
     <NotAuthorized>
-        No Access 
+        No Access
     </NotAuthorized>
 
     <Authorized Context="cntx">
@@ -20,39 +20,53 @@
                     <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
                 </MudToolBar>
             </MudPaper>
+        </MudContainer>
 
-           
+        <MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
 
-                <MudCard Elevation="0">
-                    <MudCardHeader>
-                        <CardHeaderContent>
-                        </CardHeaderContent>
-                        <CardHeaderActions>
+            <MudCard Elevation="0">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
 
-                        </CardHeaderActions>
-                    </MudCardHeader>
-                    <MudCardContent>
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
 
-                        <EditForm Model="@model" OnValidSubmit="ActionCreateEvent">
+                    <EditForm Model="@model" OnValidSubmit="ActionCreateEvent">
 
-                            <MudGrid>
-                                <MudItem xs="12" sm="12" md="8" lg="7">
-                                    <DataAnnotationsValidator />
+                        <MudGrid>
+                            <MudItem xs="12" sm="12" md="8" lg="12">
+                                <DataAnnotationsValidator />
 
-                                    <MudText><b>Select the event Option</b></MudText>
+                                <MudText><b>Select the event Option</b></MudText>
+                                <br />
 
-                                    <MudRadioGroup @bind-Value="@model.eventOption" For="@(() => model.eventOption)">
+                                <MudRadioGroup @bind-Value="@model.eventOption" For="@(() => model.eventOption)">
 
-                                        <MudRadio Value="@("Public")" Color="Color.Primary">@("Public Event")</MudRadio>
-                                        <MudRadio Value="@("Private")" Color="Color.Primary">@("Private Event")</MudRadio>
+                                    <MudGrid Style="text-align:center">
 
-                                    </MudRadioGroup>
+                                        <MudItem xs="6" sm="6" md="6" lg="6">
+                                            <div id="public-event-div">
+                                                <MudRadio Value="@("Public")" Color="Color.Primary">@("Public Event")</MudRadio>
+                                            </div>
+                                        </MudItem>
 
-                                    <br />
+                                        <MudItem xs="6" sm="6" md="6" lg="6">
+                                            <div id="private-event-div">
+                                                <MudRadio Value="@("Private")" Color="Color.Primary">@("Private Event")</MudRadio>
+                                            </div>
+                                        </MudItem>
+                                    </MudGrid>
 
-                                    <MudTextField Label="Event Name*" HelperText="Enter event name" @bind-Value="model.eventName" For="@(() => model.eventName)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                </MudRadioGroup>
 
-                                    <MudTextField T="string" Label="Event Description*" @bind-Value="model.eventDescription" For="@(() => model.eventDescription)" HelperText="Enter event description" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Placeholder="Enter description here" Lines="5" />
+                                <br />
+
+                                <MudTextField Label="Event Name*" HelperText="Enter event name" @bind-Value="model.eventName" For="@(() => model.eventName)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+
+                                <MudTextField T="string" Label="Event Description*" @bind-Value="model.eventDescription" For="@(() => model.eventDescription)" HelperText="Enter event description" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Placeholder="Enter description here" Lines="5" />
 
 
                                 <MudTextField Label="Event Address*" HelperText="Enter event address" @bind-Value="model.eventAddress" For="@(() => model.eventAddress)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
@@ -72,6 +86,7 @@
                                 <br />
 
                                 <MudText><b>Select the option *</b></MudText>
+                                <br>
 
                                 @if (!_getEventprocessing)
                                 {
@@ -83,37 +98,49 @@
                                     <MudRadioGroup @bind-Value="@model.paymentOption" For="@(() => model.paymentOption)">
                                         @if (_paymentOptions != null)
                                         {
-                                            foreach (var com in _paymentOptions)
-                                            {
-                                                <MudRadio Value="@(com._id.ToString())" Color="Color.Primary">@(com.name)</MudRadio>
-                                            }
+                                            <MudGrid Style="text-align:center">
+                                                @foreach (var com in _paymentOptions)
+                                                {
+                                                    <MudItem xs="6" sm="6" md="6" lg="6">
+                                                        <div id="public-event-div">
+                                                            <MudRadio Value="@(com._id.ToString())" Color="Color.Primary">@(com.name)</MudRadio>
+                                                        </div>
+                                                    </MudItem>
+                                                }
+                                            </MudGrid>
                                         }
                                     </MudRadioGroup>
                                 }
 
+                                <br /><br />
+
+                                <MudText><b>Select the event category *</b></MudText>
                                 <br />
-
-                                    <MudText><b>Select the event type *</b></MudText>
-
-                                    @if (!_getEventprocessing)
-                                    {
-                                        <MudSkeleton Animation="Animation.Wave" Width="40%" />
-                                        <MudSkeleton Animation="Animation.Wave" Width="60%" />
-                                    }
-                                    else
-                                    {
-                                        <MudRadioGroup @bind-Value="@model.eventTypeId" For="@(() => model.eventTypeId)">
-                                            @if (_eventTypes != null)
+                                @if (!_getEventprocessing)
+                                {
+                                    <MudSkeleton Animation="Animation.Wave" Width="40%" />
+                                    <MudSkeleton Animation="Animation.Wave" Width="60%" />
+                                }
+                                else
+                                {
+                                    <MudRadioGroup @bind-Value="@model.eventTypeId" For="@(() => model.eventTypeId)">
+                                        @if (_eventTypes != null)
+                                        {
+                                             <MudGrid>
+                                            @foreach (var com in _eventTypes)
                                             {
-                                                foreach (var com in _eventTypes)
-                                                {
-                                                <MudRadio Value="@(com._id.ToString())" Color="Color.Primary"><small>@(com.name)</small></MudRadio>
-                                                }
+                                                <MudItem xs="6" sm="6" md="6" lg="3">
+                                                <div id="eventTypesDiv">
+                                                    <MudRadio Value="@(com._id.ToString())" Color="Color.Primary"><small><b>@(com.name)</b></small></MudRadio>
+                                                </div>
+                                                </MudItem>
                                             }
-                                        </MudRadioGroup>
-                                    }
+                                            </MudGrid>
+                                        }
+                                    </MudRadioGroup>
+                                }
 
-                                    <br />
+                                <br /><br />
 
 
                                 <MudTextField Label="Web link" HelperText="Enter you social web link here" @bind-Value="model.webLink" For="@(() => model.webLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
@@ -125,28 +152,29 @@
                                 <MudTextField Label="Twitter link" HelperText="Enter twitter event link if you have any" @bind-Value="model.twitterLink" For="@(() => model.twitterLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
 
 
-                                </MudItem>
+                            </MudItem>
 
-                                <br>
+                            <br>
 
-                            </MudGrid>
+                        </MudGrid>
 
-                            <MudButton ButtonType="ButtonType.Submit" FullWidth="false" Disabled="@_processing" Style="height:50px; background:#56375C; width:200px" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
-                                @if (_processing)
-                                {
-                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                                    <MudText Class="ms-2">Processing</MudText>
-                                }
-                                else
-                                {
-                                    <MudText><b>Create Event</b></MudText>
-                                }
-                            </MudButton>
-                        </EditForm>
-                    </MudCardContent>
-                </MudCard>
+                        <MudButton ButtonType="ButtonType.Submit" FullWidth="false" Disabled="@_processing" Style="height:50px; background-color:#56375C; width:200px" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                            @if (_processing)
+                            {
+                                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                <MudText Class="ms-2">Processing</MudText>
+                            }
+                            else
+                            {
+                                <MudText><b>Save &Aacute; Continue</b></MudText>
+                            }
+                        </MudButton>
 
-             
+                         <br /><br /><br />
+
+                    </EditForm>
+                </MudCardContent>
+            </MudCard>
 
         </MudContainer>
     </Authorized>
@@ -160,6 +188,8 @@
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
     [Inject] IEventTypeService _eventTypeService { get; set; }
     [Inject] IPaymentOptionService _paymentOptionService { get; set; }
+    [Inject] IEventService _eventService { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [SupplyParameterFromForm] public CreateEventVM? model { get; set; }
 
@@ -205,7 +235,7 @@
 
             var res2 = await _paymentOptionService.GetAllPaymentOptions();
             _paymentOptions = res2.result.data ?? new List<GetPaymentOptionsDto>();
-            
+
             _getEventprocessing = true;
         }
 
@@ -216,8 +246,22 @@
 
     private async Task ActionCreateEvent()
     {
-        
+        _processing = true;
+        model.user_id = userId;
+
+        var res = await _eventService.CreateEvent(model);
+        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Created || res.result.code == ResponseCodes.ResponseCode_Ok))
+        {
+            _snackbar.Add(res.result.message, Severity.Success);
+            _navigate.NavigateTo($"/events/upload-banner/{res.result.data._id}");
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+        }
+        _processing = false;
+        StateHasChanged();
     }
 
-    
+
 }

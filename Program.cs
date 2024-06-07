@@ -46,6 +46,7 @@ builder.Services.AddTransient<IOrganisationService, OrganisationService>();
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IEventTypeService, EventTypeService>();
 builder.Services.AddTransient<IPaymentOptionService, PaymentOptionService>();
+builder.Services.AddTransient<IEventService, EventService>();
 
 
 

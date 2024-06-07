@@ -91,7 +91,7 @@
             _snackbar.Add("Invalid ID passed", Severity.Error);
 
         var res = await _accountrService.VerifyAccount(Id, model) ?? new();
-        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Successful))
+        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Ok))
         {
             await _sessionStorageService.SetItemAsync(Tokens.TokenName, res.result.token);
             await _authStateProvider.GetAuthenticationStateAsync();
@@ -114,7 +114,7 @@
             _snackbar.Add("Invalid ID passed", Severity.Error);
 
         var res = await _accountrService.ResendVerificationCode(Id) ?? new();
-        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Successful))
+        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Ok))
         {
             _snackbar.Add(res.result.message, Severity.Success);
         }

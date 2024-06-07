@@ -97,7 +97,7 @@
     {
         _processing = true;
         var res = await _accountService.CreateUser(model);
-        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Created || res.result.code == ResponseCodes.ResponseCode_Successful))
+        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Created || res.result.code == ResponseCodes.ResponseCode_Ok))
         {
             _snackbar.Add(res.result.message, Severity.Success);
             _navigate.NavigateTo($"/accounts/activate-account/{res.result.data}");
