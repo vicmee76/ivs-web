@@ -80,13 +80,16 @@
     {
         model = new SignUpVM();
 
-        var checkSession = await _sessionStorageService.GetItemAsync<string>("AccessToken");
+        var checkSession = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
         if (!string.IsNullOrEmpty(checkSession))
         {
             _navigate.NavigateTo("/");
         }
-        var res = await _organisationService.GetOrganisations();
-        _orgs = res.result.data ?? new List<GetOrganisationsDto>();
+        else
+        {
+            var res = await _organisationService.GetOrganisations();
+            _orgs = res.result.data ?? new List<GetOrganisationsDto>();
+        }
     }
 
 
@@ -94,7 +97,7 @@
     {
         _processing = true;
         var res = await _accountService.CreateUser(model);
-        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Created || res.result.code == ResponseCodes.ResponseCode_Successful))
+        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Created || res.result.code == ResponseCodes.ResponseCode_Ok))
         {
             _snackbar.Add(res.result.message, Severity.Success);
             _navigate.NavigateTo($"/accounts/activate-account/{res.result.data}");

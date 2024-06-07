@@ -18,19 +18,33 @@
     height: 100%;
     flex:none;
  }
+
+ 
 </style>
 
 
 <MudLayout>
    
-    <MudAppBar Fixed="true"  Elevation="1" Style="padding:12px" Dense="true" DisableGutters="true" Class="muudstrap-navbar">
+    <MudAppBar Fixed="true"  Elevation="0" Style="padding:12px" Dense="true" DisableGutters="true" Class="muudstrap-navbar">
+        
+        <AuthorizeView>
+             <Authorized>
+                <MudIconButton Icon="@Icons.Material.Filled.Notes" Color="Color.Dark" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+            </Authorized>
+        </AuthorizeView>
+
+
         <div class="d-none d-md-flex align-center px-12" style="width:100%">
            
-                <MudImage Src="/images/logos/ivs3.png" Alt="Ivs Logo" Elevation="0" Height="55" Class=" text-center" />
-            <div id="logoTitle" class="ml-1"><a href="/">ivs</a></div>
+            <AuthorizeView>
+                <NotAuthorized>
+                    <MudImage Src="/images/logos/ivs3.png" Alt="Ivs Logo" Elevation="0" Height="55" Class=" text-center" />
+                    <div id="logoTitle" class="ml-1"><a href="/home">ivs</a></div>
+                </NotAuthorized>
+            </AuthorizeView>
            
             <MudSpacer  />
-            <MudButton Color="Color.Inherit" Href="/" Class="ma-5" Style="font-weight:bold;">Home</MudButton>
+            <MudButton Color="Color.Inherit" Href="/home" Class="ma-5" Style="font-weight:bold;">Home</MudButton>
             <MudButton Color="Color.Inherit" Href="/features" Class="ma-5" Style="font-weight:bold;">All Events</MudButton>
             <MudMenu Color="Color.Inherit" Class="ma-5" Label="Us" Style="font-weight:bold;" EndIcon="@Icons.Material.Filled.ArrowDropDown" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
             <MudMenuItem Href="/action">About us</MudMenuItem>
@@ -49,53 +63,89 @@
                 </Authorized>
             </AuthorizeView>
 
-            
     </div>
 
-    <div class="d-flex d-md-none relative mud-width-full mud-height-full">
-        <MudExpansionPanels Square="true" Elevation="0" Class="absolute mud-width-full mud-height-full" Style="top:0px;left:0; background-color:Inherit;">
-            <MudExpansionPanel HideIcon="true" Class="mud-width-full mud-height-full">
-                <TitleContent>
-                    <div class="d-flex justify-space-between mud-width-full align-center">
-                        <div class="d-flex align-center">
-                                <MudImage Src="/images/logos/ivs3.png" Alt="Ivs Logo" Elevation="0" Height="55" Class=" text-center" />
-                                <div id="logoTitle" class="ml-1">ivs</div>
-                        </div>
-                        <MudIcon Icon="@Icons.Material.Filled.Menu" />
-                    </div>
-                </TitleContent>
-                <ChildContent>
-                    <div class="py-6 mx-n6 muudstrap-navbar-expand">
-                        <MudNavMenu>
-                            <MudNavLink Href="/">Home</MudNavLink>
-                            <MudNavLink Href="/">All Events</MudNavLink>
-                            <MudNavLink Href="/">About Us</MudNavLink>
-                            <MudNavLink Href="/">Contact Us</MudNavLink>
-                            <MudNavLink Href="/">FAQ</MudNavLink>
+     <AuthorizeView>
+        <NotAuthorized>
+            <div class="d-flex d-md-none relative mud-width-full mud-height-full">
+                <MudExpansionPanels Square="true" Elevation="0" Class="absolute mud-width-full mud-height-full" Style="top:0px;left:0; background-color:Inherit;">
+                    <MudExpansionPanel HideIcon="true" Class="mud-width-full mud-height-full">
+                        <TitleContent>
+                            <div class="d-flex justify-space-between mud-width-full align-center">
+                       
+                                        <div class="d-flex align-center">
+                                            <MudImage Src="/images/logos/ivs3.png" Alt="Ivs Logo" Elevation="0" Height="55" Class=" text-center" />
+                                        <a href="/"> <div id="logoTitle" class="ml-1">ivs</div> </a>
+                                        </div>
+                       
+                                <MudIcon Icon="@Icons.Material.Filled.Menu" />
+                            </div>
+                        </TitleContent>
+                        <ChildContent>
+                            <div class="py-6 mx-n6 muudstrap-navbar-expand">
+                                <MudNavMenu>
+                                    <MudNavLink Href="/home">Home</MudNavLink>
+                                    <MudNavLink Href="/">All Events</MudNavLink>
+                                    <MudNavLink Href="/">About Us</MudNavLink>
+                                    <MudNavLink Href="/">Contact Us</MudNavLink>
+                                    <MudNavLink Href="/">FAQ</MudNavLink>
                             
-                                <AuthorizeView>
-                                    <NotAuthorized>
-                                        <MudNavLink Href="/accounts/login">Login</MudNavLink>
-                                        <MudNavLink Href="/accounts/signup">Sing up</MudNavLink>
-                                    </NotAuthorized>
-                                    <Authorized>
-                                        <MudNavLink Href="/accounts/logout">Log Out</MudNavLink>
-                                    </Authorized>
-                                </AuthorizeView>
-                        </MudNavMenu>
-                    </div>
-                </ChildContent>
-            </MudExpansionPanel>
-        </MudExpansionPanels>
-    </div>
+                                    <MudNavLink Href="/accounts/login">Login</MudNavLink>
+                                    <MudNavLink Href="/accounts/signup">Sing up</MudNavLink>
+                                  
+                                </MudNavMenu>
+                            </div>
+                        </ChildContent>
+                    </MudExpansionPanel>
+                </MudExpansionPanels>
+            </div>
+
+        </NotAuthorized>
+
+        <Authorized>
+               <div class="d-flex d-md-none relative mud-width-full mud-height-full">
+                <div class="d-flex align-center">
+                    <MudImage Src="/images/logos/ivs3.png" Alt="Ivs Logo" Elevation="0" Height="55" Class=" text-center" />
+                    <a href="/"> <div id="logoTitle" class="ml-1">ivs</div> </a>
+                </div>
+                </div>
+        </Authorized>
+    </AuthorizeView>
 </MudAppBar>
 
-    <br /><br /><br />
-    <MudMainContent Class="">
-       
-            @Body
-       
-    </MudMainContent>
+    <AuthorizeView>
+        <Authorized>
+            <MudDrawer @bind-Open="_drawerOpen" Elevation="1" Style="margin-top:-21px">
+                <MudDrawerHeader Style="background-color: #F3DFF6; height:73px" Class="" Dense="true">
+
+                    <MudImage Src="/images/logos/ivs3.png" Alt="Ivs Logo" Elevation="0" Height="55" Class=" text-center" />
+                    <div id="logoTitle"><a href="/">ivs</a></div>
+
+                </MudDrawerHeader>
+                <NavMenu />
+            </MudDrawer>
+        </Authorized>
+    </AuthorizeView>
+
+     <AuthorizeView>
+        <Authorized>
+            <MudMainContent Class="" Style="">
+                <br />
+                  
+                    @Body
+                  
+               
+            </MudMainContent>
+        </Authorized>
+        <NotAuthorized>
+            <MudMainContent Class="">
+                <MudContainer>
+                    <br /><br /><br />
+                    @Body
+                </MudContainer>
+            </MudMainContent>
+        </NotAuthorized>
+    </AuthorizeView>
 </MudLayout>
 
 @code {

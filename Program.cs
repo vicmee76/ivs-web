@@ -1,11 +1,15 @@
 using Blazored.SessionStorage;
 using ivs_ui.Components;
 using ivs_ui.Components.Data.Services.Accounts;
+using ivs_ui.Components.Data.Services.Events;
 using ivs_ui.Components.Data.Services.General;
 using ivs_ui.Components.Data.Services.Organisations;
+using ivs_ui.Components.Data.Services.Payment;
 using ivs_ui.Domain.Interfaces.Accounts;
+using ivs_ui.Domain.Interfaces.Events;
 using ivs_ui.Domain.Interfaces.General;
 using ivs_ui.Domain.Interfaces.Organisations;
+using ivs_ui.Domain.Interfaces.Payment;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using MudBlazor.Services;
@@ -30,14 +34,28 @@ builder.Services.AddMudServices(config =>
 
 
 
+builder.Services.AddAuthorizationCore();
+builder.Services.AddAuthenticationCore();
+builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddBlazoredSessionStorage();
+
+
+builder.Services.AddHttpClient<AuthenticationStateProvider, AuthStateProvider>();
 builder.Services.AddScoped<IWebService, WebService>();
 builder.Services.AddTransient<IOrganisationService, OrganisationService>();
 builder.Services.AddTransient<IAccountService, AccountService>();
-builder.Services.AddHttpClient<AuthenticationStateProvider, AuthStateProvider>();
+builder.Services.AddTransient<IEventTypeService, EventTypeService>();
+builder.Services.AddTransient<IPaymentOptionService, PaymentOptionService>();
+builder.Services.AddTransient<IEventService, EventService>();
 
-builder.Services.AddAuthorizationCore();
-builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddBlazoredSessionStorage();
+
+
+
+
+
+
+
+
 
 var app = builder.Build();
 
@@ -47,14 +65,18 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
 }
 
-//app.UseMiddleware<GlobalExceptionHandler>();
+
 app.UseStaticFiles();
 app.UseAntiforgery();
-app.UseAuthorization();
 
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+
 
 app.Run();

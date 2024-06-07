@@ -195,3 +195,35 @@
         cursor: pointer;
         color: #e18501f7;
     }
+
+.mud-icon-button:focus-visible, .mud-icon-button:active {
+    background-color: rgb(255 243 225);
+}
+
+#btn-create-event {
+    color: #e18501f7;
+}
+
+    #btn-create-event :hover {
+        color:#56375C ;
+    }
+
+
+#eventTypesDiv {
+    cursor: pointer;
+    border: 1px dashed;
+    padding-left:15px;
+    background: #ffe4cb52;
+}
+
+
+#public-event-div {
+    background-color: rgb(243 223 246 / 57%);
+    padding: 10px;
+}
+
+#private-event-div {
+    background-color: rgb(243 223 246 / 57%);
+        padding: 10px;
+}
+

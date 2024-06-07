@@ -91,18 +91,16 @@
             _snackbar.Add("Invalid ID passed", Severity.Error);
 
         var res = await _accountrService.VerifyAccount(Id, model) ?? new();
-        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Successful))
+        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Ok))
         {
-            await _sessionStorageService.SetItemAsync("AccessToken", res.result.token);
-            await _sessionStorageService.SetItemAsync(Id, res.result.data);
+            await _sessionStorageService.SetItemAsync(Tokens.TokenName, res.result.token);
             await _authStateProvider.GetAuthenticationStateAsync();
-            _navigate.NavigateTo("/", true);
+            _navigate.NavigateTo("/events/dashboard", true);
         }
         else
         {
             _snackbar.Add(res.result.message, Severity.Error);
         }
-        _resendProcessing = false;
         StateHasChanged();
         
 
@@ -116,7 +114,7 @@
             _snackbar.Add("Invalid ID passed", Severity.Error);
 
         var res = await _accountrService.ResendVerificationCode(Id) ?? new();
-        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Successful))
+        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Ok))
         {
             _snackbar.Add(res.result.message, Severity.Success);
         }
