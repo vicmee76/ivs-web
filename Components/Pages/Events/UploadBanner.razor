@@ -113,7 +113,6 @@
     private const string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full z-10";
     private string _dragClass = DefaultDragClass;
     private List<string> _fileNames = new();
-    private MudForm form;
     private UploadBodyVM model = new();
     private UploadFileVM fileModel = new();
     private IBrowserFile imageFile;
@@ -166,10 +165,7 @@
             {
                 var formart = file.ContentType;
                 var buffer = new byte[file.Size];
-
-
                 _fileNames.Add(file.Name);
-               
                 await file.OpenReadStream(file.Size).ReadExactlyAsync(buffer);
                 imageData = $"data:{formart};base64,{Convert.ToBase64String(buffer)}";
                 model.ivsEventId = id;
@@ -193,7 +189,7 @@
             if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Ok))
             {
                 _snackbar.Add(res.result.message, Severity.Success);
-                _navigate.NavigateTo($"/events/upload-banner/{res.result.data._id}");
+                _navigate.NavigateTo($"/events/create-event-time/{res.result.data._id}");
             }
             else
             {
