@@ -47,14 +47,7 @@ builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IEventTypeService, EventTypeService>();
 builder.Services.AddTransient<IPaymentOptionService, PaymentOptionService>();
 builder.Services.AddTransient<IEventService, EventService>();
-
-
-
-
-
-
-
-
+builder.Services.AddTransient<IEventTimeService, EventTimeService>();
 
 
 var app = builder.Build();

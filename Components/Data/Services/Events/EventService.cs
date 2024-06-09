@@ -2,7 +2,7 @@
 using ivs_ui.Domain.Constants;
 using ivs_ui.Domain.Interfaces.Events;
 using ivs_ui.Domain.Interfaces.General;
-using ivs_ui.Domain.Models.Dtos.Events.IvsEvent;
+using ivs_ui.Domain.Models.Dtos.Events;
 using ivs_ui.Domain.Models.ViewModels.Events;
 using Newtonsoft.Json;
 using RestSharp;

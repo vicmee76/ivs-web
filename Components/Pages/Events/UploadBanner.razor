@@ -17,12 +17,42 @@
 
             <MudPaper Elevation="0">
                 <MudToolBar>
-
                     <MudText><b style="color:#56375C">Upload Your Banner for -- <b>@eventName</b></b></MudText>
+                    <MudSpacer />
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
 
                 </MudToolBar>
-
             </MudPaper>
+
+            <br />
+
+            <MudTimeline TimelineOrientation="TimelineOrientation.Horizontal" TimelinePosition="TimelinePosition.Bottom">
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Information</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Primary" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Info" NoIcon="true"><b>Photo</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Time</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Tickets</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+            </MudTimeline>
+
+
         </MudContainer>
 
         <br /><br />
@@ -51,7 +81,7 @@
                                     </MudText>
                                     @foreach (var file in _fileNames)
                                     {
-                                        <MudChip Color="Color.Secondary" Text="@file" />
+                                        <MudChip Color="Color.Primary" Text="@file" />
                                     }
                                 </MudPaper>
 
@@ -63,7 +93,7 @@
                                     
                                     <MudButton OnClick="@Clear" Color="Color.Error" Disabled="@(!_fileNames.Any())" Variant="Variant.Outlined"> Clear </MudButton>
 
-                                    <MudButton OnClick="@Clear" Color="Color.Warning" Variant="Variant.Filled"> Skip </MudButton>
+                                    <MudButton OnClick="@Clear" Color="Color.Primary" Variant="Variant.Filled"> Skip </MudButton>
                                 </MudToolBar>
 
                             </ButtonTemplate>
@@ -116,6 +146,12 @@
     private UploadBodyVM model = new();
     private UploadFileVM fileModel = new();
     private IBrowserFile imageFile;
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Events", href: "/events/dashboard"),
+        new BreadcrumbItem("Upload Banner", href: null, true)
+    };
 
     protected async override void OnInitialized()
     {

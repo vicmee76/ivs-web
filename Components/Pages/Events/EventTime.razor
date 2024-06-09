@@ -18,15 +18,49 @@
                 <MudToolBar>
 
                     <MudText><b style="color:#56375C">Create event time for -- <b>@eventName</b></b></MudText>
+                    <MudSpacer />
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
 
                 </MudToolBar>
-
             </MudPaper>
+
+            <br />
+
+            <MudTimeline TimelineOrientation="TimelineOrientation.Horizontal" TimelinePosition="TimelinePosition.Bottom">
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Information</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Photo</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Primary" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Info" NoIcon="true"><b>Time</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Tickets</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+            </MudTimeline>
+
         </MudContainer>
 
         <br />
 
         <MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="padding:20px">
+
+
+
+
 
             <div style="font-size:17px; line-height:40px">
                 You can add reoccuring date and time for your events. Just add the date and time for this event and click the <b>ADD</b> button. 
@@ -39,7 +73,7 @@
             <MudGrid>
 
                 <MudItem xs="12" sm="12" md="12" lg="6">
-                    <MudDateRangePicker @bind-DateRange="@_dateRange" Margin="Margin.None" Editable="false" Clearable="true" PlaceholderStart="Event Start Date" PlaceholderEnd="Event End Date" />
+                    <MudDateRangePicker @bind-DateRange="@_dateRange" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Margin="Margin.None" Editable="false" Clearable="true" PlaceholderStart="Event Start Date" PlaceholderEnd="Event End Date" />
                 </MudItem>
 
                 <MudItem xs="12" sm="12" md="12" lg="3">
@@ -93,6 +127,21 @@
 
             </MudTimeline>
 
+            <br /><br />
+
+            <MudButton OnClick="@(async () => await ActionCreateTime())" Disabled="@(!model.Any())" Style="background-color:#56375C; color:white" Variant="Variant.Filled">  
+
+                @if (_processing)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                    <MudText Class="ms-2">Processing</MudText>
+                }
+                else
+                {
+                    <MudText><b>Create Event Time</b></MudText>
+                }
+            </MudButton>
+
         </MudContainer>
 
     </Authorized>
@@ -104,6 +153,7 @@
 
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
     [Inject] IEventService _eventService { get; set; }
+    [Inject] IEventTimeService _eventTimeService { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
     [Parameter] public string? id { get; set; }
@@ -112,11 +162,18 @@
     List<EventTimeVM> model = new List<EventTimeVM>();
     private string userId { get; set; }
     private string eventName { get; set; }
-
+    private bool _processing = false;
 
     private DateRange _dateRange { get; set; }
     TimeSpan? startTime = new TimeSpan(00, 45, 00);
     TimeSpan? endTime = new TimeSpan(00, 45, 00);
+
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Events", href: "/events/dashboard"),
+        new BreadcrumbItem("Create Time", href: null, true)
+    };
 
     protected async override void OnInitialized()
     {
@@ -168,11 +225,11 @@
                 DateTime combinedEndDateTime = (DateTime)(_dateRange.End.Value.Date + endTime);
 
                 var times = new EventTimeVM()
-                    {
-                        ivsEventId = id,
-                        startDateAndTime = combinedStartDateTime.ToString(),
-                        endDateAndTime = combinedEndDateTime.ToString()
-                    };
+                {
+                    ivsEventId = id,
+                    startDateAndTime = combinedStartDateTime,
+                    endDateAndTime = combinedEndDateTime
+                };
 
                 model.Add(times);
             }
@@ -194,5 +251,28 @@
             _snackbar.Add("Something went wrong trying to remove this time please try again later.", Severity.Error);
         }
         StateHasChanged();
+    }
+
+
+    private async Task ActionCreateTime()
+    {
+        _processing = true;
+        if (!model.Any())
+        {
+            _snackbar.Add("Please, add one or more event time", Severity.Error);
+        }
+        else
+        {
+            var res = await _eventTimeService.CreateEventTime(model);
+            if (res.result.code == ResponseCodes.ResponseCode_Created)
+            {
+                _snackbar.Add(res.result.message, Severity.Success);
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+        _processing = false;
     }
 }
