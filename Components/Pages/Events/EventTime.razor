@@ -267,6 +267,7 @@
             if (res.result.code == ResponseCodes.ResponseCode_Created)
             {
                 _snackbar.Add(res.result.message, Severity.Success);
+                _navigate.NavigateTo($"/events/create-event-tickets/{id}");
             }
             else
             {
