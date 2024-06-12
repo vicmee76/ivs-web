@@ -77,19 +77,19 @@
                                 <MudText><b>Select your kind of ticket</b></MudText>
                                 <br />
 
-                                <MudRadioGroup @bind-Value="@model.ticketKind" For="@(() => model.ticketKind)">
+                                <MudRadioGroup @bind-Value="@model.ticketKind"  For="@(() => model.ticketKind)">
 
                                     <MudGrid Style="text-align:center">
 
                                         <MudItem xs="6" sm="6" md="6" lg="6">
                                             <div id="ticket-event-div">
-                                                <MudRadio Value="@("Single")" Color="Color.Primary"><b>@("Single Ticket")</b></MudRadio>
+                                                <MudRadio Value="@("Single")" @onchange="@(async () => await ActionTicketKind(true))" Color="Color.Primary"><b>@("Single Ticket")</b></MudRadio>
                                             </div>
                                         </MudItem>
 
                                         <MudItem xs="6" sm="6" md="6" lg="6">
                                             <div id="ticket-event-div">
-                                                <MudRadio Value="@("Group")" Color="Color.Primary"><b>@("Group Ticket")</b></MudRadio>
+                                                <MudRadio Value="@("Group")" @onchange="@(async () => await ActionTicketKind(false))" Color="Color.Primary"><b>@("Group Ticket")</b></MudRadio>
                                             </div>
                                         </MudItem>
                                     </MudGrid>
@@ -123,7 +123,7 @@
                                                 {
                                                     <MudItem xs="6" sm="6" md="6" lg="6">
                                                         <div id="ticket-event-div">
-                                                            <MudRadio Value="@(com._id.ToString())" Color="Color.Primary"><b>@(com.name)</b></MudRadio>
+                                                            <MudRadio Value="@(com._id.ToString())" @onchange="@(async () => await ActionPaymentKind(com.name))" Color="Color.Primary"><b>@(com.name)</b></MudRadio>
                                                         </div>
                                                     </MudItem>
                                                 }
@@ -134,12 +134,12 @@
 
                                 <br /><br />
 
-                                <MudNumericField HideSpinButtons="true" HelperText="Enter ticket in stock" @bind-Value="model.ticketAmount" For="@(() => model.ticketAmount)" Label="Ticket amount" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Step=".2M" />
+                                <MudNumericField HideSpinButtons="true" HelperText="Enter ticket in stock" @bind-Value="model.ticketAmount" For="@(() => model.ticketAmount)" Disabled="@_isFreeTicket" Label="Ticket amount" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Step=".2M" />
 
                                     <br />
 
 
-                                <MudNumericField HelperText="Select the size for groups" @bind-Value="model.groupSize" For="@(() => model.groupSize)" Label="Select the size for groups" Variant="Variant.Outlined" Min="1" Max="20" HelperTextOnFocus="true" Clearable="true" />
+                                <MudNumericField HelperText="Select the size for groups" @bind-Value="model.groupSize" Disabled="@_isGroupTicket" For="@(() => model.groupSize)" Label="Select the size for groups" Variant="Variant.Outlined" Min="1" Max="20" HelperTextOnFocus="true" Clearable="true" />
 
                                     <br />
 
@@ -211,6 +211,8 @@
     private bool _processing = false;
     private bool _getEventprocessing { get; set; } = false;
 
+    private bool _isGroupTicket { get; set; }
+    private bool _isFreeTicket { get; set; }
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
@@ -256,6 +258,32 @@
 
     private async Task ActionCreateEventTicket()
     {
-        
+
     }
+
+    private async Task ActionTicketKind(bool value)
+    {
+        _isGroupTicket = value;
+        if (value)
+            model.groupSize = 0;
+
+        StateHasChanged();
+    }
+
+
+    private async Task ActionPaymentKind(string value)
+    {
+        if(value.ToLower() == "free")
+        {
+            _isFreeTicket = true;
+            model.ticketAmount = 0;
+        }
+        else
+        {
+            _isFreeTicket = false;
+        }
+
+    }
+
+   
 }
