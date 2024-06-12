@@ -1,5 +1,6 @@
 ﻿@page "/events/create-event-tickets/{id}"
 
+
 <PageTitle>Iv's - Create Event Tickets</PageTitle>
 
 <br />
@@ -53,9 +54,9 @@
 
         </MudContainer>
 
-        <br />
 
-        <MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
+
+        <MudContainer Fixed="false" MaxWidth="MaxWidth.Medium">
 
             <MudCard Elevation="0">
                 <MudCardHeader>
@@ -76,18 +77,18 @@
                                 <MudText><b>Select your kind of ticket</b></MudText>
                                 <br />
 
-                                <MudRadioGroup @bind-Value="@model.eventOption" For="@(() => model.eventOption)">
+                                <MudRadioGroup @bind-Value="@model.ticketKind" For="@(() => model.ticketKind)">
 
                                     <MudGrid Style="text-align:center">
 
                                         <MudItem xs="6" sm="6" md="6" lg="6">
-                                            <div id="public-event-div">
+                                            <div id="ticket-event-div">
                                                 <MudRadio Value="@("Single")" Color="Color.Primary"><b>@("Single Ticket")</b></MudRadio>
                                             </div>
                                         </MudItem>
 
                                         <MudItem xs="6" sm="6" md="6" lg="6">
-                                            <div id="private-event-div">
+                                            <div id="ticket-event-div">
                                                 <MudRadio Value="@("Group")" Color="Color.Primary"><b>@("Group Ticket")</b></MudRadio>
                                             </div>
                                         </MudItem>
@@ -97,28 +98,14 @@
 
                                 <br />
 
-                                <MudTextField Label="Ticket Name*" HelperText="Enter ticket name" @bind-Value="model.eventName" For="@(() => model.eventName)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                <MudTextField Label="Ticket Name*" HelperText="Enter ticket name" @bind-Value="model.ticketName" For="@(() => model.ticketName)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
 
-                                <MudTextField T="string" Label="Ticket Description*" @bind-Value="model.eventDescription" For="@(() => model.eventDescription)" HelperText="Enter ticket description" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Placeholder="Enter description here" Lines="5" />
+                                    <br />
+
+                                <MudTextField T="string" Label="Ticket Description*" @bind-Value="model.ticketDescription" For="@(() => model.ticketDescription)" HelperText="Enter ticket description" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Placeholder="Enter description here" Lines="5" />
 
 
-                                <MudTextField Label="Event Address*" HelperText="Enter event address" @bind-Value="model.eventAddress" For="@(() => model.eventAddress)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-
-                                <MudTextField Label="Event Google pin link" HelperText="Search for the event address on Google map, copy the link and paste it here" @bind-Value="model.adressPin" For="@(() => model.adressPin)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-
-                                <MudSelect T="string" Label="Event State*" HelperText="Select state" Variant="Variant.Outlined" @bind-Value="model.eventState" For="@(() => model.eventState)" HelperTextOnFocus="true" Clearable="true">
-                                    @if (allState != null)
-                                    {
-                                        foreach (var com in allState)
-                                        {
-                                            <MudSelectItem Value="@(com)">@(com)</MudSelectItem>
-                                        }
-                                    }
-                                </MudSelect>
-
-                                <br />
-
-                                <MudText><b>Select the option *</b></MudText>
+                                <MudText><b>Ticket payment kind *</b></MudText>
                                 <br>
 
                                 @if (!_getEventprocessing)
@@ -128,14 +115,14 @@
                                 }
                                 else
                                 {
-                                    <MudRadioGroup @bind-Value="@model.paymentOption" For="@(() => model.paymentOption)">
+                                    <MudRadioGroup @bind-Value="@model.paymentOptionId" For="@(() => model.paymentOptionId)">
                                         @if (_paymentOptions != null)
                                         {
                                             <MudGrid Style="text-align:center">
                                                 @foreach (var com in _paymentOptions)
                                                 {
                                                     <MudItem xs="6" sm="6" md="6" lg="6">
-                                                        <div id="public-event-div">
+                                                        <div id="ticket-event-div">
                                                             <MudRadio Value="@(com._id.ToString())" Color="Color.Primary"><b>@(com.name)</b></MudRadio>
                                                         </div>
                                                     </MudItem>
@@ -147,44 +134,34 @@
 
                                 <br /><br />
 
-                                <MudText><b>Select the event category *</b></MudText>
+                                <MudNumericField HideSpinButtons="true" HelperText="Enter ticket in stock" @bind-Value="model.ticketAmount" For="@(() => model.ticketAmount)" Label="Ticket amount" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Step=".2M" />
+
+                                    <br />
+
+
+                                <MudNumericField HelperText="Select the size for groups" @bind-Value="model.groupSize" For="@(() => model.groupSize)" Label="Select the size for groups" Variant="Variant.Outlined" Min="1" Max="20" HelperTextOnFocus="true" Clearable="true" />
+
+                                    <br />
+
+                                <MudGrid>
+
+                                    <MudItem xs="12" sm="12" md="12" lg="6">
+                                        <MudSelect T="string" Label="Ticket in stock" HelperText="Select tickets in stock" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                                            <MudSelectItem Value="@("Limited")" />
+                                            <MudSelectItem Value="@("UnLimited")" />
+                                        </MudSelect>
+                                    </MudItem>
+
+                                    <MudItem xs="12" sm="12" md="12" lg="6">
+                                        <MudNumericField @bind-Value="model.ticketInStock" HelperText="Enter ticket in stock" For="@(() => model.ticketInStock)" Label="Ticket in stock" Variant="Variant.Outlined" Min="1" Max="500" HelperTextOnFocus="true" Clearable="true" />
+                                    </MudItem>
+
+                                </MudGrid>
+
                                 <br />
-                                @if (!_getEventprocessing)
-                                {
-                                    <MudSkeleton Animation="Animation.Wave" Width="40%" />
-                                    <MudSkeleton Animation="Animation.Wave" Width="60%" />
-                                }
-                                else
-                                {
-                                    <MudRadioGroup @bind-Value="@model.eventTypeId" For="@(() => model.eventTypeId)">
-                                        @if (_eventTypes != null)
-                                        {
-                                            <MudGrid>
-                                                @foreach (var com in _eventTypes)
-                                                {
-                                                    <MudItem xs="6" sm="6" md="6" lg="3">
-                                                        <div id="eventTypesDiv">
-                                                            <MudRadio Value="@(com._id.ToString())" Color="Color.Primary"><small><b>@(com.name)</b></small></MudRadio>
-                                                        </div>
-                                                    </MudItem>
-                                                }
-                                            </MudGrid>
-                                        }
-                                    </MudRadioGroup>
-                                }
-
-                                <br /><br />
 
 
-                                <MudTextField Label="Web link" HelperText="Enter you social web link here" @bind-Value="model.webLink" For="@(() => model.webLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-
-                                <MudTextField Label="Facbook link" HelperText="Enter facebook event link if you have any" @bind-Value="model.facebookLink" For="@(() => model.facebookLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-
-                                <MudTextField Label="Instagram Link" HelperText="Enter instagram event link if you have any" @bind-Value="model.instagramLink" For="@(() => model.instagramLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-
-                                <MudTextField Label="Twitter link" HelperText="Enter twitter event link if you have any" @bind-Value="model.twitterLink" For="@(() => model.twitterLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-
-
+                               
                             </MudItem>
 
                             <br>
@@ -219,17 +196,23 @@
 @code {
 
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+    [Inject] IPaymentOptionService _paymentOptionService { get; set; }
     [Inject] IEventService _eventService { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
+    [SupplyParameterFromForm] public CreateTicketVM? model { get; set; }
     [Parameter] public string? id { get; set; }
 
+
+    IEnumerable<GetPaymentOptionsDto> _paymentOptions = new List<GetPaymentOptionsDto>();
     AuthUser authUser = new AuthUser();
     private string userId { get; set; }
     private string eventName { get; set; }
     private bool _processing = false;
+    private bool _getEventprocessing { get; set; } = false;
 
-     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
         new BreadcrumbItem("Dashboard", href: "/events/dashboard"),
         new BreadcrumbItem("Create Tickets", href: null, disabled: true)
@@ -238,6 +221,10 @@
 
     protected async override void OnInitialized()
     {
+        _getEventprocessing = false;
+
+        model = new CreateTicketVM();
+
         var state = await _authStateProvider.GetAuthenticationStateAsync();
 
         if (!state.User.Identity.IsAuthenticated)
@@ -258,8 +245,17 @@
             {
                 _snackbar.Add(res.result.message, Severity.Error);
             }
-        }
-        StateHasChanged();
 
+            var res2 = await _paymentOptionService.GetAllPaymentOptions();
+            _paymentOptions = res2.result.data ?? new List<GetPaymentOptionsDto>();
+        }
+        _getEventprocessing = true;
+        StateHasChanged();
+    }
+
+
+    private async Task ActionCreateEventTicket()
+    {
+        
     }
 }
