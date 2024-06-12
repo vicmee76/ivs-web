@@ -146,14 +146,14 @@
                                 <MudGrid>
 
                                     <MudItem xs="12" sm="12" md="12" lg="6">
-                                        <MudSelect T="string" Label="Ticket in stock" HelperText="Select tickets in stock" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                                        <MudSelect T="string" Label="Ticket in stock" ValueChanged="ActionTicketStock" HelperText="Select tickets in stock" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
                                             <MudSelectItem Value="@("Limited")" />
                                             <MudSelectItem Value="@("UnLimited")" />
                                         </MudSelect>
                                     </MudItem>
 
                                     <MudItem xs="12" sm="12" md="12" lg="6">
-                                        <MudNumericField @bind-Value="model.ticketInStock" HelperText="Enter ticket in stock" For="@(() => model.ticketInStock)" Label="Ticket in stock" Variant="Variant.Outlined" Min="1" Max="500" HelperTextOnFocus="true" Clearable="true" />
+                                        <MudNumericField @bind-Value="model.ticketInStock" Disabled="@_isLimited" HelperText="Enter ticket in stock" For="@(() => model.ticketInStock)" Label="Ticket in stock" Variant="Variant.Outlined" Min="1" Max="500" HelperTextOnFocus="true" Clearable="true" />
                                     </MudItem>
 
                                 </MudGrid>
@@ -213,6 +213,9 @@
 
     private bool _isGroupTicket { get; set; }
     private bool _isFreeTicket { get; set; }
+    private bool _isLimited { get; set; }
+
+    private string selectTickStock { get; set; }
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
@@ -282,8 +285,23 @@
         {
             _isFreeTicket = false;
         }
-
+        StateHasChanged();
     }
 
-   
+
+    private void ActionTicketStock(string value)
+    {
+        if(value.ToLower() == "limited")
+        {
+            _isLimited = false;
+            model.ticketInStock = 0;
+        }
+        else
+        {
+            _isLimited = true;
+            model.ticketInStock = int.MaxValue;
+        }
+        StateHasChanged();
+    }
+
 }
