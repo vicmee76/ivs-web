@@ -73,15 +73,15 @@
             <MudGrid>
 
                 <MudItem xs="12" sm="12" md="12" lg="6">
-                    <MudDateRangePicker @bind-DateRange="@_dateRange" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Margin="Margin.None" Editable="false" Clearable="true" PlaceholderStart="Event Start Date" PlaceholderEnd="Event End Date" />
+                    <MudDateRangePicker @bind-DateRange="@_dateRange" PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Margin="Margin.None" Editable="false" Clearable="true" PlaceholderStart="Event Start Date" PlaceholderEnd="Event End Date" />
                 </MudItem>
 
                 <MudItem xs="12" sm="12" md="12" lg="3">
-                    <MudTimePicker Label="Event Start Time" AmPm="true" @bind-Time="startTime" />
+                    <MudTimePicker Label="Event Start Time" PickerVariant="PickerVariant.Dialog" AmPm="true" @bind-Time="startTime" />
                 </MudItem>
 
                 <MudItem xs="12" sm="12" md="12" lg="3">
-                    <MudTimePicker Label="Event End Time" AmPm="true" @bind-Time="endTime" />
+                    <MudTimePicker Label="Event End Time" PickerVariant="PickerVariant.Dialog" AmPm="true" @bind-Time="endTime" />
                 </MudItem>
 
             </MudGrid>
