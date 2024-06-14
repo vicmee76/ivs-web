@@ -184,11 +184,11 @@
                                     {
                                         if (_isUpdate)
                                         {
-                                            <MudText><b>Update</b></MudText>
+                                            <MudText><b>Update Ticket</b></MudText>
                                         }
                                         else
                                         {
-                                            <MudText><b>Save</b></MudText>
+                                            <MudText><b>Save Ticket</b></MudText>
                                         }
                                     }
                                 </MudButton>
@@ -219,11 +219,12 @@
                             }
                             else
                             {
-                                <MudTimeline TimelinePosition="TimelinePosition.Start" DisableModifiers="false">
+                               
 
                                     @if (_ticketList.Any())
                                     {
-                                        foreach (var item in _ticketList)
+                                <MudTimeline TimelinePosition="TimelinePosition.Start" DisableModifiers="false">
+                                        @foreach (var item in _ticketList)
                                         {
                                             <MudTimelineItem Size="Size.Small" Color="Color.Secondary" Elevation="2">
                                                 <MudCard Outlined="true" Elevation="25">
@@ -243,9 +244,19 @@
                                                 </MudCard>
                                             </MudTimelineItem>
                                         }
+                                        </MudTimeline>
+
+                                        <br/>
+
+                                       <center>
+                                            <MudButton ButtonType="ButtonType.Button" Href="/" FullWidth="false" Style="height:50px; background-color:#56375C; width:130px" Variant="Variant.Filled" Color="Color.Warning" Class="mt-5">
+                                                <MudText><b>All Done</b></MudText>
+                                            </MudButton>
+                                       </center>
                                     }
                                     else
                                     {
+                                    <MudTimeline TimelinePosition="TimelinePosition.Start" DisableModifiers="false">
                                         <MudTimelineItem Size="Size.Small" Color="Color.Default" Elevation="2">
                                             <MudCard Outlined="true" Elevation="25">
                                                 <MudCardHeader>
@@ -256,10 +267,11 @@
                                                 </MudCardHeader>
                                             </MudCard>
                                         </MudTimelineItem>
+                                    </MudTimeline>
                                     }
 
 
-                                </MudTimeline>
+                               
                             }
 
                         </MudItem>
