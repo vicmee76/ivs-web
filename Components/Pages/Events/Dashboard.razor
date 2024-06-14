@@ -14,9 +14,17 @@
 
             <MudPaper Elevation="0">
                 <MudToolBar>
-                    @if (fullname != null)
+
+                    @if (_processing)
                     {
-                        <MudText><b style="color:#56375C">Hi, @fullname</b></MudText>
+                        <MudSkeleton Height="42px" Width="200px" />
+                    }
+                    else
+                    {
+                        @if (fullname != null)
+                        {
+                            <MudText><b style="color:#56375C">Hi, @fullname</b></MudText>
+                        }
                     }
                     <MudSpacer />
                     <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
@@ -25,19 +33,59 @@
 
             <br />
 
-            <MudCard Elevation="0">
+            <MudCard Elevation="0" Style="padding:20px">
                 <MudCardHeader>
                     <CardHeaderContent>
-
+                        <MudText Typo="Typo.h6"><b>Dashboard</b></MudText>
                     </CardHeaderContent>
                     <CardHeaderActions>
-                        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.AddCircle" Size="Size.Small" Href="/events/create-event" Color="Color.Secondary">Create Event</MudButton>
+                        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.AddCircle" Size="Size.Medium" Href="/events/create-event" Color="Color.Secondary">Create Event</MudButton>
                     </CardHeaderActions>
                 </MudCardHeader>
                 <MudCardContent>
 
+                    <br />
 
-
+                    @if (_processing)
+                    {
+                        <MudSkeleton Height="42px;" />
+                        <MudSkeleton Height="42px;" />
+                        <MudSkeleton Height="42px;" />
+                    }
+                    else
+                    {
+                        @if (_eventsDto.Any())
+                        {
+                            <MudGrid>
+                                @foreach (var item in _eventsDto)
+                                {
+                                    <MudItem xs="12" sm="12" md="6" lg="3">
+                                        <MudCard>
+                                            <MudCardHeader>
+                                                <CardHeaderAvatar>
+                                                    <MudAvatar Color="Color.Secondary">@item.eventName[0]</MudAvatar>
+                                                    </CardHeaderAvatar>
+                                                    <CardHeaderContent>
+                                                        <MudText Typo="Typo.body2"><b>@item.eventName</b></MudText>
+                                                    <MudText Typo="Typo.body1">@item.eventOption event</MudText>
+                                                </CardHeaderContent>
+                                                <CardHeaderActions>
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+                                                </CardHeaderActions>
+                                            </MudCardHeader>
+                                            <MudCardMedia Image="images/backgrounds/abstract.jpg" Height="200" />
+                                            <MudCardContent>
+                                                <MudText Typo="Typo.body2">@item.eventAddress</MudText>
+                                                </MudCardContent>
+                                                <MudCardActions>
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default" />
+                                                </MudCardActions>
+                                            </MudCard>
+                                        </MudItem>
+                                }
+                            </MudGrid>
+                        }
+                    }
 
                 </MudCardContent>
             </MudCard>
@@ -49,14 +97,21 @@
 @code {
 
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+    [Inject] IEventService _eventService { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
+
+    IEnumerable<GetEventByUserDto> _eventsDto = new List<GetEventByUserDto>();
+
     AuthUser authUser = new AuthUser();
 
     private string fullname { get; set; }
     private string userId { get; set; }
 
+    private bool _processing { get; set; } = false;
+
     protected async override void OnInitialized()
     {
+        _processing = true;
         var state = await _authStateProvider.GetAuthenticationStateAsync();
 
         if (!state.User.Identity.IsAuthenticated)
@@ -68,10 +123,12 @@
             var auth = await authUser.GetAuthUserAsync(state);
             userId = auth.Id;
             fullname = auth.SentenceCaseFullName;
-            StateHasChanged();
-        }
 
-       
+            var res2 = await _eventService.GetEventByUser(userId);
+            _eventsDto = res2.result.data ?? new List<GetEventByUserDto>();
+        }
+        _processing = false;
+        StateHasChanged();
     }
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>

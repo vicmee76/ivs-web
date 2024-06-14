@@ -1,0 +1,518 @@
+﻿@page "/events/create-event-tickets/{id}"
+@using System.Globalization
+
+
+
+<PageTitle>Iv's - Create Event Tickets</PageTitle>
+
+<br />
+
+<AuthorizeView>
+    <NotAuthorized>
+        No Access
+    </NotAuthorized>
+
+    <Authorized Context="cntx">
+
+        <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+
+            <MudPaper Elevation="0">
+                <MudToolBar>
+
+                    <MudText><b style="color:#56375C">Create Event Tickets</b></MudText>
+
+                    <MudSpacer />
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                </MudToolBar>
+            </MudPaper>
+
+            <br />
+
+            <MudTimeline TimelineOrientation="TimelineOrientation.Horizontal" TimelinePosition="TimelinePosition.Bottom">
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Information</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Photo</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Time</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Primary" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Info" NoIcon="true"><b>Tickets</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+            </MudTimeline>
+
+        </MudContainer>
+
+
+
+        <MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
+
+            <MudCard Elevation="0">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+
+                    <MudGrid>
+
+                        <MudItem xs="12" sm="12" md="8" lg="7">
+
+                            <EditForm Model="@model" OnValidSubmit="@(async () => await ActionCreateEventTicket(_isUpdate))">
+
+                                <DataAnnotationsValidator />
+
+                                <MudText><b>Select your kind of ticket</b></MudText>
+                                <br />
+
+                                <MudRadioGroup @bind-Value="@model.ticketKind" For="@(() => model.ticketKind)">
+
+                                    <MudGrid Style="text-align:center">
+
+                                        <MudItem xs="6" sm="6" md="6" lg="6">
+                                            <div id="ticket-event-div">
+                                                <MudRadio Value="@("single")" @onchange="@(async () => await ActionTicketKind(true))" Color="Color.Primary"><b>@("Single Ticket")</b></MudRadio>
+                                            </div>
+                                        </MudItem>
+
+                                        <MudItem xs="6" sm="6" md="6" lg="6">
+                                            <div id="ticket-event-div">
+                                                <MudRadio Value="@("group")" @onchange="@(async () => await ActionTicketKind(false))" Color="Color.Primary"><b>@("Group Ticket")</b></MudRadio>
+                                            </div>
+                                        </MudItem>
+                                    </MudGrid>
+
+                                </MudRadioGroup>
+
+                                <br />
+
+                                <MudTextField Label="Ticket Name*" HelperText="Enter ticket name" @bind-Value="model.ticketName" For="@(() => model.ticketName)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+
+                                <br />
+
+                                <MudTextField T="string" Label="Ticket Description*" @bind-Value="model.ticketDescription" For="@(() => model.ticketDescription)" HelperText="Enter ticket description" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Placeholder="Enter description here" Lines="5" />
+
+
+                                <MudText><b>Ticket payment kind *</b></MudText>
+                                <br>
+
+                                @if (!_getEventprocessing)
+                                {
+                                    <MudSkeleton Animation="Animation.Wave" Width="40%" />
+                                    <MudSkeleton Animation="Animation.Wave" Width="60%" />
+                                }
+                                else
+                                {
+                                    <MudRadioGroup @bind-Value="@model.paymentOptionId" For="@(() => model.paymentOptionId)">
+                                        @if (_paymentOptions != null)
+                                        {
+                                            <MudGrid Style="text-align:center">
+                                                @foreach (var com in _paymentOptions)
+                                                {
+                                                    <MudItem xs="6" sm="6" md="6" lg="6">
+                                                        <div id="ticket-event-div">
+                                                            <MudRadio Value="@(com._id.ToString())" @onchange="@(async () => await ActionPaymentKind(com.name))" Color="Color.Primary"><b>@(com.name)</b></MudRadio>
+                                                        </div>
+                                                    </MudItem>
+                                                }
+                                            </MudGrid>
+                                        }
+                                    </MudRadioGroup>
+                                }
+
+                                <br /><br />
+
+                                <MudNumericField HideSpinButtons="true" HelperText="Enter ticket in stock" @bind-Value="amount" Required="true" ErrorText="Amount is required" Disabled="@_isFreeTicket" Label="Ticket amount" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Step=".2M" />
+
+                                <br />
+
+                                <MudNumericField HelperText="Select the size for groups" @bind-Value="model.groupSize" Disabled="@_isGroupTicket" For="@(() => model.groupSize)" Label="Select the size for groups" Variant="Variant.Outlined" Min="1" Max="20" HelperTextOnFocus="true" Clearable="true" />
+
+                                <br />
+
+                                <MudGrid>
+
+                                    <MudItem xs="12" sm="12" md="12" lg="6">
+                                        <MudSelect T="string" Label="Ticket in stock" ValueChanged="ActionTicketStock" HelperText="Select tickets in stock" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                                            <MudSelectItem Value="@("Limited")" />
+                                            <MudSelectItem Value="@("UnLimited")" />
+                                        </MudSelect>
+                                    </MudItem>
+
+                                    <MudItem xs="12" sm="12" md="12" lg="6">
+                                        <MudNumericField @bind-Value="model.ticketInStock" Disabled="@_isLimited" HelperText="Enter ticket in stock" For="@(() => model.ticketInStock)" Label="Ticket in stock" Variant="Variant.Outlined" Min="1" Max="500" HelperTextOnFocus="true" Clearable="true" />
+                                    </MudItem>
+
+                                </MudGrid>
+
+                                <br />
+
+                                <MudGrid>
+                                    <MudItem xs="12" sm="12" md="12" lg="6">
+                                        <MudDatePicker PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Editable="false" Clearable="true" @bind-Date="model.ticketSalesEndDateAndTime" Label="Ticket end date" />
+                                    </MudItem>
+                                    <MudItem xs="12" sm="12" md="12" lg="6">
+                                        <MudTimePicker Label="Select time" PickerVariant="PickerVariant.Dialog" Required="true" Editable="false" AmPm="true" @bind-Time="endTime" />
+                                    </MudItem>
+                                </MudGrid>
+
+                                <br><br />
+
+                                <MudButton ButtonType="ButtonType.Submit" FullWidth="false" Disabled="@_processing" Style="height:50px; background-color:#56375C; width:200px" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                                    @if (_processing)
+                                    {
+                                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                        <MudText Class="ms-2">Processing</MudText>
+                                    }
+                                    else
+                                    {
+                                        if (_isUpdate)
+                                        {
+                                            <MudText><b>Update Ticket</b></MudText>
+                                        }
+                                        else
+                                        {
+                                            <MudText><b>Save Ticket</b></MudText>
+                                        }
+                                    }
+                                </MudButton>
+                                &nbsp;
+                                <MudButton ButtonType="ButtonType.Reset" OnClick="ActionReset" FullWidth="false" Style="height:50px; width:130px" Variant="Variant.Filled" Color="Color.Warning" Class="mt-5">
+
+                                    <MudText><b>Reset</b></MudText>
+
+                                </MudButton>
+
+                                <br /><br /><br />
+
+                            </EditForm>
+
+                        </MudItem>
+
+                        <MudItem xs="12" sm="12" md="12" lg="5">
+
+                            <MudText Typo="Typo.h6"> <b>See your saved tickets here</b></MudText>
+
+                            <br /><br />
+
+                            @if (!_getEventprocessing)
+                            {
+                                <MudSkeleton Animation="Animation.Wave" Width="40%" />
+                                <MudSkeleton Animation="Animation.Wave" Width="60%" />
+                                <MudSkeleton Animation="Animation.Wave" Width="90%" />
+                            }
+                            else
+                            {
+                                @if (_ticketList.Any())
+                                {
+                                    <MudTimeline TimelinePosition="TimelinePosition.Start" DisableModifiers="false">
+                                        @foreach (var item in _ticketList)
+                                        {
+                                            <MudTimelineItem Size="Size.Small" Color="Color.Secondary" Elevation="2">
+                                                <MudCard Outlined="true" Elevation="25">
+                                                    <MudCardHeader>
+                                                        <CardHeaderContent>
+                                                            <MudText Typo="Typo.body1"><b>@item.ticketKind Ticket</b></MudText>
+                                                            <div>
+                                                                <div><b>Ticket Name : </b><span>@item.ticketName</span></div>
+                                                                <div><b>Ticket Price : </b><span>@item.ticketAmount.NumberDecimal.ToString("N0")</span></div>
+                                                            </div>
+                                                        </CardHeaderContent>
+                                                        <CardHeaderActions>
+                                                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Title="Edit ticket" OnClick="@(async () => await ActionEditTicket(item))" Color="Color.Default" aria-label="edit"></MudIconButton>
+                                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Title="Delete ticket" OnClick="@(async () => await ActionDeleteTicket(item._id))" Color="Color.Default" aria-label="delete"></MudIconButton>
+                                                        </CardHeaderActions>
+                                                    </MudCardHeader>
+                                                </MudCard>
+                                            </MudTimelineItem>
+                                        }
+                                    </MudTimeline>
+
+                                    <br />
+
+                                    <center>
+                                        <MudButton ButtonType="ButtonType.Button" Href="/" FullWidth="false" Style="height:50px; background-color:#56375C; width:130px" Variant="Variant.Filled" Color="Color.Warning" Class="mt-5">
+                                            <MudText><b>All Done</b></MudText>
+                                        </MudButton>
+                                    </center>
+                                }
+                                else
+                                {
+                                    <MudTimeline TimelinePosition="TimelinePosition.Start" DisableModifiers="false">
+                                        <MudTimelineItem Size="Size.Small" Color="Color.Default" Elevation="2">
+                                            <MudCard Outlined="true" Elevation="25">
+                                                <MudCardHeader>
+                                                    <CardHeaderContent>
+                                                        <MudText Typo="Typo.body1"><b>No tickets yet</b></MudText>
+
+                                                    </CardHeaderContent>
+                                                </MudCardHeader>
+                                            </MudCard>
+                                        </MudTimelineItem>
+                                    </MudTimeline>
+                                }
+
+                            }
+
+                        </MudItem>
+                    </MudGrid>
+
+
+                </MudCardContent>
+            </MudCard>
+
+        </MudContainer>
+
+
+    </Authorized>
+</AuthorizeView>
+
+
+@code {
+
+    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+    [Inject] IPaymentOptionService _paymentOptionService { get; set; }
+    [Inject] ITicketService _ticketService { get; set; }
+    [Inject] IEventService _eventService { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+    [SupplyParameterFromForm] public CreateTicketVM? model { get; set; }
+    [Parameter] public string? id { get; set; }
+
+
+    IEnumerable<GetPaymentOptionsDto> _paymentOptions = new List<GetPaymentOptionsDto>();
+    IEnumerable<TicketDto> _ticketList = new List<TicketDto>();
+
+    AuthUser authUser = new AuthUser();
+    private string userId { get; set; }
+    private string eventName { get; set; }
+
+    DateTime? date = DateTime.Today;
+    TimeSpan? endTime = new TimeSpan(00, 30, 00);
+
+    private bool _processing = false;
+    private string ticketId { get; set; }
+    private bool _getEventprocessing { get; set; } = false;
+
+    private bool _isGroupTicket { get; set; }
+    private bool _isFreeTicket { get; set; }
+    private bool _isLimited { get; set; }
+    private bool _isUpdate { get; set; } = false;
+
+    private decimal amount { get; set; }
+
+    private string selectTickStock { get; set; }
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Dashboard", href: "/events/dashboard"),
+        new BreadcrumbItem("Create Tickets", href: null, disabled: true)
+    };
+
+
+    protected async override void OnInitialized()
+    {
+        _getEventprocessing = false;
+        model = new CreateTicketVM();
+        var state = await _authStateProvider.GetAuthenticationStateAsync();
+
+        if (!state.User.Identity.IsAuthenticated)
+        {
+            _navigate.NavigateTo("/accounts/login");
+        }
+        else
+        {
+            var auth = await authUser.GetAuthUserAsync(state);
+            userId = auth.Id;
+            await InitializeComponent();
+        }
+        _getEventprocessing = true;
+        StateHasChanged();
+    }
+
+
+
+    private async Task InitializeComponent()
+    {
+        var res = await _eventService.GetEventMetaData(id);
+        if (res.result.code == ResponseCodes.ResponseCode_Ok)
+        {
+            eventName = res.result.data.eventName;
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+        }
+
+        var res2 = await _paymentOptionService.GetAllPaymentOptions();
+        _paymentOptions = res2.result.data ?? new List<GetPaymentOptionsDto>();
+
+        var res3 = await _ticketService.GetTicketByEventId(id);
+        _ticketList = res3.result.data ?? new List<TicketDto>();
+    }
+
+
+    private void ActionReset()
+    {
+        model = new CreateTicketVM();
+        endTime = new TimeSpan(00, 30, 00);
+        ticketId = string.Empty;
+        _isUpdate = false;
+    }
+
+
+    private async Task ActionCreateEventTicket(bool type)
+    {
+        _processing = true;
+
+        model.ivsEvent_id = id;
+        model.ticketAmount = amount.ToString();
+        model.ticketSalesEndDateAndTime = (DateTime)(model.ticketSalesEndDateAndTime + endTime);
+
+        if (!type)
+        {
+            var res = await _ticketService.CreateTicket(model);
+            if (res.result.code == ResponseCodes.ResponseCode_Created)
+            {
+                _snackbar.Add(res.result.message, Severity.Success);
+                await InitializeComponent();
+                ActionReset();
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+        else
+        {
+            if (string.IsNullOrWhiteSpace(ticketId))
+            {
+                _snackbar.Add("Invalid ticket reference", Severity.Error);
+            }
+            else
+            {
+                var res = await _ticketService.UpdateTicket(ticketId, model);
+                if (res.result.code == ResponseCodes.ResponseCode_Ok)
+                {
+                    _snackbar.Add(res.result.message, Severity.Success);
+                    await InitializeComponent();
+                    ActionReset();
+                }
+                else
+                {
+                    _snackbar.Add(res.result.message, Severity.Error);
+                }
+            }
+        }
+
+        StateHasChanged();
+        _processing = false;
+    }
+
+
+
+    private async Task ActionDeleteTicket(string ticketId)
+    {
+        if (string.IsNullOrEmpty(ticketId))
+        {
+            _snackbar.Add("Ticket reference is required. Please try again later", Severity.Error);
+        }
+        else
+        {
+            var res = await _ticketService.DeleteTicketById(ticketId);
+            if (res.result.code == ResponseCodes.ResponseCode_Ok)
+            {
+                _snackbar.Add(res.result.message, Severity.Success);
+                ActionReset();
+                await InitializeComponent();
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+    }
+
+
+    private async Task ActionEditTicket(TicketDto item)
+    {
+        model = new CreateTicketVM();
+        model.ticketKind = item.ticketKind.ToLower();
+        model.ivsEvent_id = item.ivsEvent_id;
+        model.paymentOptionId = item.paymentOptionId;
+        model.ticketName = item.ticketName;
+        model.ticketInStock = item.ticketInStock;
+        model.ticketDescription = item.ticketDescription;
+        model.groupSize = item.groupSize;
+        amount = item.ticketAmount.NumberDecimal;
+        model.ticketSalesEndDateAndTime = item.ticketSalesEndDateAndTime;
+        endTime = item.ticketSalesEndDateAndTime.TimeOfDay;
+
+        _isFreeTicket = amount == 0 ? true : false;
+        _isGroupTicket = item.ticketKind.ToLower() == "single" ? true : false;
+        ticketId = item._id;
+        _isUpdate = true;
+
+        StateHasChanged();
+    }
+
+
+
+
+    private async Task ActionTicketKind(bool value)
+    {
+        _isGroupTicket = value;
+        if (value)
+            model.groupSize = 0;
+
+        StateHasChanged();
+    }
+
+
+    private async Task ActionPaymentKind(string value)
+    {
+        if (value.ToLower() == "free")
+        {
+            _isFreeTicket = true;
+            amount = 0;
+        }
+        else
+        {
+            _isFreeTicket = false;
+        }
+        StateHasChanged();
+    }
+
+
+    private void ActionTicketStock(string value)
+    {
+        if (value.ToLower() == "limited")
+        {
+            _isLimited = false;
+            model.ticketInStock = 0;
+        }
+        else
+        {
+            _isLimited = true;
+            model.ticketInStock = int.MaxValue;
+        }
+        StateHasChanged();
+    }
+
+}

@@ -5,11 +5,13 @@ using ivs_ui.Components.Data.Services.Events;
 using ivs_ui.Components.Data.Services.General;
 using ivs_ui.Components.Data.Services.Organisations;
 using ivs_ui.Components.Data.Services.Payment;
+using ivs_ui.Components.Data.Services.Tickets;
 using ivs_ui.Domain.Interfaces.Accounts;
 using ivs_ui.Domain.Interfaces.Events;
 using ivs_ui.Domain.Interfaces.General;
 using ivs_ui.Domain.Interfaces.Organisations;
 using ivs_ui.Domain.Interfaces.Payment;
+using ivs_ui.Domain.Interfaces.Tickets;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using MudBlazor.Services;
@@ -47,14 +49,8 @@ builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IEventTypeService, EventTypeService>();
 builder.Services.AddTransient<IPaymentOptionService, PaymentOptionService>();
 builder.Services.AddTransient<IEventService, EventService>();
-
-
-
-
-
-
-
-
+builder.Services.AddTransient<IEventTimeService, EventTimeService>();
+builder.Services.AddTransient<ITicketService, TicketService>();
 
 
 var app = builder.Build();

@@ -1,0 +1,279 @@
+﻿@page "/events/create-event-time/{id}"
+
+<PageTitle>Iv's - Create Event Time</PageTitle>
+
+<br />
+
+<AuthorizeView>
+
+    <NotAuthorized>
+        No Access
+    </NotAuthorized>
+
+    <Authorized Context="cntx">
+
+        <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+
+            <MudPaper Elevation="0">
+                <MudToolBar>
+
+                    <MudText><b style="color:#56375C">Create event time for -- <b>@eventName</b></b></MudText>
+                    <MudSpacer />
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+
+                </MudToolBar>
+            </MudPaper>
+
+            <br />
+
+            <MudTimeline TimelineOrientation="TimelineOrientation.Horizontal" TimelinePosition="TimelinePosition.Bottom">
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Information</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Photo</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Primary" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Info" NoIcon="true"><b>Time</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Tickets</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+            </MudTimeline>
+
+        </MudContainer>
+
+        <br />
+
+        <MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="padding:20px">
+
+
+
+
+
+            <div style="font-size:17px; line-height:40px">
+                You can add reoccuring date and time for your events. Simply enter the date and time for the event and click the 'Add' button to save it. 
+                <br />
+                Do this for all the dates and time you want before clicking save.
+            </div>
+
+            <br /><br />
+            
+            <MudGrid>
+
+                <MudItem xs="12" sm="12" md="12" lg="6">
+                    <MudDateRangePicker @bind-DateRange="@_dateRange" PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Margin="Margin.None" Editable="false" Clearable="true" PlaceholderStart="Event Start Date" PlaceholderEnd="Event End Date" />
+                </MudItem>
+
+                <MudItem xs="12" sm="12" md="12" lg="3">
+                    <MudTimePicker Label="Event Start Time" PickerVariant="PickerVariant.Dialog" AmPm="true" @bind-Time="startTime" />
+                </MudItem>
+
+                <MudItem xs="12" sm="12" md="12" lg="3">
+                    <MudTimePicker Label="Event End Time" PickerVariant="PickerVariant.Dialog" AmPm="true" @bind-Time="endTime" />
+                </MudItem>
+
+            </MudGrid>
+
+            <br /><br />
+
+            <MudButton OnClick="@(async () => await ActionAddTime())" Style="background-color:#56375C; color:white" Variant="Variant.Filled"> Add Time </MudButton>
+            
+            
+            <div style="margin-top:30px; margin-bottom:30px;">
+                <MudDivider></MudDivider>
+            </div>
+
+            <MudText Typo="Typo.h6"> <b>Event Date & Time</b></MudText>
+
+            <br />
+
+            <MudTimeline TimelinePosition="TimelinePosition.Start" DisableModifiers="false">
+                
+                @if (model.Any())
+                {
+                    foreach(var item in model)
+                    {
+                        <MudTimelineItem Size="Size.Small" Color="Color.Warning" Elevation="5">
+                            <MudCard Outlined="false" Elevation="25">
+                                <MudCardHeader>
+                                    <CardHeaderContent>
+                                        <MudText Typo="Typo.body1"><b>@eventName</b></MudText>
+                                    </CardHeaderContent>
+                                    <CardHeaderActions>
+                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="@(async () => await ActionRemoveTime(item))" Color="Color.Error" aria-label="delete"></MudIconButton>
+                                    </CardHeaderActions>
+                                </MudCardHeader>
+                                <MudCardContent>
+                                    <MudText Typo="Typo.body2">Event Start Date & Time : <b>@item.startDateAndTime</b> </MudText>
+                                    <br />
+                                    <MudText Typo="Typo.body2">Event End Date & Time : <b>@item.endDateAndTime</b> </MudText>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudTimelineItem>
+                    }
+                }
+
+            </MudTimeline>
+
+            <br /><br />
+
+            <MudButton OnClick="@(async () => await ActionCreateTime())" Disabled="@(!model.Any())" Style="background-color:#56375C; color:white" Variant="Variant.Filled">  
+
+                @if (_processing)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                    <MudText Class="ms-2">Processing</MudText>
+                }
+                else
+                {
+                    <MudText><b>Create Event Time</b></MudText>
+                }
+            </MudButton>
+
+        </MudContainer>
+
+    </Authorized>
+
+
+</AuthorizeView>
+
+@code {
+
+    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+    [Inject] IEventService _eventService { get; set; }
+    [Inject] IEventTimeService _eventTimeService { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+    [Parameter] public string? id { get; set; }
+
+    AuthUser authUser = new AuthUser();
+    List<EventTimeVM> model = new List<EventTimeVM>();
+    private string userId { get; set; }
+    private string eventName { get; set; }
+    private bool _processing = false;
+
+    private DateRange _dateRange { get; set; }
+    TimeSpan? startTime = new TimeSpan(00, 45, 00);
+    TimeSpan? endTime = new TimeSpan(00, 45, 00);
+
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Events", href: "/events/dashboard"),
+        new BreadcrumbItem("Create Time", href: null, true)
+    };
+
+    protected async override void OnInitialized()
+    {
+        var state = await _authStateProvider.GetAuthenticationStateAsync();
+
+        if (!state.User.Identity.IsAuthenticated)
+        {
+            _navigate.NavigateTo("/accounts/login");
+        }
+        else
+        {
+            var auth = await authUser.GetAuthUserAsync(state);
+            userId = auth.Id;
+
+            var res = await _eventService.GetEventMetaData(id);
+            if (res.result.code == ResponseCodes.ResponseCode_Ok)
+            {
+                eventName = res.result.data.eventName;
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+        StateHasChanged();
+
+    }
+
+
+    private async Task ActionAddTime()
+    {
+        if (_dateRange == null || _dateRange.Start == null || _dateRange.End == null)
+        {
+            _snackbar.Add("Please select your event start date and event end date", Severity.Error);
+        }
+        else
+        {
+            if (_dateRange.Start > _dateRange.End)
+            {
+                _snackbar.Add("Start date cannot be greater than end date", Severity.Error);
+            }
+            else if ((_dateRange.Start == _dateRange.End) && (endTime < startTime))
+            {
+                _snackbar.Add("End time cannot be less than the start time.", Severity.Error);
+            }
+            else
+            {
+                DateTime combinedStartDateTime = (DateTime)(_dateRange.Start.Value.Date + startTime);
+                DateTime combinedEndDateTime = (DateTime)(_dateRange.End.Value.Date + endTime);
+
+                var times = new EventTimeVM()
+                {
+                    ivsEventId = id,
+                    startDateAndTime = combinedStartDateTime,
+                    endDateAndTime = combinedEndDateTime
+                };
+
+                model.Add(times);
+            }
+        }
+        StateHasChanged();
+    }
+
+
+    private async Task ActionRemoveTime(EventTimeVM item)
+    {
+        var removed = model.Remove(item);
+
+        if (removed)
+        {
+            _snackbar.Add("Time removed successfuly", Severity.Success);
+        }
+        else
+        {
+            _snackbar.Add("Something went wrong trying to remove this time please try again later.", Severity.Error);
+        }
+        StateHasChanged();
+    }
+
+
+    private async Task ActionCreateTime()
+    {
+        _processing = true;
+        if (!model.Any())
+        {
+            _snackbar.Add("Please, add one or more event time", Severity.Error);
+        }
+        else
+        {
+            var res = await _eventTimeService.CreateEventTime(model);
+            if (res.result.code == ResponseCodes.ResponseCode_Created)
+            {
+                _snackbar.Add(res.result.message, Severity.Success);
+                _navigate.NavigateTo($"/events/create-event-tickets/{id}");
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+        _processing = false;
+    }
+}

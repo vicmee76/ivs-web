@@ -1,4 +1,5 @@
 ﻿using ivs_ui.Domain.Interfaces.General;
+using ivs_ui.Domain.Models.ViewModels.Events;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -8,13 +9,21 @@ namespace ivs_ui.Components.Data.Services.General
     {
         private readonly IConfiguration _config = config;
 
-        public async Task<RestResponse> Call(string apiPathUrl, string absoluteUrl, Method method, dynamic body, Dictionary<string, string>? headers = null, Dictionary<string, string>? queryParameter = null)
+        public async Task<RestResponse> Call(string apiPathUrl, string absoluteUrl, Method method, dynamic body, Dictionary<string, string>? headers = null, Dictionary<string, string>? queryParameter = null, UploadFileVM? file = null)
         {
             var options = new RestClientOptions(_config.GetValue<string>("IvsApi:BaseUri") ?? "") { MaxTimeout = -1, };
             var client = new RestClient(options);
             var request = new RestRequest(string.Concat(apiPathUrl, absoluteUrl), method);
 
-            request.AddHeader("Content-Type", "application/json");
+            if (file != null)
+            {
+                request.AddFile("ivsEventPhoto", file.fileData, file.fileName);
+                request.AddHeader("Content-Type", "multipart/form-data");
+            }
+            else
+            {
+                request.AddHeader("Content-Type", "application/json");
+            }
 
             if (headers != null)
                 foreach (var header in headers) { request.AddHeader(header.Key, header.Value); }
@@ -31,5 +40,6 @@ namespace ivs_ui.Components.Data.Services.General
             RestResponse response = await client.ExecuteAsync(request);
             return response;
         }
+
     }
 }
