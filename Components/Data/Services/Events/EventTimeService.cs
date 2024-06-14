@@ -38,7 +38,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong, please try agian later",
+                        message = "Error! Something went wrong trying to create event time, please try agian later",
                     }
                 };
             }

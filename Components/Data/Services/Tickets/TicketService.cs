@@ -2,13 +2,10 @@
 using ivs_ui.Domain.Constants;
 using ivs_ui.Domain.Interfaces.General;
 using ivs_ui.Domain.Interfaces.Tickets;
-using ivs_ui.Domain.Models.Dtos.Events;
 using ivs_ui.Domain.Models.Dtos.Tickets;
 using ivs_ui.Domain.Models.ViewModels.Tickets;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
-using System.Reflection;
 
 namespace ivs_ui.Components.Data.Services.Tickets
 {
@@ -38,7 +35,7 @@ namespace ivs_ui.Components.Data.Services.Tickets
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong, please try agian later",
+                        message = "Error! Something went wrong trying to create ticket, please try agian later",
                     }
                 };
             }
@@ -65,7 +62,7 @@ namespace ivs_ui.Components.Data.Services.Tickets
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong, please try agian later",
+                        message = "Error! Something went wrong trying to delete ticket, please try agian later",
                     }
                 };
             }
@@ -96,7 +93,33 @@ namespace ivs_ui.Components.Data.Services.Tickets
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong, please try agian later",
+                        message = "Error! Something went wrong trying to get ticket by event id, please try agian later",
+                    }
+                };
+            }
+        }
+
+        public async Task<ResponseObject> UpdateTicket(string ticketIdd, CreateTicketVM model)
+        {
+            try
+            {
+                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+
+                var response = await _webService.Call(apiUrl, $"update-event-with-tickets/{ticketIdd}", Method.Put, model, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res.result;
+                if (content?.code != ResponseCodes.ResponseCode_Ok)
+                    return res;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to update tickets, please try agian later",
                     }
                 };
             }

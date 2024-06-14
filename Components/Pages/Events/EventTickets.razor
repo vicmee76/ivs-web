@@ -299,6 +299,7 @@
     TimeSpan? endTime = new TimeSpan(00, 30, 00);
 
     private bool _processing = false;
+    private string ticketId { get; set; }
     private bool _getEventprocessing { get; set; } = false;
 
     private bool _isGroupTicket { get; set; }
@@ -363,6 +364,7 @@
     {
         model = new CreateTicketVM();
         endTime = new TimeSpan(00, 30, 00);
+        ticketId = string.Empty;
         _isUpdate = false;
     }
 
@@ -371,12 +373,12 @@
     {
         _processing = true;
 
+        model.ivsEvent_id = id;
+        model.ticketAmount = amount.ToString();
+        model.ticketSalesEndDateAndTime = (DateTime)(model.ticketSalesEndDateAndTime + endTime);
+
         if (!type)
         {
-            model.ivsEvent_id = id;
-            model.ticketAmount = amount.ToString();
-            model.ticketSalesEndDateAndTime = (DateTime)(model.ticketSalesEndDateAndTime + endTime);
-
             var res = await _ticketService.CreateTicket(model);
             if (res.result.code == ResponseCodes.ResponseCode_Created)
             {
@@ -391,7 +393,24 @@
         }
         else
         {
-            // do update here
+            if (string.IsNullOrWhiteSpace(ticketId))
+            {
+                _snackbar.Add("Invalid ticket reference", Severity.Error);
+            }
+            else
+            {
+                var res = await _ticketService.UpdateTicket(ticketId, model);
+                if (res.result.code == ResponseCodes.ResponseCode_Ok)
+                {
+                    _snackbar.Add(res.result.message, Severity.Success);
+                    await InitializeComponent();
+                    ActionReset();
+                }
+                else
+                {
+                    _snackbar.Add(res.result.message, Severity.Error);
+                }
+            }
         }
 
         StateHasChanged();
@@ -438,7 +457,8 @@
         endTime = item.ticketSalesEndDateAndTime.TimeOfDay;
 
         _isFreeTicket = amount == 0 ? true : false;
-        _isGroupTicket = item.ticketKind.ToLower() == "single" ? true : false; 
+        _isGroupTicket = item.ticketKind.ToLower() == "single" ? true : false;
+        ticketId = item._id;
         _isUpdate = true;
 
         StateHasChanged();

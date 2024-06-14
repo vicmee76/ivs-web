@@ -32,7 +32,7 @@ namespace ivs_ui.Components.Data.Services.Organisations
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong, please try agian later",
+                        message = "Error! Something went wrong trying to get organisations, please try agian later",
                     }
                 };
             }
