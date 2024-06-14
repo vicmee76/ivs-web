@@ -45,6 +45,39 @@ namespace ivs_ui.Components.Data.Services.Events
             }
         }
 
+
+
+        public async Task<ResponseObject> GetEventByUser(string userid)
+        {
+            try
+            {
+                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+
+                var response = await _webService.Call(apiUrl, $"get-ivs-event-by-userid/{userid}", Method.Get, null, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res.result;
+                if (content?.code != ResponseCodes.ResponseCode_Ok)
+                    return res;
+
+                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
+                res.result.data = JsonConvert.DeserializeObject<List<GetEventByUserDto>>(content.data.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to get all events for a user, please try agian later",
+                    }
+                };
+            }
+        }
+
+
+
         public async Task<ResponseObject> GetEventMetaData(string id)
         {
             try
@@ -68,7 +101,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong get event meta data, please try agian later",
+                        message = "Error! Something went wrong trying to get event meta data, please try agian later",
                     }
                 };
             }

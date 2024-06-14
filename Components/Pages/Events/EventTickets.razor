@@ -194,9 +194,9 @@
                                 </MudButton>
                                 &nbsp;
                                 <MudButton ButtonType="ButtonType.Reset" OnClick="ActionReset" FullWidth="false" Style="height:50px; width:130px" Variant="Variant.Filled" Color="Color.Warning" Class="mt-5">
-                                   
-                                            <MudText><b>Reset</b></MudText>
-                                     
+
+                                    <MudText><b>Reset</b></MudText>
+
                                 </MudButton>
 
                                 <br /><br /><br />
@@ -213,17 +213,15 @@
 
                             @if (!_getEventprocessing)
                             {
-                                <MudSkeleton Animation="Animation.Wave" Width="30%" />
+                                <MudSkeleton Animation="Animation.Wave" Width="40%" />
                                 <MudSkeleton Animation="Animation.Wave" Width="60%" />
-                                <MudSkeleton Animation="Animation.Wave" Width="100%" />
+                                <MudSkeleton Animation="Animation.Wave" Width="90%" />
                             }
                             else
                             {
-                               
-
-                                    @if (_ticketList.Any())
-                                    {
-                                <MudTimeline TimelinePosition="TimelinePosition.Start" DisableModifiers="false">
+                                @if (_ticketList.Any())
+                                {
+                                    <MudTimeline TimelinePosition="TimelinePosition.Start" DisableModifiers="false">
                                         @foreach (var item in _ticketList)
                                         {
                                             <MudTimelineItem Size="Size.Small" Color="Color.Secondary" Elevation="2">
@@ -244,34 +242,32 @@
                                                 </MudCard>
                                             </MudTimelineItem>
                                         }
-                                        </MudTimeline>
+                                    </MudTimeline>
 
-                                        <br/>
+                                    <br />
 
-                                       <center>
-                                            <MudButton ButtonType="ButtonType.Button" Href="/" FullWidth="false" Style="height:50px; background-color:#56375C; width:130px" Variant="Variant.Filled" Color="Color.Warning" Class="mt-5">
-                                                <MudText><b>All Done</b></MudText>
-                                            </MudButton>
-                                       </center>
-                                    }
-                                    else
-                                    {
+                                    <center>
+                                        <MudButton ButtonType="ButtonType.Button" Href="/" FullWidth="false" Style="height:50px; background-color:#56375C; width:130px" Variant="Variant.Filled" Color="Color.Warning" Class="mt-5">
+                                            <MudText><b>All Done</b></MudText>
+                                        </MudButton>
+                                    </center>
+                                }
+                                else
+                                {
                                     <MudTimeline TimelinePosition="TimelinePosition.Start" DisableModifiers="false">
                                         <MudTimelineItem Size="Size.Small" Color="Color.Default" Elevation="2">
                                             <MudCard Outlined="true" Elevation="25">
                                                 <MudCardHeader>
                                                     <CardHeaderContent>
                                                         <MudText Typo="Typo.body1"><b>No tickets yet</b></MudText>
-                                                        
+
                                                     </CardHeaderContent>
                                                 </MudCardHeader>
                                             </MudCard>
                                         </MudTimelineItem>
                                     </MudTimeline>
-                                    }
+                                }
 
-
-                               
                             }
 
                         </MudItem>
