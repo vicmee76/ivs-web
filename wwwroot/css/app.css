@@ -227,3 +227,9 @@
         padding: 10px;
 }
 
+
+#ticket-event-div {
+    background-color: rgb(243 223 246 / 57%);
+    padding: 10px;
+    border-radius: 15px;
+}

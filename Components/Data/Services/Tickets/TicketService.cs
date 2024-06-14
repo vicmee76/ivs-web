@@ -1,36 +1,32 @@
 ﻿using Blazored.SessionStorage;
 using ivs_ui.Domain.Constants;
-using ivs_ui.Domain.Interfaces.Events;
 using ivs_ui.Domain.Interfaces.General;
-using ivs_ui.Domain.Models.Dtos.Events;
-using ivs_ui.Domain.Models.ViewModels.Events;
+using ivs_ui.Domain.Interfaces.Tickets;
+using ivs_ui.Domain.Models.Dtos.Tickets;
+using ivs_ui.Domain.Models.ViewModels.Tickets;
 using Newtonsoft.Json;
 using RestSharp;
-using System.Reflection;
 
-namespace ivs_ui.Components.Data.Services.Events
+namespace ivs_ui.Components.Data.Services.Tickets
 {
-    public class EventService(IWebService webService, ISessionStorageService sessionStorageService) : IEventService
+    public class TicketService(IWebService webService, ISessionStorageService sessionStorageService) : ITicketService
     {
         private readonly IWebService _webService = webService;
         private readonly ISessionStorageService _sessionStorageService = sessionStorageService;
-        private readonly string apiUrl = "/api/v1/ivs-events/";
+        private readonly string apiUrl = "/api/v1/tickets/";
 
-        public async Task<ResponseObject> CreateEvent(CreateEventVM model)
+        public async Task<ResponseObject> CreateTicket(CreateTicketVM model)
         {
             try
             {
                 var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
                 var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
 
-                var response = await _webService.Call(apiUrl, "create-event", Method.Post, model, headers);
+                var response = await _webService.Call(apiUrl, "create-event-tickets", Method.Post, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCode_Created)
                     return res;
-
-                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
-                res.result.data = JsonConvert.DeserializeObject<CreateEventResponseDto>(content.data.ToString());
                 return res;
             }
             catch (Exception ex)
@@ -39,7 +35,34 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to create an event, please try agian later",
+                        message = "Error! Something went wrong trying to create ticket, please try agian later",
+                    }
+                };
+            }
+        }
+
+
+        public async Task<ResponseObject> DeleteTicketById(string ticketId)
+        {
+            try
+            {
+                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+
+                var response = await _webService.Call(apiUrl, $"delete-event-with-tickets/{ticketId}", Method.Delete, null, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res.result;
+                if (content?.code != ResponseCodes.ResponseCode_Ok)
+                    return res;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to delete ticket, please try agian later",
                     }
                 };
             }
@@ -47,21 +70,21 @@ namespace ivs_ui.Components.Data.Services.Events
 
 
 
-        public async Task<ResponseObject> GetEventByUser(string userid)
+        public async Task<ResponseObject> GetTicketByEventId(string eventId)
         {
             try
             {
                 var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
                 var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
 
-                var response = await _webService.Call(apiUrl, $"get-ivs-event-by-userid/{userid}", Method.Get, null, headers);
+                var response = await _webService.Call(apiUrl, $"get-all-event-with-tickets-by-event-id/{eventId}", Method.Get, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCode_Ok)
                     return res;
 
                 var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
-                res.result.data = JsonConvert.DeserializeObject<List<GetEventByUserDto>>(content.data.ToString());
+                res.result.data = JsonConvert.DeserializeObject<List<TicketDto>>(content.data.ToString());
                 return res;
             }
             catch (Exception ex)
@@ -70,29 +93,24 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get all events for a user, please try agian later",
+                        message = "Error! Something went wrong trying to get ticket by event id, please try agian later",
                     }
                 };
             }
         }
 
-
-
-        public async Task<ResponseObject> GetEventMetaData(string id)
+        public async Task<ResponseObject> UpdateTicket(string ticketIdd, CreateTicketVM model)
         {
             try
             {
                 var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
                 var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
 
-                var response = await _webService.Call(apiUrl, $"get-ivs-event-meta-data-by-id/{id}", Method.Get, null, headers);
+                var response = await _webService.Call(apiUrl, $"update-event-with-tickets/{ticketIdd}", Method.Put, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCode_Ok)
                     return res;
-
-                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
-                res.result.data = JsonConvert.DeserializeObject<CreateEventResponseDto>(content.data.ToString());
                 return res;
             }
             catch (Exception ex)
@@ -101,38 +119,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get event meta data, please try agian later",
-                    }
-                };
-            }
-        }
-
-
-
-        public async Task<ResponseObject> UploadEventBanner(UploadBodyVM model, UploadFileVM file)
-        {
-            try
-            {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
-                var response = await _webService.Call(apiUrl, $"upload-event-photo/{model.ivsEventId}", Method.Put, null, headers, null, file);
-                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
-                var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Ok)
-                    return res;
-
-                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
-                res.result.data = JsonConvert.DeserializeObject<CreateEventResponseDto>(content.data.ToString());
-                return res;
-            }
-            catch (Exception ex)
-            {
-                return new ResponseObject()
-                {
-                    result = new ResponseContents()
-                    {
-                        message = "Error! Something went wrong trying to upload event banner, please try agian later",
+                        message = "Error! Something went wrong trying to update tickets, please try agian later",
                     }
                 };
             }

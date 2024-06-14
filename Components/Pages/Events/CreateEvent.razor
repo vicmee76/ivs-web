@@ -20,6 +20,35 @@
                     <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
                 </MudToolBar>
             </MudPaper>
+
+            <br />
+
+            <MudTimeline TimelineOrientation="TimelineOrientation.Horizontal" TimelinePosition="TimelinePosition.Bottom">
+                <MudTimelineItem Color="Color.Primary" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Info" NoIcon="true"><b>Information</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Photo</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Time</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                    <ItemContent>
+                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Tickets</b></MudAlert>
+                    </ItemContent>
+                </MudTimelineItem>
+            </MudTimeline>
+
         </MudContainer>
 
         <MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
@@ -40,7 +69,7 @@
                             <MudItem xs="12" sm="12" md="8" lg="12">
                                 <DataAnnotationsValidator />
 
-                                <MudText><b>Select the event Option</b></MudText>
+                                <MudText><b>Select the event option</b></MudText>
                                 <br />
 
                                 <MudRadioGroup @bind-Value="@model.eventOption" For="@(() => model.eventOption)">
@@ -49,13 +78,13 @@
 
                                         <MudItem xs="6" sm="6" md="6" lg="6">
                                             <div id="public-event-div">
-                                                <MudRadio Value="@("Public")" Color="Color.Primary">@("Public Event")</MudRadio>
+                                                <MudRadio Value="@("Public")" Color="Color.Primary"><b>@("Public Event")</b></MudRadio>
                                             </div>
                                         </MudItem>
 
                                         <MudItem xs="6" sm="6" md="6" lg="6">
                                             <div id="private-event-div">
-                                                <MudRadio Value="@("Private")" Color="Color.Primary">@("Private Event")</MudRadio>
+                                                <MudRadio Value="@("Private")" Color="Color.Primary"><b>@("Private Event")</b></MudRadio>
                                             </div>
                                         </MudItem>
                                     </MudGrid>
@@ -78,7 +107,7 @@
                                     {
                                         foreach (var com in allState)
                                         {
-                                            <MudSelectItem Value="@(com)"> @(com)</MudSelectItem>
+                                            <MudSelectItem Value="@(com)">@(com)</MudSelectItem>
                                         }
                                     }
                                 </MudSelect>
@@ -103,7 +132,7 @@
                                                 {
                                                     <MudItem xs="6" sm="6" md="6" lg="6">
                                                         <div id="public-event-div">
-                                                            <MudRadio Value="@(com._id.ToString())" Color="Color.Primary">@(com.name)</MudRadio>
+                                                            <MudRadio Value="@(com._id.ToString())" Color="Color.Primary"><b>@(com.name)</b></MudRadio>
                                                         </div>
                                                     </MudItem>
                                                 }
@@ -166,7 +195,7 @@
                             }
                             else
                             {
-                                <MudText><b>Save &Aacute; Continue</b></MudText>
+                                <MudText><b>Save & Continue</b></MudText>
                             }
                         </MudButton>
 
@@ -177,6 +206,8 @@
             </MudCard>
 
         </MudContainer>
+
+
     </Authorized>
 </AuthorizeView>
 
