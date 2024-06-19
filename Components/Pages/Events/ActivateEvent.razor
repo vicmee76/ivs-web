@@ -1,0 +1,51 @@
+﻿@page "/events/activate-event/{id}"
+
+<PageTitle>Iv's - Activate Event</PageTitle>
+
+<br />
+
+<AuthorizeView>
+
+    <NotAuthorized>
+        No Access
+    </NotAuthorized>
+
+     <Authorized Context="cntx">
+
+        <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+
+            <MudPaper Elevation="0">
+                <MudToolBar>
+
+                    <MudText><b style="color:#56375C">Preview event for -- <b>@eventName</b></b></MudText>
+                    <MudSpacer />
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+
+                </MudToolBar>
+            </MudPaper>
+
+            
+
+        </MudContainer>
+
+        <br />
+
+         </Authorized>
+</AuthorizeView>
+
+@code {
+
+      [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+    [Inject] IEventService _eventService { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+    [Parameter] public string? id { get; set; }
+
+    private string eventName { get; set; }
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Events", href: "/events/dashboard"),
+        new BreadcrumbItem("Event preview", href: null, true)
+    };
+}
