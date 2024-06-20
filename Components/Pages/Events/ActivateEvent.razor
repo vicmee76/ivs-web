@@ -17,14 +17,47 @@
             <MudPaper Elevation="0">
                 <MudToolBar>
 
-                    <MudText><b style="color:#56375C">Preview event for -- <b>@eventName</b></b></MudText>
+                    @if (!_getEventprocessing)
+                    {
+                        <MudSkeleton Animation="Animation.Wave" Width="20%" />
+                    }
+                    else
+                    {
+                        <MudText><b style="color:#56375C">Preview event for -- <b>@eventName</b></b></MudText>
+                    }
                     <MudSpacer />
                     <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
-
                 </MudToolBar>
             </MudPaper>
 
-            
+            <br/>
+
+            <MudPaper Elevation="0" Style="padding:20px">
+
+                <MudGrid>
+                    <MudItem xs="12" sm="12" md="12" lg="4" Style="padding:10px">
+
+                        <MudText Typo="Typo.h6">Banner</MudText>
+                        <MudDivider></MudDivider>
+                        <br />
+
+                       <div style="text-align:center">
+                            <MudImage Fluid="true" Src="@_events.qrCodeLink" Height="300" Width="300" Alt="Swedish Farm House" Class="rounded-lg" />
+                       </div>
+
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12" md="12" lg="8" Style="padding:10px">
+
+                        <MudText Typo="Typo.h6">Event Details</MudText>
+                        <MudDivider></MudDivider>
+
+                    </MudItem>
+                </MudGrid>
+
+            </MudPaper>
+
+
 
         </MudContainer>
 
@@ -35,17 +68,54 @@
 
 @code {
 
-      [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
     [Inject] IEventService _eventService { get; set; }
+    [Inject] IConfiguration _config { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
     [Parameter] public string? id { get; set; }
 
+    AuthUser authUser = new AuthUser();
+    GetEventDetailsDto _events = new GetEventDetailsDto();
+    private string userId { get; set; }
     private string eventName { get; set; }
+    private bool _getEventprocessing { get; set; } = false;
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
         new BreadcrumbItem("Events", href: "/events/dashboard"),
-        new BreadcrumbItem("Event preview", href: null, true)
+        new BreadcrumbItem("Preview event", href: null, true)
     };
+
+
+    protected async override void OnInitialized()
+    {
+        _getEventprocessing = false;
+        var state = await _authStateProvider.GetAuthenticationStateAsync();
+
+        if (!state.User.Identity.IsAuthenticated)
+        {
+            _navigate.NavigateTo("/accounts/login");
+        }
+        else
+        {
+            var auth = await authUser.GetAuthUserAsync(state);
+            userId = auth.Id;
+
+            var res = await _eventService.GetEventDetails(id);
+            if (res.result.code == ResponseCodes.ResponseCode_Ok)
+            {
+                _events = res.result.data;
+                eventName = _events.eventName;
+                var img = _config.GetValue<string>("Paths:ImagePath") + _events.eventImage;
+                _events.eventImagePath = img;
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+        _getEventprocessing = true;
+        StateHasChanged();
+    }
 }

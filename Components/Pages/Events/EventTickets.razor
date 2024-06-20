@@ -19,7 +19,14 @@
             <MudPaper Elevation="0">
                 <MudToolBar>
 
-                    <MudText><b style="color:#56375C">Create Event Tickets</b></MudText>
+                    @if (!_getEventprocessing)
+                    {
+                        <MudSkeleton Animation="Animation.Wave" Width="20%" />
+                    }
+                    else
+                    {
+                        <MudText><b style="color:#56375C">Create Event Tickets for -- <b>@eventName</b></b></MudText>
+                    }
 
                     <MudSpacer />
                     <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
@@ -247,7 +254,7 @@
                                     <br />
 
                                     <center>
-                                        <MudButton ButtonType="ButtonType.Button" Href="/" FullWidth="false" Style="height:50px; background-color:#56375C; width:130px" Variant="Variant.Filled" Color="Color.Warning" Class="mt-5">
+                                        <MudButton ButtonType="ButtonType.Button" Href="@activateUrl" FullWidth="false" Style="height:50px; background-color:#56375C; width:130px" Variant="Variant.Filled" Color="Color.Warning" Class="mt-5">
                                             <MudText><b>All Done</b></MudText>
                                         </MudButton>
                                     </center>
@@ -302,6 +309,7 @@
     AuthUser authUser = new AuthUser();
     private string userId { get; set; }
     private string eventName { get; set; }
+    private string activateUrl { get; set; }
 
     DateTime? date = DateTime.Today;
     TimeSpan? endTime = new TimeSpan(00, 30, 00);
@@ -354,6 +362,7 @@
         if (res.result.code == ResponseCodes.ResponseCode_Ok)
         {
             eventName = res.result.data.eventName;
+            activateUrl = $"/events/activate-event/{id}";
         }
         else
         {
