@@ -143,7 +143,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
                 var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
 
-                var response = await _webService.Call(apiUrl, $"upload-event-photo/{model.ivsEventId}", Method.Put, null, headers, null, file);
+                var response = await _webService.Call(apiUrl, $"upload-event-photo/{model.ivsEventId}", Method.Put, model, headers, null, file);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCode_Ok)

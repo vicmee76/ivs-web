@@ -97,8 +97,18 @@
                                     
                                     <MudButton HtmlTag="label" Color="Color.Primary" for="@context.Id" Icon="@Icons.Material.Filled.Image" Variant="Variant.Outlined"> Browse </MudButton>
                                     
-                                    <MudButton OnClick="@(async () => await Upload())" Style="background-color:#56375C; color:white" Disabled="@(!_fileNames.Any())" Variant="Variant.Filled"> Upload & Continue </MudButton>
-                                    
+                                    <MudButton OnClick="@(async () => await Upload())" Style="background-color:#56375C; color:white" Disabled="@(!_fileNames.Any())" Variant="Variant.Filled">
+                                        @if (_processing)
+                                        {
+                                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                            <MudText Class="ms-2">Processing</MudText>
+                                        }
+                                        else
+                                        {
+                                            <MudText> Upload & Continue</MudText>
+                                        }
+                                    </MudButton>
+
                                     <MudButton OnClick="@Clear" Color="Color.Error" Disabled="@(!_fileNames.Any())" Variant="Variant.Outlined"> Clear </MudButton>
 
                                     <MudButton OnClick="@Clear" Color="Color.Primary" Variant="Variant.Filled"> Skip </MudButton>
@@ -155,6 +165,8 @@
     private UploadBodyVM model = new();
     private UploadFileVM fileModel = new();
     private IBrowserFile imageFile;
+
+    private bool _processing = false;
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
@@ -218,6 +230,7 @@
                 imageFile = file;
                 fileModel.fileData = buffer;
                 fileModel.fileName = file.Name;
+                fileModel.imageFileData = imageData;
             }
             StateHasChanged();
         }
@@ -229,6 +242,7 @@
 
     private async Task Upload()
     {
+        _processing = true;
         if (imageFile != null)
         {
             var res = await _eventService.UploadEventBanner(model, fileModel);
@@ -246,6 +260,7 @@
         {
             _snackbar.Add("Please select and image to upload", Severity.Error);
         }
+        _processing = false;
     }
 
     private void SetDragClass()

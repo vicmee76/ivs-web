@@ -59,6 +59,8 @@
                             <MudGrid>
                                 @foreach (var item in _eventsDto)
                                 {
+                                    var activateUrl = $"/events/activate-event/{item._id}";
+
                                     <MudItem xs="12" sm="12" md="6" lg="3">
                                         <MudCard>
                                             <MudCardHeader>
@@ -73,17 +75,65 @@
                                                     <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
                                                 </CardHeaderActions>
                                             </MudCardHeader>
-                                            <MudCardMedia Image="images/backgrounds/abstract.jpg" Height="200" />
+
+                                            @if (string.IsNullOrEmpty(item.eventImageData))
+                                            {
+                                                <MudCardMedia Image="images/backgrounds/abstract.jpg" Height="200" />
+                                            }
+                                            else
+                                            {
+                                                <MudCardMedia Image="@item.eventImageData" Height="200" />
+                                            }
+
                                             <MudCardContent>
                                                 <MudText Typo="Typo.body2">@item.eventAddress</MudText>
                                                 </MudCardContent>
+
                                                 <MudCardActions>
-                                                    <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default" />
-                                                </MudCardActions>
-                                            </MudCard>
-                                        </MudItem>
+                                                    <MudIconButton Icon="@Icons.Material.Filled.Share" Title="Share" Color="Color.Default" />
+
+                                                @if (item.status.ToLower() == "pending")
+                                                {
+                                                    <MudChip Variant="Variant.Text" Color="Color.Warning"><b>Not published</b></MudChip>
+                                                }
+                                                else
+                                                {
+                                                    <MudChip Variant="Variant.Text" Color="Color.Success"><b>Published</b></MudChip>
+                                                }
+
+                                                <MudSpacer></MudSpacer>
+
+
+                                                @if (item.status.ToLower() == "pending")
+                                                {
+                                                    <MudIconButton Href="@activateUrl" Icon="@Icons.Material.TwoTone.KeyboardDoubleArrowRight" Title="Publish event" Size="Size.Large" Color="Color.Secondary" />
+                                                }
+                                                else
+                                                {
+                                                    <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleRight" Title="View event" Size="Size.Large" Color="Color.Secondary" />
+                                                }
+
+                                                
+
+                                            </MudCardActions>
+                                        </MudCard>
+                                    </MudItem>
                                 }
                             </MudGrid>
+                        }
+                        else
+                        {
+                            <div style="text-align:center;">
+
+
+                                <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="130" Class="rounded-lg" />
+
+                                <br />
+
+                                <MudText Typo="Typo.h5"> <b>You haven't created an event yet!</b></MudText>
+                                <br>
+                                <MudText> Once you create an event you will be able to visualize and track them.</MudText>
+                            </div>
                         }
                     }
 
@@ -106,6 +156,7 @@
 
     private string fullname { get; set; }
     private string userId { get; set; }
+   
 
     private bool _processing { get; set; } = false;
 
@@ -120,6 +171,8 @@
         }
         else
         {
+            
+
             var auth = await authUser.GetAuthUserAsync(state);
             userId = auth.Id;
             fullname = auth.SentenceCaseFullName;
