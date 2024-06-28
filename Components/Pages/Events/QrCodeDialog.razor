@@ -1,0 +1,24 @@
+﻿<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            View QR Code
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        
+        <div style="text-align:center; margin:20px;">
+            <MudImage Fluid="true" Src="@qrCodeData" Height="300" Width="300" Alt="Swedish Farm House" Class="rounded-lg" />
+        </div>
+           
+    </DialogContent>
+    <DialogActions>
+        
+    </DialogActions>
+
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public string qrCodeData { get; set; }
+    private void Cancel() { MudDialog.Cancel(); }
+}
