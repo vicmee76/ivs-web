@@ -64,7 +64,7 @@
 
                             <MudGrid>
 
-                                <MudItem xs="12" sm="12" md="12" lg="6">
+                                <MudItem xs="12" sm="12" md="12" lg="9">
 
                                     <div>
                                         <MudText Typo="Typo.h6"><b>@_events.eventName</b></MudText>
@@ -107,14 +107,15 @@
                                             </MudButton>
                                             <br />
                                         }
-
                                     </div>
 
                                     <br />
 
+                                    
+
                                     <div>
 
-                                        <MudText Typo="Typo.body1"><b>Event time</b></MudText>
+                                        <MudText Typo="Typo.body1"><b>Event Time</b></MudText>
 
                                         <br />
 
@@ -126,24 +127,90 @@
                                         }
                                         else
                                         {
-                                            foreach (var t in _events.EventTime)
-                                            {
-                                                <div style="padding:10px; border:1px dashed #f0baf9">
-                                                    <MudText Typo="Typo.body2">Starts At : <b>@Convert.ToDateTime(t.startDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</b> </MudText>
-                                                    <br />
-                                                    <MudText Typo="Typo.body2">Ends At : <b>@Convert.ToDateTime(t.endDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</b> </MudText>
-                                                </div>
-                                                <br />
-                                            }
+                                            <MudExpansionPanels DisableBorders="true" Elevation="0">
+
+                                                @foreach (var t in _events.EventTime)
+                                                {
+                                                    <MudExpansionPanel Text="@Convert.ToDateTime(t.startDateAndTime).ToString("dddd, dd MMMM yyyy")">
+                                                        <div style="padding:10px; border:1px dashed #f0baf9">
+                                                            <MudText Typo="Typo.body2">Starts At : <b>@Convert.ToDateTime(t.startDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</b> </MudText>
+                                                            <br />
+                                                            <MudText Typo="Typo.body2">Ends At : <b>@Convert.ToDateTime(t.endDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</b> </MudText>
+                                                        </div>
+                                                    </MudExpansionPanel>
+                                                   <br />
+                                                }
+                                            </MudExpansionPanels>
                                         }
 
                                     </div>
 
+                                    <br />
+
+                                    <div>
+                                        <MudButton Href="@_events.adressPin"
+                                                   Target="_blank"
+                                                   Variant="Variant.Outlined"
+                                                   EndIcon="@Icons.Material.Filled.QrCode"
+                                                   Color="Color.Warning"
+                                                   Style="text-transform:none">
+                                            View QR Code
+                                        </MudButton>
+
+                                    </div>
+
+                                    <br /><br />
+
+                                    <div>
+                                        <MudText Typo="Typo.body1"><b>Event Tickets</b></MudText>
+
+                                        <br />
+
+                                        @if (!_events.Tickets.Any())
+                                        {
+                                            <span>
+                                                You dont have any tickets, please click <MudLink Href="@ticketlink" Variant="Variant.Outlined" Color="Color.Secondary" Style="text-transform:none; cursor:pointer"><b>here</b></MudLink> to create a ticket
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <MudExpansionPanels DisableBorders="true" Elevation="0">
+                                                @foreach (var t in _events.Tickets)
+                                                {
+                                                    <MudExpansionPanel Text="@t.ticketName">
+                                                        <div style="padding:10px; border:1px dashed #f9c7ba; line-height:30px;">
+                                                            <div><b>Ticket Kind : </b><span>@t.ticketKind</span></div>
+                                                            <div><b>Ticket Name : </b><span>@t.ticketName</span></div>
+                                                            <div><b>Ticket Price : </b><span>@t.ticketAmount.NumberDecimal.ToString("N0")</span></div>
+                                                            <div><b>Ticket in stock : </b><span>@t.ticketInStock</span></div>
+                                                            <div><b>Group Size : </b><span>@t.groupSize</span></div>
+                                                            <div><b>Ticket end date : </b><span>@Convert.ToDateTime(t.ticketSalesEndDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</span></div>
+                                                        </div>
+                                                    </MudExpansionPanel>
+                                                    <br />
+                                                }
+                                            </MudExpansionPanels>
+                                        }
+
+                                    </div>
+
+                                    <br />
+
                                 </MudItem>
 
+                               <MudItem xs="12" sm="12" md="12" lg="3">
+
+                                   <div style="text-align : center">
+
+                                        <MudButton Variant="Variant.Filled" id="btnDarkColor" Href="/events/create-event" Size="Size.Large">
+                                            Publish Event
+                                        </MudButton>
+
+                                   </div>
+
+                               </MudItem>
 
 
-                                <MudItem xs="12" sm="12" md="12" lg="6"></MudItem>
                             </MudGrid>
 
                         </MudItem>
