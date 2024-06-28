@@ -16,6 +16,32 @@ namespace ivs_ui.Components.Data.Services.Events
         private readonly ISessionStorageService _sessionStorageService = sessionStorageService;
         private readonly string apiUrl = "/api/v1/ivs-events/";
 
+        public async Task<ResponseObject> ActivateEvent(string id)
+        {
+            try
+            {
+                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+
+                var response = await _webService.Call(apiUrl, $"activate-event/{id}", Method.Put, null, headers, null, null);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res.result;
+                if (content?.code != ResponseCodes.ResponseCode_Ok)
+                    return res;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to publish this event, please try agian later",
+                    }
+                };
+            }
+        }
+
         public async Task<ResponseObject> CreateEvent(CreateEventVM model)
         {
             try
@@ -44,7 +70,6 @@ namespace ivs_ui.Components.Data.Services.Events
                 };
             }
         }
-
 
 
         public async Task<ResponseObject> GetEventByUser(string userid)
@@ -76,6 +101,7 @@ namespace ivs_ui.Components.Data.Services.Events
             }
         }
 
+
         public async Task<ResponseObject> GetEventDetails(string id)
         {
             try
@@ -104,6 +130,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 };
             }
         }
+
 
         public async Task<ResponseObject> GetEventMetaData(string id)
         {
@@ -135,7 +162,6 @@ namespace ivs_ui.Components.Data.Services.Events
         }
 
 
-
         public async Task<ResponseObject> UploadEventBanner(UploadBodyVM model, UploadFileVM file)
         {
             try
@@ -164,5 +190,6 @@ namespace ivs_ui.Components.Data.Services.Events
                 };
             }
         }
+
     }
 }

@@ -15,6 +15,19 @@
 
         <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
 
+            <MudMessageBox @ref="publishMessageBox" Title="Publish event" CancelText="Cancel" YesText="Publish" Style="padding:20px;">
+                <MessageContent>
+                    Are you sure you want to publish this event
+                </MessageContent>
+                <YesButton>
+                    <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Warning">Publish</MudButton>
+                </YesButton>
+                <CancelButton>
+                    <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Default">Cancel</MudButton>
+                </CancelButton>
+            </MudMessageBox>
+
+
             <MudPaper Elevation="0">
                 <MudToolBar>
 
@@ -150,7 +163,7 @@
 
                                     <div>
 
-                                        <MudButton Variant="Variant.Outlined" OnClick="@((e) => ViewQrCodeAction(_events.qrCodeLink))" EndIcon="@Icons.Material.Filled.QrCode" Color="Color.Warning" Style="text-transform:none">
+                                        <MudButton Variant="Variant.Filled" OnClick="@((e) => ViewQrCodeAction(_events.qrCodeLink))" EndIcon="@Icons.Material.Filled.QrCode" Color="Color.Warning" Style="text-transform:none">
                                             View QR Code
                                         </MudButton>
 
@@ -191,7 +204,63 @@
 
                                     </div>
 
-                                    <br />
+                                    <br /><br />
+
+                                    <div>
+                                        <MudText Typo="Typo.body1"><b>Social Links</b></MudText>
+
+                                       <br />
+
+                                       <div>
+                                           
+                                            @if (!string.IsNullOrWhiteSpace(_events.webLink))
+                                            {
+                                                <div>
+                                                    Visit us on
+                                                    <MudElement HtmlTag="a" Class="ms-1" Style="color:lightsalmon;font-weight:bold;" href="@_events.webLink" target="blank" rel="noopener noreferrer">
+                                                        Web site
+                                                    </MudElement>
+                                                </div>
+                                                <br />
+                                            }
+
+                                            @if (!string.IsNullOrWhiteSpace(_events.instagramLink))
+                                            {
+                                                <div>
+                                                    Visit us on
+                                                    <MudElement HtmlTag="a" Class="ms-1" Style="color:hotpink;font-weight:bold;" href="@_events.instagramLink" target="blank" rel="noopener noreferrer">
+                                                        Instagram
+                                                    </MudElement>
+                                                </div>
+                                                <br />
+                                            }
+
+                                            @if (!string.IsNullOrWhiteSpace(_events.facebookLink))
+                                            {
+                                                <div>
+                                                    Visit us on
+                                                    <MudElement HtmlTag="a" Class="ms-1" Style="color:blue;font-weight:bold;" href="@_events.facebookLink" target="blank" rel="noopener noreferrer">
+                                                        Facbook
+                                                    </MudElement>
+                                                </div>
+                                                <br />
+                                            }
+
+                                            @if (!string.IsNullOrWhiteSpace(_events.twitterLink))
+                                            {
+                                                <div>
+                                                    Visit us on
+                                                    <MudElement HtmlTag="a" Class="ms-1" Style="color:black;font-weight:bold;" href="@_events.twitterLink" target="blank" rel="noopener noreferrer">
+                                                        Twitter
+                                                    </MudElement>
+                                                </div>
+                                                <br />
+                                            }
+
+
+                                       </div>
+
+                                    </div>
 
                                 </MudItem>
 
@@ -199,8 +268,16 @@
 
                                    <div style="text-align : center">
 
-                                        <MudButton Variant="Variant.Filled" id="btnDarkColor" Href="/events/create-event" Size="Size.Large">
-                                            Publish Event
+                                        <MudButton Variant="Variant.Filled" Disabled="@_processing" id="btnDarkColor" OnClick="@((e) => PublishEventAction())" Size="Size.Large">
+                                            @if (_processing)
+                                            {
+                                                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                                <MudText Class="ms-2">Processing</MudText>
+                                            }
+                                            else
+                                            {
+                                                <MudText><b>Publish Event</b></MudText>
+                                            }
                                         </MudButton>
 
                                    </div>
@@ -242,6 +319,9 @@
     private string timelink { get; set; }
     private string ticketlink { get; set; }
     private bool _getEventprocessing { get; set; } = false;
+    private bool _processing { get; set; } = false;
+
+    private MudMessageBox publishMessageBox { get; set; }
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
@@ -295,12 +375,37 @@
             };
 
         var parameters = new DialogParameters<QrCodeDialog> { { x => x.qrCodeData, qrCode }};
-        var dialog = await DialogService.ShowAsync<QrCodeDialog>("View QR Code", parameters, opts);
+        var dialog = await DialogService.ShowAsync<QrCodeDialog>("QR Code", parameters, opts);
 
         var result = await dialog.Result;
         if (!result.Cancelled)
         {
             StateHasChanged();
         }
+    }
+
+
+
+    private async Task PublishEventAction()
+    {
+        _processing = true;
+
+        bool? result = await publishMessageBox.Show();
+        if (result == true)
+        {
+            var res = await _eventService.ActivateEvent(id);
+            if (res.result.code == ResponseCodes.ResponseCode_Ok)
+            {
+                _snackbar.Add(res.result.message, Severity.Success);
+                _navigate.NavigateTo("/events/dashboard");
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+
+        StateHasChanged();
+        _processing = false;
     }
 }

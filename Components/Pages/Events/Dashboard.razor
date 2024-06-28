@@ -72,7 +72,18 @@
                                                     <MudText Typo="Typo.body1">@item.eventOption event</MudText>
                                                 </CardHeaderContent>
                                                 <CardHeaderActions>
-                                                    <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+                                                    <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Default">
+                                                        <MudMenuItem>View</MudMenuItem>
+                                                        @if (item.status.ToLower() == "pending")
+                                                        {
+                                                            <MudMenuItem>Edit</MudMenuItem>
+                                                            <MudMenuItem>Delete</MudMenuItem>
+                                                        }
+                                                        else
+                                                        {
+
+                                                        }
+                                                    </MudMenu>
                                                 </CardHeaderActions>
                                             </MudCardHeader>
 
