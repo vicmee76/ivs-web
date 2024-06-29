@@ -17,7 +17,15 @@
             <MudPaper Elevation="0">
                 <MudToolBar>
 
-                    <MudText><b style="color:#56375C">Create event time for -- <b>@eventName</b></b></MudText>
+                    @if (!_getEventprocessing)
+                    {
+                        <MudSkeleton Animation="Animation.Wave" Width="20%" />
+                    }
+                    else
+                    {
+                        <MudText><b style="color:#56375C">Create event time for -- <b>@eventName</b></b></MudText>
+                    }
+
                     <MudSpacer />
                     <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
 
@@ -163,6 +171,7 @@
     private string userId { get; set; }
     private string eventName { get; set; }
     private bool _processing = false;
+    private bool _getEventprocessing { get; set; } = false;
 
     private DateRange _dateRange { get; set; }
     TimeSpan? startTime = new TimeSpan(00, 45, 00);
@@ -177,6 +186,8 @@
 
     protected async override void OnInitialized()
     {
+         _getEventprocessing = false;
+
         var state = await _authStateProvider.GetAuthenticationStateAsync();
 
         if (!state.User.Identity.IsAuthenticated)
@@ -198,6 +209,9 @@
                 _snackbar.Add(res.result.message, Severity.Error);
             }
         }
+
+        _getEventprocessing = true;
+
         StateHasChanged();
 
     }
