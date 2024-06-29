@@ -114,34 +114,7 @@
 
                                 <br />
 
-                                <MudText><b>Select the option *</b></MudText>
-                                <br>
-
-                                @if (!_getEventprocessing)
-                                {
-                                    <MudSkeleton Animation="Animation.Wave" Width="40%" />
-                                    <MudSkeleton Animation="Animation.Wave" Width="60%" />
-                                }
-                                else
-                                {
-                                    <MudRadioGroup @bind-Value="@model.paymentOption" For="@(() => model.paymentOption)">
-                                        @if (_paymentOptions != null)
-                                        {
-                                            <MudGrid Style="text-align:center">
-                                                @foreach (var com in _paymentOptions)
-                                                {
-                                                    <MudItem xs="6" sm="6" md="6" lg="6">
-                                                        <div id="public-event-div">
-                                                            <MudRadio Value="@(com._id.ToString())" Color="Color.Primary"><b>@(com.name)</b></MudRadio>
-                                                        </div>
-                                                    </MudItem>
-                                                }
-                                            </MudGrid>
-                                        }
-                                    </MudRadioGroup>
-                                }
-
-                                <br /><br />
+                                <br />
 
                                 <MudText><b>Select the event category *</b></MudText>
                                 <br />
@@ -228,7 +201,6 @@
     States states = new States();
 
     IEnumerable<GetEventTypesDto> _eventTypes = new List<GetEventTypesDto>();
-    IEnumerable<GetPaymentOptionsDto> _paymentOptions = new List<GetPaymentOptionsDto>();
 
     private string userId { get; set; }
     private bool _processing { get; set; }
@@ -263,9 +235,6 @@
 
             var res = await _eventTypeService.GetEventTypes();
             _eventTypes = res.result.data ?? new List<GetEventTypesDto>();
-
-            var res2 = await _paymentOptionService.GetAllPaymentOptions();
-            _paymentOptions = res2.result.data ?? new List<GetPaymentOptionsDto>();
 
             _getEventprocessing = true;
         }
