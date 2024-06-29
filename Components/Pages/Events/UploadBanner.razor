@@ -17,7 +17,15 @@
 
             <MudPaper Elevation="0">
                 <MudToolBar>
+
+                     @if (!_getEventprocessing)
+                    {
+                        <MudSkeleton Animation="Animation.Wave" Width="20%" />
+                    }
+                    else
+                    {
                     <MudText><b style="color:#56375C">Upload Your Banner for -- <b>@eventName</b></b></MudText>
+                    }
                     <MudSpacer />
                     <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
 
@@ -89,8 +97,18 @@
                                     
                                     <MudButton HtmlTag="label" Color="Color.Primary" for="@context.Id" Icon="@Icons.Material.Filled.Image" Variant="Variant.Outlined"> Browse </MudButton>
                                     
-                                    <MudButton OnClick="@(async () => await Upload())" Style="background-color:#56375C; color:white" Disabled="@(!_fileNames.Any())" Variant="Variant.Filled"> Upload & Continue </MudButton>
-                                    
+                                    <MudButton OnClick="@(async () => await Upload())" Style="background-color:#56375C; color:white" Disabled="@(!_fileNames.Any())" Variant="Variant.Filled">
+                                        @if (_processing)
+                                        {
+                                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                            <MudText Class="ms-2">Processing</MudText>
+                                        }
+                                        else
+                                        {
+                                            <MudText> Upload & Continue</MudText>
+                                        }
+                                    </MudButton>
+
                                     <MudButton OnClick="@Clear" Color="Color.Error" Disabled="@(!_fileNames.Any())" Variant="Variant.Outlined"> Clear </MudButton>
 
                                     <MudButton OnClick="@Clear" Color="Color.Primary" Variant="Variant.Filled"> Skip </MudButton>
@@ -137,6 +155,7 @@
     [Parameter] public string? id { get; set; }
 
     AuthUser authUser = new AuthUser();
+    private bool _getEventprocessing { get; set; } = false;
     private string userId { get; set; }
     private string imageData { get; set; }
     private string eventName { get; set; }
@@ -147,6 +166,8 @@
     private UploadFileVM fileModel = new();
     private IBrowserFile imageFile;
 
+    private bool _processing = false;
+
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
         new BreadcrumbItem("Events", href: "/events/dashboard"),
@@ -155,7 +176,7 @@
 
     protected async override void OnInitialized()
     {
-
+        _getEventprocessing = false;
         var state = await _authStateProvider.GetAuthenticationStateAsync();
 
         if (!state.User.Identity.IsAuthenticated)
@@ -177,6 +198,7 @@
                 _snackbar.Add(res.result.message, Severity.Error);
             }
         }
+        _getEventprocessing = true;
         StateHasChanged();
 
     }
@@ -208,6 +230,7 @@
                 imageFile = file;
                 fileModel.fileData = buffer;
                 fileModel.fileName = file.Name;
+                fileModel.imageFileData = imageData;
             }
             StateHasChanged();
         }
@@ -219,6 +242,7 @@
 
     private async Task Upload()
     {
+        _processing = true;
         if (imageFile != null)
         {
             var res = await _eventService.UploadEventBanner(model, fileModel);
@@ -236,6 +260,7 @@
         {
             _snackbar.Add("Please select and image to upload", Severity.Error);
         }
+        _processing = false;
     }
 
     private void SetDragClass()

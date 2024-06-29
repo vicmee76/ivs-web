@@ -18,6 +18,7 @@ namespace ivs_ui.Components.Data.Services.General
             if (file != null)
             {
                 request.AddFile("ivsEventPhoto", file.fileData, file.fileName);
+                request.AddParameter("imageFileData", file.imageFileData);
                 request.AddHeader("Content-Type", "multipart/form-data");
             }
             else
