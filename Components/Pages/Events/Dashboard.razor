@@ -60,6 +60,7 @@
                                 @foreach (var item in _eventsDto)
                                 {
                                     var activateUrl = $"/events/activate-event/{item._id}";
+                                    var updateUrl = $"/events/update-event/{item._id}";
 
                                     <MudItem xs="12" sm="12" md="6" lg="3">
                                         <MudCard>
@@ -76,7 +77,7 @@
                                                         <MudMenuItem>View event</MudMenuItem>
                                                         @if (item.status.ToLower() == "pending")
                                                         {
-                                                            <MudMenuItem>Edit event</MudMenuItem>
+                                                            <MudMenuItem Href="@updateUrl">Edit event</MudMenuItem>
                                                             <MudMenuItem>Delete event</MudMenuItem>
                                                         }
                                                         else

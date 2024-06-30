@@ -162,6 +162,38 @@ namespace ivs_ui.Components.Data.Services.Events
         }
 
 
+
+        public async Task<ResponseObject> UpdateEvent(string id, CreateEventVM model)
+        {
+            try
+            {
+                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+
+                var response = await _webService.Call(apiUrl, $"update-event/{id}", Method.Put, model, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res.result;
+                if (content?.code != ResponseCodes.ResponseCode_Ok)
+                    return res;
+
+                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
+                res.result.data = JsonConvert.DeserializeObject<CreateEventResponseDto>(content.data.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to update an event, please try agian later",
+                    }
+                };
+            }
+        }
+
+
+
         public async Task<ResponseObject> UploadEventBanner(UploadBodyVM model, UploadFileVM file)
         {
             try
