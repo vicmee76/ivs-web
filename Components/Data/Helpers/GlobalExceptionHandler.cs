@@ -1,4 +1,4 @@
-﻿using ivs_ui.Domain.Constants;
+﻿using ivs.Domain.Constants;
 
 namespace ivs_ui.Components.Data.Helpers
 {
