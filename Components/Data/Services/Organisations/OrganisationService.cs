@@ -1,7 +1,7 @@
-﻿using ivs_ui.Domain.Constants;
-using ivs_ui.Domain.Interfaces.General;
-using ivs_ui.Domain.Interfaces.Organisations;
-using ivs_ui.Domain.Models.Dtos.Organisations;
+﻿using ivs.Domain.Constants;
+using ivs.Domain.Interfaces.General;
+using ivs.Domain.Interfaces.Organisations;
+using ivs.Domain.Models.Dtos.Organisations;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -10,19 +10,19 @@ namespace ivs_ui.Components.Data.Services.Organisations
     public class OrganisationService(IWebService webService) : IOrganisationService
     {
         private readonly IWebService _webService = webService;
-        private readonly string apiUrl = "/api/v1/organisations/";
+        private const string ApiUrl = "/api/v1/organisations/";
 
         public async Task<ResponseObject> GetOrganisations()
         {
             try
             {
-                var response = await _webService.Call(apiUrl, "", Method.Get, null, null);
+                var response = await _webService.Call(ApiUrl, "", Method.Get, null, null, null, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
-                var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Ok)
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
                     return new ResponseObject();
 
-                var myJsonResponse = content?.data.ToString().Trim().TrimStart('{').TrimEnd('}');
+                var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
                 res.result.data = JsonConvert.DeserializeObject<List<GetOrganisationsDto>>(myJsonResponse);
                 return res;
             }
@@ -32,7 +32,7 @@ namespace ivs_ui.Components.Data.Services.Organisations
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get organisations, please try agian later",
+                        message = "Error! Something went wrong trying to get organisations, please try again later",
                     }
                 };
             }

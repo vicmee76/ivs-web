@@ -266,7 +266,7 @@
                 _eventTypes = res.result.data ?? new List<GetEventTypesDto>();
 
                 var get = await _eventService.GetEventMetaData(id);
-                if (get.result.code == ResponseCodes.ResponseCode_Ok)
+                if (get.result.code == ResponseCodes.ResponseCodeOk)
                 {
                     var data = get.result.data;
                     model.adressPin = data.adressPin;
@@ -305,7 +305,7 @@
         if (isUpdate)
         {
             var res = await _eventService.UpdateEvent(id, model);
-            if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Ok))
+            if (res.result != null && (res.result.code == ResponseCodes.ResponseCodeOk))
             {
                 _snackbar.Add(res.result.message, Severity.Success);
                 _navigate.NavigateTo($"/events/upload-banner/{res.result.data._id}");
@@ -318,7 +318,7 @@
         else
         {
             var res = await _eventService.CreateEvent(model);
-            if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Created || res.result.code == ResponseCodes.ResponseCode_Ok))
+            if (res.result != null && (res.result.code == ResponseCodes.ResponseCodeCreated || res.result.code == ResponseCodes.ResponseCodeOk))
             {
                 _snackbar.Add(res.result.message, Severity.Success);
                 _navigate.NavigateTo($"/events/upload-banner/{res.result.data._id}");

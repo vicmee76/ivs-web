@@ -189,7 +189,7 @@
             userId = auth.Id;
 
             var res = await _eventService.GetEventMetaData(id);
-            if(res.result.code == ResponseCodes.ResponseCode_Ok)
+            if(res.result.code == ResponseCodes.ResponseCodeOk)
             {
                 eventName = res.result.data.eventName;
             }
@@ -246,7 +246,7 @@
         if (imageFile != null)
         {
             var res = await _eventService.UploadEventBanner(model, fileModel);
-            if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Ok))
+            if (res.result != null && (res.result.code == ResponseCodes.ResponseCodeOk))
             {
                 _snackbar.Add(res.result.message, Severity.Success);
                 _navigate.NavigateTo($"/events/create-event-time/{res.result.data._id}");

@@ -1,33 +1,29 @@
-﻿using Blazored.LocalStorage;
-using ivs_ui.Components.Pages.Accounts;
-using ivs_ui.Domain.Constants;
-using ivs_ui.Domain.Interfaces.Accounts;
-using ivs_ui.Domain.Interfaces.General;
-using ivs_ui.Domain.Models.Dtos.Accounts;
-using ivs_ui.Domain.Models.Dtos.Organisations;
-using ivs_ui.Domain.Models.ViewModels.Accounts;
+﻿using ivs.Domain.Constants;
 using Newtonsoft.Json;
 using RestSharp;
-using System.Reflection;
+using ivs.Domain.Interfaces.Accounts;
+using ivs.Domain.Interfaces.General;
+using ivs.Domain.Models.Dtos.Accounts;
+using ivs.Domain.Models.ViewModels.Accounts;
 
 namespace ivs_ui.Components.Data.Services.Accounts
 {
     public class AccountService(IWebService webService) : IAccountService
     {
         private readonly IWebService _webService = webService;
-        private readonly string apiUsersUrl = "/api/v1/users";
-        private readonly string apiLoginUrl = "/api/v1/accounts";
+        private const string ApiUsersUrl = "/api/v1/users";
+        private const string ApiLoginUrl = "/api/v1/accounts";
 
         public async Task<ResponseObject> CreateUser(SignUpVM model)
         {
             try
             {
-                var response = await _webService.Call(apiUsersUrl, "/sign-up/create-user", Method.Post, model);
+                var response = await _webService.Call(ApiUsersUrl, "/sign-up/create-user", Method.Post, model);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
-                var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Created)
-                    return res;
-                return res;
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeCreated)
+                    return res!;
+                return res!;
             }
             catch (Exception ex)
             {
@@ -46,14 +42,14 @@ namespace ivs_ui.Components.Data.Services.Accounts
         {
             try
             {
-                var response = await _webService.Call(apiLoginUrl, $"/login-user", Method.Post, model);
+                var response = await _webService.Call(ApiLoginUrl, $"/login-user", Method.Post, model);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
-                var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Ok)
-                    return res;
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res!;
 
-                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
-                res.result.data = JsonConvert.DeserializeObject<UserDto>(content.data.ToString());
+                var myJsonResponse = content.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
+                res.result.data = JsonConvert.DeserializeObject<UserDto>(content.data?.ToString());
                 return res;
             }
             catch (Exception ex)    
@@ -74,10 +70,10 @@ namespace ivs_ui.Components.Data.Services.Accounts
         {
             try
             {
-                var response = await _webService.Call(apiUsersUrl, $"/resend-verification-code/{userId}", Method.Put, null);
+                var response = await _webService.Call(ApiUsersUrl, $"/resend-verification-code/{userId}", Method.Put, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Ok)
+                if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
                 return res;
             }
@@ -97,12 +93,12 @@ namespace ivs_ui.Components.Data.Services.Accounts
         {
             try
             {
-                var response = await _webService.Call(apiUsersUrl, $"/forgot-password/{id}", Method.Put, model);
+                var response = await _webService.Call(ApiUsersUrl, $"/forgot-password/{id}", Method.Put, model);
                     var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
-                var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Ok)
-                    return res;
-                return res;
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res!;
+                return res!;
             }
             catch (Exception ex)
             {
@@ -124,10 +120,10 @@ namespace ivs_ui.Components.Data.Services.Accounts
         {
             try
             {
-                var response = await _webService.Call(apiUsersUrl, $"/send-forgot-password-token/{email}", Method.Put, null);
+                var response = await _webService.Call(ApiUsersUrl, $"/send-forgot-password-token/{email}", Method.Put, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Ok)
+                if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
                 return res;
             }
@@ -152,10 +148,10 @@ namespace ivs_ui.Components.Data.Services.Accounts
         {
             try
             {
-                var response = await _webService.Call(apiUsersUrl, $"/verify-account/{userId}", Method.Put, model);
+                var response = await _webService.Call(ApiUsersUrl, $"/verify-account/{userId}", Method.Put, model);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Ok)
+                if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
 
                 var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');

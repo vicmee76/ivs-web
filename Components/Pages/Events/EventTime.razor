@@ -200,7 +200,7 @@
             userId = auth.Id;
 
             var res = await _eventService.GetEventMetaData(id);
-            if (res.result.code == ResponseCodes.ResponseCode_Ok)
+            if (res.result.code == ResponseCodes.ResponseCodeOk)
             {
                 eventName = res.result.data.eventName;
             }
@@ -278,7 +278,7 @@
         else
         {
             var res = await _eventTimeService.CreateEventTime(model);
-            if (res.result.code == ResponseCodes.ResponseCode_Created)
+            if (res.result.code == ResponseCodes.ResponseCodeCreated)
             {
                 _snackbar.Add(res.result.message, Severity.Success);
                 _navigate.NavigateTo($"/events/create-event-tickets/{id}");

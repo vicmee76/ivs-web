@@ -19,7 +19,36 @@
 
   
   <ItemGroup>
-    <ProjectReference Include="..\ivs-ui.Domain\ivs-ui.Domain.csproj" />
+    <ProjectReference Include="ivs.Domain\ivs.Domain.csproj" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <Compile Remove="ivs.Domain\**" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <EmbeddedResource Remove="ivs.Domain\**" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <Content Remove="ivs.Domain\**" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <None Remove="ivs.Domain\**" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="ivs.Domain\bin\Debug\net8.0\ivs.Domain.deps.json" />
+    <_ContentIncludedByDefault Remove="ivs.Domain\obj\Debug\net8.0\ivs.Domain.sourcelink.json" />
+    <_ContentIncludedByDefault Remove="ivs.Domain\obj\ivs.Domain.csproj.nuget.dgspec.json" />
+    <_ContentIncludedByDefault Remove="ivs.Domain\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="ivs.Domain\obj\project.packagespec.json" />
   </ItemGroup>
   
 </Project>

@@ -190,7 +190,7 @@
                                                         <div style="padding:10px; border:1px dashed #f9c7ba; line-height:30px;">
                                                             <div><b>Ticket Kind : </b><span>@t.ticketKind</span></div>
                                                             <div><b>Ticket Name : </b><span>@t.ticketName</span></div>
-                                                            <div><b>Ticket Price : </b><span>@t.ticketAmount.NumberDecimal.ToString("N0")</span></div>
+                                                            <div><b>Ticket Price : </b><span>@t.ticketAmount.numberDecimal.ToString("N0")</span></div>
                                                             <div><b>Ticket in stock : </b><span>@t.ticketInStock</span></div>
                                                             <div><b>Group Size : </b><span>@t.groupSize</span></div>
                                                             <div><b>Ticket end date : </b><span>@Convert.ToDateTime(t.ticketSalesEndDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</span></div>
@@ -346,7 +346,7 @@
             userId = auth.Id;
 
             var res = await _eventService.GetEventDetails(id);
-            if (res.result.code == ResponseCodes.ResponseCode_Ok)
+            if (res.result.code == ResponseCodes.ResponseCodeOk)
             {
                 _events = res.result.data;
                 eventName = _events.eventName;
@@ -393,7 +393,7 @@
         if (result == true)
         {
             var res = await _eventService.ActivateEvent(id);
-            if (res.result.code == ResponseCodes.ResponseCode_Ok)
+            if (res.result.code == ResponseCodes.ResponseCodeOk)
             {
                 _snackbar.Add(res.result.message, Severity.Success);
                 _navigate.NavigateTo("/events/dashboard");

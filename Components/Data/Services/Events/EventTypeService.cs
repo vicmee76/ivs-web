@@ -1,13 +1,10 @@
 ﻿using Blazored.SessionStorage;
-using ivs_ui.Components.Data.Services.General;
-using ivs_ui.Domain.Constants;
-using ivs_ui.Domain.Interfaces.Events;
-using ivs_ui.Domain.Interfaces.General;
-using ivs_ui.Domain.Models.Dtos.Accounts;
-using ivs_ui.Domain.Models.Dtos.Events;
 using Newtonsoft.Json;
 using RestSharp;
-using System.Reflection;
+using ivs.Domain.Constants;
+using ivs.Domain.Interfaces.Events;
+using ivs.Domain.Interfaces.General;
+using ivs.Domain.Models.Dtos.Events;
 
 namespace ivs_ui.Components.Data.Services.Events
 {
@@ -15,7 +12,7 @@ namespace ivs_ui.Components.Data.Services.Events
     {
         private readonly IWebService _webService = webService;
         private readonly ISessionStorageService _sessionStorageService = sessionStorageService;
-        private readonly string apiUrl = "/api/v1/event-types";
+        private const string ApiUrl = "/api/v1/event-types";
 
 
         public async Task<ResponseObject> GetEventTypes()
@@ -25,14 +22,14 @@ namespace ivs_ui.Components.Data.Services.Events
                 var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
                 var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
 
-                var response = await _webService.Call(apiUrl, "/", Method.Get, null, headers);
+                var response = await _webService.Call(ApiUrl, "/", Method.Get, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
-                var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Ok)
-                    return res;
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res!;
 
-                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
-                res.result.data = JsonConvert.DeserializeObject<List<GetEventTypesDto>>(content.data.ToString());
+                var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
+                res.result.data = JsonConvert.DeserializeObject<List<GetEventTypesDto>>(content?.data?.ToString());
                 return res;
             }
             catch (Exception ex)
