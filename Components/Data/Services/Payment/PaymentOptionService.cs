@@ -37,7 +37,7 @@ namespace ivs_ui.Components.Data.Services.Payment
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get all payment options, please try agian later",
+                        message = "Error! Something went wrong trying to get all payment options, please try again later",
                     }
                 };
             }

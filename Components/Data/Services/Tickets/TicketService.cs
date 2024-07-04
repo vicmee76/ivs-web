@@ -35,7 +35,7 @@ namespace ivs_ui.Components.Data.Services.Tickets
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to create ticket, please try agian later",
+                        message = "Error! Something went wrong trying to create ticket, please try again later",
                     }
                 };
             }
@@ -62,7 +62,7 @@ namespace ivs_ui.Components.Data.Services.Tickets
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to delete ticket, please try agian later",
+                        message = "Error! Something went wrong trying to delete ticket, please try again later",
                     }
                 };
             }
@@ -93,7 +93,7 @@ namespace ivs_ui.Components.Data.Services.Tickets
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get ticket by event id, please try agian later",
+                        message = "Error! Something went wrong trying to get ticket by event id, please try again later",
                     }
                 };
             }
@@ -119,7 +119,7 @@ namespace ivs_ui.Components.Data.Services.Tickets
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to update tickets, please try agian later",
+                        message = "Error! Something went wrong trying to update tickets, please try again later",
                     }
                 };
             }

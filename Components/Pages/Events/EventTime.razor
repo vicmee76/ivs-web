@@ -4,7 +4,7 @@
 
 <br />
 
-<AuthorizeView>
+<AuthorizeView Roles="User,Admin">
 
     <NotAuthorized>
         No Access
@@ -96,7 +96,20 @@
 
             <br /><br />
 
-            <MudButton OnClick="@(async () => await ActionAddTime())" Style="background-color:#56375C; color:white" Variant="Variant.Filled"> Add Time </MudButton>
+            <MudButton OnClick="@(async () => await ActionAddTime())" Style="background-color:#56375C; color:white" Variant="Variant.Filled">
+                
+                @if (_processing)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                    <MudText Class="ms-2">Processing</MudText>
+                }
+                else
+                {
+                    <MudText><b>Create Event Time</b></MudText>
+                }
+            </MudButton>
+
+          
             
             
             <div style="margin-top:30px; margin-bottom:30px;">
@@ -211,15 +224,14 @@
         }
 
         _getEventprocessing = true;
-
         StateHasChanged();
-
     }
 
 
     private async Task ActionAddTime()
     {
-        if (_dateRange == null || _dateRange.Start == null || _dateRange.End == null)
+        _processing = true;
+        if (_dateRange.Start == null || _dateRange.End == null)
         {
             _snackbar.Add("Please select your event start date and event end date", Severity.Error);
         }
@@ -242,12 +254,15 @@
                 {
                     ivsEventId = id,
                     startDateAndTime = combinedStartDateTime,
-                    endDateAndTime = combinedEndDateTime
+                    endDateAndTime = combinedEndDateTime,
+                    timeZone = string.Empty
                 };
-
-                model.Add(times);
+                
+                var res = await _eventTimeService.CreateEventTime(times);
+                _snackbar.Add(res.result.message, res.result.code == ResponseCodes.ResponseCodeCreated ? Severity.Success : Severity.Error);
             }
         }
+        _processing = false;
         StateHasChanged();
     }
 
@@ -255,7 +270,6 @@
     private async Task ActionRemoveTime(EventTimeVM item)
     {
         var removed = model.Remove(item);
-
         if (removed)
         {
             _snackbar.Add("Time removed successfuly", Severity.Success);
@@ -277,7 +291,7 @@
         }
         else
         {
-            var res = await _eventTimeService.CreateEventTime(model);
+            var res = await _eventTimeService.CreateEventTime(model.FirstOrDefault());
             if (res.result.code == ResponseCodes.ResponseCodeCreated)
             {
                 _snackbar.Add(res.result.message, Severity.Success);

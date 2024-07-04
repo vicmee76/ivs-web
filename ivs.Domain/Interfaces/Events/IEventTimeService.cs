@@ -5,5 +5,7 @@ namespace ivs.Domain.Interfaces.Events;
 
 public interface IEventTimeService
 {
-    public Task<ResponseObject> CreateEventTime(List<EventTimeVM> model);
+    public Task<ResponseObject> CreateEventTime(EventTimeVM model);
+    public Task<ResponseObject> GetTimeByEventId(string eventId);
+    public Task<ResponseObject> DeleteEventTime(string id);
 }

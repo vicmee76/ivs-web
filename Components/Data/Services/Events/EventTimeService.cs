@@ -15,7 +15,7 @@ namespace ivs_ui.Components.Data.Services.Events
         private readonly ISessionStorageService _sessionStorageService = sessionStorageService;
         private const string ApiUrl = "/api/v1/ivs-events-time/";
 
-        public async Task<ResponseObject> CreateEventTime(List<EventTimeVM> model)
+        public async Task<ResponseObject> CreateEventTime(EventTimeVM model)
         {
             try
             {
@@ -29,6 +29,36 @@ namespace ivs_ui.Components.Data.Services.Events
                     return res;
 
                 var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
+                res.result.data = JsonConvert.DeserializeObject<CreateEventTimeDto>(myJsonResponse);
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to create event time, please try again later",
+                    }
+                };
+            }
+        }
+        
+
+        public async Task<ResponseObject> GetTimeByEventId(string eventId)
+        {
+            try
+            {
+                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+
+                var response = await _webService.Call(ApiUrl, $"get-ivs-event-time-by-eventId/{eventId}", Method.Get, null, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
                 res.result.data = JsonConvert.DeserializeObject<List<CreateEventTimeDto>>(myJsonResponse);
                 return res;
             }
@@ -38,7 +68,31 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to create event time, please try agian later",
+                        message = "Error! Something went wrong trying to get event time, please try again later",
+                    }
+                };
+            }
+        }
+
+        public async Task<ResponseObject> DeleteEventTime(string id)
+        {
+            try
+            {
+                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+
+                var response = await _webService.Call(ApiUrl, $"get-ivs-event-time-by-eventId/{id}", Method.Delete, null, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to get event time, please try again later",
                     }
                 };
             }

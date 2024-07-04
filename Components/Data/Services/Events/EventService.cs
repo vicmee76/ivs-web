@@ -35,7 +35,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to publish this event, please try agian later",
+                        message = "Error! Something went wrong trying to publish this event, please try again later",
                     }
                 };
             }
@@ -64,7 +64,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to create an event, please try agian later",
+                        message = "Error! Something went wrong trying to create an event, please try again later",
                     }
                 };
             }
@@ -94,7 +94,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get all events for a user, please try agian later",
+                        message = "Error! Something went wrong trying to get all events for a user, please try again later",
                     }
                 };
             }
@@ -124,7 +124,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get event meta data, please try agian later",
+                        message = "Error! Something went wrong trying to get event meta data, please try again later",
                     }
                 };
             }
@@ -154,7 +154,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get event meta data, please try agian later",
+                        message = "Error! Something went wrong trying to get event meta data, please try again later",
                     }
                 };
             }
@@ -185,7 +185,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to update an event, please try agian later",
+                        message = "Error! Something went wrong trying to update an event, please try again later",
                     }
                 };
             }
@@ -216,7 +216,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to upload event banner, please try agian later",
+                        message = "Error! Something went wrong trying to upload event banner, please try again later",
                     }
                 };
             }

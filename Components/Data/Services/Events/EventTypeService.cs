@@ -38,7 +38,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get all event types, please try agian later",
+                        message = "Error! Something went wrong trying to get all event types, please try again later",
                     }
                 };
             }

@@ -58,7 +58,7 @@ namespace ivs_ui.Components.Data.Services.Accounts
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to login, please try agian later",
+                        message = "Error! Something went wrong trying to login, please try again later",
                     }
                 };
             }
@@ -83,7 +83,7 @@ namespace ivs_ui.Components.Data.Services.Accounts
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to resend verification code, please try agian later",
+                        message = "Error! Something went wrong trying to resend verification code, please try again later",
                     }
                 };
             }
@@ -108,7 +108,7 @@ namespace ivs_ui.Components.Data.Services.Accounts
                     {
                         success = false,
                         code = 500,
-                        message = "Error! Something went wrong trying to reset password, please try agian later"
+                        message = "Error! Something went wrong trying to reset password, please try again later"
                     }
                 };
             }
@@ -135,7 +135,7 @@ namespace ivs_ui.Components.Data.Services.Accounts
                     {
                         success = false,
                         code = 500,
-                        message = "Error! Something went wrong trying to send forgot password token, please try agian later"
+                        message = "Error! Something went wrong trying to send forgot password token, please try again later"
                     }
                 };
             }
@@ -166,7 +166,7 @@ namespace ivs_ui.Components.Data.Services.Accounts
                     {
                         success = false,
                         code = 500,
-                        message = "Error! Something went wrong trying to verify account, please try agian later"
+                        message = "Error! Something went wrong trying to verify account, please try again later"
                     }
                 };
             }
