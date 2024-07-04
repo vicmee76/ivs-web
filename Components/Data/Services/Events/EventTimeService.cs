@@ -84,6 +84,11 @@ namespace ivs_ui.Components.Data.Services.Events
                 var response = await _webService.Call(ApiUrl, $"get-ivs-event-time-by-eventId/{id}", Method.Delete, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
+                res.result.data = JsonConvert.DeserializeObject<List<CreateEventTimeDto>>(myJsonResponse);
                 return res;
             }
             catch (Exception ex)
@@ -92,7 +97,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get event time, please try again later",
+                        message = "Error! Something went wrong trying to delete event time, please try again later",
                     }
                 };
             }

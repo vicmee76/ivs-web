@@ -81,7 +81,7 @@
             <MudGrid>
 
                 <MudItem xs="12" sm="12" md="12" lg="6">
-                    <MudDateRangePicker @bind-DateRange="@_dateRange" PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Margin="Margin.None" Editable="false" Clearable="true" PlaceholderStart="Event Start Date" PlaceholderEnd="Event End Date" />
+                    <MudDateRangePicker @ref="_picker" @bind-DateRange="@_dateRange" PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Margin="Margin.None" Editable="false" Clearable="true" PlaceholderStart="Event Start Date" PlaceholderEnd="Event End Date" />
                 </MudItem>
 
                 <MudItem xs="12" sm="12" md="12" lg="3">
@@ -119,35 +119,44 @@
             <MudText Typo="Typo.h6"> <b>Event Date & Time</b></MudText>
 
             <br />
+            @if (!_getEventprocessing)
+            {
+                <MudSkeleton Animation="Animation.Wave" Width="40%"/>
+                <MudSkeleton Animation="Animation.Wave" Width="60%"/>
+                <MudSkeleton Animation="Animation.Wave" Width="90%"/>
+            }
+            else
+            {
+                <MudTimeline TimelinePosition="TimelinePosition.Start" DisableModifiers="false">
 
-            <MudTimeline TimelinePosition="TimelinePosition.Start" DisableModifiers="false">
-                
-                @if (model.Any())
-                {
-                    foreach(var item in model)
+                    @if (model.Any())
                     {
-                        <MudTimelineItem Size="Size.Small" Color="Color.Warning" Elevation="5">
-                            <MudCard Outlined="false" Elevation="25">
-                                <MudCardHeader>
-                                    <CardHeaderContent>
-                                        <MudText Typo="Typo.body1"><b>@eventName</b></MudText>
-                                    </CardHeaderContent>
-                                    <CardHeaderActions>
-                                        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="@(async () => await ActionRemoveTime(item))" Color="Color.Error" aria-label="delete"></MudIconButton>
-                                    </CardHeaderActions>
-                                </MudCardHeader>
-                                <MudCardContent>
-                                    <MudText Typo="Typo.body2">Event Start Date & Time : <b>@item.startDateAndTime</b> </MudText>
-                                    <br />
-                                    <MudText Typo="Typo.body2">Event End Date & Time : <b>@item.endDateAndTime</b> </MudText>
-                                </MudCardContent>
-                            </MudCard>
-                        </MudTimelineItem>
+                        foreach (var item in model)
+                        {
+                            <MudTimelineItem Size="Size.Small" Color="Color.Secondary" Elevation="5">
+                                <MudCard Outlined="false" Elevation="25">
+                                    <MudCardHeader>
+                                        <CardHeaderContent>
+                                            <MudText Typo="Typo.body1"><b>@eventName</b></MudText>
+                                        </CardHeaderContent>
+                                        <CardHeaderActions>
+                                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Title="Edit time" OnClick="@(() => ActionEditTime(item))" Color="Color.Default" aria-label="edit"></MudIconButton>
+                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="@(async () => await ActionRemoveTime(item._id))" Color="Color.Error" aria-label="delete"></MudIconButton>
+                                        </CardHeaderActions>
+                                    </MudCardHeader>
+                                    <MudCardContent>
+                                        <MudText Typo="Typo.body2">Event Start Date & Time : <b>@Convert.ToDateTime(item.startDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</b> </MudText>
+                                        <br/>
+                                        <MudText Typo="Typo.body2">Event End Date & Time : <b>@Convert.ToDateTime(item.endDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</b> </MudText>
+                                    </MudCardContent>
+                                </MudCard>
+                            </MudTimelineItem>
+                        }
                     }
-                }
 
-            </MudTimeline>
 
+                </MudTimeline>
+            }
             <br /><br />
 
             <MudButton OnClick="@(async () => await ActionCreateTime())" Disabled="@(!model.Any())" Style="background-color:#56375C; color:white" Variant="Variant.Filled">  
@@ -180,13 +189,16 @@
     [Parameter] public string? id { get; set; }
 
     AuthUser authUser = new AuthUser();
-    List<EventTimeVM> model = new List<EventTimeVM>();
+    List<CreateEventTimeDto> model = [];
     private string userId { get; set; }
     private string eventName { get; set; }
+    private static DateTime startDate { get; set; } = DateTime.Now.Date;
+    private static DateTime endDate { get; set; } = DateTime.Now.AddDays(1).Date;
     private bool _processing = false;
     private bool _getEventprocessing { get; set; } = false;
 
-    private DateRange _dateRange { get; set; }
+    private MudDateRangePicker _picker;
+    DateRange _dateRange = new DateRange(startDate, endDate);
     TimeSpan? startTime = new TimeSpan(00, 45, 00);
     TimeSpan? endTime = new TimeSpan(00, 45, 00);
 
@@ -216,6 +228,16 @@
             if (res.result.code == ResponseCodes.ResponseCodeOk)
             {
                 eventName = res.result.data.eventName;
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+            
+            var res2 = await _eventTimeService.GetTimeByEventId(id);
+            if (res2.result.code == ResponseCodes.ResponseCodeOk)
+            {
+                model = res2.result.data ?? new List<CreateEventTimeDto>();
             }
             else
             {
@@ -267,20 +289,34 @@
     }
 
 
-    private async Task ActionRemoveTime(EventTimeVM item)
+    private async Task ActionRemoveTime(string id)
     {
-        var removed = model.Remove(item);
-        if (removed)
-        {
-            _snackbar.Add("Time removed successfuly", Severity.Success);
-        }
-        else
-        {
-            _snackbar.Add("Something went wrong trying to remove this time please try again later.", Severity.Error);
-        }
-        StateHasChanged();
+       
     }
 
+
+    private void ActionEditTime(CreateEventTimeDto item)
+    {
+        try
+        {
+            
+                
+             startDate = Convert.ToDateTime(item.startDateAndTime);
+             endDate = Convert.ToDateTime(item.endDateAndTime);
+            _dateRange = new DateRange(startDate.Date, endDate.Date);
+
+            _picker.DateRange = _dateRange;
+            
+            startTime = Convert.ToDateTime(item.startDateAndTime).TimeOfDay;
+            endTime = Convert.ToDateTime(item.endDateAndTime).TimeOfDay;
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
 
     private async Task ActionCreateTime()
     {
@@ -291,16 +327,7 @@
         }
         else
         {
-            var res = await _eventTimeService.CreateEventTime(model.FirstOrDefault());
-            if (res.result.code == ResponseCodes.ResponseCodeCreated)
-            {
-                _snackbar.Add(res.result.message, Severity.Success);
-                _navigate.NavigateTo($"/events/create-event-tickets/{id}");
-            }
-            else
-            {
-                _snackbar.Add(res.result.message, Severity.Error);
-            }
+            
         }
         _processing = false;
     }
