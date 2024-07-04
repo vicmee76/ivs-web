@@ -6,23 +6,23 @@ public class CreateEventVM
 {
     public string? user_id { get; set; }
     
-    [Required]
+    [Required(ErrorMessage = "Event name is required")]
     public string? eventName { get; set; }
     
-    [Required]
+    [Required(ErrorMessage = "Event description is required")]
     public string? eventDescription { get; set; }
     
-    [Required]
+    [Required(ErrorMessage = "Event address is required")]
     public string? eventAddress { get; set; }
     
-    [Required]
+    [Required(ErrorMessage = "Event state is required")]
     public string? eventState { get; set; }
     public string? adressPin { get; set; }
     
-    [Required]
+    [Required(ErrorMessage = "Please select an event type option")]
     public string? eventTypeId { get; set; }
     
-    [Required]
+    [Required(ErrorMessage = "Please select and event option")]
     public string? eventOption { get; set; }
     public string? webLink { get; set; }
     public string? facebookLink { get; set; }

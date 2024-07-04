@@ -36,8 +36,7 @@
 
                     <br /><br />
 
-                    <div id="sub-title-2">Didn't get an activation code, click 
-                        
+                    <div id="sub-title-2">Didn't get an activation code, click
                         <MudButton Variant="Variant.Text" Size="Size.Small" style="font-weight: bolder; text-decoration: none" Color="Color.Warning" OnClick="ActionResendVerificationCode">
 
                             @if (_resendProcessing)
@@ -49,7 +48,6 @@
                             {
                                 <MudText><b>Here</b></MudText>
                             }
-
                     </MudButton>
                         to get a new code
                     </div>
@@ -81,8 +79,6 @@
         model = new ActivateAccountVM();
     }
 
-
-
     private async Task ActionActivateAccount()
     {
         _processing = true;
@@ -101,8 +97,6 @@
             _snackbar.Add(res.result.message, Severity.Error);
         }
         StateHasChanged();
-        
-
         _processing = false;
     }
 
@@ -113,14 +107,7 @@
             _snackbar.Add("Invalid ID passed", Severity.Error);
 
         var res = await _accountrService.ResendVerificationCode(Id) ?? new();
-        if (res.result != null && (res.result.code == ResponseCodes.ResponseCodeOk))
-        {
-            _snackbar.Add(res.result.message, Severity.Success);
-        }
-        else
-        {
-            _snackbar.Add(res.result.message, Severity.Error);
-        }
+        _snackbar.Add(res.result.message, res.result.code == ResponseCodes.ResponseCodeOk ? Severity.Success : Severity.Error);
         _resendProcessing = false;
         StateHasChanged();
     }
