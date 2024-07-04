@@ -259,12 +259,11 @@
             userId = auth.Id;
 
             allState = states.GetStates();
-
+            var res = await _eventTypeService.GetEventTypes();
+            _eventTypes = res.result.data ?? new List<GetEventTypesDto>();
+            
             if (!string.IsNullOrEmpty(id))
             {
-                var res = await _eventTypeService.GetEventTypes();
-                _eventTypes = res.result.data ?? new List<GetEventTypesDto>();
-
                 var get = await _eventService.GetEventMetaData(id);
                 if (get.result.code == ResponseCodes.ResponseCodeOk)
                 {
@@ -280,7 +279,6 @@
                     model.facebookLink = data.facebookLink;
                     model.twitterLink = data.twitterLink;
                     model.instagramLink = data.instagramLink;
-
                     isUpdate = true;
                 }
                 else

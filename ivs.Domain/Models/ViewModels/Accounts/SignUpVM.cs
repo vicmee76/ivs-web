@@ -21,7 +21,6 @@ public class SignUpVM
     [Required(ErrorMessage = "Organisation is required")]
     public string? organisation_id { get; set; }
 
-    [Required(ErrorMessage = "Role is required")]
     public string? role { get; set; } = "User";
 
     [Range(typeof(bool), "true", "true", ErrorMessage = "You must agree to the terms and conditions")]

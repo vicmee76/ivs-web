@@ -18,7 +18,7 @@
                     @if (_processing)
                     {
                         <MudSkeleton Height="42px" Width="200px" />
-                    }
+                    }           
                     else
                     {
                         @if (fullname != null)
@@ -183,8 +183,6 @@
         }
         else
         {
-            
-
             var auth = await authUser.GetAuthUserAsync(state);
             userId = auth.Id;
             fullname = auth.SentenceCaseFullName;

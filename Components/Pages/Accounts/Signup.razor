@@ -27,7 +27,7 @@
                     
                     <MudTextField InputType="@PasswordInput"  Label="Confirm Password" HelperText="Confirm your password" @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
 
-                    <MudSelect T="string" Label="Organisation Type" Variant="Variant.Outlined" @bind-Value="model.organisation_id">
+                    <MudSelect T="string" Label="Organisation Type" Variant="Variant.Outlined" @bind-Value="model.organisation_id" For="@(() => model.organisation_id)">
                         @if (_orgs != null)
                         {
                             foreach (var com in _orgs)
@@ -38,7 +38,7 @@
                     </MudSelect>
 
                     <br />
-                    <MudCheckBox T="bool" @bind-Value="model.hasAgreed" Required="true" RequiredError="You must agree" Label="Agree to terms and conditions!" />
+                    <MudCheckBox T="bool" @bind-Value="model.hasAgreed" Required="true" For="@(() => model.hasAgreed)" RequiredError="You must agree" Label="Agree to terms and conditions!" />
 
 
                     <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">

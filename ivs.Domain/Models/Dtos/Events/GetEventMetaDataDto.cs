@@ -10,6 +10,7 @@ public class GetEventMetaDataDto
     public string? adressPin { get; set; }
     public string? status { get; set; }
     public string? eventOption { get; set; }
+    public string? eventTypeId { get; set; }
     public string? paymentOption { get; set; }
     public string? webLink { get; set; }
     public string? facebookLink { get; set; }
