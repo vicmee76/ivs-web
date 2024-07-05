@@ -32,12 +32,9 @@
 
                         <EditForm Model="@model" OnValidSubmit="ActionLogin">
                             <DataAnnotationsValidator />
-
                             <MudTextField InputType="InputType.Email" Label="Email" HelperText="Enter your email" @bind-Value="model.email" For="@(() => model.email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-
                             <MudTextField InputType="@PasswordInput" Label="Password" HelperText="Enter your password" @bind-Value="model.password" For="@(() => model.password)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
                             <MudSpacer></MudSpacer>
-                        
                             <div id="forgot-password-div">
                             <a href="/accounts/send-forgot-password-token">Forgot password</a>
                         </div>
@@ -65,10 +62,7 @@
                 </div>
 
             <div class="column left" id="transparent-image" style="">
-
                 <div id="login-middle-title">Hello, Glad to see you! </div>
-
-
             </div>
         </div>
     </div>
@@ -105,7 +99,7 @@
     {
         _processing = true;
         var res = await _accountService.Login(model);
-        if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Ok))
+        if ((res.result.code == ResponseCodes.ResponseCodeOk))
         {
             //var userid = res.result.data._id;
             await _sessionStorageService.SetItemAsync(Tokens.TokenName, res.result.token);

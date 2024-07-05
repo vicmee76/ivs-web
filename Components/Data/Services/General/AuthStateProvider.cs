@@ -1,9 +1,8 @@
 ﻿using Blazored.SessionStorage;
-using ivs_ui.Domain.Constants;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 using System.Text.Json;
+using ivs.Domain.Constants;
 
 namespace ivs_ui.Components.Data.Services.General
 {
@@ -39,7 +38,7 @@ namespace ivs_ui.Components.Data.Services.General
             if (!string.IsNullOrEmpty(token))
                 identity = new ClaimsIdentity(ParseClaimsFromJwt(token), Tokens.JwtName);
             
-             _anonymous = new ClaimsPrincipal(identity);
+            _anonymous = new ClaimsPrincipal(identity);
             var state = new AuthenticationState(_anonymous);
 
             NotifyAuthenticationStateChanged(Task.FromResult(state));

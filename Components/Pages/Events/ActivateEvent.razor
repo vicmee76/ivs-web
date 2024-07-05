@@ -5,7 +5,7 @@
 
 <br />
 
-<AuthorizeView>
+<AuthorizeView Roles="User,Admin">
 
     <NotAuthorized>
         No Access
@@ -84,7 +84,6 @@
                                         <MudText Typo="Typo.h6"><b>@_events.eventName</b></MudText>
                                         <br />
                                         <div>
-                                            <MudChip Size="Size.Medium" Color="Color.Dark"><b>@_events.PaymentOptions.FirstOrDefault().name</b></MudChip>
                                             <MudChip Size="Size.Medium" Color="Color.Secondary"><b>@_events.eventOption.ToUpper()</b></MudChip>
                                             <MudChip Size="Size.Medium" Color="Color.Warning"><b>@_events.EventType.FirstOrDefault().name</b></MudChip>
 
@@ -191,7 +190,7 @@
                                                         <div style="padding:10px; border:1px dashed #f9c7ba; line-height:30px;">
                                                             <div><b>Ticket Kind : </b><span>@t.ticketKind</span></div>
                                                             <div><b>Ticket Name : </b><span>@t.ticketName</span></div>
-                                                            <div><b>Ticket Price : </b><span>@t.ticketAmount.NumberDecimal.ToString("N0")</span></div>
+                                                            <div><b>Ticket Price : </b><span>@t.ticketAmount.numberDecimal.ToString("N0")</span></div>
                                                             <div><b>Ticket in stock : </b><span>@t.ticketInStock</span></div>
                                                             <div><b>Group Size : </b><span>@t.groupSize</span></div>
                                                             <div><b>Ticket end date : </b><span>@Convert.ToDateTime(t.ticketSalesEndDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</span></div>
@@ -218,7 +217,7 @@
                                                 <div>
                                                     Visit us on
                                                     <MudElement HtmlTag="a" Class="ms-1" Style="color:lightsalmon;font-weight:bold;" href="@_events.webLink" target="blank" rel="noopener noreferrer">
-                                                        Web site
+                                                       @_events.webLink
                                                     </MudElement>
                                                 </div>
                                                 <br />
@@ -229,7 +228,7 @@
                                                 <div>
                                                     Visit us on
                                                     <MudElement HtmlTag="a" Class="ms-1" Style="color:hotpink;font-weight:bold;" href="@_events.instagramLink" target="blank" rel="noopener noreferrer">
-                                                        Instagram
+                                                        @_events.instagramLink
                                                     </MudElement>
                                                 </div>
                                                 <br />
@@ -240,7 +239,7 @@
                                                 <div>
                                                     Visit us on
                                                     <MudElement HtmlTag="a" Class="ms-1" Style="color:blue;font-weight:bold;" href="@_events.facebookLink" target="blank" rel="noopener noreferrer">
-                                                        Facbook
+                                                        @_events.facebookLink
                                                     </MudElement>
                                                 </div>
                                                 <br />
@@ -251,7 +250,7 @@
                                                 <div>
                                                     Visit us on
                                                     <MudElement HtmlTag="a" Class="ms-1" Style="color:black;font-weight:bold;" href="@_events.twitterLink" target="blank" rel="noopener noreferrer">
-                                                        Twitter
+                                                        @_events.twitterLink
                                                     </MudElement>
                                                 </div>
                                                 <br />
@@ -347,7 +346,7 @@
             userId = auth.Id;
 
             var res = await _eventService.GetEventDetails(id);
-            if (res.result.code == ResponseCodes.ResponseCode_Ok)
+            if (res.result.code == ResponseCodes.ResponseCodeOk)
             {
                 _events = res.result.data;
                 eventName = _events.eventName;
@@ -394,7 +393,7 @@
         if (result == true)
         {
             var res = await _eventService.ActivateEvent(id);
-            if (res.result.code == ResponseCodes.ResponseCode_Ok)
+            if (res.result.code == ResponseCodes.ResponseCodeOk)
             {
                 _snackbar.Add(res.result.message, Severity.Success);
                 _navigate.NavigateTo("/events/dashboard");

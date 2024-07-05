@@ -4,7 +4,7 @@
 
 <br />
 
-<AuthorizeView>
+<AuthorizeView Roles="User,Admin">
 
     <NotAuthorized>
         No Access
@@ -110,8 +110,7 @@
                                     </MudButton>
 
                                     <MudButton OnClick="@Clear" Color="Color.Error" Disabled="@(!_fileNames.Any())" Variant="Variant.Outlined"> Clear </MudButton>
-
-                                    <MudButton OnClick="@Clear" Color="Color.Primary" Variant="Variant.Filled"> Skip </MudButton>
+                                    <MudButton OnClick="@Clear" Color="Color.Primary" Href="@skipUrl" Variant="Variant.Filled"> Skip </MudButton>
                                 </MudToolBar>
 
                             </ButtonTemplate>
@@ -159,6 +158,7 @@
     private string userId { get; set; }
     private string imageData { get; set; }
     private string eventName { get; set; }
+    private string skipUrl { get; set; } 
     private const string DefaultDragClass = "relative rounded-lg border-2 border-dashed pa-4 mt-4 mud-width-full mud-height-full z-10";
     private string _dragClass = DefaultDragClass;
     private List<string> _fileNames = new();
@@ -178,7 +178,8 @@
     {
         _getEventprocessing = false;
         var state = await _authStateProvider.GetAuthenticationStateAsync();
-
+        skipUrl = $"/events/create-event-time/{id}";
+        
         if (!state.User.Identity.IsAuthenticated)
         {
             _navigate.NavigateTo("/accounts/login");
@@ -189,9 +190,10 @@
             userId = auth.Id;
 
             var res = await _eventService.GetEventMetaData(id);
-            if(res.result.code == ResponseCodes.ResponseCode_Ok)
+            if(res.result.code == ResponseCodes.ResponseCodeOk)
             {
-                eventName = res.result.data.eventName;
+                eventName = res?.result?.data.eventName;
+                imageData = res.result.data.eventImageData;
             }
             else
             {
@@ -236,7 +238,7 @@
         }
         catch(Exception ex)
         {
-
+            _snackbar.Add("Something went wrong, please try again later", Severity.Error);
         }
     }
 
@@ -246,7 +248,7 @@
         if (imageFile != null)
         {
             var res = await _eventService.UploadEventBanner(model, fileModel);
-            if (res.result != null && (res.result.code == ResponseCodes.ResponseCode_Ok))
+            if (res.result != null && (res.result.code == ResponseCodes.ResponseCodeOk))
             {
                 _snackbar.Add(res.result.message, Severity.Success);
                 _navigate.NavigateTo($"/events/create-event-time/{res.result.data._id}");
