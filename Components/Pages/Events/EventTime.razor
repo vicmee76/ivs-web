@@ -1,334 +1,1 @@
-﻿@page "/events/create-event-time/{id}"
-
-<PageTitle>Iv's - Create Event Time</PageTitle>
-
-<br />
-
-<AuthorizeView Roles="User,Admin">
-
-    <NotAuthorized>
-        No Access
-    </NotAuthorized>
-
-    <Authorized Context="cntx">
-
-        <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
-
-            <MudPaper Elevation="0">
-                <MudToolBar>
-
-                    @if (!_getEventprocessing)
-                    {
-                        <MudSkeleton Animation="Animation.Wave" Width="20%" />
-                    }
-                    else
-                    {
-                        <MudText><b style="color:#56375C">Create event time for -- <b>@eventName</b></b></MudText>
-                    }
-
-                    <MudSpacer />
-                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
-
-                </MudToolBar>
-            </MudPaper>
-
-            <br />
-
-            <MudTimeline TimelineOrientation="TimelineOrientation.Horizontal" TimelinePosition="TimelinePosition.Bottom">
-                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
-                    <ItemContent>
-                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Information</b></MudAlert>
-                    </ItemContent>
-                </MudTimelineItem>
-
-                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
-                    <ItemContent>
-                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Photo</b></MudAlert>
-                    </ItemContent>
-                </MudTimelineItem>
-
-                <MudTimelineItem Color="Color.Primary" Variant="Variant.Filled">
-                    <ItemContent>
-                        <MudAlert Severity="Severity.Info" NoIcon="true"><b>Time</b></MudAlert>
-                    </ItemContent>
-                </MudTimelineItem>
-
-                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
-                    <ItemContent>
-                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Tickets</b></MudAlert>
-                    </ItemContent>
-                </MudTimelineItem>
-            </MudTimeline>
-
-        </MudContainer>
-
-        <br />
-
-        <MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="padding:20px">
-
-
-
-
-
-            <div style="font-size:17px; line-height:40px">
-                You can add reoccuring date and time for your events. Simply enter the date and time for the event and click the 'Add' button to save it. 
-                <br />
-                Do this for all the dates and time you want before clicking save.
-            </div>
-
-            <br /><br />
-            
-            <MudGrid>
-
-                <MudItem xs="12" sm="12" md="12" lg="6">
-                    <MudDateRangePicker @ref="_picker" @bind-DateRange="@_dateRange" PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Margin="Margin.None" Editable="false" Clearable="true" PlaceholderStart="Event Start Date" PlaceholderEnd="Event End Date" />
-                </MudItem>
-
-                <MudItem xs="12" sm="12" md="12" lg="3">
-                    <MudTimePicker Label="Event Start Time" PickerVariant="PickerVariant.Dialog" AmPm="true" @bind-Time="startTime" />
-                </MudItem>
-
-                <MudItem xs="12" sm="12" md="12" lg="3">
-                    <MudTimePicker Label="Event End Time" PickerVariant="PickerVariant.Dialog" AmPm="true" @bind-Time="endTime" />
-                </MudItem>
-
-            </MudGrid>
-
-            <br /><br />
-
-            <MudButton OnClick="@(async () => await ActionAddTime())" Style="background-color:#56375C; color:white" Variant="Variant.Filled">
-                
-                @if (_processing)
-                {
-                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                    <MudText Class="ms-2">Processing</MudText>
-                }
-                else
-                {
-                    <MudText><b>Create Event Time</b></MudText>
-                }
-            </MudButton>
-
-          
-            
-            
-            <div style="margin-top:30px; margin-bottom:30px;">
-                <MudDivider></MudDivider>
-            </div>
-
-            <MudText Typo="Typo.h6"> <b>Event Date & Time</b></MudText>
-
-            <br />
-            @if (!_getEventprocessing)
-            {
-                <MudSkeleton Animation="Animation.Wave" Width="40%"/>
-                <MudSkeleton Animation="Animation.Wave" Width="60%"/>
-                <MudSkeleton Animation="Animation.Wave" Width="90%"/>
-            }
-            else
-            {
-                <MudTimeline TimelinePosition="TimelinePosition.Start" DisableModifiers="false">
-
-                    @if (model.Any())
-                    {
-                        foreach (var item in model)
-                        {
-                            <MudTimelineItem Size="Size.Small" Color="Color.Secondary" Elevation="5">
-                                <MudCard Outlined="false" Elevation="25">
-                                    <MudCardHeader>
-                                        <CardHeaderContent>
-                                            <MudText Typo="Typo.body1"><b>@eventName</b></MudText>
-                                        </CardHeaderContent>
-                                        <CardHeaderActions>
-                                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Title="Edit time" OnClick="@(() => ActionEditTime(item))" Color="Color.Default" aria-label="edit"></MudIconButton>
-                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="@(async () => await ActionRemoveTime(item._id))" Color="Color.Error" aria-label="delete"></MudIconButton>
-                                        </CardHeaderActions>
-                                    </MudCardHeader>
-                                    <MudCardContent>
-                                        <MudText Typo="Typo.body2">Event Start Date & Time : <b>@Convert.ToDateTime(item.startDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</b> </MudText>
-                                        <br/>
-                                        <MudText Typo="Typo.body2">Event End Date & Time : <b>@Convert.ToDateTime(item.endDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</b> </MudText>
-                                    </MudCardContent>
-                                </MudCard>
-                            </MudTimelineItem>
-                        }
-                    }
-
-
-                </MudTimeline>
-            }
-            <br /><br />
-
-            <MudButton OnClick="@(async () => await ActionCreateTime())" Disabled="@(!model.Any())" Style="background-color:#56375C; color:white" Variant="Variant.Filled">  
-
-                @if (_processing)
-                {
-                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                    <MudText Class="ms-2">Processing</MudText>
-                }
-                else
-                {
-                    <MudText><b>Create Event Time</b></MudText>
-                }
-            </MudButton>
-
-        </MudContainer>
-
-    </Authorized>
-
-
-</AuthorizeView>
-
-@code {
-
-    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
-    [Inject] IEventService _eventService { get; set; }
-    [Inject] IEventTimeService _eventTimeService { get; set; }
-    [Inject] NavigationManager? _navigate { get; set; }
-    [Inject] ISnackbar? _snackbar { get; set; }
-    [Parameter] public string? id { get; set; }
-
-    AuthUser authUser = new AuthUser();
-    List<CreateEventTimeDto> model = [];
-    private string userId { get; set; }
-    private string eventName { get; set; }
-    private static DateTime startDate { get; set; } = DateTime.Now.Date;
-    private static DateTime endDate { get; set; } = DateTime.Now.AddDays(1).Date;
-    private bool _processing = false;
-    private bool _getEventprocessing { get; set; } = false;
-
-    private MudDateRangePicker _picker;
-    DateRange _dateRange = new DateRange(startDate, endDate);
-    TimeSpan? startTime = new TimeSpan(00, 45, 00);
-    TimeSpan? endTime = new TimeSpan(00, 45, 00);
-
-
-    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
-    {
-        new BreadcrumbItem("Events", href: "/events/dashboard"),
-        new BreadcrumbItem("Create Time", href: null, true)
-    };
-
-    protected async override void OnInitialized()
-    {
-         _getEventprocessing = false;
-
-        var state = await _authStateProvider.GetAuthenticationStateAsync();
-
-        if (!state.User.Identity.IsAuthenticated)
-        {
-            _navigate.NavigateTo("/accounts/login");
-        }
-        else
-        {
-            var auth = await authUser.GetAuthUserAsync(state);
-            userId = auth.Id;
-
-            var res = await _eventService.GetEventMetaData(id);
-            if (res.result.code == ResponseCodes.ResponseCodeOk)
-            {
-                eventName = res.result.data.eventName;
-            }
-            else
-            {
-                _snackbar.Add(res.result.message, Severity.Error);
-            }
-            
-            var res2 = await _eventTimeService.GetTimeByEventId(id);
-            if (res2.result.code == ResponseCodes.ResponseCodeOk)
-            {
-                model = res2.result.data ?? new List<CreateEventTimeDto>();
-            }
-            else
-            {
-                _snackbar.Add(res.result.message, Severity.Error);
-            }
-        }
-
-        _getEventprocessing = true;
-        StateHasChanged();
-    }
-
-
-    private async Task ActionAddTime()
-    {
-        _processing = true;
-        if (_dateRange.Start == null || _dateRange.End == null)
-        {
-            _snackbar.Add("Please select your event start date and event end date", Severity.Error);
-        }
-        else
-        {
-            if (_dateRange.Start > _dateRange.End)
-            {
-                _snackbar.Add("Start date cannot be greater than end date", Severity.Error);
-            }
-            else if ((_dateRange.Start == _dateRange.End) && (endTime < startTime))
-            {
-                _snackbar.Add("End time cannot be less than the start time.", Severity.Error);
-            }
-            else
-            {
-                DateTime combinedStartDateTime = (DateTime)(_dateRange.Start.Value.Date + startTime);
-                DateTime combinedEndDateTime = (DateTime)(_dateRange.End.Value.Date + endTime);
-
-                var times = new EventTimeVM()
-                {
-                    ivsEventId = id,
-                    startDateAndTime = combinedStartDateTime,
-                    endDateAndTime = combinedEndDateTime,
-                    timeZone = string.Empty
-                };
-                
-                var res = await _eventTimeService.CreateEventTime(times);
-                _snackbar.Add(res.result.message, res.result.code == ResponseCodes.ResponseCodeCreated ? Severity.Success : Severity.Error);
-            }
-        }
-        _processing = false;
-        StateHasChanged();
-    }
-
-
-    private async Task ActionRemoveTime(string id)
-    {
-       
-    }
-
-
-    private void ActionEditTime(CreateEventTimeDto item)
-    {
-        try
-        {
-            
-                
-             startDate = Convert.ToDateTime(item.startDateAndTime);
-             endDate = Convert.ToDateTime(item.endDateAndTime);
-            _dateRange = new DateRange(startDate.Date, endDate.Date);
-
-            _picker.DateRange = _dateRange;
-            
-            startTime = Convert.ToDateTime(item.startDateAndTime).TimeOfDay;
-            endTime = Convert.ToDateTime(item.endDateAndTime).TimeOfDay;
-            StateHasChanged();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }
-
-    private async Task ActionCreateTime()
-    {
-        _processing = true;
-        if (!model.Any())
-        {
-            _snackbar.Add("Please, add one or more event time", Severity.Error);
-        }
-        else
-        {
-            
-        }
-        _processing = false;
-    }
-}
+﻿@page "/events/create-event-time/{id}"<PageTitle>Iv's - Create Event Time</PageTitle><br /><AuthorizeView Roles="User,Admin">    <NotAuthorized>        No Access    </NotAuthorized>    <Authorized Context="cntx">        <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">            <MudPaper Elevation="0">                <MudToolBar>                    @if (!_getEventprocessing)                    {                        <MudSkeleton Animation="Animation.Wave" Width="20%" />                    }                    else                    {                        <MudText><b style="color:#56375C">Create event time for -- <b>@eventName</b></b></MudText>                    }                    <MudSpacer />                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>                </MudToolBar>            </MudPaper>            <br />            <MudTimeline TimelineOrientation="TimelineOrientation.Horizontal" TimelinePosition="TimelinePosition.Bottom">                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">                    <ItemContent>                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Information</b></MudAlert>                    </ItemContent>                </MudTimelineItem>                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">                    <ItemContent>                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Photo</b></MudAlert>                    </ItemContent>                </MudTimelineItem>                <MudTimelineItem Color="Color.Primary" Variant="Variant.Filled">                    <ItemContent>                        <MudAlert Severity="Severity.Info" NoIcon="true"><b>Time</b></MudAlert>                    </ItemContent>                </MudTimelineItem>                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">                    <ItemContent>                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Tickets</b></MudAlert>                    </ItemContent>                </MudTimelineItem>            </MudTimeline>        </MudContainer>        <br />        <MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="padding:20px">            <div style="font-size:17px; line-height:40px">                You can add reoccuring date and time for your events. Simply enter the date and time for the event and click the 'Add' button to save it.                 <br />                Do this for all the dates and time you want before clicking save.            </div>            <br /><br />                        <MudGrid>                @* <MudItem xs="12" sm="12" md="12" lg="6"> *@                @*     <MudDateRangePicker @bind-DateRange="@_dateRange" PickerVariant="PickerVariant.Dialog" Margin="Margin.None" Editable="true"  PlaceholderStart="Event Start Date" PlaceholderEnd="Event End Date" /> *@                @* </MudItem> *@                                <MudItem xs="12" sm="12" md="12" lg="3">                    <MudDatePicker Label="Basic example" @bind-Date="_startDate"/>                </MudItem>                                <MudItem xs="12" sm="12" md="12" lg="3">                    <MudDatePicker Label="Basic example" @bind-Date="_endDate"/>                </MudItem>                <MudItem xs="12" sm="12" md="12" lg="3">                    <MudTimePicker Label="Event Start Time" PickerVariant="PickerVariant.Dialog" AmPm="true" @bind-Time="startTime" />                </MudItem>                <MudItem xs="12" sm="12" md="12" lg="3">                    <MudTimePicker Label="Event End Time" PickerVariant="PickerVariant.Dialog" AmPm="true" @bind-Time="endTime" />                </MudItem>            </MudGrid>            <br /><br />            <MudButton OnClick="@(async () => await ActionAddTime())" Style="background-color:#56375C; color:white" Variant="Variant.Filled">                                @if (_processing)                {                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>                    <MudText Class="ms-2">Processing</MudText>                }                else                {                    <MudText><b>Create Event Time</b></MudText>                }            </MudButton>                        <div style="margin-top:30px; margin-bottom:30px;">                <MudDivider></MudDivider>            </div>            <MudText Typo="Typo.h6"> <b>Event Date & Time</b></MudText>            <br />            @if (!_getEventprocessing)            {                <MudSkeleton Animation="Animation.Wave" Width="40%"/>                <MudSkeleton Animation="Animation.Wave" Width="60%"/>                <MudSkeleton Animation="Animation.Wave" Width="90%"/>            }            else            {                <MudTimeline TimelinePosition="TimelinePosition.Start" DisableModifiers="false">                    @if (model.Any())                    {                        foreach (var item in model)                        {                            <MudTimelineItem Size="Size.Small" Color="Color.Secondary" Elevation="5">                                <MudCard Outlined="false" Elevation="25">                                    <MudCardHeader>                                        <CardHeaderContent>                                            <MudText Typo="Typo.body1"><b>@eventName</b></MudText>                                        </CardHeaderContent>                                        <CardHeaderActions>                                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Title="Edit time" OnClick="@(() => ActionEditTime(item))" Color="Color.Default" aria-label="edit"></MudIconButton>                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="@(async () => await ActionRemoveTime(item._id))" Color="Color.Error" aria-label="delete"></MudIconButton>                                        </CardHeaderActions>                                    </MudCardHeader>                                    <MudCardContent>                                        <MudText Typo="Typo.body2">Event Start Date & Time : <b>@Convert.ToDateTime(item.startDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</b> </MudText>                                        <br/>                                        <MudText Typo="Typo.body2">Event End Date & Time : <b>@Convert.ToDateTime(item.endDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</b> </MudText>                                    </MudCardContent>                                </MudCard>                            </MudTimelineItem>                        }                    }                </MudTimeline>            }            <br /><br />            <MudButton OnClick="@(async () => await ActionCreateTime())" Disabled="@(!model.Any())" Style="background-color:#56375C; color:white" Variant="Variant.Filled">                  @if (_processing)                {                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />                    <MudText Class="ms-2">Processing</MudText>                }                else                {                    <MudText><b>Create Event Time</b></MudText>                }            </MudButton>        </MudContainer>    </Authorized></AuthorizeView>@code {    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }    [Inject] IEventService _eventService { get; set; }    [Inject] IEventTimeService _eventTimeService { get; set; }    [Inject] NavigationManager? _navigate { get; set; }    [Inject] ISnackbar? _snackbar { get; set; }    [Parameter] public string? id { get; set; }    AuthUser authUser = new AuthUser();    List<CreateEventTimeDto> model = [];    private string userId { get; set; }    private string eventName { get; set; }    private bool _processing = false;    private bool _getEventprocessing { get; set; } = false;    //DateRange? _dateRange { get; set; }    private DateTime? _startDate = DateTime.Today;    private DateTime? _endDate = DateTime.Today;    TimeSpan? startTime = new TimeSpan(00, 45, 00);    TimeSpan? endTime = new TimeSpan(00, 45, 00);    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>    {        new BreadcrumbItem("Events", href: "/events/dashboard"),        new BreadcrumbItem("Create Time", href: null, true)    };       protected async override void OnInitialized()    {         _getEventprocessing = false;        var state = await _authStateProvider.GetAuthenticationStateAsync();        if (!state.User.Identity.IsAuthenticated)        {            _navigate.NavigateTo("/accounts/login");        }        else        {            var auth = await authUser.GetAuthUserAsync(state);            userId = auth.Id;            var res = await _eventService.GetEventMetaData(id);            if (res.result.code == ResponseCodes.ResponseCodeOk)            {                eventName = res.result.data.eventName;            }            else            {                _snackbar.Add(res.result.message, Severity.Error);            }                        var res2 = await _eventTimeService.GetTimeByEventId(id);            if (res2.result.code == ResponseCodes.ResponseCodeOk)            {                model = res2.result.data ?? new List<CreateEventTimeDto>();            }            else            {                _snackbar.Add(res.result.message, Severity.Error);            }        }        _getEventprocessing = true;        StateHasChanged();    }    private async Task ActionAddTime()    {        _processing = true;        if (_startDate == null || _endDate == null)        {            _snackbar.Add("Please select your event start date and event end date", Severity.Error);        }        else        {            if (_startDate < DateTime.Today || _endDate < DateTime.Today)            {                _snackbar.Add("Don't select a past date", Severity.Error);            }            else if (_startDate> _endDate)            {                _snackbar.Add("Start date cannot be greater than end date", Severity.Error);            }            else if ((_startDate == _endDate) && (endTime < startTime))            {                _snackbar.Add("End time cannot be less than the start time.", Severity.Error);            }            else            {                DateTime combinedStartDateTime = (DateTime)(_startDate + startTime);                DateTime combinedEndDateTime = (DateTime)(_endDate+ endTime);                var times = new EventTimeVM()                {                    ivsEventId = id,                    startDateAndTime = combinedStartDateTime,                    endDateAndTime = combinedEndDateTime,                    timeZone = string.Empty                };                                var res = await _eventTimeService.CreateEventTime(times);                _snackbar.Add(res.result.message, res.result.code == ResponseCodes.ResponseCodeCreated ? Severity.Success : Severity.Error);            }        }        _processing = false;        StateHasChanged();    }    private async Task ActionRemoveTime(string id)    {           }    private void ActionEditTime(CreateEventTimeDto item)    {        try        {            _startDate = Convert.ToDateTime(item.startDateAndTime);            _endDate = Convert.ToDateTime(item.endDateAndTime);            startTime = Convert.ToDateTime(item.startDateAndTime).TimeOfDay;            endTime = Convert.ToDateTime(item.endDateAndTime).TimeOfDay;            StateHasChanged();        }        catch (Exception e)        {            Console.WriteLine(e);            throw;        }    }    private async Task ActionCreateTime()    {        _processing = true;        if (!model.Any())        {            _snackbar.Add("Please, add one or more event time", Severity.Error);        }        else        {                    }        _processing = false;    }}
