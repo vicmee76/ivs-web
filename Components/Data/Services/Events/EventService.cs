@@ -1,12 +1,11 @@
 ﻿using Blazored.SessionStorage;
-using ivs_ui.Domain.Constants;
-using ivs_ui.Domain.Interfaces.Events;
-using ivs_ui.Domain.Interfaces.General;
-using ivs_ui.Domain.Models.Dtos.Events;
-using ivs_ui.Domain.Models.ViewModels.Events;
 using Newtonsoft.Json;
 using RestSharp;
-using System.Reflection;
+using ivs.Domain.Constants;
+using ivs.Domain.Interfaces.Events;
+using ivs.Domain.Interfaces.General;
+using ivs.Domain.Models.Dtos.Events;
+using ivs.Domain.Models.ViewModels.Events;
 
 namespace ivs_ui.Components.Data.Services.Events
 {
@@ -14,7 +13,7 @@ namespace ivs_ui.Components.Data.Services.Events
     {
         private readonly IWebService _webService = webService;
         private readonly ISessionStorageService _sessionStorageService = sessionStorageService;
-        private readonly string apiUrl = "/api/v1/ivs-events/";
+        private const string ApiUrl = "/api/v1/ivs-events/";
 
         public async Task<ResponseObject> ActivateEvent(string id)
         {
@@ -23,10 +22,10 @@ namespace ivs_ui.Components.Data.Services.Events
                 var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
                 var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
 
-                var response = await _webService.Call(apiUrl, $"activate-event/{id}", Method.Put, null, headers, null, null);
+                var response = await _webService.Call(ApiUrl, $"activate-event/{id}", Method.Put, null, headers, null, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Ok)
+                if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
                 return res;
             }
@@ -36,7 +35,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to publish this event, please try agian later",
+                        message = "Error! Something went wrong trying to publish this event, please try again later",
                     }
                 };
             }
@@ -49,14 +48,14 @@ namespace ivs_ui.Components.Data.Services.Events
                 var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
                 var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
 
-                var response = await _webService.Call(apiUrl, "create-event", Method.Post, model, headers);
+                var response = await _webService.Call(ApiUrl, "create-event", Method.Post, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Created)
+                if (content?.code != ResponseCodes.ResponseCodeCreated)
                     return res;
 
-                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
-                res.result.data = JsonConvert.DeserializeObject<CreateEventResponseDto>(content.data.ToString());
+                var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
+                res.result.data = JsonConvert.DeserializeObject<CreateEventResponseDto>(content?.data.ToString());
                 return res;
             }
             catch (Exception ex)
@@ -65,7 +64,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to create an event, please try agian later",
+                        message = "Error! Something went wrong trying to create an event, please try again later",
                     }
                 };
             }
@@ -79,10 +78,10 @@ namespace ivs_ui.Components.Data.Services.Events
                 var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
                 var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
 
-                var response = await _webService.Call(apiUrl, $"get-ivs-event-by-userid/{userid}", Method.Get, null, headers);
+                var response = await _webService.Call(ApiUrl, $"get-ivs-event-by-userid/{userid}", Method.Get, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Ok)
+                if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
 
                 var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
@@ -95,7 +94,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get all events for a user, please try agian later",
+                        message = "Error! Something went wrong trying to get all events for a user, please try again later",
                     }
                 };
             }
@@ -109,10 +108,10 @@ namespace ivs_ui.Components.Data.Services.Events
                 var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
                 var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
 
-                var response = await _webService.Call(apiUrl, $"get-ivs-event-by-id/{id}", Method.Get, null, headers);
+                var response = await _webService.Call(ApiUrl, $"get-ivs-event-by-id/{id}", Method.Get, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Ok)
+                if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
 
                 var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
@@ -125,7 +124,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get event meta data, please try agian later",
+                        message = "Error! Something went wrong trying to get event meta data, please try again later",
                     }
                 };
             }
@@ -139,10 +138,41 @@ namespace ivs_ui.Components.Data.Services.Events
                 var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
                 var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
 
-                var response = await _webService.Call(apiUrl, $"get-ivs-event-meta-data-by-id/{id}", Method.Get, null, headers);
+                var response = await _webService.Call(ApiUrl, $"get-ivs-event-meta-data-by-id/{id}", Method.Get, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Ok)
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
+                res.result.data = JsonConvert.DeserializeObject<GetEventMetaDataDto>(content.data.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to get event meta data, please try again later",
+                    }
+                };
+            }
+        }
+
+
+
+        public async Task<ResponseObject> UpdateEvent(string id, CreateEventVM model)
+        {
+            try
+            {
+                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+
+                var response = await _webService.Call(ApiUrl, $"update-event/{id}", Method.Put, model, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
 
                 var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
@@ -155,11 +185,12 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get event meta data, please try agian later",
+                        message = "Error! Something went wrong trying to update an event, please try again later",
                     }
                 };
             }
         }
+
 
 
         public async Task<ResponseObject> UploadEventBanner(UploadBodyVM model, UploadFileVM file)
@@ -169,13 +200,13 @@ namespace ivs_ui.Components.Data.Services.Events
                 var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
                 var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
 
-                var response = await _webService.Call(apiUrl, $"upload-event-photo/{model.ivsEventId}", Method.Put, model, headers, null, file);
+                var response = await _webService.Call(ApiUrl, $"upload-event-photo/{model.ivsEventId}", Method.Put, model, headers, null, file);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCode_Ok)
+                if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
 
-                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
+                var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
                 res.result.data = JsonConvert.DeserializeObject<CreateEventResponseDto>(content.data.ToString());
                 return res;
             }
@@ -185,7 +216,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to upload event banner, please try agian later",
+                        message = "Error! Something went wrong trying to upload event banner, please try again later",
                     }
                 };
             }

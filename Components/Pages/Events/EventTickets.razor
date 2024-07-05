@@ -7,7 +7,7 @@
 
 <br />
 
-<AuthorizeView>
+<AuthorizeView Roles="User,Admin">
     <NotAuthorized>
         No Access
     </NotAuthorized>
@@ -238,7 +238,7 @@
                                                             <MudText Typo="Typo.body1"><b>@item.ticketKind Ticket</b></MudText>
                                                             <div>
                                                                 <div><b>Ticket Name : </b><span>@item.ticketName</span></div>
-                                                                <div><b>Ticket Price : </b><span>@item.ticketAmount.NumberDecimal.ToString("N0")</span></div>
+                                                                <div><b>Ticket Price : </b><span>@item.ticketAmount.numberDecimal.ToString("N0")</span></div>
                                                             </div>
                                                         </CardHeaderContent>
                                                         <CardHeaderActions>
@@ -359,7 +359,7 @@
     private async Task InitializeComponent()
     {
         var res = await _eventService.GetEventMetaData(id);
-        if (res.result.code == ResponseCodes.ResponseCode_Ok)
+        if (res.result.code == ResponseCodes.ResponseCodeOk)
         {
             eventName = res.result.data.eventName;
             activateUrl = $"/events/activate-event/{id}";
@@ -397,7 +397,7 @@
         if (!type)
         {
             var res = await _ticketService.CreateTicket(model);
-            if (res.result.code == ResponseCodes.ResponseCode_Created)
+            if (res.result.code == ResponseCodes.ResponseCodeCreated)
             {
                 _snackbar.Add(res.result.message, Severity.Success);
                 await InitializeComponent();
@@ -417,7 +417,7 @@
             else
             {
                 var res = await _ticketService.UpdateTicket(ticketId, model);
-                if (res.result.code == ResponseCodes.ResponseCode_Ok)
+                if (res.result.code == ResponseCodes.ResponseCodeOk)
                 {
                     _snackbar.Add(res.result.message, Severity.Success);
                     await InitializeComponent();
@@ -445,7 +445,7 @@
         else
         {
             var res = await _ticketService.DeleteTicketById(ticketId);
-            if (res.result.code == ResponseCodes.ResponseCode_Ok)
+            if (res.result.code == ResponseCodes.ResponseCodeOk)
             {
                 _snackbar.Add(res.result.message, Severity.Success);
                 ActionReset();
@@ -469,9 +469,9 @@
         model.ticketInStock = item.ticketInStock;
         model.ticketDescription = item.ticketDescription;
         model.groupSize = item.groupSize;
-        amount = item.ticketAmount.NumberDecimal;
+        amount = item.ticketAmount.numberDecimal;
         model.ticketSalesEndDateAndTime = item.ticketSalesEndDateAndTime;
-        endTime = item.ticketSalesEndDateAndTime.TimeOfDay;
+        endTime = item.ticketSalesEndDateAndTime?.TimeOfDay;
 
         _isFreeTicket = amount == 0 ? true : false;
         _isGroupTicket = item.ticketKind.ToLower() == "single" ? true : false;

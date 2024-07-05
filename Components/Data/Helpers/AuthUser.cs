@@ -1,4 +1,5 @@
-﻿using ivs_ui.Domain.Models.Dtos.Accounts;
+﻿
+using ivs.Domain.Models.Dtos.Accounts;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace ivs_ui.Components.Data.Helpers
