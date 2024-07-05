@@ -8,4 +8,5 @@ public interface IEventTimeService
     public Task<ResponseObject> CreateEventTime(EventTimeVM model);
     public Task<ResponseObject> GetTimeByEventId(string eventId);
     public Task<ResponseObject> DeleteEventTime(string id);
+    public Task<ResponseObject> UpdateEventTime(string id, EventTimeVM model);
 }

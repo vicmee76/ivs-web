@@ -102,5 +102,28 @@ namespace ivs_ui.Components.Data.Services.Events
                 };
             }
         }
+
+        public async Task<ResponseObject> UpdateEventTime(string id, EventTimeVM model)
+        {
+            try
+            {
+                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+
+                var response = await _webService.Call(ApiUrl, $"update-event-time/{id}", Method.Put, model, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to update event time, please try again later",
+                    }
+                };
+            }
+        }
     }
 }
