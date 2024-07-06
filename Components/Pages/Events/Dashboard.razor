@@ -87,7 +87,7 @@
                                                 <CardHeaderActions>
                                                     <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Default">
                                                         <MudMenuItem>View event</MudMenuItem>
-                                                        @if (item.status.ToLower() == "pending")
+                                                        @if (item.status == Helpers.Pending)
                                                         {
                                                             <MudMenuItem Href="@updateUrl">Edit event</MudMenuItem>
                                                             <MudMenuItem OnClick="@(async (e) => await DeleteEventAction(item._id))"> Delete event</MudMenuItem>
@@ -116,7 +116,7 @@
                                             <MudCardActions>
                                                 <MudIconButton Icon="@Icons.Material.Filled.Share" Title="Share" Color="Color.Default"/>
 
-                                                @if (item.status.ToLower() == "pending")
+                                                @if (item.status == Helpers.Pending)
                                                 {
                                                     <MudChip Variant="Variant.Text" Color="Color.Warning"><b>Not published</b></MudChip>
                                                 }
@@ -127,7 +127,7 @@
 
                                                 <MudSpacer></MudSpacer>
 
-                                                @if (item.status.ToLower() == "pending")
+                                                @if (item.status == Helpers.Pending)
                                                 {
                                                     <MudIconButton Href="@activateUrl" Icon="@Icons.Material.TwoTone.KeyboardDoubleArrowRight" Title="Publish event" Size="Size.Large" Color="Color.Secondary"/>
                                                 }
