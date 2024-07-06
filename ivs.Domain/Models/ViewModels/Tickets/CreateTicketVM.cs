@@ -17,12 +17,10 @@ public class CreateTicketVM
     [StringLength(100, ErrorMessage = "Ticket Name can't be longer than 100 characters.")]
     public string? ticketName { get; set; }
 
-    [Required(ErrorMessage = "Ticket Amount is required.")]
-    [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Invalid Ticket Amount.")]
     public string? ticketAmount { get; set; }
 
     [Range(1, 100, ErrorMessage = "Group Size must be between 1 and 100.")]
-    public int groupSize { get; set; }
+    public int groupSize { get; set; } = 1;
 
     [StringLength(500, ErrorMessage = "Ticket Description can't be longer than 500 characters.")]
     public string? ticketDescription { get; set; }
