@@ -12,13 +12,25 @@
         <br />
         <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
 
+            <MudMessageBox @ref="deleteEventMessageBox" Title="Delete event" CancelText="Cancel" YesText="Delete" Style="padding:20px;">
+                <MessageContent>
+                    Are you sure you want to delete this event
+                </MessageContent>
+                <YesButton>
+                    <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Secondary">Delete</MudButton>
+                </YesButton>
+                <CancelButton>
+                    <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Default">Cancel</MudButton>
+                </CancelButton>
+            </MudMessageBox>
+
             <MudPaper Elevation="0">
                 <MudToolBar>
 
                     @if (_processing)
                     {
-                        <MudSkeleton Height="42px" Width="200px" />
-                    }           
+                        <MudSkeleton Height="42px" Width="200px"/>
+                    }
                     else
                     {
                         @if (fullname != null)
@@ -26,12 +38,12 @@
                             <MudText><b style="color:#56375C">Hi, @fullname</b></MudText>
                         }
                     }
-                    <MudSpacer />
+                    <MudSpacer/>
                     <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
                 </MudToolBar>
             </MudPaper>
 
-            <br />
+            <br/>
 
             <MudCard Elevation="0" Style="padding:20px">
                 <MudCardHeader>
@@ -44,13 +56,13 @@
                 </MudCardHeader>
                 <MudCardContent>
 
-                    <br />
+                    <br/>
 
                     @if (_processing)
                     {
-                        <MudSkeleton Height="42px;" />
-                        <MudSkeleton Height="42px;" />
-                        <MudSkeleton Height="42px;" />
+                        <MudSkeleton Height="42px;"/>
+                        <MudSkeleton Height="42px;"/>
+                        <MudSkeleton Height="42px;"/>
                     }
                     else
                     {
@@ -67,9 +79,9 @@
                                             <MudCardHeader>
                                                 <CardHeaderAvatar>
                                                     <MudAvatar Color="Color.Secondary">@item.eventName[0]</MudAvatar>
-                                                    </CardHeaderAvatar>
-                                                    <CardHeaderContent>
-                                                        <MudText Typo="Typo.body2"><b>@item.eventName</b></MudText>
+                                                </CardHeaderAvatar>
+                                                <CardHeaderContent>
+                                                    <MudText Typo="Typo.body2"><b>@item.eventName</b></MudText>
                                                     <MudText Typo="Typo.body1">@item.eventOption event</MudText>
                                                 </CardHeaderContent>
                                                 <CardHeaderActions>
@@ -78,7 +90,7 @@
                                                         @if (item.status.ToLower() == "pending")
                                                         {
                                                             <MudMenuItem Href="@updateUrl">Edit event</MudMenuItem>
-                                                            <MudMenuItem>Delete event</MudMenuItem>
+                                                            <MudMenuItem OnClick="@(async (e) => await DeleteEventAction(item._id))"> Delete event</MudMenuItem>
                                                         }
                                                         else
                                                         {
@@ -90,19 +102,19 @@
 
                                             @if (string.IsNullOrEmpty(item.eventImageData))
                                             {
-                                                <MudCardMedia Image="images/backgrounds/abstract.jpg" Height="200" />
+                                                <MudCardMedia Image="images/backgrounds/abstract.jpg" Height="200"/>
                                             }
                                             else
                                             {
-                                                <MudCardMedia Image="@item.eventImageData" Height="200" />
+                                                <MudCardMedia Image="@item.eventImageData" Height="200"/>
                                             }
 
                                             <MudCardContent>
                                                 <MudText Typo="Typo.body2">@item.eventAddress</MudText>
-                                                </MudCardContent>
+                                            </MudCardContent>
 
-                                                <MudCardActions>
-                                                    <MudIconButton Icon="@Icons.Material.Filled.Share" Title="Share" Color="Color.Default" />
+                                            <MudCardActions>
+                                                <MudIconButton Icon="@Icons.Material.Filled.Share" Title="Share" Color="Color.Default"/>
 
                                                 @if (item.status.ToLower() == "pending")
                                                 {
@@ -118,14 +130,14 @@
 
                                                 @if (item.status.ToLower() == "pending")
                                                 {
-                                                    <MudIconButton Href="@activateUrl" Icon="@Icons.Material.TwoTone.KeyboardDoubleArrowRight" Title="Publish event" Size="Size.Large" Color="Color.Secondary" />
+                                                    <MudIconButton Href="@activateUrl" Icon="@Icons.Material.TwoTone.KeyboardDoubleArrowRight" Title="Publish event" Size="Size.Large" Color="Color.Secondary"/>
                                                 }
                                                 else
                                                 {
-                                                    <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleRight" Title="View event" Size="Size.Large" Color="Color.Secondary" />
+                                                    <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleRight" Title="View event" Size="Size.Large" Color="Color.Secondary"/>
                                                 }
 
-                                                
+
 
                                             </MudCardActions>
                                         </MudCard>
@@ -138,9 +150,9 @@
                             <div style="text-align:center;">
 
 
-                                <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="130" Class="rounded-lg" />
+                                <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="130" Class="rounded-lg"/>
 
-                                <br />
+                                <br/>
 
                                 <MudText Typo="Typo.h5"> <b>You haven't created an event yet!</b></MudText>
                                 <br>
@@ -161,16 +173,20 @@
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
     [Inject] IEventService _eventService { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
-
+    [Inject] ISnackbar? _snackbar { get; set; }
+    private MudMessageBox deleteEventMessageBox { get; set; }
     IEnumerable<GetEventByUserDto> _eventsDto = new List<GetEventByUserDto>();
-
     AuthUser authUser = new AuthUser();
-
     private string fullname { get; set; }
     private string userId { get; set; }
-   
-
     private bool _processing { get; set; } = false;
+    
+private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+{
+new BreadcrumbItem("Events", href: "#"),
+new BreadcrumbItem("Dashboard", href: null, disabled: true)
+};
+
 
     protected async override void OnInitialized()
     {
@@ -186,18 +202,33 @@
             var auth = await authUser.GetAuthUserAsync(state);
             userId = auth.Id;
             fullname = auth.SentenceCaseFullName;
-
-            var res2 = await _eventService.GetEventByUser(userId);
-            _eventsDto = res2.result.data ?? new List<GetEventByUserDto>();
+            await GetEvents();
         }
         _processing = false;
         StateHasChanged();
     }
 
-    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+
+    private async Task GetEvents()
     {
-        new BreadcrumbItem("Events", href: "#"),
-        new BreadcrumbItem("Dashboard", href: null, disabled: true)
-    };
+        var res2 = await _eventService.GetEventByUser(userId);
+        _eventsDto = res2.result.data ?? new List<GetEventByUserDto>();
+    }
+
+    private async Task DeleteEventAction(string id)
+    {
+        _processing = true;
+        bool? result = await deleteEventMessageBox.Show();
+        if (result == true)
+        {
+            var res = await _eventService.DeleteEvent(id);
+            _snackbar.Add(res.result.message, res.result.code == ResponseCodes.ResponseCodeOk ? Severity.Success : Severity.Error);
+            await GetEvents();
+        }
+
+        StateHasChanged();
+        _processing = false;
+    }
+   
 
 }

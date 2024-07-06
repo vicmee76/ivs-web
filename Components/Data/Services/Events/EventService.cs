@@ -41,6 +41,29 @@ namespace ivs_ui.Components.Data.Services.Events
             }
         }
 
+        
+        public async Task<ResponseObject> DeleteEvent(string id)
+        {
+            try
+            {
+                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+                var response = await _webService.Call(ApiUrl, $"delete-ivs-event/{id}", Method.Delete, null, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to create an event, please try again later",
+                    }
+                };
+            }
+        }
+
         public async Task<ResponseObject> CreateEvent(CreateEventVM model)
         {
             try
