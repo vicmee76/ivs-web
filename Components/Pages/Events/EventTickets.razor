@@ -361,8 +361,16 @@
         var res = await _eventService.GetEventMetaData(id);
         if (res.result.code == ResponseCodes.ResponseCodeOk)
         {
-            eventName = res.result.data.eventName;
-            activateUrl = $"/events/activate-event/{id}";
+            if (res?.result?.data.status == Helpers.Active)
+            {
+                _navigate.NavigateTo("/events/dashboard");
+                _snackbar.Add("Event is already active", Severity.Info);
+            }
+            else
+            {
+                eventName = res.result.data.eventName;
+                activateUrl = $"/events/activate-event/{id}";
+            }
         }
         else
         {
