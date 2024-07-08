@@ -1,4 +1,5 @@
-﻿using Blazored.SessionStorage;
+﻿using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 using Newtonsoft.Json;
 using RestSharp;
 using ivs.Domain.Constants;
@@ -8,10 +9,10 @@ using ivs.Domain.Models.Dtos.Events;
 
 namespace ivs_ui.Components.Data.Services.Events
 {
-    public class EventTypeService(IWebService webService, ISessionStorageService sessionStorageService) : IEventTypeService
+    public class EventTypeService(IWebService webService, ILocalStorageService sessionStorageService) : IEventTypeService
     {
         private readonly IWebService _webService = webService;
-        private readonly ISessionStorageService _sessionStorageService = sessionStorageService;
+        private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
         private const string ApiUrl = "/api/v1/event-types";
 
 

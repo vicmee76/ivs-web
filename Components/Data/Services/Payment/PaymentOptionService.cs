@@ -1,4 +1,5 @@
-﻿using Blazored.SessionStorage;
+﻿using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 using ivs.Domain.Constants;
 using ivs.Domain.Interfaces.General;
 using ivs.Domain.Interfaces.Payment;
@@ -8,10 +9,10 @@ using RestSharp;
 
 namespace ivs_ui.Components.Data.Services.Payment
 {
-    public class PaymentOptionService(IWebService webService, ISessionStorageService sessionStorageService) : IPaymentOptionService
+    public class PaymentOptionService(IWebService webService, ILocalStorageService sessionStorageService) : IPaymentOptionService
     {
         private readonly IWebService _webService = webService;
-        private readonly ISessionStorageService _sessionStorageService = sessionStorageService;
+        private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
         private const string ApiUrl = "/api/v1/payments-options/";
 
         public async Task<ResponseObject> GetAllPaymentOptions()

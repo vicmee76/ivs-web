@@ -152,6 +152,7 @@
 
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ISessionStorageService _sessionStorageService { get; set; }
+    [Inject] ILocalStorageService _localStorageService { get; set; }
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
 
     private bool _drawerOpen = true;
@@ -163,7 +164,7 @@
 
     private async Task ActionLogOut()
     {
-        await _sessionStorageService.ClearAsync();
+        await _localStorageService.ClearAsync();
         await _authStateProvider.GetAuthenticationStateAsync();
         _navigate.NavigateTo("/", true);
     }

@@ -1,4 +1,5 @@
-﻿using Blazored.SessionStorage;
+﻿using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 using ivs.Domain.Constants;
 using ivs.Domain.Interfaces.Events;
 using ivs.Domain.Interfaces.General;
@@ -9,10 +10,10 @@ using RestSharp;
 
 namespace ivs_ui.Components.Data.Services.Events
 {
-    public class EventTimeService(IWebService webService, ISessionStorageService sessionStorageService) : IEventTimeService
+    public class EventTimeService(IWebService webService, ILocalStorageService sessionStorageService) : IEventTimeService
     {
         private readonly IWebService _webService = webService;
-        private readonly ISessionStorageService _sessionStorageService = sessionStorageService;
+        private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
         private const string ApiUrl = "/api/v1/ivs-events-time/";
 
         public async Task<ResponseObject> CreateEventTime(EventTimeVM model)

@@ -67,6 +67,7 @@
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] IAccountService _accountrService { get; set; }
     [Inject] ISessionStorageService _sessionStorageService { get; set; }
+    [Inject] ILocalStorageService _localStorageService { get; set; }
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
     [Parameter] public string? Id { get; set; }
     [SupplyParameterFromForm] public ActivateAccountVM? model { get; set; }
@@ -88,7 +89,7 @@
         var res = await _accountrService.VerifyAccount(Id, model) ?? new();
         if (res.result != null && (res.result.code == ResponseCodes.ResponseCodeOk))
         {
-            await _sessionStorageService.SetItemAsync(Tokens.TokenName, res.result.token);
+            await _localStorageService.SetItemAsync(Tokens.TokenName, res.result.token);
             await _authStateProvider.GetAuthenticationStateAsync();
             _navigate.NavigateTo("/events/dashboard", true);
         }
