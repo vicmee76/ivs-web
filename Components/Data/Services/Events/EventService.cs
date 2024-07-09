@@ -1,4 +1,5 @@
-﻿using Blazored.SessionStorage;
+﻿using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 using Newtonsoft.Json;
 using RestSharp;
 using ivs.Domain.Constants;
@@ -9,10 +10,10 @@ using ivs.Domain.Models.ViewModels.Events;
 
 namespace ivs_ui.Components.Data.Services.Events
 {
-    public class EventService(IWebService webService, ISessionStorageService sessionStorageService) : IEventService
+    public class EventService(IWebService webService, ILocalStorageService sessionStorageService) : IEventService
     {
         private readonly IWebService _webService = webService;
-        private readonly ISessionStorageService _sessionStorageService = sessionStorageService;
+        private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
         private const string ApiUrl = "/api/v1/ivs-events/";
 
         public async Task<ResponseObject> ActivateEvent(string id)
@@ -36,6 +37,29 @@ namespace ivs_ui.Components.Data.Services.Events
                     result = new ResponseContents()
                     {
                         message = "Error! Something went wrong trying to publish this event, please try again later",
+                    }
+                };
+            }
+        }
+
+        
+        public async Task<ResponseObject> DeleteEvent(string id)
+        {
+            try
+            {
+                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+                var response = await _webService.Call(ApiUrl, $"delete-ivs-event/{id}", Method.Delete, null, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to create an event, please try again later",
                     }
                 };
             }

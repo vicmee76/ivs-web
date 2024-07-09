@@ -45,7 +45,7 @@
            
             <MudSpacer  />
             <MudButton Color="Color.Inherit" Href="/home" Class="ma-5" Style="font-weight:bold;">Home</MudButton>
-            <MudButton Color="Color.Inherit" Href="/features" Class="ma-5" Style="font-weight:bold;">Discovery</MudButton>
+            <MudButton Color="Color.Inherit" Href="/events/discovery" Class="ma-5" Style="font-weight:bold;">Discovery</MudButton>
             <MudMenu Color="Color.Inherit" Class="ma-5" Label="Us" Style="font-weight:bold;" EndIcon="@Icons.Material.Filled.ArrowDropDown" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
             <MudMenuItem Href="/action">About us</MudMenuItem>
             <MudMenuItem Href="/another-action">Contact us</MudMenuItem>
@@ -152,6 +152,7 @@
 
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ISessionStorageService _sessionStorageService { get; set; }
+    [Inject] ILocalStorageService _localStorageService { get; set; }
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
 
     private bool _drawerOpen = true;
@@ -163,7 +164,7 @@
 
     private async Task ActionLogOut()
     {
-        await _sessionStorageService.ClearAsync();
+        await _localStorageService.ClearAsync();
         await _authStateProvider.GetAuthenticationStateAsync();
         _navigate.NavigateTo("/", true);
     }

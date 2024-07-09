@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 using System.Text.Json;
+using Blazored.LocalStorage;
 using ivs.Domain.Constants;
 
 namespace ivs_ui.Components.Data.Services.General
@@ -9,23 +10,25 @@ namespace ivs_ui.Components.Data.Services.General
     public class AuthStateProvider : AuthenticationStateProvider
     {
         private readonly ISessionStorageService _sessionStorageService;
+        private readonly ILocalStorageService _localStorageService;
         private readonly HttpClient _http;
         private ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
 
-        public AuthStateProvider(HttpClient http, ISessionStorageService sessionStorageService)
+        public AuthStateProvider(HttpClient http, ISessionStorageService sessionStorageService, ILocalStorageService localStorageService)
         {
             _sessionStorageService = sessionStorageService ?? throw new ArgumentNullException(nameof(sessionStorageService));
+            _localStorageService = localStorageService ?? throw new ArgumentNullException(nameof(localStorageService));
             _http = http;
         }
        
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            string token = string.Empty;
-            var hasKey = await _sessionStorageService.ContainKeyAsync(Tokens.TokenName)!;
+            string? token = string.Empty;
+            var hasKey = await _localStorageService.ContainKeyAsync(Tokens.TokenName)!;
             if (hasKey)
             {
-                token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                token = await _localStorageService.GetItemAsync<string>(Tokens.TokenName);
             }
             else
             {
@@ -49,7 +52,7 @@ namespace ivs_ui.Components.Data.Services.General
        
 
 
-        public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
+        public static IEnumerable<Claim> ParseClaimsFromJwt(string? jwt)
         {
             var claims = new List<Claim>();
             var payload = jwt.Split('.')[1];

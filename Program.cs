@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using Blazored.SessionStorage;
 using ivs_ui.Components;
 using ivs_ui.Components.Data.Services.Accounts;
@@ -40,6 +41,7 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddAuthenticationCore();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddBlazoredSessionStorage();
+builder.Services.AddBlazoredLocalStorage();
 
 
 builder.Services.AddHttpClient<AuthenticationStateProvider, AuthStateProvider>();

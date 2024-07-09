@@ -6,6 +6,7 @@ namespace ivs.Domain.Interfaces.Events;
 public interface IEventService
 {
     public Task<ResponseObject> ActivateEvent(string id);
+    public Task<ResponseObject> DeleteEvent(string id);
     public Task<ResponseObject> CreateEvent(CreateEventVM model);
     public Task<ResponseObject> GetEventByUser(string userid);
     public Task<ResponseObject> GetEventDetails(string id);

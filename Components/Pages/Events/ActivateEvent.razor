@@ -193,6 +193,7 @@
                                                             <div><b>Ticket Price : </b><span>@t.ticketAmount.numberDecimal.ToString("N0")</span></div>
                                                             <div><b>Ticket in stock : </b><span>@t.ticketInStock</span></div>
                                                             <div><b>Group Size : </b><span>@t.groupSize</span></div>
+                                                            <div><b>Ticket start date : </b><span>@Convert.ToDateTime(t.ticketSalesStartDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</span></div>
                                                             <div><b>Ticket end date : </b><span>@Convert.ToDateTime(t.ticketSalesEndDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</span></div>
                                                         </div>
                                                     </MudExpansionPanel>
