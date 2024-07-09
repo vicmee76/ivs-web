@@ -65,7 +65,7 @@
     [Inject] IAccountService? _accountService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
     [Inject] ISessionStorageService _sessionStorageService { get; set; }
-
+    [Inject] ILocalStorageService _localStorageService { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [SupplyParameterFromForm] public SignUpVM? model { get; set; }
 
@@ -80,7 +80,7 @@
     {
         model = new SignUpVM();
 
-        var checkSession = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+        var checkSession = await _localStorageService.GetItemAsync<string>(Tokens.TokenName);
         if (!string.IsNullOrEmpty(checkSession))
         {
             _navigate.NavigateTo("/");

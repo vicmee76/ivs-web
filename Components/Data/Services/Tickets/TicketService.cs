@@ -1,4 +1,5 @@
-﻿using Blazored.SessionStorage;
+﻿using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 using ivs.Domain.Constants;
 using ivs.Domain.Interfaces.General;
 using ivs.Domain.Interfaces.Tickets;
@@ -9,10 +10,10 @@ using RestSharp;
 
 namespace ivs_ui.Components.Data.Services.Tickets
 {
-    public class TicketService(IWebService webService, ISessionStorageService sessionStorageService) : ITicketService
+    public class TicketService(IWebService webService, ILocalStorageService sessionStorageService) : ITicketService
     {
         private readonly IWebService _webService = webService;
-        private readonly ISessionStorageService _sessionStorageService = sessionStorageService;
+        private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
         private const string ApiUrl = "/api/v1/tickets/";
 
         public async Task<ResponseObject> CreateTicket(CreateTicketVM model)

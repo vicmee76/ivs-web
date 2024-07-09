@@ -25,6 +25,9 @@ public class CreateTicketVM
     [StringLength(500, ErrorMessage = "Ticket Description can't be longer than 500 characters.")]
     public string? ticketDescription { get; set; }
 
+    [Required(ErrorMessage = "Ticket selling start date is required.")]
+    public DateTime? ticketSaleStartDateAndTime { get; set; }
+    
     [Required(ErrorMessage = "Ticket selling end date is required.")]
     public DateTime? ticketSalesEndDateAndTime { get; set; }
 
