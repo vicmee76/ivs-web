@@ -13,6 +13,7 @@ public class TicketDto
     public int groupSize { get; set; }
     public string? ticketDescription { get; set; }
     public DateTime? ticketSalesEndDateAndTime { get; set; }
+    public DateTime? ticketSalesStartDateAndTime { get; set; }
     public string? createdAt { get; set; }
     public int ticketInStock { get; set; }
 }

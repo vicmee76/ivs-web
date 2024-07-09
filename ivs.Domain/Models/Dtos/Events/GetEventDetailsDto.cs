@@ -61,6 +61,7 @@ public class Ticket
     public string groupSize { get; set; }
     public string ticketDescription { get; set; }
     public string ticketSalesEndDateAndTime { get; set; }
+    public string ticketSalesStartDateAndTime { get; set; }
     public string createdAt { get; set; }
 }
 
