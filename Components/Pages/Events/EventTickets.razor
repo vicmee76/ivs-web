@@ -172,6 +172,13 @@
 
                                 <MudGrid>
                                     <MudItem xs="12" sm="12" md="12" lg="6">
+                                        <MudDatePicker PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Editable="false" Clearable="true" @bind-Date="model.ticketSaleStartDateAndTime" Label="Ticket Start date" />
+                                    </MudItem>
+                                    <MudItem xs="12" sm="12" md="12" lg="6">
+                                        <MudTimePicker Label="Select time" PickerVariant="PickerVariant.Dialog" Required="true" Editable="false" AmPm="true" @bind-Time="startTime" />
+                                    </MudItem>
+
+                                    <MudItem xs="12" sm="12" md="12" lg="6">
                                         <MudDatePicker PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Editable="false" Clearable="true" @bind-Date="model.ticketSalesEndDateAndTime" Label="Ticket end date" />
                                     </MudItem>
                                     <MudItem xs="12" sm="12" md="12" lg="6">
@@ -312,7 +319,8 @@
     private string activateUrl { get; set; }
 
     DateTime? date = DateTime.Today;
-    TimeSpan? endTime = new TimeSpan(00, 30, 00);
+    TimeSpan? endTime = new TimeSpan(00, 00, 00);
+    TimeSpan? startTime = new TimeSpan(00, 00, 00);
 
     private bool _processing = false;
     private string ticketId { get; set; }
@@ -388,7 +396,8 @@
     private void ActionReset()
     {
         model = new CreateTicketVM();
-        endTime = new TimeSpan(00, 30, 00);
+        endTime = new TimeSpan(00, 00, 00);
+        startTime = new TimeSpan(00, 00, 00);
         ticketId = string.Empty;
         _isUpdate = false;
     }
@@ -400,6 +409,7 @@
 
         model.ivsEvent_id = id;
         model.ticketAmount = amount.ToString();
+        model.ticketSaleStartDateAndTime = (DateTime)(model.ticketSaleStartDateAndTime + startTime);
         model.ticketSalesEndDateAndTime = (DateTime)(model.ticketSalesEndDateAndTime + endTime);
 
         if (!type)
@@ -478,7 +488,9 @@
         model.ticketDescription = item.ticketDescription;
         model.groupSize = item.groupSize;
         amount = item.ticketAmount.numberDecimal;
+        model.ticketSaleStartDateAndTime = item.ticketSalesStartDateAndTime;
         model.ticketSalesEndDateAndTime = item.ticketSalesEndDateAndTime;
+        startTime = item.ticketSalesStartDateAndTime?.TimeOfDay;
         endTime = item.ticketSalesEndDateAndTime?.TimeOfDay;
 
         _isFreeTicket = amount == 0 ? true : false;
