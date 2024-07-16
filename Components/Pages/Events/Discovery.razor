@@ -2,13 +2,16 @@
 
 <PageTitle>Iv's - Discovery</PageTitle>
 
-<MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+<MudContainer Fixed="true" MaxWidth="MaxWidth.Medium">
    
    <br/><br/>
    
-   <MudGrid>
+   <span id="discovery-title">Discover every moment</span>
+   
+   <br/><br/>
+   
+   <MudGrid Spacing="6" Justify="Justify.Center">
      
-
    @if (_processing)
    {
       <MudItem xs="12" sm="12" md="12" lg="12">
@@ -21,13 +24,18 @@
    {
       foreach (var e in _event)
       {
-         <MudItem xs="12" sm="12" md="6" lg="3">
+         string eventName = e.eventName.Length > 19 ? e.eventName.Substring(0, 21) + " ..." : e.eventName;
+         string address = e.eventAddress.Length > 25 ? e.eventAddress.Substring(0, 25) + " ..." : e.eventAddress;
+         
+         <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
             <MudCard>
-               <MudCardMedia Image="@e.eventImageData" Height="200"/>
+               <MudCardMedia Image="@e.eventImageData" Height="200" />
                <MudCardContent>
-                  <MudText Typo="Typo.h5"><b>@e.eventName</b></MudText>
-                  <MudText Typo="Typo.body2">Old paint found on a stone house door.</MudText>
-                  <MudText Typo="Typo.body2">This photo was taken in a small village in Istra Croatia.</MudText>
+                  <br/>
+                  <div style="font-size: medium"><b>@eventName</b></div>
+                  <br/>
+                  <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" Color="Color.Secondary"/> <span>@address</span>
+
                </MudCardContent>
                <MudCardActions>
                   <MudButton Variant="Variant.Text" Color="Color.Primary">Share</MudButton>
