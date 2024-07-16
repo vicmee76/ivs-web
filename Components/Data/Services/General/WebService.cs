@@ -38,7 +38,7 @@ namespace ivs_ui.Components.Data.Services.General
                 request.AddJsonBody(serilizedBody);
             }
 
-            RestResponse response = await client.ExecuteAsync(request);
+            var response = await client.ExecuteAsync(request);
             return response;
         }
 

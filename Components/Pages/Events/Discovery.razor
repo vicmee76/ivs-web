@@ -1,5 +1,63 @@
 ﻿@page "/events/discovery"
 
+<PageTitle>Iv's - Discovery</PageTitle>
+
+<MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+   
+   <br/><br/>
+   
+   <MudGrid>
+     
+
+   @if (_processing)
+   {
+      <MudItem xs="12" sm="12" md="12" lg="12">
+         <MudSkeleton Height="42px;"/>
+         <MudSkeleton Height="42px;"/>
+         <MudSkeleton Height="42px;"/>
+      </MudItem>
+   }
+   else
+   {
+      foreach (var e in _event)
+      {
+         <MudItem xs="12" sm="12" md="6" lg="3">
+            <MudCard>
+               <MudCardMedia Image="@e.eventImageData" Height="200"/>
+               <MudCardContent>
+                  <MudText Typo="Typo.h5"><b>@e.eventName</b></MudText>
+                  <MudText Typo="Typo.body2">Old paint found on a stone house door.</MudText>
+                  <MudText Typo="Typo.body2">This photo was taken in a small village in Istra Croatia.</MudText>
+               </MudCardContent>
+               <MudCardActions>
+                  <MudButton Variant="Variant.Text" Color="Color.Primary">Share</MudButton>
+                  <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
+               </MudCardActions>
+            </MudCard>
+         </MudItem>
+      }
+   }
+   </MudGrid>
+</MudContainer>
+
+
 @code {
+   [Inject] IEventService _eventService { get; set; }
+   [Inject] NavigationManager? _navigate { get; set; }
+   [Inject] ISnackbar? _snackbar { get; set; }
+   
+   private bool _processing { get; set; } = false;
+   private IEnumerable<FetchEventDto> _event = new List<FetchEventDto>();
+
+   protected async override void OnInitialized()
+   {
+      _processing = true;
+      var res = await _eventService.FetchEvent();
+      _event = res.result.data ?? new List<FetchEventDto>();
+      _processing = false;
+      StateHasChanged();
+   }
 
 }
+
+
