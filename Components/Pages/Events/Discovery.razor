@@ -3,13 +3,10 @@
 <PageTitle>Iv's - Discovery</PageTitle>
 
 <MudContainer Fixed="true" MaxWidth="MaxWidth.Medium">
-   
-   <br/><br/>
-   
-   <span id="discovery-title">Discover every moment</span>
-   
-   <br/><br/>
-   
+
+
+    <div id="discovery-title"> <span id="discovery-title-1">Discover</span> every <span id="discovery-title-2">moment</span></div>
+
    <MudGrid Spacing="6" Justify="Justify.Center">
      
    @if (_processing)
@@ -54,6 +51,7 @@
    [Inject] NavigationManager? _navigate { get; set; }
    [Inject] ISnackbar? _snackbar { get; set; }
    
+    private Transition transition = Transition.Slide;
    private bool _processing { get; set; } = false;
    private IEnumerable<FetchEventDto> _event = new List<FetchEventDto>();
 
