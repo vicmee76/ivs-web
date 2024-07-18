@@ -34,25 +34,36 @@
                   <div style="line-height: 40px">
                      <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" Color="Color.Secondary"/> <span>@address</span>
                      <br/>
-                     <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small" Color="Color.Secondary"/> <span>@Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToLongDateString()</span>
-                     <br/>
-                     <MudIcon Icon="@Icons.Material.Filled.AccessTime" Size="Size.Small" Color="Color.Secondary"/> <span>@Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("HH:mm tt")</span>
+                     <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small" Color="Color.Secondary"/> <span>@Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")</span>
                      <br/>
 
+                     <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@e.eventOption</b></MudChip>
+                     
                      @if (e.eventTimes.Count > 1)
                      {
-                        <MudChip T="string" Size="Size.Small" Color="Color.Primary">@e.eventTimes.Count+ times</MudChip>
+                        <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count+ Times</MudChip>
+                     }
+                     else
+                     {
+                        <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Time</MudChip>  
                      }
 
                      @if (e.eventTickets.Count > 1)
                      {
-                        <MudChip T="string" Size="Size.Small" Color="Color.Primary">@e.eventTickets.Count+ tickets</MudChip>
+                        <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count+ Tickets</MudChip>
                      }
+                     else
+                     {
+                        <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Ticket</MudChip>
+                     }
+                     <br/>
+                     <hr/>
                   </div>
                </MudCardContent>
                <MudCardActions>
-                  <MudButton Variant="Variant.Text" Color="Color.Primary">Share</MudButton>
-                  <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
+                  <MudText Typo="Typo.body2" Color="Color.Primary"><b>@e.paymentOptions.FirstOrDefault()?.name</b></MudText>
+                  <MudSpacer></MudSpacer>
+                  <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Primary"><b>Get tickets</b></MudButton>
                </MudCardActions>
             </MudCard>
          </MudItem>
