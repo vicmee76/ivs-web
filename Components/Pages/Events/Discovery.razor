@@ -21,8 +21,8 @@
    {
       foreach (var e in _event)
       {
-         string eventName = e.eventName.Length > 19 ? e.eventName.Substring(0, 21) + " ..." : e.eventName;
-         string address = e.eventAddress.Length > 25 ? e.eventAddress.Substring(0, 25) + " ..." : e.eventAddress;
+         string eventName = e.eventName.Length > 19 ? e.eventName[..21] + " ..." : e.eventName;
+         string address = e.eventAddress.Length > 25 ? e.eventAddress[..25] + " ..." : e.eventAddress;
          
          <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
             <MudCard>
@@ -31,8 +31,24 @@
                   <br/>
                   <div style="font-size: medium"><b>@eventName</b></div>
                   <br/>
-                  <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" Color="Color.Secondary"/> <span>@address</span>
+                  <div style="line-height: 40px">
+                     <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" Color="Color.Secondary"/> <span>@address</span>
+                     <br/>
+                     <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small" Color="Color.Secondary"/> <span>@Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToLongDateString()</span>
+                     <br/>
+                     <MudIcon Icon="@Icons.Material.Filled.AccessTime" Size="Size.Small" Color="Color.Secondary"/> <span>@Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("HH:mm tt")</span>
+                     <br/>
 
+                     @if (e.eventTimes.Count > 1)
+                     {
+                        <MudChip T="string" Size="Size.Small" Color="Color.Primary">@e.eventTimes.Count+ times</MudChip>
+                     }
+
+                     @if (e.eventTickets.Count > 1)
+                     {
+                        <MudChip T="string" Size="Size.Small" Color="Color.Primary">@e.eventTickets.Count+ tickets</MudChip>
+                     }
+                  </div>
                </MudCardContent>
                <MudCardActions>
                   <MudButton Variant="Variant.Text" Color="Color.Primary">Share</MudButton>
