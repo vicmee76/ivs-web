@@ -84,7 +84,6 @@ namespace ivs_ui.Components.Data.Services.Tickets
                 if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
 
-                var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
                 res.result.data = JsonConvert.DeserializeObject<List<TicketDto>>(content?.data?.ToString());
                 return res;
             }
