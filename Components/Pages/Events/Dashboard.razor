@@ -67,7 +67,7 @@
                     {
                         @if (_eventsDto.Any())
                         {
-                            <MudGrid>
+                            <MudGrid Spacing="6">
                                 @foreach (var item in _eventsDto)
                                 {
                                     var activateUrl = $"/events/activate-event/{item._id}";

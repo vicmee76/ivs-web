@@ -8,6 +8,7 @@ public interface IEventService
     public Task<ResponseObject> ActivateEvent(string id);
     public Task<ResponseObject> DeleteEvent(string id);
     public Task<ResponseObject> CreateEvent(CreateEventVM model);
+    public Task<ResponseObject> FetchEvent(Dictionary<string, int>? queryParameter = null);
     public Task<ResponseObject> GetEventByUser(string userid);
     public Task<ResponseObject> GetEventDetails(string id);
     public Task<ResponseObject> GetEventMetaData(string id);
