@@ -233,3 +233,11 @@
     padding: 10px;
     border-radius: 15px;
 }
+
+
+#discovery-title {
+    font-family: "Akaya Telivigala", system-ui;
+    font-size: 45px;
+    height: 120px;
+    color: #56375C;
+}

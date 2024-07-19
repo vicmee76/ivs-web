@@ -78,7 +78,6 @@ namespace ivs_ui.Components.Data.Services.Events
                 if (content?.code != ResponseCodes.ResponseCodeCreated)
                     return res;
 
-                var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
                 res.result.data = JsonConvert.DeserializeObject<CreateEventResponseDto>(content?.data.ToString());
                 return res;
             }
@@ -95,19 +94,15 @@ namespace ivs_ui.Components.Data.Services.Events
         }
 
         
-        public async Task<ResponseObject> FetchEvent(Dictionary<string, string>? queryParameter = null)
+        public async Task<ResponseObject> FetchEvent(Dictionary<string, int>? queryParameter = null)
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
-                var response = await _webService.Call(ApiUrl, $"fetch-event", Method.Get, null, headers, queryParameter);
+                var response = await _webService.Call(ApiUrl, $"fetch-event", Method.Get, null, null, queryParameter);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
-                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
                 res.result.data = JsonConvert.DeserializeObject<List<FetchEventDto>>(content.data.ToString());
                 return res;
             }
@@ -132,7 +127,6 @@ namespace ivs_ui.Components.Data.Services.Events
                 if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
 
-                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
                 res.result.data = JsonConvert.DeserializeObject<List<GetEventByUserDto>>(content.data.ToString());
                 return res;
             }
@@ -162,7 +156,6 @@ namespace ivs_ui.Components.Data.Services.Events
                 if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
 
-                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
                 res.result.data = JsonConvert.DeserializeObject<GetEventDetailsDto>(content.data.ToString());
                 return res;
             }
@@ -172,7 +165,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get event meta data, please try again later",
+                        message = "Error! Something went wrong trying to get event details data, please try again later",
                     }
                 };
             }
@@ -192,7 +185,6 @@ namespace ivs_ui.Components.Data.Services.Events
                 if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
 
-                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
                 res.result.data = JsonConvert.DeserializeObject<GetEventMetaDataDto>(content.data.ToString());
                 return res;
             }
@@ -223,7 +215,6 @@ namespace ivs_ui.Components.Data.Services.Events
                 if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
 
-                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
                 res.result.data = JsonConvert.DeserializeObject<CreateEventResponseDto>(content.data.ToString());
                 return res;
             }
@@ -253,8 +244,6 @@ namespace ivs_ui.Components.Data.Services.Events
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
-
-                var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
                 res.result.data = JsonConvert.DeserializeObject<CreateEventResponseDto>(content.data.ToString());
                 return res;
             }

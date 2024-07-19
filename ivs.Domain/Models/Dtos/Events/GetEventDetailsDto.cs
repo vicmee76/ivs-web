@@ -4,8 +4,6 @@ namespace ivs.Domain.Models.Dtos.Events;
 
 public class GetEventDetailsDto
 {
-    public string eventImagePath;
-    public string? eventImageData;
     public string _id { get; set; }
     public string eventName { get; set; }
     public string eventDescription { get; set; }
@@ -19,11 +17,13 @@ public class GetEventDetailsDto
     public string eventShortLink { get; set; }
     public string qrCodeLink { get; set; }
     public string updatedAt { get; set; }
-    public string eventImage { get; set; }
     public string webLink { get; set; }
     public string facebookLink { get; set; }
     public string twitterLink { get; set; }
     public string instagramLink { get; set; }
+    public string eventImageName { get; set; }
+    public string eventImagePath { get; set; }
+    public string? eventImageData { get; set; }
     public List<User> Users { get; set; }
     public List<EventType> EventType { get; set; }
     public List<EventTime> EventTime { get; set; }
@@ -57,11 +57,11 @@ public class Ticket
     public string paymentOptionId { get; set; }
     public string ticketName { get; set; }
     public TicketAmount? ticketAmount { get; set; }
-    public string? ticketInStock { get; set; }
-    public string groupSize { get; set; }
+    public int? ticketInStock { get; set; }
+    public int? groupSize { get; set; }
     public string ticketDescription { get; set; }
     public string ticketSalesEndDateAndTime { get; set; }
-    public string ticketSalesStartDateAndTime { get; set; }
+    public string? ticketSalesStartDateAndTime { get; set; }
     public string createdAt { get; set; }
 }
 

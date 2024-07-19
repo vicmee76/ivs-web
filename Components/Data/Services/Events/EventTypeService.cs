@@ -29,7 +29,6 @@ namespace ivs_ui.Components.Data.Services.Events
                 if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res!;
 
-                var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
                 res.result.data = JsonConvert.DeserializeObject<List<GetEventTypesDto>>(content?.data?.ToString());
                 return res;
             }
