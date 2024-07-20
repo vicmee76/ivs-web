@@ -33,12 +33,17 @@
                             <div style="line-height: 40px">
                                 <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" Color="Color.Secondary" /> <span>@address</span>
                                 <br />
-                                <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small" Color="Color.Secondary" /> <span>@Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")</span>
+                                <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small" Color="Color.Secondary" /> <span>
+                                    @if (e.eventTimes.Any())
+                                    {
+                                        @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
+                                    }
+                                </span>
                                 <br />
 
                                 <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@e.eventOption</b></MudChip>
 
-                                @if (e.eventTimes.Count > 1)
+                                @if (e.eventTimes.Any() && e.eventTimes.Count > 1)
                                 {
                                     <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Times</MudChip>
                                 }
@@ -47,7 +52,7 @@
                                     <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Time</MudChip>
                                 }
 
-                                @if (e.eventTickets.Count > 1)
+                                @if (e.eventTickets.Any() && e.eventTickets.Count > 1)
                                 {
                                     <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Tickets</MudChip>
                                 }
