@@ -6,7 +6,7 @@
 
     <div id="discovery-title"> <span id="discovery-title-1">Discover</span> every <span id="discovery-title-2">moment</span></div>
 
-    <MudGrid Spacing="6" Justify="Justify.Center">
+    <MudGrid Spacing="6">
 
         @if (_processing)
         {
@@ -108,6 +108,8 @@
     private Transition transition = Transition.Slide;
     private bool _processing { get; set; } = false;
     private bool _getProcessing { get; set; } = false;
+    private HashSet<string> seenKeys = new HashSet<string>();
+
     private List<FetchEventDto> _event = new List<FetchEventDto>();
     Dictionary<string, int> queryParameter = new Dictionary<string, int> { { "page", 0 }, { "limit", 0 } };
 
@@ -117,11 +119,27 @@
         queryParameter["page"] = _config.GetValue<int>("Pagination:DiscoveryLoadMorePage");
 
         _processing = true;
-        var res = await _eventService.FetchEvent(queryParameter);
-        var data = res.result.data ?? new List<FetchEventDto>();
-        _event.AddRange(data);
+        await GetFetchData();
         _processing = false;
         StateHasChanged();
+    }
+
+    private async Task GetFetchData()
+    {
+        var res = await _eventService.FetchEvent(queryParameter);
+        if (res.result.code == ResponseCodes.ResponseCodeOk)
+        {
+            var data = (List<FetchEventDto>)res.result.data;
+            foreach (var e in data)
+            {
+                if (seenKeys.Add(e._id))
+                    _event.Add(e);
+            }
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+        }
     }
 
 
@@ -129,18 +147,7 @@
     {
         _getProcessing = true;
         queryParameter["page"] = _event.Count;
-
-        var res = await _eventService.FetchEvent(queryParameter);
-        if (res.result.code == ResponseCodes.ResponseCodeOk)
-        {
-            var data = (List<FetchEventDto>)res.result.data;
-            _event.AddRange(data);
-        }
-        else
-        {
-            _snackbar.Add(res.result.message, Severity.Error);
-        }
-
+        await GetFetchData();
         StateHasChanged();
         _getProcessing = false;
     }
