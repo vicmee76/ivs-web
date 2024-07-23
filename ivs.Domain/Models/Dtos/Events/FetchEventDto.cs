@@ -48,6 +48,9 @@ public class FewEventTicket
 
     [JsonProperty("ticketAmount")]
     public TicketAmount ticketAmount { get; set; }
+    
+    [JsonProperty("paymentOptionId")]
+    public string  paymentOptionId { get; set; }
 }
 
 public class FewEventTime
@@ -69,5 +72,8 @@ public class FewPaymentOption
 {
     [JsonProperty("name")]
     public string name { get; set; }
+    
+    [JsonProperty("paymentOptionId")]
+    public string  paymentOptionId { get; set; }
 }
 

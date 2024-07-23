@@ -18,59 +18,73 @@
         }
         else
         {
-            foreach (var e in _event)
+            if (_event.Any())
             {
-                string eventName = e.eventName.Length > 19 ? e.eventName[..21] + " ..." : e.eventName;
-                string address = e.eventAddress.Length > 25 ? e.eventAddress[..25] + " ..." : e.eventAddress;
+                foreach (var e in _event)
+                {
+                    string eventName = e.eventName.Length > 19 ? e.eventName[..21] + " ..." : e.eventName;
+                    string address = e.eventAddress.Length > 25 ? e.eventAddress[..25] + " ..." : e.eventAddress;
 
-                <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
-                    <MudCard>
-                        <MudCardMedia Image="@e.eventImageData" Height="200" />
-                        <MudCardContent>
-                            <br />
-                            <div style="font-size: medium"><b>@eventName</b></div>
-                            <br />
-                            <div style="line-height: 40px">
-                                <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" Color="Color.Secondary" /> <span>@address</span>
-                                <br />
-                                <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small" Color="Color.Secondary" /> <span>
-                                    @if (e.eventTimes.Any())
+                    <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
+                        <MudCard>
+                            <MudCardMedia Image="@e.eventImageData" Height="200"/>
+                            <MudCardContent>
+                                <br/>
+                                <div style="font-size: medium"><b>@eventName</b></div>
+                                <br/>
+                                <div style="line-height: 40px">
+                                    <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" Color="Color.Secondary"/> <span>@address</span>
+                                    <br/>
+                                    <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small" Color="Color.Secondary"/>
+                                    <span>
+                                        @if (e.eventTimes.Any())
+                                        {
+                                            @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
+                                        }
+                                    </span>
+                                    <br/>
+
+                                    <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@e.eventOption</b></MudChip>
+
+                                    @if (e.eventTimes.Any() && e.eventTimes.Count > 1)
                                     {
-                                        @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
+                                        <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Times</MudChip>
                                     }
-                                </span>
-                                <br />
+                                    else
+                                    {
+                                        <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Time</MudChip>
+                                    }
 
-                                <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@e.eventOption</b></MudChip>
-
-                                @if (e.eventTimes.Any() && e.eventTimes.Count > 1)
-                                {
-                                    <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Times</MudChip>
-                                }
-                                else
-                                {
-                                    <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Time</MudChip>
-                                }
-
-                                @if (e.eventTickets.Any() && e.eventTickets.Count > 1)
-                                {
-                                    <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Tickets</MudChip>
-                                }
-                                else
-                                {
-                                    <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Ticket</MudChip>
-                                }
-                                <br />
-                                <hr />
-                            </div>
-                        </MudCardContent>
-                        <MudCardActions>
-                            <MudText Typo="Typo.body2" Color="Color.Primary"><b>@e.paymentOptions.FirstOrDefault()?.name</b></MudText>
-                            <MudSpacer></MudSpacer>
-                            <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Primary"><b>Get tickets</b></MudButton>
-                        </MudCardActions>
-                    </MudCard>
-                </MudItem>
+                                    @if (e.eventTickets.Any() && e.eventTickets.Count > 1)
+                                    {
+                                        <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Tickets</MudChip>
+                                    }
+                                    else
+                                    {
+                                        <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Ticket</MudChip>
+                                    }
+                                    <br/>
+                                    <hr/>
+                                </div>
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudText Typo="Typo.body2" Color="Color.Primary"><b>@e.paymentOptions.FirstOrDefault()?.name</b></MudText>
+                                <MudSpacer></MudSpacer>
+                                <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Primary"><b>Get tickets</b></MudButton>
+                            </MudCardActions>
+                        </MudCard>
+                    </MudItem>
+                }
+            }
+            else
+            {
+                <div style="text-align:center;">
+                    <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="130" Class="rounded-lg"/>
+                    <br/>
+                    <MudText Typo="Typo.h5"> <b>No event yet!</b></MudText>
+                    <br>
+                    <MudText> Once an event is published, you will see them here.</MudText>
+                </div>
             }
         }
     </MudGrid>
