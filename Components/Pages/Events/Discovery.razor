@@ -18,7 +18,7 @@
         }
         else
         {
-            if (_event.Any())
+            if (_event != null)
             {
                 foreach (var e in _event)
                 {
@@ -27,22 +27,22 @@
 
                     <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
                         <MudCard>
-                            <MudCardMedia Image="@e.eventImageData" Height="200"/>
+                            <MudCardMedia Image="@e.eventImageData" Height="200" />
                             <MudCardContent>
-                                <br/>
+                                <br />
                                 <div style="font-size: medium"><b>@eventName</b></div>
-                                <br/>
+                                <br />
                                 <div style="line-height: 40px">
-                                    <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" Color="Color.Secondary"/> <span>@address</span>
-                                    <br/>
-                                    <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small" Color="Color.Secondary"/>
+                                    <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" Color="Color.Secondary" /> <span>@address</span>
+                                    <br />
+                                    <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small" Color="Color.Secondary" />
                                     <span>
                                         @if (e.eventTimes.Any())
                                         {
                                             @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
                                         }
                                     </span>
-                                    <br/>
+                                    <br />
 
                                     <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@e.eventOption</b></MudChip>
 
@@ -63,8 +63,8 @@
                                     {
                                         <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Ticket</MudChip>
                                     }
-                                    <br/>
-                                    <hr/>
+                                    <br />
+                                    <hr />
                                 </div>
                             </MudCardContent>
                             <MudCardActions>
@@ -78,13 +78,15 @@
             }
             else
             {
-                <div style="text-align:center;">
-                    <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="130" Class="rounded-lg"/>
-                    <br/>
-                    <MudText Typo="Typo.h5"> <b>No event yet!</b></MudText>
-                    <br>
-                    <MudText> Once an event is published, you will see them here.</MudText>
-                </div>
+                <MudItem lg="12">
+                    <div style="text-align:center;">
+                        <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="130" Class="rounded-lg" />
+                        <br />
+                        <MudText Typo="Typo.h5"> <b>No event yet!</b></MudText>
+                        <br>
+                        <MudText> Once an event is published, you will see them here.</MudText>
+                    </div>
+                </MudItem>
             }
         }
     </MudGrid>
@@ -97,7 +99,7 @@
     </div>
 
     <div style="text-align : center">
-        <MudButton Variant="Variant.Filled" Disabled="@_getProcessing" OnClick="@((e) => LoadEventAction())" id="btnDarkColor" Size="Size.Large">
+        <MudButton Variant="Variant.Filled" Disabled="@_getProcessing" OnClick="@(async(e) => await LoadEventAction())" id="btnDarkColor" Size="Size.Large">
             @if (_getProcessing)
             {
                 <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
@@ -122,9 +124,9 @@
     private Transition transition = Transition.Slide;
     private bool _processing { get; set; } = false;
     private bool _getProcessing { get; set; } = false;
-    private HashSet<string> seenKeys = new HashSet<string>();
 
-    private List<FetchEventDto> _event = new List<FetchEventDto>();
+    HashSet<string> seenKeys = new HashSet<string>();
+    List<FetchEventDto> _event = new List<FetchEventDto>();
     Dictionary<string, int> queryParameter = new Dictionary<string, int> { { "page", 0 }, { "limit", 0 } };
 
     protected async override void OnInitialized()
@@ -135,7 +137,7 @@
         _processing = true;
         await GetFetchData();
         _processing = false;
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task GetFetchData()
@@ -162,8 +164,8 @@
         _getProcessing = true;
         queryParameter["page"] = _event.Count;
         await GetFetchData();
-        StateHasChanged();
         _getProcessing = false;
+        await InvokeAsync(StateHasChanged);
     }
 
 }
