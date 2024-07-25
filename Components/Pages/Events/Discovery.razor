@@ -18,74 +18,67 @@
         }
         else
         {
-            if (_event != null)
+            foreach (var e in _event)
             {
-                foreach (var e in _event)
-                {
-                    string eventName = e.eventName.Length > 19 ? e.eventName[..21] + " ..." : e.eventName;
-                    string address = e.eventAddress.Length > 25 ? e.eventAddress[..25] + " ..." : e.eventAddress;
+                var eventName = e.eventName.Length > 19 ? e.eventName[..21] + " ..." : e.eventName;
+                var address = e.eventAddress.Length > 25 ? e.eventAddress[..25] + " ..." : e.eventAddress;
 
-                    <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
-                        <MudCard>
-                            <MudCardMedia Image="@e.eventImageData" Height="200" />
-                            <MudCardContent>
+                <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
+                    <MudCard>
+                        <MudCardMedia Image="@e.eventImageData" Height="200" />
+                        <MudCardContent>
+                            <br />
+                            <div style="font-size: medium"><b>@eventName</b></div>
+                            <br />
+                            <div style="line-height: 40px">
+                                <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" Color="Color.Secondary" /> <span>@address</span>
                                 <br />
-                                <div style="font-size: medium"><b>@eventName</b></div>
+                                <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small" Color="Color.Secondary" />
+                                <span>
+                                    @if (e.eventTimes.Any())
+                                    {
+                                        @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
+                                    }
+                                </span>
                                 <br />
-                                <div style="line-height: 40px">
-                                    <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" Color="Color.Secondary" /> <span>@address</span>
-                                    <br />
-                                    <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small" Color="Color.Secondary" />
-                                    <span>
-                                        @if (e.eventTimes.Any())
-                                        {
-                                            @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
-                                        }
-                                    </span>
-                                    <br />
 
-                                    <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@e.eventOption</b></MudChip>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@e.eventOption</b></MudChip>
 
-                                    @if (e.eventTimes.Any() && e.eventTimes.Count > 1)
-                                    {
-                                        <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Times</MudChip>
-                                    }
-                                    else
-                                    {
-                                        <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Time</MudChip>
-                                    }
+                                @if (e.eventTimes.Any() && e.eventTimes.Count > 1)
+                                {
+                                    <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Times</MudChip>
+                                }
+                                else
+                                {
+                                    <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Time</MudChip>
+                                }
 
-                                    @if (e.eventTickets.Any() && e.eventTickets.Count > 1)
-                                    {
-                                        <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Tickets</MudChip>
-                                    }
-                                    else
-                                    {
-                                        <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Ticket</MudChip>
-                                    }
-                                    <br />
-                                    <hr />
-                                </div>
-                            </MudCardContent>
-                            <MudCardActions>
-                                <MudText Typo="Typo.body2" Color="Color.Primary"><b>@e.paymentOptions.FirstOrDefault()?.name</b></MudText>
-                                <MudSpacer></MudSpacer>
-                                <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Primary"><b>Get tickets</b></MudButton>
-                            </MudCardActions>
-                        </MudCard>
-                    </MudItem>
-                }
-            }
-            else
-            {
-                <MudItem lg="12">
-                    <div style="text-align:center;">
-                        <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="130" Class="rounded-lg" />
-                        <br />
-                        <MudText Typo="Typo.h5"> <b>No event yet!</b></MudText>
-                        <br>
-                        <MudText> Once an event is published, you will see them here.</MudText>
-                    </div>
+                                @if (e.eventTickets.Any() && e.eventTickets.Count > 1)
+                                {
+                                    <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Tickets</MudChip>
+                                }
+                                else
+                                {
+                                    <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Ticket</MudChip>
+                                }
+                                <br />
+                            </div>
+                        </MudCardContent>
+                        <MudCardActions>
+                            @if (e.paymentOptions.Count > 1)
+                            {
+                                var pays = e.paymentOptions.Select(p => p.name).ToList();
+                                var pay = string.Join(" & ", pays);
+                                <MudText Typo="Typo.body2" Style="font-size: x-small" Color="Color.Primary"><b>@pay</b></MudText>
+                            }
+                            else
+                            {
+                                <MudText Typo="Typo.body2" Style="font-size: x-small" Color="Color.Primary"><b>@e?.paymentOptions?.FirstOrDefault()?.name</b></MudText>
+                            }
+                            <MudSpacer></MudSpacer>
+                            <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Primary"><b>Get tickets</b></MudButton>
+                        </MudCardActions>
+                    </MudCard>
                 </MudItem>
             }
         }
@@ -122,8 +115,8 @@
     [Inject] IConfiguration? _config { get; set; }
 
     private Transition transition = Transition.Slide;
-    private bool _processing { get; set; } = false;
-    private bool _getProcessing { get; set; } = false;
+    private bool _processing { get; set; }
+    private bool _getProcessing { get; set; }
 
     HashSet<string> seenKeys = new HashSet<string>();
     List<FetchEventDto> _event = new List<FetchEventDto>();
@@ -137,7 +130,7 @@
         _processing = true;
         await GetFetchData();
         _processing = false;
-        await InvokeAsync(StateHasChanged);
+        StateHasChanged();
     }
 
     private async Task GetFetchData()
@@ -146,11 +139,8 @@
         if (res.result.code == ResponseCodes.ResponseCodeOk)
         {
             var data = (List<FetchEventDto>)res.result.data;
-            foreach (var e in data)
-            {
-                if (seenKeys.Add(e._id))
-                    _event.Add(e);
-            }
+            foreach (var e in data.Where(e => seenKeys.Add(e._id)))
+                _event.Add(e);
         }
         else
         {
@@ -165,7 +155,7 @@
         queryParameter["page"] = _event.Count;
         await GetFetchData();
         _getProcessing = false;
-        await InvokeAsync(StateHasChanged);
+        StateHasChanged();
     }
 
 }
