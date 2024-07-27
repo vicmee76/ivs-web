@@ -285,27 +285,24 @@
         if (res.result.code == ResponseCodes.ResponseCodeOk)
         {
             var data = (List<FetchEventDto>)res.result.data;
-            foreach (var e in data.Where(e => seenKeys.Add(e._id)))
-                _event.Add(e);
+            _event.AddRange(data.Where(e => seenKeys.Add(e._id)));
         }
         else
         {
             _snackbar.Add(res.result.message, Severity.Error);
         }
 
-        if (_event.Any())
+        if (!_event.Any()) return _event;
+        foreach (var x in _event)
         {
-            foreach (var x in _event)
-            {
-                var freePaymentOptionIds = x.paymentOptions
-                    .Where(po => po.name == queryParameter["paymentOptionName"])
-                    .Select(po => po.paymentOptionId)
-                    .ToList();
+            var freePaymentOptionIds = x.paymentOptions
+                .Where(po => po.name == queryParameter["paymentOptionName"])
+                .Select(po => po.paymentOptionId)
+                .ToList();
 
-                // Remove free tickets from the eventTickets list
-                x.eventTickets = x.eventTickets.Where(et => freePaymentOptionIds.Contains(et.paymentOptionId)).ToList();
-                x.paymentOptions = x.paymentOptions.Where(c => freePaymentOptionIds.Contains(c.paymentOptionId)).ToList();
-            }
+            // Remove free tickets from the eventTickets list
+            x.eventTickets = x.eventTickets.Where(et => freePaymentOptionIds.Contains(et.paymentOptionId)).ToList();
+            x.paymentOptions = x.paymentOptions.Where(c => freePaymentOptionIds.Contains(c.paymentOptionId)).ToList();
         }
 
         return _event;
