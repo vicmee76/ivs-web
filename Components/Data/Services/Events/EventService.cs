@@ -94,7 +94,7 @@ namespace ivs_ui.Components.Data.Services.Events
         }
 
         
-        public async Task<ResponseObject> FetchEvent(Dictionary<string, int>? queryParameter = null)
+        public async Task<ResponseObject> FetchEvent(Dictionary<string, string>? queryParameter = null)
         {
             try
             {
