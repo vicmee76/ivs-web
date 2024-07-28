@@ -261,12 +261,12 @@
 
     protected async override void OnInitialized()
     {
-        freeQueryParameter["limit"] = _config.GetValue<string>("Pagination:DiscoveryLoadMoreLimit");
-        freeQueryParameter["page"] = _config.GetValue<string>("Pagination:DiscoveryLoadMorePage");
+        freeQueryParameter["limit"] = _config.GetValue<string>("Pagination:DiscoveryLoadMoreLimit") ?? "4";
+        freeQueryParameter["page"] = _config.GetValue<string>("Pagination:DiscoveryLoadMorePage") ?? "0";
         freeQueryParameter["paymentOptionName"] = "FREE";
         
-        paidQueryParameter["limit"] = _config.GetValue<string>("Pagination:DiscoveryLoadMoreLimit");
-        paidQueryParameter["page"] = _config.GetValue<string>("Pagination:DiscoveryLoadMorePage");
+        paidQueryParameter["limit"] = _config.GetValue<string>("Pagination:DiscoveryLoadMoreLimit") ?? "4";
+        paidQueryParameter["page"] = _config.GetValue<string>("Pagination:DiscoveryLoadMorePage") ?? "0";
         paidQueryParameter["paymentOptionName"] = "PAID";
 
         _processing = true;
