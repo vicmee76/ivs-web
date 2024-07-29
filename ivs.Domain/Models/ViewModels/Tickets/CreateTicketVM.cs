@@ -26,7 +26,7 @@ public class CreateTicketVM
     public string? ticketDescription { get; set; }
 
     [Required(ErrorMessage = "Ticket selling start date is required.")]
-    public DateTime? ticketSaleStartDateAndTime { get; set; }
+    public DateTime? ticketSalesStartDateAndTime { get; set; }
     
     [Required(ErrorMessage = "Ticket selling end date is required.")]
     public DateTime? ticketSalesEndDateAndTime { get; set; }

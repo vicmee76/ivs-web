@@ -9,7 +9,7 @@ namespace ivs_ui.Components.Data.Services.General
     {
         private readonly IConfiguration _config = config;
 
-        public async Task<RestResponse> Call(string apiPathUrl, string absoluteUrl, Method method, dynamic? body, Dictionary<string, string>? headers = null, Dictionary<string, int>? queryParameter = null, UploadFileVM? file = null)
+        public async Task<RestResponse> Call(string apiPathUrl, string absoluteUrl, Method method, dynamic? body, Dictionary<string, string>? headers = null, Dictionary<string, string>? queryParameter = null, UploadFileVM? file = null)
         {
             var options = new RestClientOptions(_config.GetValue<string>("IvsApi:BaseUri") ?? "");
             var client = new RestClient(options);
