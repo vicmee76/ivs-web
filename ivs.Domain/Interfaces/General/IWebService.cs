@@ -5,5 +5,5 @@ using RestSharp;
 
 public interface IWebService
 {
-    Task<RestResponse> Call(string apiPathUrl, string absoluteUrl, Method method, dynamic? body, Dictionary<string, string>? headers = null, Dictionary<string, int>? queryParameter = null, UploadFileVM file = null);
+    Task<RestResponse> Call(string apiPathUrl, string absoluteUrl, Method method, dynamic? body, Dictionary<string, string>? headers = null, Dictionary<string, string>? queryParameter = null, UploadFileVM file = null);
 }

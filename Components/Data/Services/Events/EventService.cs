@@ -94,7 +94,7 @@ namespace ivs_ui.Components.Data.Services.Events
         }
 
         
-        public async Task<ResponseObject> FetchEvent(Dictionary<string, int>? queryParameter = null)
+        public async Task<ResponseObject> FetchEvent(Dictionary<string, string>? queryParameter = null)
         {
             try
             {
@@ -108,8 +108,13 @@ namespace ivs_ui.Components.Data.Services.Events
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to fetch event, please try again later",
+                    }
+                };
             }
         }
 
