@@ -8,6 +8,12 @@
 
     <br/>
 
+    @{
+        var latestLink = $"/events/discover-events/{Helpers.DiscoverEventLatest}";
+        var freeLink = $"/events/discover-events/{Helpers.DiscoverEventFree}";
+        var paidLink = $"/events/discover-events/{Helpers.DiscoverEventPaid}";
+    }
+
 
     <MudCard Elevation="0">
         <MudCardHeader>
@@ -15,7 +21,7 @@
                 <MudText Typo="Typo.h6"><b>Latest Events</b></MudText>
             </CardHeaderContent>
             <CardHeaderActions>
-                <MudText Typo="Typo.body1">See All</MudText>
+                <MudLink Typo="Typo.body1" Href="@latestLink">See All</MudLink>
             </CardHeaderActions>
         </MudCardHeader>
         <MudCardContent>
@@ -121,7 +127,7 @@
                 <MudText Typo="Typo.h6"><b>Free Events</b></MudText>
             </CardHeaderContent>
             <CardHeaderActions>
-                <MudText Typo="Typo.body1">See More</MudText>
+                <MudLink Typo="Typo.body1" Href="@freeLink">See more</MudLink>
             </CardHeaderActions>
         </MudCardHeader>
         <MudCardContent>
@@ -227,7 +233,7 @@
                 <MudText Typo="Typo.h6"><b>Paid Events</b></MudText>
             </CardHeaderContent>
             <CardHeaderActions>
-                <MudText Typo="Typo.body1">See More</MudText>
+                <MudLink Typo="Typo.body1" Href="@paidLink">See more</MudLink>
             </CardHeaderActions>
         </MudCardHeader>
         <MudCardContent>
