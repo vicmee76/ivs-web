@@ -20,7 +20,7 @@ public class FetchEventDto
     public string eventOption { get; set; }
 
     [JsonProperty("createdAt")] 
-    public string createdAt { get; set; }
+    public DateTime? createdAt { get; set; }
 
     [JsonProperty("eventImageData")] 
     public string eventImageData { get; set; }

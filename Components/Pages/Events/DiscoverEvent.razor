@@ -5,27 +5,21 @@
 <br />
 
 @{
-    var title = id == Helpers.DiscoverEventLatest ? "Latest Events" :
-                        id == Helpers.DiscoverEventFree ? "Free Events" :
-                        id == Helpers.DiscoverEventPaid ? "Paid Events" : "";
+    var title = id == Helpers.DiscoverEventLatest ? "Latest events" :
+                        id == Helpers.DiscoverEventFree ? "Free events" :
+                        id == Helpers.DiscoverEventPaid ? "Paid events" : "";
 }
 
 <MudContainer Fixed="true" MaxWidth="MaxWidth.Medium">
 
     <div id="discovery-title">
-        <span id="discovery-title-1">Discover</span> every <span id="discovery-title-2">moment</span>
-        <br />
-        <span id="discovery-title-1">@title</span>
+        <span id="discovery-title-1">Discover</span> every <span id="discovery-title-2">moment</span> -  <span id="discovery-title-1">@title</span>
+       
     </div>
 
-    <br />
+    <br /><br />
 
     <MudCard Elevation="0">
-        <MudCardHeader>
-            <CardHeaderContent>
-                <MudText Typo="Typo.h6"><b>Latest Events</b></MudText>
-            </CardHeaderContent>
-        </MudCardHeader>
         <MudCardContent>
             <MudGrid Spacing="6">
                 @if (_processing)
@@ -155,7 +149,7 @@
     private Transition transition = Transition.Slide;
     private bool _processing { get; set; }
     private bool _getProcessing { get; set; }
-    private string getOptions { get; set; } = Helpers.DiscoverEventLatest;
+    private string getOptions { get; set; } = Helpers.GetOptionsLatest;
 
     List<FetchEventDto> _events = new List<FetchEventDto>();
     Dictionary<string, string> queryParameter = new Dictionary<string, string> { { "page", "0" }, { "limit", "0" } };
@@ -164,8 +158,8 @@
     {
         _processing = true;
 
-        var limit = _config.GetValue<string>("Pagination:DiscoveryLoadMoreLimit") ?? "4";
-        var page = _config.GetValue<string>("Pagination:DiscoveryLoadMorePage") ?? "0";
+        var limit = _config.GetValue<string>("Pagination:DiscoveryEventsLoadMoreLimit") ?? "4";
+        var page = _config.GetValue<string>("Pagination:DiscoveryEventsLoadMorePage") ?? "0";
 
         queryParameter["limit"] = limit;
         queryParameter["page"] = page;
@@ -176,7 +170,8 @@
             getOptions = string.Empty;
         }
 
-        _events = await GetFetchData(getOptions, queryParameter);
+         _events = await GetFetchData(getOptions, queryParameter);
+        //_events = events.OrderByDescending(x => x.createdAt).ToList();
 
         _processing = false;
         StateHasChanged();
@@ -228,7 +223,13 @@
     {
         _getProcessing = true;
         queryParameter["page"] = _events.Count.ToString();
-        await GetFetchData(getOptions, queryParameter);
+        var loadEvents = await GetFetchData(getOptions, queryParameter);
+
+        if (loadEvents.Any())
+            _events.AddRange(loadEvents);
+
+       //_events = _events.OrderByDescending(x => x.createdAt).ToList();
+
         _getProcessing = false;
         StateHasChanged();
     }

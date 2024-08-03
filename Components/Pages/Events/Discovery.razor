@@ -388,12 +388,14 @@
         latestQueryParameter["page"] = page;
         _latestEvents = await GetFetchData(Helpers.GetOptionsLatest, latestQueryParameter);
         _LatestProcessing = false;
+        StateHasChanged();
 
         freeQueryParameter["limit"] = limit;
         freeQueryParameter["page"] = page;
         freeQueryParameter["paymentOptionName"] = Helpers.FreeEvents;
         _freeEvent = await GetFetchData(string.Empty, freeQueryParameter);
         _freeProcessing = false;
+        StateHasChanged();
 
         paidQueryParameter["limit"] = limit;
         paidQueryParameter["page"] = page;
@@ -414,7 +416,7 @@
         if (res.result.code == ResponseCodes.ResponseCodeOk)
         {
             var data = (List<FetchEventDto>)res.result.data;
-            _event.AddRange(data.Where(e => seenKeys.Add(e._id)));
+            _event.AddRange(data);
         }
         else
         {
