@@ -358,7 +358,6 @@
 
 @code {
     [Inject] IEventService _eventService { get; set; }
-    [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
     [Inject] IConfiguration? _config { get; set; }
 
@@ -379,7 +378,7 @@
     protected async override void OnInitialized()
     {
         var limit = _config.GetValue<string>("Pagination:DiscoveryLoadMoreLimit") ?? "4";
-        var page = _config.GetValue<string>("Pagination:DiscoveryLoadMorePage") ?? "4";
+        var page = _config.GetValue<string>("Pagination:DiscoveryLoadMorePage") ?? "0";
 
         _LatestProcessing = true;
         _freeProcessing = true;
@@ -392,13 +391,13 @@
 
         freeQueryParameter["limit"] = limit;
         freeQueryParameter["page"] = page;
-        freeQueryParameter["paymentOptionName"] = "FREE";
+        freeQueryParameter["paymentOptionName"] = Helpers.FreeEvents;
         _freeEvent = await GetFetchData(string.Empty, freeQueryParameter);
         _freeProcessing = false;
 
         paidQueryParameter["limit"] = limit;
         paidQueryParameter["page"] = page;
-        paidQueryParameter["paymentOptionName"] = "PAID";
+        paidQueryParameter["paymentOptionName"] = Helpers.PaidEvents;
         _paidEvent = await GetFetchData(string.Empty, paidQueryParameter);
         _paidProcessing = false;
 
@@ -447,14 +446,7 @@
     }
 
 
-    // private async Task LoadEventAction()
-    // {
-    //     _getProcessing = true;
-    //     freeQueryParameter["page"] = _event.Count.ToString();
-    //     await GetFetchData(freeQueryParameter);
-    //     _getProcessing = false;
-    //     StateHasChanged();
-    // }
+    
 
 }
 
