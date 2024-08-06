@@ -36,12 +36,12 @@
                     {
                         foreach (var e in _events)
                         {
-                            var eventName = e.eventName.Length > 19 ? e.eventName[..21] + " ..." : e.eventName;
+                            var eventName = e.eventName.Length > 19 ? e.eventName[..20] + " ..." : e.eventName;
                             var address = e.eventAddress.Length > 25 ? e.eventAddress[..25] + " ..." : e.eventAddress;
 
                             <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
                                 <MudCard>
-                                    <MudCardMedia Image="@e.eventImageData" Height="200" />
+                                    <MudCardMedia Image="@e.eventImagePath" Height="200" />
                                     <MudCardContent>
                                         <br />
                                         <div style="font-size: medium"><b>@eventName</b></div>
@@ -85,11 +85,11 @@
                                         {
                                             var pays = e.paymentOptions.Select(p => p.name).ToList();
                                             var pay = string.Join(" & ", pays);
-                                            <MudText Typo="Typo.body2" Style="font-size: x-small" Color="Color.Primary"><b>@pay</b></MudText>
+                                            <MudText Typo="Typo.body2" Style="font-size: x-small" Color="Color.Dark"><b>@pay</b></MudText>
                                         }
                                         else
                                         {
-                                            <MudText Typo="Typo.body2" Style="font-size: x-small" Color="Color.Primary"><b>@e?.paymentOptions?.FirstOrDefault()?.name</b></MudText>
+                                            <MudText Typo="Typo.body2" Style="font-size: x-small" Color="Color.Dark"><b>@e?.paymentOptions?.FirstOrDefault()?.name</b></MudText>
                                         }
                                         <MudSpacer></MudSpacer>
                                         <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Primary"><b>Open</b></MudButton>

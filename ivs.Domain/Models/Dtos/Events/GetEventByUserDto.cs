@@ -8,6 +8,6 @@ public class GetEventByUserDto
     public string? eventAddress { get; set; }
     public string? eventOption { get; set; }
     public string? createdAt { get; set; }
-    public string? eventImageData { get; set; }
+    public string? eventImagePath { get; set; }
     public string? status { get; set; }
 }
