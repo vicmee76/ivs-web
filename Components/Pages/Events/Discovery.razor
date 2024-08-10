@@ -158,7 +158,7 @@
         <MudGrid>
             <MudItem xs="12" sm="12" md="7" lg="7" xl="7" xxl="7">
                 <div>
-                    <MudTextField T="string" Label="Enter an event name" Variant="Variant.Outlined" />
+                    <MudTextField T="string" @bind-Value="@eventNameString" Label="Enter an event name" Variant="Variant.Outlined" />
                 </div>
             </MudItem>
             <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
@@ -167,14 +167,14 @@
                     {
                         foreach (var com in _eventTypes)
                         {
-                            <MudSelectItem Value="@(com._id)">@(com.name)</MudSelectItem>
+                            <MudSelectItem Value="@(com.name)">@(com.name)</MudSelectItem>
                         }
                     }
                 </MudSelect>
             </MudItem>
 
             <MudItem xs="6" sm="6" md="2" lg="2" xl="2" xxl="2">
-                <MudButton StartIcon="@Icons.Material.Filled.Search" Variant="Variant.Filled" id="btnDarkColor-Search" Size="Size.Large">
+                <MudButton StartIcon="@Icons.Material.Filled.Search" Variant="Variant.Filled" OnClick="SearchEvent" id="btnDarkColor-Search" Size="Size.Large">
                     Search
                 </MudButton>
             </MudItem>
@@ -524,15 +524,17 @@
     [Inject] ISnackbar? _snackbar { get; set; }
     [Inject] IConfiguration? _config { get; set; }
     [Inject] IEventTypeService _eventTypeService { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
     IEnumerable<GetEventTypesDto> _eventTypes = new List<GetEventTypesDto>();
 
-   
+
     private bool _LatestEventProcessing { get; set; }
     private bool _freeEventProcessing { get; set; }
     private bool _paidEventProcessing { get; set; }
     private bool _getProcessing { get; set; }
 
     private string eventTypeString { get; set; }
+    private string eventNameString { get; set; }
 
     private bool arrows = true;
     private bool bullets = false;
@@ -625,7 +627,34 @@
     }
 
 
-    
+    private void SearchEvent()
+    {
+        var url = String.Empty;
+
+        if(string.IsNullOrEmpty(eventNameString) && string.IsNullOrEmpty(eventTypeString))
+        {
+            return;
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(eventNameString))
+            {
+                url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Name={eventNameString}";
+            }
+
+            if (!string.IsNullOrEmpty(eventTypeString))
+            {
+                url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Type={eventTypeString}";
+            }
+
+            if (!string.IsNullOrEmpty(eventTypeString) && !string.IsNullOrEmpty(eventNameString))
+            {
+                url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Combine={eventTypeString}|{eventNameString}";
+            }
+
+            _navigate.NavigateTo(url);
+        }
+    }
 
 }
 

@@ -8,6 +8,7 @@ public class Helpers
     public static readonly string FreeEvents = "FREE";
     public static readonly string PaidEvents = "PAID";
     public static readonly string DiscoverEventLatest = "latest-event";
+    public static readonly string DiscoverEventSearch = "search-event";
     public static readonly string DiscoverEventFree = "free-event";
     public static readonly string DiscoverEventPaid = "paid-event";
 }

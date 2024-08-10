@@ -1,23 +1,53 @@
 ﻿@page "/events/discover-events/{id}";
+@page "/events/discover-events/{id}/{searchQuery}";
 
 <PageTitle>Iv's - Discover Event</PageTitle>
 
-<br />
-
 @{
-    var title = id == Helpers.DiscoverEventLatest ? "Latest events" :
+    var title = id == Helpers.DiscoverEventLatest ? "All & latest events" :
+                        id == Helpers.DiscoverEventSearch ? "Search events" :
                         id == Helpers.DiscoverEventFree ? "Free events" :
                         id == Helpers.DiscoverEventPaid ? "Paid events" : "";
 }
 
 <MudContainer Fixed="true" MaxWidth="MaxWidth.Medium">
 
-    <div id="discovery-title">
-        <span id="discovery-title-1">Discover</span> every <span id="discovery-title-2">moment</span> -  <span id="discovery-title-1">@title</span>
-       
+    <div style="background-color: #faf2fb; padding:20px">
+
+        <div id="discovery-title">
+            <span id="discovery-title-mid">Discover every moment - @title @searchCriteria</span>
+        </div>
+
+        <br />
+
+        <MudGrid>
+            <MudItem xs="12" sm="12" md="7" lg="7" xl="7" xxl="7">
+                <div>
+                    <MudTextField T="string" @bind-Value="@eventNameString" Label="Enter an event name" Variant="Variant.Outlined" />
+                </div>
+            </MudItem>
+            <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                <MudSelect T="string" Label="Event Types*" HelperText="Select types" Variant="Variant.Outlined" @bind-Value="@eventTypeString" HelperTextOnFocus="true" Clearable="true">
+                    @if (_eventTypes != null)
+                    {
+                        foreach (var com in _eventTypes)
+                        {
+                            <MudSelectItem Value="@(com.name)">@(com.name)</MudSelectItem>
+                        }
+                    }
+                </MudSelect>
+            </MudItem>
+
+            <MudItem xs="6" sm="6" md="2" lg="2" xl="2" xxl="2">
+                <MudButton StartIcon="@Icons.Material.Filled.Search" Variant="Variant.Filled" OnClick="SearchEvent" id="btnDarkColor-Search" Size="Size.Large">
+                    Search
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+        <br />
     </div>
 
-    <br /><br />
+    <br />
 
     <MudCard Elevation="0">
         <MudCardContent>
@@ -146,14 +176,22 @@
 
 @code {
     [Parameter] public string? id { get; set; }
+    [Parameter] public string? searchQuery { get; set; }
     [Inject] IEventService _eventService { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
     [Inject] IConfiguration? _config { get; set; }
+    [Inject] IEventTypeService _eventTypeService { get; set; }
+
+    IEnumerable<GetEventTypesDto> _eventTypes = new List<GetEventTypesDto>();
+
+    private string eventTypeString { get; set; }
+    private string eventNameString { get; set; }
 
     private Transition transition = Transition.Slide;
     private bool _processing { get; set; }
     private bool _getProcessing { get; set; }
+    private string searchCriteria { get; set; }
     private string getOptions { get; set; } = Helpers.GetOptionsLatest;
 
     List<FetchEventDto> _events = new List<FetchEventDto>();
@@ -163,6 +201,10 @@
     {
         _processing = true;
 
+        var res = await _eventTypeService.GetEventTypes();
+        _eventTypes = res.result.data ?? new List<GetEventTypesDto>();
+        StateHasChanged();
+
         var limit = _config.GetValue<string>("Pagination:DiscoveryEventsLoadMoreLimit") ?? "4";
         var page = _config.GetValue<string>("Pagination:DiscoveryEventsLoadMorePage") ?? "0";
 
@@ -171,12 +213,41 @@
 
         if (id != Helpers.DiscoverEventLatest)
         {
-            queryParameter["paymentOptionName"] = id == Helpers.DiscoverEventFree ? Helpers.FreeEvents : Helpers.PaidEvents;
+            queryParameter["paymentOptionName"] = id == Helpers.DiscoverEventFree ? Helpers.FreeEvents :
+                                                  id == Helpers.DiscoverEventPaid ? Helpers.PaidEvents : string.Empty;
             getOptions = string.Empty;
         }
 
-         _events = await GetFetchData(getOptions, queryParameter);
-        //_events = events.OrderByDescending(x => x.createdAt).ToList();
+        if(id == Helpers.DiscoverEventSearch)
+        {
+            var split = searchQuery.Split('=');
+
+            if(split[0].ToString().Equals("Name", StringComparison.OrdinalIgnoreCase))
+            {
+                queryParameter["eventName"] = split[1].ToString();
+                searchCriteria = $" for '{split[1].ToString()}'".ToLower();
+            }
+
+            if (split[0].ToString().Equals("Type", StringComparison.OrdinalIgnoreCase))
+            {
+                queryParameter["eventTypeName"] = split[1].ToString();
+                searchCriteria = $" for '{split[1].ToString()}'".ToLower();
+            }
+
+            if (split[0].ToString().Equals("Combine", StringComparison.OrdinalIgnoreCase))
+            {
+                var combine = split[1].Split('|');
+
+                if(combine.Count() > 1)
+                {
+                    queryParameter["eventTypeName"] = combine[0].ToString();
+                    queryParameter["eventName"] = combine[1].ToString();
+                    searchCriteria = $" for '{combine[0].ToString()}' with '{combine[1].ToString()}'".ToLower();
+                }
+            }
+        }
+
+        _events = await GetFetchData(getOptions, queryParameter);
 
         _processing = false;
         StateHasChanged();
@@ -207,20 +278,53 @@
         }
         else
         {
-            foreach (var x in _event)
-            {
-                var freePaymentOptionIds = x.paymentOptions
-                    .Where(po => po.name == queryParameter["paymentOptionName"])
-                    .Select(po => po.paymentOptionId)
-                    .ToList();
 
-                // Remove free tickets from the eventTickets list
-                x.eventTickets = x.eventTickets.Where(et => freePaymentOptionIds.Contains(et.paymentOptionId)).ToList();
-                x.paymentOptions = x.paymentOptions.Where(c => freePaymentOptionIds.Contains(c.paymentOptionId)).ToList();
+            if (queryParameter.ContainsKey("paymentOptionName") && !string.IsNullOrEmpty(queryParameter["paymentOptionName"]))
+            {
+                foreach (var x in _event)
+                {
+                    var freePaymentOptionIds = x.paymentOptions
+                        .Where(po => po.name == queryParameter["paymentOptionName"])
+                        .Select(po => po.paymentOptionId)
+                        .ToList();
+
+                    // Remove free tickets from the eventTickets list
+                    x.eventTickets = x.eventTickets.Where(et => freePaymentOptionIds.Contains(et.paymentOptionId)).ToList();
+                    x.paymentOptions = x.paymentOptions.Where(c => freePaymentOptionIds.Contains(c.paymentOptionId)).ToList();
+                }
             }
         }
 
         return _event;
+    }
+
+    private void SearchEvent()
+    {
+        var url = String.Empty;
+
+        if (string.IsNullOrEmpty(eventNameString) && string.IsNullOrEmpty(eventTypeString))
+        {
+            return;
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(eventNameString))
+            {
+                url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Name={eventNameString}";
+            }
+
+            if (!string.IsNullOrEmpty(eventTypeString))
+            {
+                url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Type={eventTypeString}";
+            }
+
+            if (!string.IsNullOrEmpty(eventTypeString) && !string.IsNullOrEmpty(eventNameString))
+            {
+                url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Combine={eventTypeString}|{eventNameString}";
+            }
+
+            _navigate.NavigateTo(url, true);
+        }
     }
 
 
@@ -232,8 +336,6 @@
 
         if (loadEvents.Any())
             _events.AddRange(loadEvents);
-
-       //_events = _events.OrderByDescending(x => x.createdAt).ToList();
 
         _getProcessing = false;
         StateHasChanged();
