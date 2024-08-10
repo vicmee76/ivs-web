@@ -68,6 +68,16 @@
     font-weight: bolder;
 }
 
+
+#btnDarkColor-Search {
+    background-color: #56375C;
+    color: white;
+    height: 60px;
+    text-transform: none;
+    font-weight: bolder;
+}
+
+
 #btnBrightColor {
     color: #e18501f7;
     height: 50px;
@@ -238,6 +248,19 @@
 #discovery-title {
     font-family: "Akaya Telivigala", system-ui;
     font-size: 45px;
-    height: 120px;
     color: #56375C;
+}
+
+#discovery-title-mid {
+    font-family: "Akaya Telivigala", system-ui;
+    font-size: 35px;
+    color: #56375C;
+}
+
+#trending-title {
+    font-family: "Akaya Telivigala", system-ui;
+    font-weight: bold;
+    font-size: 30px;
+    color: #56375C;
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.4);
 }
