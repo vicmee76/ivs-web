@@ -1,0 +1,39 @@
+﻿@page "/events/get-tickets/{id}";
+
+<PageTitle>Iv's - Get Your Tickets</PageTitle>
+
+<MudContainer Fixed="true" MaxWidth="MaxWidth.Medium" Style="background-color:white">
+    <br /><br />
+
+</MudContainer>
+
+
+
+@code {
+    [Parameter] public string? id { get; set; }
+    [Inject] IEventService _eventService { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+
+    GetEventDetailsDto _events = new GetEventDetailsDto();
+
+    private bool _getEventprocessing { get; set; } = false;
+
+
+    protected async override void OnInitialized()
+    {
+        _getEventprocessing = false;
+        var res = await _eventService.GetEventDetails(id);
+        if (res.result.code == ResponseCodes.ResponseCodeOk)
+        {
+            _events = res.result.data;
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+        }
+
+        _getEventprocessing = true;
+        StateHasChanged();
+    }
+}
