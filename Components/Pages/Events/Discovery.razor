@@ -566,6 +566,10 @@
         var limit = _config.GetValue<string>("Pagination:DiscoveryLoadMoreLimit") ?? "4";
         var page = _config.GetValue<string>("Pagination:DiscoveryLoadMorePage") ?? "0";
 
+        var res = await _eventTypeService.GetEventTypes();
+        _eventTypes = res.result.data ?? new List<GetEventTypesDto>();
+        StateHasChanged();
+
         _LatestEventProcessing = true;
         _freeEventProcessing = true;
         _paidEventProcessing = true;
@@ -590,9 +594,6 @@
         _paidEventProcessing = false;
         StateHasChanged();
 
-        var res = await _eventTypeService.GetEventTypes();
-        _eventTypes = res.result.data ?? new List<GetEventTypesDto>();
-        StateHasChanged();
     }
 
 
@@ -602,24 +603,19 @@
         List<FetchEventDto> _event = new List<FetchEventDto>();
 
         var res = await _eventService.FetchEvent(queryParameter);
-        if (res.result.code == ResponseCodes.ResponseCodeOk)
-        {
-            var data = (List<FetchEventDto>)res.result.data;
-            _event.AddRange(data);
-        }
-        else
+        if (res.result.code != ResponseCodes.ResponseCodeOk)
         {
             _snackbar.Add(res.result.message, Severity.Error);
+            return new List<FetchEventDto>();
         }
+
+        var data = (List<FetchEventDto>)res.result.data;
+        _event.AddRange(data.Where(e => seenKeys.Add(e._id)));
 
         if (!_event.Any()) return _event;
 
-        if (getOptions == Helpers.GetOptionsLatest)
-        {
-            return _event;
-        }
-        else
-        {
+        if (getOptions == Helpers.GetOptionsLatest) return _event;
+
             foreach (var x in _event)
             {
                 var freePaymentOptionIds = x.paymentOptions
@@ -631,7 +627,7 @@
                 x.eventTickets = x.eventTickets.Where(et => freePaymentOptionIds.Contains(et.paymentOptionId)).ToList();
                 x.paymentOptions = x.paymentOptions.Where(c => freePaymentOptionIds.Contains(c.paymentOptionId)).ToList();
             }
-        }
+        
 
         return _event;
     }
@@ -642,28 +638,20 @@
         var url = String.Empty;
 
         if (string.IsNullOrEmpty(eventNameString) && string.IsNullOrEmpty(eventTypeString))
-        {
             return;
-        }
-        else
-        {
-            if (!string.IsNullOrEmpty(eventNameString))
-            {
-                url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Name={eventNameString}";
-            }
 
-            if (!string.IsNullOrEmpty(eventTypeString))
-            {
-                url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Type={eventTypeString}";
-            }
+        if (!string.IsNullOrEmpty(eventNameString))
+            url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Name={eventNameString}";
 
-            if (!string.IsNullOrEmpty(eventTypeString) && !string.IsNullOrEmpty(eventNameString))
-            {
-                url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Combine={eventTypeString}|{eventNameString}";
-            }
 
-            _navigate.NavigateTo(url);
-        }
+        if (!string.IsNullOrEmpty(eventTypeString))
+            url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Type={eventTypeString}";
+
+
+        if (!string.IsNullOrEmpty(eventTypeString) && !string.IsNullOrEmpty(eventNameString))
+            url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Combine={eventTypeString}|{eventNameString}";
+
+        _navigate.NavigateTo(url, true);
     }
 
 }

@@ -260,38 +260,31 @@
         List<FetchEventDto> _event = new List<FetchEventDto>();
 
         var res = await _eventService.FetchEvent(queryParameter);
-        if (res.result.code == ResponseCodes.ResponseCodeOk)
-        {
-            var data = (List<FetchEventDto>)res.result.data;
-            _event.AddRange(data.Where(e => seenKeys.Add(e._id)));
-        }
-        else
+        if (res.result.code != ResponseCodes.ResponseCodeOk)
         {
             _snackbar.Add(res.result.message, Severity.Error);
+            return new List<FetchEventDto>();
         }
+
+        var data = (List<FetchEventDto>)res.result.data;
+        _event.AddRange(data.Where(e => seenKeys.Add(e._id)));
 
         if (!_event.Any()) return _event;
 
-        if (getOptions == Helpers.GetOptionsLatest)
-        {
-            return _event;
-        }
-        else
-        {
+        if (getOptions == Helpers.GetOptionsLatest) return _event;
 
-            if (queryParameter.ContainsKey("paymentOptionName") && !string.IsNullOrEmpty(queryParameter["paymentOptionName"]))
+        if (queryParameter.ContainsKey("paymentOptionName") && !string.IsNullOrEmpty(queryParameter["paymentOptionName"]))
+        {
+            foreach (var x in _event)
             {
-                foreach (var x in _event)
-                {
-                    var freePaymentOptionIds = x.paymentOptions
-                        .Where(po => po.name == queryParameter["paymentOptionName"])
-                        .Select(po => po.paymentOptionId)
-                        .ToList();
+                var freePaymentOptionIds = x.paymentOptions
+                    .Where(po => po.name == queryParameter["paymentOptionName"])
+                    .Select(po => po.paymentOptionId)
+                    .ToList();
 
-                    // Remove free tickets from the eventTickets list
-                    x.eventTickets = x.eventTickets.Where(et => freePaymentOptionIds.Contains(et.paymentOptionId)).ToList();
-                    x.paymentOptions = x.paymentOptions.Where(c => freePaymentOptionIds.Contains(c.paymentOptionId)).ToList();
-                }
+                // Remove free tickets from the eventTickets list
+                x.eventTickets = x.eventTickets.Where(et => freePaymentOptionIds.Contains(et.paymentOptionId)).ToList();
+                x.paymentOptions = x.paymentOptions.Where(c => freePaymentOptionIds.Contains(c.paymentOptionId)).ToList();
             }
         }
 
@@ -303,28 +296,20 @@
         var url = String.Empty;
 
         if (string.IsNullOrEmpty(eventNameString) && string.IsNullOrEmpty(eventTypeString))
-        {
             return;
-        }
-        else
-        {
-            if (!string.IsNullOrEmpty(eventNameString))
-            {
-                url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Name={eventNameString}";
-            }
 
-            if (!string.IsNullOrEmpty(eventTypeString))
-            {
-                url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Type={eventTypeString}";
-            }
+        if (!string.IsNullOrEmpty(eventNameString))
+            url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Name={eventNameString}";
 
-            if (!string.IsNullOrEmpty(eventTypeString) && !string.IsNullOrEmpty(eventNameString))
-            {
-                url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Combine={eventTypeString}|{eventNameString}";
-            }
 
-            _navigate.NavigateTo(url, true);
-        }
+        if (!string.IsNullOrEmpty(eventTypeString))
+            url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Type={eventTypeString}";
+
+
+        if (!string.IsNullOrEmpty(eventTypeString) && !string.IsNullOrEmpty(eventNameString))
+            url = $"/events/discover-events/{Helpers.DiscoverEventSearch}/Combine={eventTypeString}|{eventNameString}";
+
+        _navigate.NavigateTo(url, true);
     }
 
 
