@@ -59,4 +59,10 @@
         width: 100%;
         padding: 40px;
     }
+
+    #event-title {
+        font-size: 1.7em;
+        font-family: "Akaya Telivigala", system-ui;
+        width: 100%;
+    }
 }
