@@ -23,7 +23,6 @@ public class GetEventDetailsDto
     public string instagramLink { get; set; }
     public string eventImageName { get; set; }
     public string eventImagePath { get; set; }
-    public string? eventImageData { get; set; }
     public List<User> Users { get; set; }
     public List<EventType> EventType { get; set; }
     public List<EventTime> EventTime { get; set; }
