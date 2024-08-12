@@ -6,6 +6,10 @@ public class TicketDto
 {
     public string? _id { get; set; }
     public string? ivsEvent_id { get; set; }
+    
+    public string? eventTimeId { get; set; }
+    
+    public string? evenTimeName { get; set; }
     public string? ticketKind { get; set; }
     public string? paymentOptionId { get; set; }
     public string? ticketName { get; set; }

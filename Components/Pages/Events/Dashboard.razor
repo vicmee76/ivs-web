@@ -72,7 +72,7 @@
                                 {
                                     var activateUrl = $"/events/activate-event/{item._id}";
                                     var updateUrl = $"/events/update-event/{item._id}";
-                                    var eventName = item.eventName.Length > 32 ? item.eventName[..29] + " ..." : item.eventName;
+                                    var eventName = item.eventName.Length > 23 ? item.eventName[..23] + " ..." : item.eventName;
 
                                     <MudItem xs="12" sm="12" md="6" lg="3">
                                         <MudCard>

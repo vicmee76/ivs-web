@@ -53,29 +53,93 @@
 
                     <br /><br />
 
-                    <div>
-
-                        <h1>Location </h1>
-
-                        <br />
-
-                <div> @_events.eventAddress -- @_events.eventState</div>
+                    <MudGrid>
                         
-                        <br />
+                        <MudItem xs="12" sm="12" md="6" lg="6">
+                            <div>
+                                <h1>Location </h1>
 
-                        @if (!string.IsNullOrEmpty(_events.adressPin))
-                        {
-                            <MudButton Href="@_events.adressPin"
-                                       Target="_blank"
-                                       Variant="Variant.Outlined"
-                                       EndIcon="@Icons.Material.Filled.LocationOn"
-                                       Color="Color.Secondary"
-                                       Style="text-transform:none">
-                                Google address pin link
-                            </MudButton>
+                                <br />
+
+                                <div> @_events.eventAddress -- @_events.eventState</div>
+
+                                <br />
+
+                                @if (!string.IsNullOrEmpty(_events.adressPin))
+                                {
+                                    <MudButton Href="@_events.adressPin"
+                                               Target="_blank"
+                                               Variant="Variant.Outlined"
+                                               EndIcon="@Icons.Material.Filled.LocationOn"
+                                               Color="Color.Secondary"
+                                               Style="text-transform:none">
+                                        Google address pin link
+                                    </MudButton>
+                                    <br />
+                                }
+                            </div>
+                            <br/>
+                        </MudItem>
+                        
+                        <MudItem xs="12" sm="12" md="6" lg="6">
+
+                            <h1>Social Links</h1>
+
                             <br />
-                        }
-                    </div>
+
+                            <div>
+
+                                @if (!string.IsNullOrWhiteSpace(_events.webLink))
+                                {
+                                <div>
+                                    Visit us on
+                                    <MudElement HtmlTag="a" Class="ms-1" Style="font-weight:bold;" href="@_events.webLink" target="blank" rel="noopener noreferrer">
+                                        Web
+                                    </MudElement>
+                                </div>
+                                
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(_events.instagramLink))
+                                {
+                                <div>
+                                    Visit us on
+                                    <MudElement HtmlTag="a" Class="ms-1" Style="font-weight:bold;" href="@_events.instagramLink" target="blank" rel="noopener noreferrer">
+                                        Instagram
+                                    </MudElement>
+                                </div>
+                                
+                                }
+
+
+                                @if (!string.IsNullOrWhiteSpace(_events.facebookLink))
+                                {
+                                <div>
+                                    Visit us on
+                                    <MudElement HtmlTag="a" Class="ms-1" Style="font-weight:bold;" href="@_events.facebookLink" target="blank" rel="noopener noreferrer">
+                                        Faccebook
+                                    </MudElement>
+                                </div>
+                                
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(_events.twitterLink))
+                                {
+                                <div>
+                                    Visit us on
+                                    <MudElement HtmlTag="a" Class="ms-1" Style="font-weight:bold;" href="@_events.twitterLink" target="blank" rel="noopener noreferrer">
+                                        Twitter
+                                    </MudElement>
+                                </div>
+                                
+                                }
+
+
+                            </div>
+                            
+                        </MudItem>
+                        
+                    </MudGrid>
 
                     <br /><br />
 
@@ -105,62 +169,6 @@
                         <br /><br />
 
 
-           <h1>Social Links</h1>
-
-            <br />
-
-            <div>
-
-                @if (!string.IsNullOrWhiteSpace(_events.webLink))
-                {
-                    <div>
-                        Visit us on
-                        <MudElement HtmlTag="a" Class="ms-1" Style="color:lightsalmon;font-weight:bold;" href="@_events.webLink" target="blank" rel="noopener noreferrer">
-                            @_events.webLink
-                        </MudElement>
-                    </div>
-                    <br />
-                }
-
-                @if (!string.IsNullOrWhiteSpace(_events.instagramLink))
-                {
-                    <div>
-                        Visit us on
-                        <MudElement HtmlTag="a" Class="ms-1" Style="color:hotpink;font-weight:bold;" href="@_events.instagramLink" target="blank" rel="noopener noreferrer">
-                            @_events.instagramLink
-                        </MudElement>
-                    </div>
-                    <br />
-                }
-
-                @if (!string.IsNullOrWhiteSpace(_events.facebookLink))
-                {
-                    <div>
-                        Visit us on
-                        <MudElement HtmlTag="a" Class="ms-1" Style="color:blue;font-weight:bold;" href="@_events.facebookLink" target="blank" rel="noopener noreferrer">
-                            @_events.facebookLink
-                        </MudElement>
-                    </div>
-                    <br />
-                }
-
-                @if (!string.IsNullOrWhiteSpace(_events.twitterLink))
-                {
-                    <div>
-                        Visit us on
-                        <MudElement HtmlTag="a" Class="ms-1" Style="color:black;font-weight:bold;" href="@_events.twitterLink" target="blank" rel="noopener noreferrer">
-                            @_events.twitterLink
-                        </MudElement>
-                    </div>
-                    <br />
-                }
-
-
-            </div>
-
-                
-
-                    <br /><br />
 
                     <div>
                         <MudText Typo="Typo.body1"><b>Event Tickets</b></MudText>

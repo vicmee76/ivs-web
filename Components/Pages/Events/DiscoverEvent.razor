@@ -66,6 +66,7 @@
                     {
                         foreach (var e in _events)
                         {
+                            var ticketLink = $"/events/get-tickets/{e._id}";
                             var eventName = e.eventName.Length > 19 ? e.eventName[..20] + " ..." : e.eventName;
                             var address = e.eventAddress.Length > 25 ? e.eventAddress[..25] + " ..." : e.eventAddress;
 
@@ -122,10 +123,11 @@
                                             <MudText Typo="Typo.body2" Style="font-size: x-small" Color="Color.Dark"><b>@e?.paymentOptions?.FirstOrDefault()?.name</b></MudText>
                                         }
                                         <MudSpacer></MudSpacer>
-                                        <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Primary"><b>Get Tickets</b></MudButton>
+                                        <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Primary" Href="@ticketLink"><b>Get Tickets</b></MudButton>
                                     </MudCardActions>
                                 </MudCard>
                             </MudItem>
+                            
                         }
                     }
                     else

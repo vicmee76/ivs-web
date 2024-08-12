@@ -6,6 +6,8 @@ public class CreateTicketVM
 {
     
     public string? ivsEvent_id { get; set; }
+    
+    public string? eventTimeId { get; set; }
 
     [Required(ErrorMessage = "Ticket Kind is required.")]
     public string? ticketKind { get; set; }
