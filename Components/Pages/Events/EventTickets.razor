@@ -108,7 +108,7 @@
 
                                 <MudText><b>Bind your event times to your tickets</b></MudText>
                                 <br />
-                                <MudSelect T="string" MultiSelection="@multiSelect" Variant="Variant.Outlined" Required="true" SelectAll="@selectAll" SelectAllText="Select all times" HelperText="@timeValue"  @bind-Value="timeValue"  @bind-SelectedValues="timeOptions" MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" Label="Even times" AdornmentIcon="@Icons.Material.Filled.Search">
+                                <MudSelect T="string" MultiSelection="@multiSelect" Variant="Variant.Outlined" Required="true" SelectAll="@selectAll" SelectAllText="Select all times"  @bind-Value="timeValue"  @bind-SelectedValues="timeOptions" MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" Label="Even times" AdornmentIcon="@Icons.Material.Filled.Search">
                                     @foreach (var val in _eventTimes)
                                     {
                                         var times = Convert.ToDateTime(val.startDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt");
@@ -247,19 +247,23 @@
                                     <MudTimeline TimelinePosition="TimelinePosition.Start" DisableModifiers="false">
                                         @foreach (var item in _ticketList)
                                         {
+                                            var eventDate = item.eventTimeDetails == null ? string.Empty : Convert.ToDateTime(item.eventTimeDetails.startDateAndTime).Date.ToString("dddd, dd MMMM yyyy");
+
                                             <MudTimelineItem Size="Size.Small" Color="Color.Secondary" Elevation="2">
                                                 <MudCard Outlined="true" Elevation="25">
                                                     <MudCardHeader>
                                                         <CardHeaderContent>
                                                             <MudText Typo="Typo.body1"><b>@item.ticketKind Ticket</b></MudText>
+                                                           <br />
                                                             <div>
                                                                 <div><b>Ticket Name : </b><span>@item.ticketName</span></div>
                                                                 <div><b>Ticket Price : </b><span>@item.ticketAmount.numberDecimal.ToString("N0")</span></div>
+                                                                <div><b>Event Date : </b><span>@eventDate</span></div>
                                                             </div>
                                                         </CardHeaderContent>
                                                         <CardHeaderActions>
                                                             <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Title="Edit ticket" OnClick="@( () =>  ActionEditTicket(item))" Color="Color.Default" aria-label="edit"></MudIconButton>
-                                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Title="Delete ticket" OnClick="@(async () => await ActionDeleteTicket(item._id))" Color="Color.Default" aria-label="delete"></MudIconButton>
+                                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Title="Delete ticket" OnClick="@(async () => await ActionDeleteTicket(item._id))" Color="Color.Error" aria-label="delete"></MudIconButton>
                                                         </CardHeaderActions>
                                                     </MudCardHeader>
                                                 </MudCard>

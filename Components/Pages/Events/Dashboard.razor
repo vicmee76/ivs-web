@@ -89,7 +89,7 @@
                                                         <MudMenuItem>View event</MudMenuItem>
                                                         @if (item.status == Helpers.Pending)
                                                         {
-                                                            <MudMenuItem Href="@updateUrl">Edit event</MudMenuItem>
+                                                            <MudMenuItem Href="@updateUrl" >Edit event</MudMenuItem>
                                                             <MudMenuItem OnClick="@(async (e) => await DeleteEventAction(item._id))"> Delete event</MudMenuItem>
                                                         }
                                                         else
