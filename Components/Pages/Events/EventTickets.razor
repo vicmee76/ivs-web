@@ -537,7 +537,7 @@
         model.ticketDescription = item.ticketDescription;
         model.groupSize = item.groupSize;
         amount = item.ticketAmount.numberDecimal;
-        model.ticketSalesStartDateAndTime = Convert.ToDateTime(item.ticketSalesStartDateAndTime.ToString()).Date;
+        model.ticketSalesStartDateAndTime = item.ticketSalesStartDateAndTime?.Date;
         model.ticketSalesEndDateAndTime = item.ticketSalesEndDateAndTime?.Date;
         startTime = item.ticketSalesStartDateAndTime?.TimeOfDay;
         endTime = item.ticketSalesEndDateAndTime?.TimeOfDay;
