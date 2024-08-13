@@ -1,0 +1,50 @@
+﻿@page "/orders/buy-tickets/{id}";
+
+<PageTitle>Iv's - Buy Your Tickets</PageTitle>
+
+
+<MudContainer Fixed="false" MaxWidth="MaxWidth.Medium" Style="background-color:white">
+
+    <br />
+
+    <h3>Buy Your Tickets </h3>
+
+    <br />
+    sosod
+
+</MudContainer>
+
+
+
+@code {
+
+    [Parameter] public string? id { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] ITicketService? _ticketService { get; set; }
+    [Inject] IEventService _eventService { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+
+    IEnumerable<TicketDto> _ticketList = new List<TicketDto>();
+
+    private bool _processing { get; set; } = false;
+    private string eventName { get; set; }
+
+
+    protected async override void OnInitialized()
+    {
+        _processing = false;
+        var res = await _ticketService.GetTicketByEventId(id);
+
+        if (res.result.code == ResponseCodes.ResponseCodeOk)
+        {
+            _ticketList = res.result.data;
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+        }
+
+        _processing = true;
+        StateHasChanged();
+    }
+}

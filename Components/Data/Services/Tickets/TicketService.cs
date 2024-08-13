@@ -75,10 +75,7 @@ namespace ivs_ui.Components.Data.Services.Tickets
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
-                var response = await _webService.Call(ApiUrl, $"get-all-event-with-tickets-by-event-id/{eventId}", Method.Get, null, headers);
+                var response = await _webService.Call(ApiUrl, $"get-all-event-with-tickets-by-event-id/{eventId}", Method.Get, null, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
