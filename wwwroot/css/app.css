@@ -84,6 +84,16 @@
     font-weight: bolder;
 }
 
+
+#btnBuyTickets {
+    color: black;
+    height: 50px;
+    width: 200px;
+    text-transform: none;
+    font-weight: bolder;
+    background-color: rgb(247 196 255);
+}
+
 #reg-title {
     font-family: "Akaya Telivigala";
     font-weight: 600;
