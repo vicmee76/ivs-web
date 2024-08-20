@@ -3,14 +3,117 @@
 <PageTitle>Iv's - Buy Your Tickets</PageTitle>
 
 
-<MudContainer Fixed="false" MaxWidth="MaxWidth.Medium" Style="background-color:white">
+<MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="background-color:white">
 
-    <br />
+    <br /><br/>
 
-    <h3>Buy Your Tickets </h3>
+    <div id="discovery-title">
+        <span id="discovery-title-mid">Buy your tickets</span>
+    </div>
 
-    <br />
-    sosod
+    <br /><br/>
+   
+    <MudGrid>
+        
+        <MudItem  xs="12" sm="12" md="7" lg="7" xl="7" xxl="7">  
+            
+            @if (_processing)
+            {
+                <MudSkeleton Height="42px;" />
+                <MudSkeleton Height="42px;" />
+                <MudSkeleton Height="42px;" />
+            }
+            else
+            {
+               
+                if (_ticketList.Any())
+                {
+                    <div>
+
+                        @foreach (var com in _ticketList)
+                        {
+                            var title = $"{Convert.ToDateTime(com.StartDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")}";
+                            
+                            <div style="font-size: 15px; color: rgb(79 79 80); background-color: #fdf6fdfc; font-weight: bolder; padding: 20px">@title</div>
+                            
+                            <br/>
+                            <div style="padding: 20px">
+
+                                @if (com.Tickets.Any())
+                                {
+                                    var date = DateTime.Now;
+                                    <MudGrid>
+                                        @foreach (var tic in com.Tickets)
+                                        {
+                                            var amount = tic.ticketAmount.numberDecimal.ToString("C");
+                                            <MudItem xs="12" sm="12" md="12" lg="9" xl="9" xxl="9">
+                                                <div>
+                                                    <div><b>@tic.ticketName</b></div>
+                                                    <br/>
+                                                    <div><b style="color: #e1901d">@amount</b></div>
+                                                    <br/>
+                                                    <div style="padding-top:10px; padding-bottom: 10px;"> @tic.ticketDescription</div>
+                                                </div>
+                                            </MudItem>
+
+                                            <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
+
+                                                @if (tic.ticketInStock == 0 || date > tic.ticketSalesEndDateAndTime)
+                                                {
+                                                    
+                                                }
+                                                else
+                                                {
+                                                    <MudSelect T="int" Label="Quantity" Margin="Margin.Dense"  SelectedValuesChanged="@(async () => await GenerateCost(tic._id))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                                                        <MudSelectItem T="int" Value="1" />
+                                                        <MudSelectItem T="int" Value="2" />
+                                                        <MudSelectItem T="int" Value="3" />
+                                                        <MudSelectItem T="int" Value="4" />
+                                                        <MudSelectItem T="int" Value="5" />
+                                                    </MudSelect>
+                                                    <br/>
+                                                }
+
+                                            </MudItem>
+                                            
+                                            <MudDivider></MudDivider>
+                                        }
+
+                                    </MudGrid>
+                                }
+                                else
+                                {
+                                    <b>No Ticket found</b>
+                                }
+                            </div>
+
+                           <br/>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <br/>
+                    <div style="text-align:center;">
+                        <MudImage Src="images/backgrounds/nothing.png" Alt="No data image" Elevation="0" Height="60" Class="rounded-lg"/>
+                        <br/>
+                        <MudText Typo="Typo.h6"> <b>No ticket yet!</b></MudText>
+                        <br>
+                        <MudText> Once a ticket is created, you will see them here for purchase.</MudText>
+                    </div>
+                }
+            }
+            
+        </MudItem>
+        
+        
+        <MudItem  xs="12" sm="12" md="5" lg="5" xl="5" xxl="5">
+            
+            
+        </MudItem>
+    </MudGrid>
+    
 
 </MudContainer>
 
@@ -24,27 +127,45 @@
     [Inject] IEventService _eventService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
 
-    IEnumerable<TicketDto> _ticketList = new List<TicketDto>();
+    IEnumerable<TimeAndTicketGroupingDto> _ticketList = new List<TimeAndTicketGroupingDto>();
 
     private bool _processing { get; set; } = false;
-    private string eventName { get; set; }
+    private int quantity { get; set; }
 
 
     protected async override void OnInitialized()
     {
-        _processing = false;
+        _processing = true;
         var res = await _ticketService.GetTicketByEventId(id);
 
         if (res.result.code == ResponseCodes.ResponseCodeOk)
         {
-            _ticketList = res.result.data;
+            if (res.result.data is List<TicketDto> result)
+            {
+                _ticketList = result
+                    .GroupBy(ticket => new { ticket.eventTimeDetails._id, ticket.eventTimeDetails.startDateAndTime })
+                    .Select(group => new TimeAndTicketGroupingDto
+                    {
+                        EventTimeId = group.Key._id,
+                        StartDateAndTime = group.Key.startDateAndTime,
+                        Tickets = group.ToList()
+                    }).ToList();
+            }
         }
         else
         {
             _snackbar.Add(res.result.message, Severity.Error);
         }
 
-        _processing = true;
+        _processing = false;
         StateHasChanged();
     }
+
+    private async Task GenerateCost(string ticketId)
+    {
+        var id = ticketId;
+        //var qty = qutty
+        ;
+    }
+
 }
