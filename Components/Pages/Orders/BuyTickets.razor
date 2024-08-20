@@ -25,11 +25,9 @@
             }
             else
             {
-               
                 if (_ticketList.Any())
                 {
                     <div>
-
                         @foreach (var com in _ticketList)
                         {
                             var title = $"{Convert.ToDateTime(com.StartDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")}";
@@ -89,7 +87,6 @@
 
                            <br/>
                         }
-
                     </div>
                 }
                 else
@@ -100,7 +97,7 @@
                         <br/>
                         <MudText Typo="Typo.h6"> <b>No ticket yet!</b></MudText>
                         <br>
-                        <MudText> Once a ticket is created, you will see them here for purchase.</MudText>
+                        <MudText> Once a ticket is created, you will see them here for purchase. </MudText>
                     </div>
                 }
             }
@@ -110,8 +107,8 @@
         
         <MudItem  xs="12" sm="12" md="5" lg="5" xl="5" xxl="5">
             
-            
         </MudItem>
+        
     </MudGrid>
     
 
