@@ -11,4 +11,8 @@
       <PackageReference Include="RestSharp" Version="111.3.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Models\Dtos\Orders\" />
+    </ItemGroup>
+
 </Project>
