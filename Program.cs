@@ -4,12 +4,14 @@ using ivs_ui.Components;
 using ivs_ui.Components.Data.Services.Accounts;
 using ivs_ui.Components.Data.Services.Events;
 using ivs_ui.Components.Data.Services.General;
+using ivs_ui.Components.Data.Services.Orders;
 using ivs_ui.Components.Data.Services.Organisations;
 using ivs_ui.Components.Data.Services.Payment;
 using ivs_ui.Components.Data.Services.Tickets;
 using ivs.Domain.Interfaces.Accounts;
 using ivs.Domain.Interfaces.Events;
 using ivs.Domain.Interfaces.General;
+using ivs.Domain.Interfaces.Orders;
 using ivs.Domain.Interfaces.Organisations;
 using ivs.Domain.Interfaces.Payment;
 using ivs.Domain.Interfaces.Tickets;
@@ -53,6 +55,7 @@ builder.Services.AddTransient<IPaymentOptionService, PaymentOptionService>();
 builder.Services.AddTransient<IEventService, EventService>();
 builder.Services.AddTransient<IEventTimeService, EventTimeService>();
 builder.Services.AddTransient<ITicketService, TicketService>();
+builder.Services.AddTransient<IOrdersService, OrdersService>();
 
 
 var app = builder.Build();
