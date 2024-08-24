@@ -53,7 +53,7 @@ namespace ivs_ui.Components.Data.Services.Events
                     return res;
 
                 var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
-                res.result.data = JsonConvert.DeserializeObject<List<CreateEventTimeDto>>(myJsonResponse);
+                res.result.data = JsonConvert.DeserializeObject<List<EventTimeDto>>(myJsonResponse);
                 return res;
             }
             catch (Exception ex)

@@ -12,18 +12,16 @@ namespace ivs_ui.Components.Data.Services.Tickets
 {
     public class TicketService(IWebService webService, ILocalStorageService sessionStorageService) : ITicketService
     {
-        private readonly IWebService _webService = webService;
-        private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
         private const string ApiUrl = "/api/v1/tickets/";
 
         public async Task<ResponseObject> CreateTicket(CreateTicketVM model)
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                var token = await sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
                 var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
 
-                var response = await _webService.Call(ApiUrl, "create-event-tickets", Method.Post, model, headers);
+                var response = await webService.Call(ApiUrl, "create-event-tickets", Method.Post, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCodeCreated)
@@ -47,10 +45,10 @@ namespace ivs_ui.Components.Data.Services.Tickets
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                var token = await sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
                 var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
 
-                var response = await _webService.Call(ApiUrl, $"delete-event-with-tickets/{ticketId}", Method.Delete, null, headers);
+                var response = await webService.Call(ApiUrl, $"delete-event-with-tickets/{ticketId}", Method.Delete, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -75,10 +73,7 @@ namespace ivs_ui.Components.Data.Services.Tickets
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
-                var response = await _webService.Call(ApiUrl, $"get-all-event-with-tickets-by-event-id/{eventId}", Method.Get, null, headers);
+                var response = await webService.Call(ApiUrl, $"get-all-event-with-tickets-by-event-id/{eventId}", Method.Get, null, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -103,10 +98,10 @@ namespace ivs_ui.Components.Data.Services.Tickets
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+                var token = await sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
                 var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
 
-                var response = await _webService.Call(ApiUrl, $"update-event-with-tickets/{ticketIdd}", Method.Put, model, headers);
+                var response = await webService.Call(ApiUrl, $"update-event-with-tickets/{ticketIdd}", Method.Put, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)

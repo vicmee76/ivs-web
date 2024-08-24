@@ -1,6 +1,6 @@
 namespace ivs.Domain.Models.Dtos.Events;
 
-public class CreateEventTimeDto
+public class EventTimeDto
 {
     public string? _id { get; set; }
     public string? ivsEventId { get; set; }
