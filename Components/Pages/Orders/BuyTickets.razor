@@ -428,8 +428,16 @@
                     AttendeesRequest = _attendanceVms
                 };
                 
-                
-                
+                var order = await _orderService.SaveOrder(orderVM);
+
+                if (order.result.code == ResponseCodes.ResponseCodeOk)
+                {
+                    var orderResult = (List<SaveOrderDto>)order.result.data;
+                }
+                else
+                {
+                    _snackbar.Add(order.result.message, Severity.Error);
+                }
             }
             else
             {

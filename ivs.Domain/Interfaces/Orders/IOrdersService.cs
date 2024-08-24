@@ -6,4 +6,5 @@ namespace ivs.Domain.Interfaces.Orders;
 public interface IOrdersService
 {
     public Task<ResponseObject> GenerateCost(List<GenerateCostVM> model);
+    public Task<ResponseObject> SaveOrder(OrdersVM model);
 }

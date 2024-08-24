@@ -38,4 +38,30 @@ public class OrdersService(IWebService _webService) : IOrdersService
             };
         }
     }
+
+    public async Task<ResponseObject> SaveOrder(OrdersVM model)
+    {
+        try
+        {
+            var response = await _webService.Call(ApiUrl, "save-order", Method.Post, model, null, null, null);
+            var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+            var content = res?.result;
+            if (content?.code != ResponseCodes.ResponseCodeOk)
+                return new ResponseObject();
+                
+            var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
+            res.result.data = JsonConvert.DeserializeObject<List<SaveOrderDto>>(content?.data?.ToString());
+            return res;
+        }
+        catch (Exception ex)
+        {
+            return new ResponseObject()
+            {
+                result = new ResponseContents()
+                {
+                    message = "Error! Something went wrong trying to get organisations, please try again later",
+                }
+            };
+        }
+    }
 }
