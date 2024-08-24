@@ -1,5 +1,11 @@
 ﻿@page "/events/create-event-tickets/{id}"
 
+@{
+    CultureInfo nigeriaCulture = new CultureInfo("en-NG");
+    Thread.CurrentThread.CurrentCulture = nigeriaCulture;
+    Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
+}
+
 <PageTitle>Iv's - Create Event Tickets</PageTitle>
 
 <br />
@@ -257,7 +263,7 @@
                                                            <br />
                                                             <div>
                                                                 <div><b>Ticket Name : </b><span>@item.ticketName</span></div>
-                                                                <div><b>Ticket Price : </b><span>@item.ticketAmount.numberDecimal.ToString("N0")</span></div>
+                                                                <div><b>Ticket Price : </b><span>@item.ticketAmount.numberDecimal.ToString("C")</span></div>
                                                                 <div><b>Event Date : </b><span>@eventDate</span></div>
                                                             </div>
                                                         </CardHeaderContent>

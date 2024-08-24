@@ -1,5 +1,10 @@
 ﻿@page "/events/activate-event/{id}"
  
+@{
+    CultureInfo nigeriaCulture = new CultureInfo("en-NG");
+    Thread.CurrentThread.CurrentCulture = nigeriaCulture;
+    Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
+}
 
 <PageTitle>Iv's - Activate Event</PageTitle>
 
@@ -190,7 +195,7 @@
                                                         <div style="padding:10px; border:1px dashed #f9c7ba; line-height:30px;">
                                                             <div><b>Ticket Kind : </b><span>@t.ticketKind</span></div>
                                                             <div><b>Ticket Name : </b><span>@t.ticketName</span></div>
-                                                            <div><b>Ticket Price : </b><span>@t.ticketAmount.numberDecimal.ToString("N0")</span></div>
+                                                            <div><b>Ticket Price : </b><span>@t.ticketAmount.numberDecimal.ToString("C")</span></div>
                                                             <div><b>Ticket in stock : </b><span>@t.ticketInStock</span></div>
                                                             <div><b>Group Size : </b><span>@t.groupSize</span></div>
                                                             <div><b>Ticket start date : </b><span>@Convert.ToDateTime(t.ticketSalesStartDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</span></div>
