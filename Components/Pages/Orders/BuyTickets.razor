@@ -50,7 +50,7 @@
                                         @foreach (var tic in com.Tickets)
                                         {
                                             var amount = tic.ticketAmount.numberDecimal.ToString("C");
-                                            <MudItem xs="12" sm="12" md="12" lg="9" xl="9" xxl="9">
+                                            <MudItem xs="12" sm="8" md="8" lg="9" xl="9" xxl="9">
                                                 <div>
                                                     <div><b>@tic.ticketName</b></div>
                                                     <br/>
@@ -61,7 +61,7 @@
                                                 </div>
                                             </MudItem>
 
-                                            <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
+                                            <MudItem xs="12" sm="4" md="4" lg="3" xl="3" xxl="3">
 
                                                 @if (tic.ticketInStock == 0 || date > tic.ticketSalesEndDateAndTime)
                                                 {
@@ -96,6 +96,56 @@
 
                          
                         }
+                    </div>
+
+                    <br />
+
+                    <div id="discovery-title">
+                        <span id="discovery-title-mid">Contact Information</span>
+                    </div>
+
+                    <br />
+
+                    <div style="font-size:16px; line-height:25px">
+                        We will send all the tickets you selected to the email details provided below after a successful purchase.
+                    </div>
+
+                    <br /><br />
+
+                    <div>
+
+                        <MudGrid>
+
+                            <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
+                                <label>Enter your first name</label>
+                                <MudTextField Label="First Name" Margin="Margin.Dense" @bind-Value="model.FirstName" For="@(() => model.FirstName)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
+                                <label>Enter your last name</label>
+                                <MudTextField Label="Last Name" Margin="Margin.Dense" @bind-Value="model.LastName" For="@(() => model.LastName)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
+                                <label>Enter your phone number</label>
+                                <MudTextField Label="Phone"  Margin="Margin.Dense" @bind-Value="model.PhoneNumber" For="@(() => model.PhoneNumber)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
+                                <label>Enter your phone number</label>
+                                <MudTextField InputType="InputType.Email" Label="Email" Margin="Margin.Dense"  @bind-Value="model.Email" For="@(() => model.Email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="4" md="4" lg="4" xl="4" xxl="4">
+                                <label>Select your gender</label>
+                                <MudSelect Label="Gender" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="model.Gender" For="@(() => model.Gender)">
+                                    <MudSelectItem Value="@("M")">M</MudSelectItem>
+                                    <MudSelectItem Value="@("F")">F</MudSelectItem>
+                                </MudSelect>
+                            </MudItem>
+
+                        </MudGrid>
+
                     </div>
                 }
                 else
@@ -199,6 +249,20 @@
                                 </MudItem>
 
                             </MudGrid>
+
+                            <br />
+
+                        <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                            @if (_processing)
+                            {
+                                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                <MudText Class="ms-2">Processing</MudText>
+                            }
+                            else
+                            {
+                                <MudText><b>Buy Ticket</b></MudText>
+                            }
+                        </MudButton>
                         }
                         
                         <br/>
@@ -227,6 +291,7 @@
     [Inject] IOrdersService? _orderService { get; set; }
     [Inject] IEventService _eventService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
+    public ContactInformationVM? model { get; set; }
 
     IEnumerable<TimeAndTicketGroupingDto> _ticketList = new List<TimeAndTicketGroupingDto>();
     List<GenerateCostDto> generateCost = new();
@@ -240,6 +305,8 @@
 
     protected async override void OnInitialized()
     {
+        model = new ContactInformationVM();
+
         _processing = true;
         var res = await _ticketService.GetTicketByEventId(id);
 
@@ -288,7 +355,7 @@
             };
             TicketWithQuantity[ticketId] = generateCostVm;
         }
-        
+
         var costVm = TicketWithQuantity.Values.ToList();
         if (costVm.Any())
         {
@@ -311,6 +378,12 @@
         _generateCostProcessing = false;
         StateHasChanged();
 
+    }
+
+
+    private async Task ActionSaveOrder()
+    {
+        
     }
 
 }
