@@ -69,7 +69,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <MudSelect T="int" Label="Quantity" bind-Value="quantity" Margin="Margin.Dense"  SelectedValuesChanged="@(async (value) => await GenerateCost(tic._id, value))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                                                    <MudSelect T="int" Label="Quantity" bind-Value="quantity" Margin="Margin.Dense"  SelectedValuesChanged="@(async (value) => await GenerateCost(tic._id, com.EventTimeId, value))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
                                                         <MudSelectItem T="int" Value="0" />
                                                         <MudSelectItem T="int" Value="1" />
                                                         <MudSelectItem T="int" Value="2" />
@@ -267,7 +267,7 @@
     }
 
 
-    private async Task GenerateCost(string ticketId, IEnumerable<int> value)
+    private async Task GenerateCost(string ticketId, string eventTimeId, IEnumerable<int> value)
     {
         _generateCostProcessing = true;
 
@@ -282,6 +282,7 @@
             var generateCostVm = new GenerateCostVM()
             {
                 eventId = id,
+                eventTimeId = eventTimeId,
                 ticketId = ticketId,
                 quantity = value.FirstOrDefault().ToString()
             };
