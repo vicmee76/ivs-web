@@ -23,7 +23,6 @@
     font-size: 5.7rem;
     line-height: 1.4;
     font-weight: 600;
-    /*color: #011b33;*/
     text-align: left;
     height: 400px;
     align-content: center;
@@ -68,11 +67,31 @@
     font-weight: bolder;
 }
 
+
+#btnDarkColor-Search {
+    background-color: #56375C;
+    color: white;
+    height: 60px;
+    text-transform: none;
+    font-weight: bolder;
+}
+
+
 #btnBrightColor {
     color: #e18501f7;
     height: 50px;
     text-transform: none;
     font-weight: bolder;
+}
+
+
+#btnBuyTickets {
+    color: black;
+    height: 50px;
+    width: 200px;
+    text-transform: none;
+    font-weight: bolder;
+    background-color: rgb(247 196 255);
 }
 
 #reg-title {
@@ -238,6 +257,54 @@
 #discovery-title {
     font-family: "Akaya Telivigala", system-ui;
     font-size: 45px;
-    height: 120px;
     color: #56375C;
+}
+
+#discovery-title-mid {
+    font-family: "Akaya Telivigala", system-ui;
+    font-size: 35px;
+    color: #56375C;
+}
+
+#trending-title {
+    font-family: "Akaya Telivigala", system-ui;
+    font-weight: bold;
+    font-size: 30px;
+    color: #56375C;
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.4);
+}
+
+
+.image-container {
+    position: relative;
+    margin: 0 auto; /* Center it */
+    text-align:center;
+    justify-content:center;
+    align-content:center;
+    height:auto;
+}
+
+    .image-container .image-centered {
+        position: absolute; /* Position the background text */
+        bottom: 0; /* At the bottom. Use top:0 to append it to the top */
+        background: rgb(0, 0, 0); /* Fallback color */
+        background: rgba(0, 0, 0, 0.6); /* Black background with 0.5 opacity */
+        color: #f1f1f1; /* Grey text */
+        width: 100%; /* Full width */
+        height:100%;
+        padding: 20px; /* Some padding */
+    }   
+
+.image-centered div {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#event-title {
+    font-size: 3.0em;
+    font-family: "Akaya Telivigala", system-ui;
+    width:100%;
 }

@@ -14,7 +14,7 @@
     <Authorized Context="cntx">
 
         <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
-
+            <br /><br />
             <MudMessageBox @ref="publishMessageBox" Title="Publish event" CancelText="Cancel" YesText="Publish" Style="padding:20px;">
                 <MessageContent>
                     Are you sure you want to publish this event
@@ -65,7 +65,7 @@
                             <br />
 
                             <div>
-                                <MudImage Fluid="true" Src="@_events.eventImageData" Height="500" Width="500" Alt="Swedish Farm House" Class="rounded-lg" />
+                                <MudImage Fluid="true" Src="@_events.eventImagePath" Height="500" Width="500" Alt="Swedish Farm House" Class="rounded-lg" />
                             </div>
 
                         </MudItem>
@@ -268,17 +268,20 @@
 
                                    <div style="text-align : center">
 
-                                        <MudButton Variant="Variant.Filled" Disabled="@_processing" id="btnDarkColor" OnClick="@((e) => PublishEventAction())" Size="Size.Large">
-                                            @if (_processing)
-                                            {
-                                                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                                                <MudText Class="ms-2">Processing</MudText>
-                                            }
-                                            else
-                                            {
-                                                <MudText><b>Publish Event</b></MudText>
-                                            }
-                                        </MudButton>
+                                        @if(_events.status == Helpers.Pending)
+                                        {
+                                            <MudButton Variant="Variant.Filled" Disabled="@_processing" id="btnDarkColor" OnClick="@((e) => PublishEventAction())" Size="Size.Large">
+                                                @if (_processing)
+                                                {
+                                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                                    <MudText Class="ms-2">Processing</MudText>
+                                                }
+                                                else
+                                                {
+                                                    <MudText><b>Publish Event</b></MudText>
+                                                }
+                                            </MudButton>
+                                        }
 
                                    </div>
 
@@ -351,8 +354,6 @@
             {
                 _events = res.result.data;
                 eventName = _events.eventName;
-                var img = _config.GetValue<string>("Paths:ImagePath") + _events.eventImageName;
-                _events.eventImagePath = img;
             }
             else
             {

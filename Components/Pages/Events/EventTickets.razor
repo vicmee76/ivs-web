@@ -1,7 +1,4 @@
 ﻿@page "/events/create-event-tickets/{id}"
-@using System.Globalization
-
-
 
 <PageTitle>Iv's - Create Event Tickets</PageTitle>
 
@@ -15,7 +12,7 @@
     <Authorized Context="cntx">
 
         <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
-
+            
             <MudPaper Elevation="0">
                 <MudToolBar>
 
@@ -107,7 +104,19 @@
 
                                 </MudRadioGroup>
 
+                                <br /><br/>
+
+                                <MudText><b>Bind your event times to your tickets</b></MudText>
                                 <br />
+                                <MudSelect T="string" MultiSelection="@multiSelect" Variant="Variant.Outlined" Required="true" SelectAll="@selectAll" SelectAllText="Select all times"  @bind-Value="timeValue"  @bind-SelectedValues="timeOptions" MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" Label="Even times" AdornmentIcon="@Icons.Material.Filled.Search">
+                                    @foreach (var val in _eventTimes)
+                                    {
+                                        var times = Convert.ToDateTime(val.startDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt");
+                                        <MudSelectItem T="string" Value="@val._id">Starts on @times</MudSelectItem>
+                                    }
+                                </MudSelect>
+                                
+                                <br/><br/>
 
                                 <MudTextField Label="Ticket Name*" HelperText="Enter ticket name" @bind-Value="model.ticketName" For="@(() => model.ticketName)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
 
@@ -238,19 +247,23 @@
                                     <MudTimeline TimelinePosition="TimelinePosition.Start" DisableModifiers="false">
                                         @foreach (var item in _ticketList)
                                         {
+                                            var eventDate = item.eventTimeDetails == null ? string.Empty : Convert.ToDateTime(item.eventTimeDetails.startDateAndTime).Date.ToString("dddd, dd MMMM yyyy");
+
                                             <MudTimelineItem Size="Size.Small" Color="Color.Secondary" Elevation="2">
                                                 <MudCard Outlined="true" Elevation="25">
                                                     <MudCardHeader>
                                                         <CardHeaderContent>
                                                             <MudText Typo="Typo.body1"><b>@item.ticketKind Ticket</b></MudText>
+                                                           <br />
                                                             <div>
                                                                 <div><b>Ticket Name : </b><span>@item.ticketName</span></div>
                                                                 <div><b>Ticket Price : </b><span>@item.ticketAmount.numberDecimal.ToString("N0")</span></div>
+                                                                <div><b>Event Date : </b><span>@eventDate</span></div>
                                                             </div>
                                                         </CardHeaderContent>
                                                         <CardHeaderActions>
-                                                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Title="Edit ticket" OnClick="@(async () => await ActionEditTicket(item))" Color="Color.Default" aria-label="edit"></MudIconButton>
-                                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Title="Delete ticket" OnClick="@(async () => await ActionDeleteTicket(item._id))" Color="Color.Default" aria-label="delete"></MudIconButton>
+                                                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Title="Edit ticket" OnClick="@( () =>  ActionEditTicket(item))" Color="Color.Default" aria-label="edit"></MudIconButton>
+                                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Title="Delete ticket" OnClick="@(async () => await ActionDeleteTicket(item._id))" Color="Color.Error" aria-label="delete"></MudIconButton>
                                                         </CardHeaderActions>
                                                     </MudCardHeader>
                                                 </MudCard>
@@ -304,14 +317,20 @@
     [Inject] IPaymentOptionService _paymentOptionService { get; set; }
     [Inject] ITicketService _ticketService { get; set; }
     [Inject] IEventService _eventService { get; set; }
+    [Inject] IEventTimeService _eventTimeService { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
     [SupplyParameterFromForm] public CreateTicketVM? model { get; set; }
     [Parameter] public string? id { get; set; }
 
+    private string timeValue { get; set; } = string.Empty;
+    private bool multiSelect { get; set; } = true;
+    private bool selectAll { get; set; } = true;
+    private IEnumerable<string> timeOptions { get; set; } = new HashSet<string>() {};
 
     IEnumerable<GetPaymentOptionsDto> _paymentOptions = new List<GetPaymentOptionsDto>();
     IEnumerable<TicketDto> _ticketList = new List<TicketDto>();
+    IEnumerable<EventTimeDto> _eventTimes = new List<EventTimeDto>();
 
     AuthUser authUser = new AuthUser();
     private string userId { get; set; }
@@ -341,6 +360,10 @@
         new BreadcrumbItem("Create Tickets", href: null, disabled: true)
     };
 
+    private string GetMultiSelectionText(List<string> selectedValues)
+    {
+        return $"{selectedValues.Count} times{(selectedValues.Count > 1 ? "s have" : " has")} been selected";
+    }
 
     protected async override void OnInitialized()
     {
@@ -390,6 +413,9 @@
 
         var res3 = await _ticketService.GetTicketByEventId(id);
         _ticketList = res3.result.data ?? new List<TicketDto>();
+        
+        var res4 = await _eventTimeService.GetTimeByEventId(id);
+        _eventTimes = res4.result.data ?? new List<EventTimeDto>();
     }
 
 
@@ -399,7 +425,10 @@
         endTime = new TimeSpan(00, 00, 00);
         startTime = new TimeSpan(00, 00, 00);
         ticketId = string.Empty;
+        timeOptions = new HashSet<string>();
         _isUpdate = false;
+        multiSelect = true;
+        selectAll = true;
     }
 
 
@@ -414,16 +443,30 @@
 
         if (!type)
         {
-            var res = await _ticketService.CreateTicket(model);
-            if (res.result.code == ResponseCodes.ResponseCodeCreated)
+            if (!timeOptions.Any())
             {
-                _snackbar.Add(res.result.message, Severity.Success);
+                _snackbar.Add("Please select an event time for this ticket", Severity.Error);
+                return;
+            }
+
+            int countSuccess = 0;
+            foreach (var time in timeOptions)
+            {
+                model.eventTimeId = time;
+                var res = await _ticketService.CreateTicket(model);
+                if (res.result.code == ResponseCodes.ResponseCodeCreated)
+                    countSuccess++;
+            }
+            
+            if (timeOptions.Count() == countSuccess)
+            {
+                _snackbar.Add("Event tickets created successfully", Severity.Success);
                 await InitializeComponent();
                 ActionReset();
             }
             else
             {
-                _snackbar.Add(res.result.message, Severity.Error);
+                _snackbar.Add("Some event tickets were not created with event time, please check and try again.", Severity.Error);
             }
         }
         else
@@ -434,6 +477,12 @@
             }
             else
             {
+                if (!timeOptions.Any())
+                {
+                    _snackbar.Add("Please select an event time for this ticket", Severity.Error);
+                    return;
+                }
+                model.eventTimeId = timeOptions.FirstOrDefault();
                 var res = await _ticketService.UpdateTicket(ticketId, model);
                 if (res.result.code == ResponseCodes.ResponseCodeOk)
                 {
@@ -477,7 +526,7 @@
     }
 
 
-    private async Task ActionEditTicket(TicketDto item)
+    private void ActionEditTicket(TicketDto item)
     {
         model = new CreateTicketVM();
         model.ticketKind = item.ticketKind.ToLower();
@@ -488,8 +537,8 @@
         model.ticketDescription = item.ticketDescription;
         model.groupSize = item.groupSize;
         amount = item.ticketAmount.numberDecimal;
-        model.ticketSalesStartDateAndTime = item.ticketSalesStartDateAndTime;
-        model.ticketSalesEndDateAndTime = item.ticketSalesEndDateAndTime;
+        model.ticketSalesStartDateAndTime = item.ticketSalesStartDateAndTime?.Date;
+        model.ticketSalesEndDateAndTime = item.ticketSalesEndDateAndTime?.Date;
         startTime = item.ticketSalesStartDateAndTime?.TimeOfDay;
         endTime = item.ticketSalesEndDateAndTime?.TimeOfDay;
 
@@ -497,6 +546,10 @@
         _isGroupTicket = item.ticketKind.ToLower() == "single" ? true : false;
         ticketId = item._id;
         _isUpdate = true;
+
+        timeOptions = new List<string>() { item.eventTimeId };
+        multiSelect = false;
+        selectAll = false;
 
         StateHasChanged();
     }

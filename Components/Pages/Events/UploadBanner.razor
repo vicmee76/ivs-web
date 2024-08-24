@@ -14,7 +14,7 @@
     <Authorized Context="cntx">
 
         <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
-
+            
             <MudPaper Elevation="0">
                 <MudToolBar>
 
@@ -95,7 +95,7 @@
 
                                 <MudToolBar DisableGutters="true" Class="relative d-flex justify-end gap-4 z-30">
                                     
-                                    <MudButton HtmlTag="label" Color="Color.Primary" for="@context.Id" Icon="@Icons.Material.Filled.Image" Variant="Variant.Outlined"> Browse </MudButton>
+                                    <MudButton HtmlTag="label" Color="Color.Primary" for="@context.Id" Icon="@Icons.Material.Filled.Image" Disabled="_processing" Variant="Variant.Outlined"> Browse </MudButton>
                                     
                                     <MudButton OnClick="@(async () => await Upload())" Style="background-color:#56375C; color:white" Disabled="@(!_fileNames.Any())" Variant="Variant.Filled">
                                         @if (_processing)
@@ -110,7 +110,7 @@
                                     </MudButton>
 
                                     <MudButton OnClick="@Clear" Color="Color.Error" Disabled="@(!_fileNames.Any())" Variant="Variant.Outlined"> Clear </MudButton>
-                                    <MudButton OnClick="@Clear" Color="Color.Primary" Href="@skipUrl" Variant="Variant.Filled"> Skip </MudButton>
+                                    <MudButton OnClick="@Clear" Color="Color.Primary" Href="@skipUrl" Disabled="@_processing" Variant="Variant.Filled"> Skip </MudButton>
                                 </MudToolBar>
 
                             </ButtonTemplate>
@@ -200,7 +200,7 @@
                 else
                 {
                     eventName = res?.result?.data.eventName;
-                    imageData = res.result.data.eventImageData;
+                    imageData = res.result.data.eventImagePath;
                 }
             }
             else

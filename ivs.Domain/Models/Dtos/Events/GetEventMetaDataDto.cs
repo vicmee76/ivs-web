@@ -21,7 +21,6 @@ public class GetEventMetaDataDto
     public string? eventShortLink { get; set; }
     public string? qrCodeLink { get; set; }
     public string? updatedAt { get; set; }
-    public string? eventImageData { get; set; }
     public string? eventImageName { get; set; }
     public string? eventImagePath { get; set; }
 }

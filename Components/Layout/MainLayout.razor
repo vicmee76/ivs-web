@@ -23,7 +23,7 @@
 </style>
 
 
-<MudLayout>
+<MudLayout Style="background-color:#f5f5f570">
    
     <MudAppBar Fixed="true"  Elevation="0" Style="padding:12px" Dense="true" DisableGutters="true" Class="muudstrap-navbar">
         
@@ -129,19 +129,17 @@
 
      <AuthorizeView>
         <Authorized>
-            <MudMainContent Class="" Style="">
-                <br />
-                  
+            <MudMainContent Class="" Style="background-color:white">
                     @Body
-                  
-               
+                <br /><br /><br />
             </MudMainContent>
         </Authorized>
+
         <NotAuthorized>
-            <MudMainContent Class="">
+            <MudMainContent Class="" >
                 <MudContainer>
-                    <br /><br /><br />
                     @Body
+                    <br /><br /><br />
                 </MudContainer>
             </MudMainContent>
         </NotAuthorized>

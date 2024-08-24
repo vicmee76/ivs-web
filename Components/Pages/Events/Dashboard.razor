@@ -9,7 +9,7 @@
     </NotAuthorized>
     <Authorized>
 
-        <br />
+        <br /><br />
         <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
             <MudMessageBox @ref="deleteEventMessageBox" Title="Delete event" CancelText="Cancel" YesText="Delete" Style="padding:20px;">
                 <MessageContent>
@@ -72,6 +72,7 @@
                                 {
                                     var activateUrl = $"/events/activate-event/{item._id}";
                                     var updateUrl = $"/events/update-event/{item._id}";
+                                    var eventName = item.eventName.Length > 23 ? item.eventName[..23] + " ..." : item.eventName;
 
                                     <MudItem xs="12" sm="12" md="6" lg="3">
                                         <MudCard>
@@ -80,7 +81,7 @@
                                                     <MudAvatar Color="Color.Secondary">@item.eventName[0]</MudAvatar>
                                                 </CardHeaderAvatar>
                                                 <CardHeaderContent>
-                                                    <MudText Typo="Typo.body2"><b>@item.eventName</b></MudText>
+                                                    <MudText Typo="Typo.body2"><b>@eventName</b></MudText>
                                                     <MudText Typo="Typo.body1">@item.eventOption event</MudText>
                                                 </CardHeaderContent>
                                                 <CardHeaderActions>
@@ -88,7 +89,7 @@
                                                         <MudMenuItem>View event</MudMenuItem>
                                                         @if (item.status == Helpers.Pending)
                                                         {
-                                                            <MudMenuItem Href="@updateUrl">Edit event</MudMenuItem>
+                                                            <MudMenuItem Href="@updateUrl" >Edit event</MudMenuItem>
                                                             <MudMenuItem OnClick="@(async (e) => await DeleteEventAction(item._id))"> Delete event</MudMenuItem>
                                                         }
                                                         else
@@ -99,13 +100,13 @@
                                                 </CardHeaderActions>
                                             </MudCardHeader>
 
-                                            @if (string.IsNullOrEmpty(item.eventImageData))
+                                            @if (string.IsNullOrEmpty(item.eventImagePath))
                                             {
                                                 <MudCardMedia Image="images/backgrounds/abstract.jpg" Height="200"/>
                                             }
                                             else
                                             {
-                                                <MudCardMedia Image="@item.eventImageData" Height="200"/>
+                                                <MudCardMedia Image="@item.eventImagePath" Height="200"/>
                                             }
 
                                             <MudCardContent>
