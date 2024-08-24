@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ivs.Domain.Models.ViewModels.Orders
 {
-    public class ContactInformationVM
+    public class AttendanceVm
     {
 
         [Required(ErrorMessage = "First Name is required")]
@@ -17,8 +17,7 @@ namespace ivs.Domain.Models.ViewModels.Orders
         [Required(ErrorMessage = "Last Name is required")]
         [StringLength(30, MinimumLength = 3, ErrorMessage = "Please enter your correct last name")]
         public string? LastName { get; set; }
-
-
+        
         [Required(ErrorMessage = "Email Address is required")]
         [EmailAddress(ErrorMessage = "Invalid email address")]
         public string? Email { get; set; }
@@ -29,6 +28,12 @@ namespace ivs.Domain.Models.ViewModels.Orders
 
         [Required(ErrorMessage = "Gender is required")]
         public string? Gender { get; set; }
+        
+        public string?  orderId { get; set; }
+        public string?  ivsEventId { get; set; }
+        public string?  ticketId { get; set; }
+        public string?  eventTimeId { get; set; }
+        public string?  ticketQuantity { get; set; }
 
     }
 }
