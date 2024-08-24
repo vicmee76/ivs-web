@@ -1,5 +1,6 @@
 ﻿@page "/orders/buy-tickets/{id}"
 
+
 <PageTitle>Iv's - Buy Your Tickets</PageTitle>
 
 @{
@@ -383,8 +384,19 @@
 
     private async Task ActionSaveOrder()
     {
-        var r = model;
-        int k;
+        var context = new ValidationContext(model, serviceProvider: null, items: null);
+        var results = new List<ValidationResult>();
+        Validator.TryValidateObject(model, context, results, true);
+
+        if (results.Any())
+        {
+            foreach (var er in results)
+                _snackbar.Add(er.ErrorMessage, Severity.Error);
+        }
+        else
+        {
+
+        }
     }
 
 }

@@ -20,7 +20,7 @@ namespace ivs.Domain.Models.ViewModels.Orders
 
 
         [Required(ErrorMessage = "Email Address is required")]
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
         public string? Email { get; set; }
 
         [Required(ErrorMessage = "Phone is required")]
