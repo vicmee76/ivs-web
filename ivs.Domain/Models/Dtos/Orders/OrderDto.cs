@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ivs.Domain.Models.Dtos.Orders
 {
-    public class SaveOrderDto
+    public class OrderDto
     {
         public string _id { get; set; }
         public string ivsEventId { get; set; }

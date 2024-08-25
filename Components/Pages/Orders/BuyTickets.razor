@@ -433,7 +433,7 @@
                 if (order.result.code == ResponseCodes.ResponseCodeOk)
                 {
                     // https://localhost:5001/orders/payment-method/66ca7841f877ce4ed8d0a593
-                    var orderResult = (SaveOrderDto)order.result.data;
+                    var orderResult = (OrderDto)order.result.data;
                     _navigate.NavigateTo($"/orders/payment-method/{orderResult._id}");
                     _snackbar.Add(order.result.message, Severity.Success);
                 }

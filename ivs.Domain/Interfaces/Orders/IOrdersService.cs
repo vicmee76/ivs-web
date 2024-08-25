@@ -7,4 +7,5 @@ public interface IOrdersService
 {
     public Task<ResponseObject> GenerateCost(List<GenerateCostVM> model);
     public Task<ResponseObject> SaveOrder(OrdersVM model);
+    public Task<ResponseObject> GetOrderById(string id);
 }
