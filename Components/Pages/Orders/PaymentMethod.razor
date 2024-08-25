@@ -1,5 +1,6 @@
 ﻿@page "/orders/payment-method/{id}"
 
+
 @{
     CultureInfo nigeriaCulture = new CultureInfo("en-NG");
     Thread.CurrentThread.CurrentCulture = nigeriaCulture;
@@ -85,6 +86,7 @@
 
     [Parameter] public string? id { get; set; }
     [Inject] IOrdersService? _orderService { get; set; }
+    [Inject] IPaymentService? _paymentService { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
 
@@ -96,8 +98,6 @@
     public string totalAmount { get; set; }
 
     public MakePaymentVM paymentVM { get; set; }
-
-
 
     protected async override void OnInitialized()
     {
@@ -114,7 +114,6 @@
         {
             _snackbar.Add(res.result.message, Severity.Error);
         }
-
         _processing = false;
         StateHasChanged();
     }
@@ -122,14 +121,40 @@
 
     private async Task ActionMakePayment()
     {
+        _actionProcessing = true;
+
         if (string.IsNullOrEmpty(paymentGateWay))
         {
             _snackbar.Add("Please choose a payment method", Severity.Error);
         }
         else
         {
-            
+            paymentVM = new MakePaymentVM();
+            paymentVM.orderId = id;
+            paymentVM.paymentGateWay = paymentGateWay.ToUpper();
+
+            var res = await _paymentService.GeneratePaymentLink(paymentVM);
+
+            if (res.result.code == ResponseCodes.ResponseCodeOk)
+            {
+                if (res.result.data is List<PaymentDto> result)
+                {
+                    _navigate.NavigateTo(result.FirstOrDefault().link.ToString());
+                }
+                else
+                {
+                    _snackbar.Add("Something went wrong trying to connect to payment gateway, please trying again later.", Severity.Error);
+                }
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+
+
         }
+
+        _actionProcessing = false;
     }
 
 

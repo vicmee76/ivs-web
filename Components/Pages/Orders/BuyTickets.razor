@@ -119,27 +119,27 @@
 
                             <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
                                 <label>Enter your first name</label>
-                                <MudTextField Label="First Name" Margin="Margin.Dense" @bind-Value="model.FirstName" For="@(() => model.FirstName)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                <MudTextField Label="First Name" Margin="Margin.Dense" @bind-Value="model.firstName" For="@(() => model.firstName)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
                             </MudItem>
 
                             <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
                                 <label>Enter your last name</label>
-                                <MudTextField Label="Last Name" Margin="Margin.Dense" @bind-Value="model.LastName" For="@(() => model.LastName)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                <MudTextField Label="Last Name" Margin="Margin.Dense" @bind-Value="model.lastName" For="@(() => model.lastName)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
                             </MudItem>
 
                             <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
                                 <label>Enter your phone number</label>
-                                <MudTextField Label="Phone"  Margin="Margin.Dense" @bind-Value="model.PhoneNumber" For="@(() => model.PhoneNumber)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                <MudTextField Label="Phone"  Margin="Margin.Dense" @bind-Value="model.phoneNumber" For="@(() => model.phoneNumber)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
                             </MudItem>
 
                             <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
                                 <label>Enter your email</label>
-                                <MudTextField InputType="InputType.Email" Label="Email" Margin="Margin.Dense"  @bind-Value="model.Email" For="@(() => model.Email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                <MudTextField InputType="InputType.Email" Label="Email" Margin="Margin.Dense"  @bind-Value="model.email" For="@(() => model.email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
                             </MudItem>
 
                             <MudItem xs="12" sm="4" md="4" lg="4" xl="4" xxl="4">
                                 <label>Select your gender</label>
-                                <MudSelect Label="Gender" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="model.Gender" For="@(() => model.Gender)">
+                                <MudSelect Label="Gender" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="model.gender" For="@(() => model.gender)">
                                     <MudSelectItem Value="@("M")">M</MudSelectItem>
                                     <MudSelectItem Value="@("F")">F</MudSelectItem>
                                 </MudSelect>
@@ -406,11 +406,11 @@
                         eventTimeId = dic.eventTimeId,
                         ticketId = c.ticketId,
                         ticketQuantity = c.ticketQuantity.ToString(),
-                        FirstName = model.FirstName,
-                        LastName = model.LastName,
-                        Email = model.Email,
-                        PhoneNumber = model.PhoneNumber,
-                        Gender = model.Gender
+                        firstName = model.firstName,
+                        lastName = model.lastName,
+                        email = model.email,
+                        phoneNumber = model.phoneNumber,
+                        gender = model.gender
                     };
                     _attendanceVms.Add(attendance);
                 }

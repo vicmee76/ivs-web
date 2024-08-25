@@ -12,8 +12,6 @@ public class OrdersService(IWebService _webService) : IOrdersService
 {
     private const string ApiUrl = "/api/v1/orders/";
 
-
-
     public async Task<ResponseObject> GetOrderById(string id)
     {
         try

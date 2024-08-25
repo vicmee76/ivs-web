@@ -12,22 +12,22 @@ namespace ivs.Domain.Models.ViewModels.Orders
 
         [Required(ErrorMessage = "First Name is required")]
         [StringLength(30, MinimumLength = 3, ErrorMessage = "Please enter your correct first name")]
-        public string? FirstName { get; set; }
+        public string? firstName { get; set; }
 
         [Required(ErrorMessage = "Last Name is required")]
         [StringLength(30, MinimumLength = 3, ErrorMessage = "Please enter your correct last name")]
-        public string? LastName { get; set; }
+        public string? lastName { get; set; }
         
         [Required(ErrorMessage = "Email Address is required")]
         [EmailAddress(ErrorMessage = "Invalid email address")]
-        public string? Email { get; set; }
+        public string? email { get; set; }
 
         [Required(ErrorMessage = "Phone is required")]
         [StringLength(15, MinimumLength = 11, ErrorMessage = "Please enter your correct phone number")]
-        public string? PhoneNumber { get; set; }
+        public string? phoneNumber { get; set; }
 
         [Required(ErrorMessage = "Gender is required")]
-        public string? Gender { get; set; }
+        public string? gender { get; set; }
         
         public string?  orderId { get; set; }
         public string?  ivsEventId { get; set; }
