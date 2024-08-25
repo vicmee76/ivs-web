@@ -33,7 +33,7 @@ public class OrdersService(IWebService _webService) : IOrdersService
             {
                 result = new ResponseContents()
                 {
-                    message = "Error! Something went wrong trying to get organisations, please try again later",
+                    message = "Error! Something went wrong trying to generate cost, please try again later",
                 }
             };
         }
@@ -50,7 +50,7 @@ public class OrdersService(IWebService _webService) : IOrdersService
                 return new ResponseObject();
                 
             var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
-            res.result.data = JsonConvert.DeserializeObject<List<SaveOrderDto>>(content?.data?.ToString());
+            res.result.data = JsonConvert.DeserializeObject<SaveOrderDto>(content?.data?.ToString());
             return res;
         }
         catch (Exception ex)
@@ -59,7 +59,7 @@ public class OrdersService(IWebService _webService) : IOrdersService
             {
                 result = new ResponseContents()
                 {
-                    message = "Error! Something went wrong trying to get organisations, please try again later",
+                    message = "Error! Something went wrong trying to save order, please try again later",
                 }
             };
         }

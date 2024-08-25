@@ -1,0 +1,44 @@
+﻿@page "/orders/payment-method/{id}"
+
+<PageTitle>Iv's - Select Payment Method</PageTitle>
+
+
+
+<MudContainer>
+
+    <br /><br />
+
+    <center>
+        <MudPaper Elevation="0" Outlined="false" MaxWidth="650px" Square="false" Class="ma-2 pa-10">
+            <div style="text-align:left">
+
+                <div id="reg-title">Choose a payment method.</div>
+                <br />
+                <br />
+               <MudDivider></MudDivider>
+               <br />
+              
+                <div>
+
+                    <div class="d-inline">
+                        <MudImage Src="images/backgrounds/flutterwavelogo.png" Alt="Fltterwave logo" Elevation="0" Height="20" Class="rounded-circle" />
+                    </div>
+                    <div class="d-inline">
+                        <span style="font-size:26px; font-weight:bold"> Pay with flutterwave </span>
+                    </div>
+                </div>
+
+                <br /><br />
+                <MudDivider></MudDivider>
+              
+
+            </div>
+        </MudPaper>
+    </center>
+</MudContainer>
+
+
+
+@code {
+    [Parameter] public string? id { get; set; }
+}
