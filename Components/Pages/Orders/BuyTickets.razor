@@ -66,7 +66,10 @@
 
                                                 @if (tic.ticketInStock == 0 || date > tic.ticketSalesEndDateAndTime)
                                                 {
-                                                    
+                                                    var notAvailable = tic.ticketInStock == 0 ? "Out of Stock":
+                                                                       date > tic.ticketSalesEndDateAndTime ? "Sales Ended" : "";
+
+                                                        <b style="color:crimson">@notAvailable</b>
                                                 }
                                                 else
                                                 {
@@ -400,19 +403,42 @@
                 foreach (var c in generateCost.FirstOrDefault().tickets)
                 {
                     var dic = TicketWithQuantity[c.ticketId];
-                    var attendance = new AttendanceVm()
+
+                    if (c.ticketQuantity > 1)
                     {
-                        ivsEventId = id,
-                        eventTimeId = dic.eventTimeId,
-                        ticketId = c.ticketId,
-                        ticketQuantity = c.ticketQuantity.ToString(),
-                        firstName = model.firstName,
-                        lastName = model.lastName,
-                        email = model.email,
-                        phoneNumber = model.phoneNumber,
-                        gender = model.gender
-                    };
-                    _attendanceVms.Add(attendance);
+                        for (int i = 0; i < c.ticketQuantity; i++)
+                        {
+                            var attendance = new AttendanceVm()
+                                {
+                                    ivsEventId = id,
+                                    eventTimeId = dic.eventTimeId,
+                                    ticketId = c.ticketId,
+                                    ticketQuantity = "1",
+                                    firstName = model.firstName,
+                                    lastName = model.lastName,
+                                    email = model.email,
+                                    phoneNumber = model.phoneNumber,
+                                    gender = model.gender
+                                };
+                            _attendanceVms.Add(attendance);
+                        }
+                    }
+                    else
+                    {
+                        var attendance = new AttendanceVm()
+                            {
+                                ivsEventId = id,
+                                eventTimeId = dic.eventTimeId,
+                                ticketId = c.ticketId,
+                                ticketQuantity = c.ticketQuantity.ToString(),
+                                firstName = model.firstName,
+                                lastName = model.lastName,
+                                email = model.email,
+                                phoneNumber = model.phoneNumber,
+                                gender = model.gender
+                            };
+                        _attendanceVms.Add(attendance);
+                    }
                 }
 
                 var orderVM = new OrdersVM()

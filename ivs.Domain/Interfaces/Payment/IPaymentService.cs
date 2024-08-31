@@ -6,5 +6,6 @@ namespace ivs.Domain.Interfaces.Payment
     public interface IPaymentService
     {
         public Task<ResponseObject> GeneratePaymentLink(MakePaymentVM model);
+        public Task<ResponseObject> VerifyPayment(Dictionary<string, string> model);
     }
 }

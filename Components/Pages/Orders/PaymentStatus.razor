@@ -1,0 +1,40 @@
+﻿@page "/orders/payment-status"
+
+<PageTitle>Iv's - Payment Status</PageTitle>
+
+@code {
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "status")]
+    public string? status { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "tx_ref")]
+    public string tx_ref { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "transaction_id")]
+    public string transaction_id { get; set; }
+
+    public bool _processing { get; set; } = false;
+
+
+    protected async override void OnInitialized()
+    {
+        _processing = true;
+
+        var res = await _orderService.GetOrderById(id);
+
+        if (res.result.code == ResponseCodes.ResponseCodeOk)
+        {
+            if (res.result.data is List<OrderDto> result)
+                totalAmount = result.FirstOrDefault().totalFee.numberDecimal.ToString("C");
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+        }
+        _processing = false;
+        StateHasChanged();
+    }
+}

@@ -36,5 +36,30 @@ namespace ivs_ui.Components.Data.Services.Payment
                 };
             }
         }
+
+        public async Task<ResponseObject> VerifyPayment(Dictionary<string, string> model)
+        {
+            try
+            {
+                var response = await _webService.Call(ApiUrl, $"verify-flutterwave-payment", Method.Post, null, model, null, null);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return new ResponseObject();
+
+                res.result.data = JsonConvert.DeserializeObject<List<PaymentDto>>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to connect to payment gateway, please try again later.",
+                    }
+                };
+            }
+        }
     }
 }

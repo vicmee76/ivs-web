@@ -44,11 +44,27 @@
 
   
   <ItemGroup>
+    <Content Remove="Components\Pages\Orders\PaymentStatus.razor" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\Pages\Orders\PaymentStatus.razor" />
     <_ContentIncludedByDefault Remove="ivs.Domain\bin\Debug\net8.0\ivs.Domain.deps.json" />
     <_ContentIncludedByDefault Remove="ivs.Domain\obj\Debug\net8.0\ivs.Domain.sourcelink.json" />
     <_ContentIncludedByDefault Remove="ivs.Domain\obj\ivs.Domain.csproj.nuget.dgspec.json" />
     <_ContentIncludedByDefault Remove="ivs.Domain\obj\project.assets.json" />
     <_ContentIncludedByDefault Remove="ivs.Domain\obj\project.packagespec.json" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\Pages\Orders\PaymentStatus.razor" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <None Include="Components\Pages\Orders\PaymentStatus.razor" />
   </ItemGroup>
   
 </Project>
