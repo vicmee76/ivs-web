@@ -403,42 +403,25 @@
                 foreach (var c in generateCost.FirstOrDefault().tickets)
                 {
                     var dic = TicketWithQuantity[c.ticketId];
-
-                    if (c.ticketQuantity > 1)
-                    {
-                        for (int i = 0; i < c.ticketQuantity; i++)
+                    var attendance = new AttendanceVm()
                         {
-                            var attendance = new AttendanceVm()
-                                {
-                                    ivsEventId = id,
-                                    eventTimeId = dic.eventTimeId,
-                                    ticketId = c.ticketId,
-                                    ticketQuantity = "1",
-                                    firstName = model.firstName,
-                                    lastName = model.lastName,
-                                    email = model.email,
-                                    phoneNumber = model.phoneNumber,
-                                    gender = model.gender
-                                };
-                            _attendanceVms.Add(attendance);
-                        }
-                    }
-                    else
-                    {
-                        var attendance = new AttendanceVm()
-                            {
-                                ivsEventId = id,
-                                eventTimeId = dic.eventTimeId,
-                                ticketId = c.ticketId,
-                                ticketQuantity = c.ticketQuantity.ToString(),
-                                firstName = model.firstName,
-                                lastName = model.lastName,
-                                email = model.email,
-                                phoneNumber = model.phoneNumber,
-                                gender = model.gender
-                            };
-                        _attendanceVms.Add(attendance);
-                    }
+                            ivsEventId = id,
+                            eventTimeId = dic.eventTimeId,
+                            ticketId = c.ticketId,
+                            ticketQuantity = c.ticketQuantity.ToString(),
+                            firstName = model.firstName,
+                            lastName = model.lastName,
+                            email = model.email,
+                            phoneNumber = model.phoneNumber,
+                            gender = model.gender,
+                            ticketPrice = c.ticketPrice.ToString(),
+                            ticketServiceFee = c.ticketServiceFee.ToString(),
+                            totalTicketFee = c.totalTicketFee.ToString(),
+                            totalTicketServiceFee = c.totalTicketServiceFee.ToString(),
+                            totalTicketFeeAndServiceFee = c.totalTicketFeeAndServiceFee.ToString(),
+
+                        };
+                    _attendanceVms.Add(attendance);
                 }
 
                 var orderVM = new OrdersVM()
