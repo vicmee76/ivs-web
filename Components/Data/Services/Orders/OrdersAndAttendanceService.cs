@@ -5,10 +5,11 @@ using ivs.Domain.Models.Dtos.Orders;
 using ivs.Domain.Models.ViewModels.Orders;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Reflection;
 
 namespace ivs_ui.Components.Data.Services.Orders;
 
-public class OrdersService(IWebService _webService) : IOrdersService
+public class OrdersAndAttendanceService(IWebService _webService) : IOrdersAndAttendanceService
 {
     private const string ApiUrl = "/api/v1/orders/";
 
@@ -84,6 +85,31 @@ public class OrdersService(IWebService _webService) : IOrdersService
                 result = new ResponseContents()
                 {
                     message = "Error! Something went wrong trying to save order, please try again later",
+                }
+            };
+        }
+    }
+
+    public async Task<ResponseObject> GetAttendanceByOrderId(string orderId)
+    {
+        try
+        {
+            var response = await _webService.Call(ApiUrl, $"get-attendance-by-order-id/{orderId}", Method.Get, null, null, null, null);
+            var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+            var content = res?.result;
+            if (content?.code != ResponseCodes.ResponseCodeOk)
+                return new ResponseObject();
+
+            res.result.data = JsonConvert.DeserializeObject<List<AttendanceDto>>(content?.data?.ToString());
+            return res;
+        }
+        catch (Exception ex)
+        {
+            return new ResponseObject()
+            {
+                result = new ResponseContents()
+                {
+                    message = "Error! Something went wrong trying to get attendace record by, please try again later",
                 }
             };
         }
