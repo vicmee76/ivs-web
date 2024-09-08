@@ -37,7 +37,7 @@
                     <div>
 
                         <div style="text-align: center; background-color:#ffefef; padding:20px">
-                            <h1> @totalAmount</h1>
+                            <h1> @totalAmount.ToString("C")</h1>
                         </div>
 
                         <br />
@@ -95,7 +95,7 @@
 
     public string? paymentGateWay { get; set; }
 
-    public string totalAmount { get; set; }
+    public decimal totalAmount { get; set; }
 
     public MakePaymentVM paymentVM { get; set; }
 
@@ -108,7 +108,7 @@
         if (res.result.code == ResponseCodes.ResponseCodeOk)
         {
             if (res.result.data is List<OrderDto> result)
-                totalAmount = result.FirstOrDefault().totalFee.numberDecimal.ToString("C");
+                totalAmount = result.FirstOrDefault().totalFee.numberDecimal;
         }
         else
         {
