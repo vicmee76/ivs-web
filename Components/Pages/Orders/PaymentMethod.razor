@@ -66,13 +66,15 @@
 
                             <MudGrid>
 
-                                <MudItem xs="7" sm="7" md="7" lg="9" xl="9" xxl="9">
+                                <MudItem xs="7" sm="7" md="7" lg="7" xl="7" xxl="7">
                                     <p style="font-size: larger; font-weight: bold">Total Cost</p>
                                 </MudItem>
-                                <MudItem xs="5" sm="5" md="5" lg="3" xl="3" xxl="3">
+                                <MudItem xs="5" sm="5" md="5" lg="5" xl="5" xxl="5">
                                     <div style="font-size: larger; text-align: end">
                                         <b>@tickets.Sum(x => Convert.ToDecimal(x.totalTicketFeeAndServiceFee)).ToString("C")</b>
-                                        <small style="font-size:smaller; color:palevioletred; font-weight:bold">Includes fees</small>
+                                       <div>
+                                            <small style="font-size:12px; color:palevioletred; font-weight:bold">Includes <span>@tickets.Sum(x => Convert.ToDecimal(x.totalTicketServiceFee)).ToString("C") </span> fees</small>
+                                       </div>
                                     </div>
                                 </MudItem>
 
