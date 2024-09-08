@@ -41,13 +41,13 @@ namespace ivs_ui.Components.Data.Services.Payment
         {
             try
             {
-                var response = await _webService.Call(ApiUrl, $"verify-flutterwave-payment", Method.Post, null, model, null, null);
+                var response = await _webService.Call(ApiUrl, $"verify-flutterwave-payment", Method.Post, null, null, model, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
                     return new ResponseObject();
 
-                res.result.data = JsonConvert.DeserializeObject<List<PaymentDto>>(content?.data?.ToString());
+                res.result.data = JsonConvert.DeserializeObject<List<VerifyPaymentDto>>(content?.data?.ToString());
                 return res;
             }
             catch (Exception ex)
