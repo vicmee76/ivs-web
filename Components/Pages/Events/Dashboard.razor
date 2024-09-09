@@ -42,8 +42,6 @@
                 </MudToolBar>
             </MudPaper>
 
-            <br/>
-
             <MudCard Elevation="0" Style="padding:20px">
                 <MudCardHeader>
                     <CardHeaderContent>
@@ -116,7 +114,8 @@
                                                         }
                                                         else
                                                         {
-
+                                                            <MudMenuItem Href="@updateUrl">Attendance</MudMenuItem>
+                                                            <MudMenuItem Href="@updateUrl">Payments</MudMenuItem>
                                                         }
                                                     </MudMenu>
                                                 </CardHeaderActions>
@@ -189,7 +188,8 @@
                                                     }
                                                     else
                                                     {
-
+                                                        <MudMenuItem Href="@updateUrl">Attendance</MudMenuItem>
+                                                        <MudMenuItem Href="@updateUrl">Payments</MudMenuItem>
                                                     }
                                                 </MudMenu>
                                             </CellTemplate>
@@ -313,6 +313,9 @@ private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
             return true;
 
         if (x.status.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        
+        if (x.createdAt.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
             return true;
 
         if ($"{x.eventName} {x.status} {x.eventOption}".Contains(_searchString))
