@@ -49,12 +49,32 @@
                     <CardHeaderContent>
                         <MudText Typo="Typo.h6"><b>Dashboard</b></MudText>
                     </CardHeaderContent>
+                    
                     <CardHeaderActions>
                         <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.AddCircle" Size="Size.Medium" Href="/events/create-event" Color="Color.Secondary">Create Event</MudButton>
                     </CardHeaderActions>
                 </MudCardHeader>
                 <MudCardContent>
 
+                    <MudDivider></MudDivider>
+                    
+                    <br/>
+
+                    <MudToggleIconButton @bind-Toggled="isGridView"
+                                         Icon="@Icons.Material.Filled.List"
+                                         Color="@Color.Dark"
+                                         Size="Size.Large"
+                                         ToggledIcon="@Icons.Material.Filled.GridView"
+                                         ToggledColor="@Color.Dark"
+                                         ToggledSize="Size.Large"
+                                         title="@(isGridView ? "Showing grid view" : "Showing list view")" />
+
+                    <span>@(isGridView ? "Showing grid view" : "Showing list view")</span>
+                    
+                    <br/><br/>
+                    
+                    <MudDivider></MudDivider>
+                    
                     <br/>
 
                     @if (_processing)
@@ -67,7 +87,9 @@
                     {
                         @if (_eventsDto.Any())
                         {
-                            <MudGrid Spacing="6">
+                            if (isGridView)
+                            {
+                                 <MudGrid Spacing="6">
                                 @foreach (var item in _eventsDto)
                                 {
                                     var activateUrl = $"/events/activate-event/{item._id}";
@@ -78,11 +100,11 @@
                                         <MudCard>
                                             <MudCardHeader>
                                                 <CardHeaderAvatar>
-                                                    <MudAvatar Color="Color.Secondary">@item.eventName[0]</MudAvatar>
+                                                    <MudAvatar Size="Size.Medium" Color="Color.Secondary">@item.eventName[0]</MudAvatar>
                                                 </CardHeaderAvatar>
                                                 <CardHeaderContent>
                                                     <MudText Typo="Typo.body2"><b>@eventName</b></MudText>
-                                                    <MudText Typo="Typo.body1">@item.eventOption event</MudText>
+                                                    <MudText Style="font-size: small" Typo="Typo.body1">@item.eventOption event</MudText>
                                                 </CardHeaderContent>
                                                 <CardHeaderActions>
                                                     <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Default">
@@ -114,7 +136,7 @@
                                             </MudCardContent>
 
                                             <MudCardActions>
-                                                <MudIconButton Icon="@Icons.Material.Filled.Share" Title="Share" Color="Color.Default"/>
+                                                <MudIconButton Icon="@Icons.Material.Filled.Share" Size="Size.Medium" Title="Share" Color="Color.Warning"/>
 
                                                 @if (item.status == Helpers.Pending)
                                                 {
@@ -129,11 +151,11 @@
 
                                                 @if (item.status == Helpers.Pending)
                                                 {
-                                                    <MudIconButton Href="@activateUrl" Icon="@Icons.Material.TwoTone.KeyboardDoubleArrowRight" Title="Publish event" Size="Size.Large" Color="Color.Secondary"/>
+                                                    <MudIconButton Href="@activateUrl" Icon="@Icons.Material.TwoTone.KeyboardDoubleArrowRight" Title="Publish event" Size="Size.Medium" Color="Color.Warning"/>
                                                 }
                                                 else
                                                 {
-                                                    <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleRight" Title="View event" Size="Size.Large" Color="Color.Secondary"/>
+                                                    <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleRight" Title="View event" Size="Size.Medium" Color="Color.Secondary"/>
                                                 }
 
                                             </MudCardActions>
@@ -141,6 +163,81 @@
                                     </MudItem>
                                 }
                             </MudGrid>
+                            }
+                            else
+                            {
+                                <MudDataGrid T="GetEventByUserDto" Elevation="1" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_eventsDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
+                                             Hideable="false">
+                                    <ToolBarContent>
+                                        <MudText Typo="Typo.h6" Color="Color.Secondary"><b>My Events</b></MudText>
+                                        <MudSpacer />
+                                        <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                                                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                    </ToolBarContent>
+                                    <Columns>
+                                        <TemplateColumn  Title="Actions" Sortable="false" Filterable="false">
+                                            <CellTemplate Context="ctx">
+                                                @{
+                                                    var updateUrl = $"/events/update-event/{ctx.Item._id}";
+                                                }
+                                                <MudMenu Icon="@Icons.Material.Filled.Settings" Size="Size.Small" Color="Color.Default">
+                                                    <MudMenuItem>View event</MudMenuItem>
+                                                    @if (ctx.Item.status == Helpers.Pending)
+                                                    {
+                                                        <MudMenuItem Href="@updateUrl">Edit event</MudMenuItem>
+                                                        <MudMenuItem OnClick="@(async (e) => await DeleteEventAction(ctx.Item._id))"> Delete event</MudMenuItem>
+                                                    }
+                                                    else
+                                                    {
+
+                                                    }
+                                                </MudMenu>
+                                            </CellTemplate>
+                                        </TemplateColumn>
+                                        <PropertyColumn Property="x => x.eventOption" Title="Privacy" Sortable="true" Filterable="true"/>
+                                        <PropertyColumn Property="x => x.eventName" Title="Event Name" Sortable="true" Filterable="true"/>
+                                        <PropertyColumn Property="x => x.eventAddress" Title="Event Address" Sortable="false" Filterable="true"/>
+                                        <TemplateColumn Title="Status" Sortable="true" Filterable="true">
+                                            <CellTemplate Context="ctx">
+                                                @if (ctx.Item.status == Helpers.Pending)
+                                                {
+                                                    <MudChip Variant="Variant.Text" Color="Color.Warning"><b>Not published</b></MudChip>
+                                                }
+                                                else
+                                                {
+                                                    <MudChip Variant="Variant.Text" Color="Color.Success"><b>Published</b></MudChip>
+                                                }
+                                            </CellTemplate>
+                                        </TemplateColumn>
+                                        <TemplateColumn Title="Created Date" Sortable="true" Filterable="true">
+                                            <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.createdAt).ToString("F") </CellTemplate>
+                                        </TemplateColumn>
+                                        <TemplateColumn Title="Share" Sortable="false" Filterable="false">
+                                            <CellTemplate Context="ctx">
+                                                <MudIconButton Icon="@Icons.Material.Filled.Share" Size="Size.Small" Title="Click to copy" Color="Color.Warning"/>
+                                            </CellTemplate>
+                                        </TemplateColumn>
+                                        <TemplateColumn Title="Published" Sortable="false" Filterable="false">
+                                            <CellTemplate Context="ctx">
+                                                @{
+                                                    var activateUrl = $"/events/activate-event/{ctx.Item._id}";
+                                                }
+                                                @if (ctx.Item.status == Helpers.Pending)
+                                                {
+                                                    <MudIconButton Href="@activateUrl" Icon="@Icons.Material.TwoTone.KeyboardDoubleArrowRight" Title="Publish event" Size="Size.Medium" Color="Color.Default"/>
+                                                }
+                                                else
+                                                {
+                                                    <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleRight" Title="View event" Size="Size.Medium" Color="Color.Secondary"/>
+                                                }
+                                            </CellTemplate>
+                                        </TemplateColumn>
+                                    </Columns>
+                                    <PagerContent>
+                                        <MudDataGridPager T="GetEventByUserDto" />
+                                    </PagerContent>
+                                </MudDataGrid>
+                            }
                         }
                         else
                         {
@@ -173,11 +270,15 @@
     private string fullname { get; set; }
     private string userId { get; set; }
     private bool _processing { get; set; } = false;
+    private bool isGridView { get; set; } = true;
+    
+    private string _searchString;
+    private bool _sortNameByLength;
     
 private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
 {
-new BreadcrumbItem("Events", href: "#"),
-new BreadcrumbItem("Dashboard", href: null, disabled: true)
+    new BreadcrumbItem("Events", href: "#"),
+    new BreadcrumbItem("Dashboard", href: null, disabled: true)
 };
 
 
@@ -201,7 +302,24 @@ new BreadcrumbItem("Dashboard", href: null, disabled: true)
         StateHasChanged();
     }
     
+   
     
+    private Func<GetEventByUserDto, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
+
+        if (x.eventName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.status.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if ($"{x.eventName} {x.status} {x.eventOption}".Contains(_searchString))
+            return true;
+
+        return false;
+    };
 
 
     private async Task GetEvents()
