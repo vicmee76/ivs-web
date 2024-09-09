@@ -18,6 +18,7 @@ using ivs.Domain.Interfaces.Tickets;
 using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using MudBlazor.Services;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,7 +56,8 @@ builder.Services.AddTransient<IPaymentOptionService, PaymentOptionService>();
 builder.Services.AddTransient<IEventService, EventService>();
 builder.Services.AddTransient<IEventTimeService, EventTimeService>();
 builder.Services.AddTransient<ITicketService, TicketService>();
-builder.Services.AddTransient<IOrdersService, OrdersService>();
+builder.Services.AddTransient<IOrdersAndAttendanceService, OrdersAndAttendanceService>();
+builder.Services.AddTransient<IPaymentService, PaymentService>();
 
 
 var app = builder.Build();

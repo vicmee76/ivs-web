@@ -1,0 +1,148 @@
+﻿@page "/orders/verify-payment"
+
+<PageTitle>Iv's - Payment Status</PageTitle>
+
+
+<MudContainer>
+
+    <br />
+
+    <center>
+        <MudPaper Elevation="0" Outlined="false" MaxWidth="650px" Square="false" Class="ma-2 pa-10">
+
+            @if (_processing)
+            {
+                <div>
+                    <div id="reg-title">Confirming Payment.</div>
+                    <br />
+                    <div style="text-align:center">
+                        <MudProgressCircular Color="Color.Secondary" Style="height:40px;width:40px;" Indeterminate="true" />
+                    </div>
+                    <br />
+                    Please wait....
+                    <br /><br />
+                    <MudIcon Icon="@Icons.Material.Filled.PendingActions" Size="Size.Large" Style="height:100px;width:100px;" Color="Color.Primary"></MudIcon>
+                    <br />
+                    <br />
+                    <h3>
+                        Order ID <br />
+                        @tx_ref
+                    </h3>
+                    <br />
+                    <div style="font-size:medium">Your payment is processing. Do not close this page till you get confirmation.</div>
+                </div>
+            }
+            else
+            {
+                if (_isSuccessful == "successful")
+                {
+                    <div style="">
+                        <div id="reg-title">Payment Successful.</div>
+                        <br />
+                        <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Large" Style="height:150px;width:150px;" Color="Color.Success"></MudIcon>
+                        <br /><br />
+                        <h3>
+                            Order ID <br />
+                            @tx_ref
+                        </h3>
+                        <br />
+                        <div style="font-size:16px; line-height:30px">Your payment is successful, <br />you will get an email with your tickets</div>
+                    </div>
+                }
+                else if (_isSuccessful == "failed")
+                {
+                    <div>
+                        <div id="reg-title">Payment Successful.</div>
+                        <br />
+                        <MudIcon Icon="@Icons.Material.Filled.Cancel" Size="Size.Large" Style="height:150px;width:150px;" Color="Color.Error"></MudIcon>
+                        <br />
+                        <br />
+                        <h3>
+                            Order ID <br />
+                            @tx_ref
+                        </h3>
+                        <br />
+                        <div style="font-size:medium">Opps... Your payment failed!</div>
+                    </div>
+
+                }
+                else
+                {
+                    <div>
+                        <div id="reg-title">Payment Pending.</div>
+                        <br />
+                        <div style="text-align:center">
+                            <MudProgressCircular Color="Color.Secondary" Style="height:40px;width:40px;" Indeterminate="true" />
+                        </div>
+                        <br />
+                        Please wait....
+                        <br /><br />
+                        <MudIcon Icon="@Icons.Material.Filled.PendingActions" Size="Size.Large" Style="height:150px;width:150px;" Color="Color.Primary"></MudIcon>
+                        <br />
+                        <br />
+                        <h3>
+                            Order ID <br />
+                            @tx_ref
+                        </h3>
+                        <br />
+                        <div style="font-size:medium">Your payment is pending. Do not close this page till you get confirmation.</div>
+                    </div>
+                }
+            }
+
+        </MudPaper>
+    </center>
+</MudContainer>
+
+
+@code {
+
+    [Inject] IPaymentService? _paymentService { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "status")]
+    public string? status { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "tx_ref")]
+    public string? tx_ref { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "transaction_id")]
+    public string? transaction_id { get; set; }
+
+    public bool _processing { get; set; } = false;
+    public string _isSuccessful { get; set; } = "pending";
+
+    protected async override void OnInitialized()
+    {
+        _processing = true;
+
+        var queryParams = new Dictionary<string, string?>();
+        queryParams.Add("status", status);
+        queryParams.Add("tx_ref", tx_ref);
+        queryParams.Add("transaction_id", transaction_id);
+
+        if (string.IsNullOrEmpty(transaction_id) || string.IsNullOrEmpty(tx_ref) || string.IsNullOrEmpty(status))
+        {
+            _isSuccessful = "failed";
+        }
+        else
+        {
+            var res = await _paymentService.VerifyPayment(queryParams);
+
+            if (res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true)
+            {
+                _isSuccessful = "successful";
+            }
+            else
+            {
+                _isSuccessful = "failed";
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+        _processing = false;
+        StateHasChanged();
+    }
+}

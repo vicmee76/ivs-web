@@ -1,0 +1,210 @@
+﻿@page "/orders/payment-method/{orderId}"
+
+
+@{
+    CultureInfo nigeriaCulture = new CultureInfo("en-NG");
+    Thread.CurrentThread.CurrentCulture = nigeriaCulture;
+    Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
+}
+
+
+<PageTitle>Iv's - Select Payment Method</PageTitle>
+
+
+<MudContainer>
+
+    <br />
+
+    <center>
+        <MudPaper Elevation="0" Outlined="false" MaxWidth="500px" Square="false" Class="ma-2 pa-10">
+            <div style="text-align:left">
+
+                <div id="reg-title">Choose a payment method.</div>
+                <br />
+               <br />
+
+                @if (_processing)
+                {
+                    <br />
+                    <div style="text-align:center">
+                        <MudProgressCircular Color="Color.Secondary" Style="height:40px;width:40px;" Indeterminate="true" />
+                    </div>
+                }
+                else
+                {
+                    if (tickets.Any())
+                    {
+
+                        <div>
+
+
+
+                            <b> Tickets Summary</b>
+                            <br />
+                            <br />
+                            <br />
+
+                            <MudGrid>
+                                @foreach (var t in tickets)
+                                {
+                                    <MudItem xs="7" sm="7" md="7" lg="9" xl="9" xxl="9">
+                                        <div style="line-height: 23px">
+                                            <p>@t.ticketQuantity X @t.ticketDetails.FirstOrDefault().ticketName</p>
+                                        </div>
+                                    </MudItem>
+                                    <MudItem xs="5" sm="5" md="5" lg="3" xl="3" xxl="3">
+                                        <div style="font-size: 15px; text-align: end">
+                                            <b>@Convert.ToDecimal(t.totalTicketFeeAndServiceFee).ToString("C")</b>
+                                        </div>
+                                    </MudItem>
+                                    <br />
+                                    <MudDivider></MudDivider>
+                                }
+                            </MudGrid>
+
+                            <br /><br />
+
+                            <MudGrid>
+
+                                <MudItem xs="7" sm="7" md="7" lg="7" xl="7" xxl="7">
+                                    <p style="font-size: larger; font-weight: bold">Total Cost</p>
+                                </MudItem>
+                                <MudItem xs="5" sm="5" md="5" lg="5" xl="5" xxl="5">
+                                    <div style="font-size: larger; text-align: end">
+                                        <b>@tickets.Sum(x => Convert.ToDecimal(x.totalTicketFeeAndServiceFee)).ToString("C")</b>
+                                       <div>
+                                            <small style="font-size:12px; color:palevioletred; font-weight:bold">Includes <span>@tickets.Sum(x => Convert.ToDecimal(x.totalTicketServiceFee)).ToString("C") </span> fees</small>
+                                       </div>
+                                    </div>
+                                </MudItem>
+
+                            </MudGrid>
+
+
+                            <br />
+                            <br />
+
+                            <div style="background-color:#f3dff65e; padding:10px">
+
+                                <MudRadioGroup @bind-Value="@paymentGateWay">
+                                    <MudRadio Value="@("Flutterwave")" Color="Color.Secondary">
+                                        <div style="display: flex; align-items: center; padding:20px">
+                                            <MudImage Src="images/backgrounds/flutterwavelogo.png" Alt="Flutterwave logo" Elevation="0" Height="40" Class="rounded-circle" />
+                                            <span style="font-size:14px; font-weight:bold; margin-left: 10px;">Pay with Flutterwave</span>
+                                        </div>
+                                    </MudRadio>
+                                </MudRadioGroup>
+
+                            </div>
+
+                            <br />
+
+                            <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_actionProcessing" OnClick="@( async () => await ActionMakePayment())" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                                @if (_actionProcessing)
+                                {
+                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                    <MudText Class="ms-2">Processing</MudText>
+                                }
+                                else
+                                {
+                                    <MudText><b>Pay Now</b></MudText>
+                                }
+                            </MudButton>
+
+                        </div>
+                    }
+                }
+
+
+            </div>
+        </MudPaper>
+    </center>
+</MudContainer>
+
+
+
+@code {
+
+    [Parameter] public string? orderId { get; set; }
+    [Inject] IOrdersAndAttendanceService? _orderService { get; set; }
+    [Inject] IPaymentService? _paymentService { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+
+    public bool _processing { get; set; } = false;
+    public bool _actionProcessing { get; set; } = false;
+
+    public string? paymentGateWay { get; set; }
+
+    public List<AttendanceDto> tickets = new();
+
+    public decimal totalAmount { get; set; }
+
+    public MakePaymentVM paymentVM { get; set; }
+
+    protected async override void OnInitialized()
+    {
+        _processing = true;
+
+        var res = await _orderService.GetAttendanceByOrderId(orderId);
+
+        if (res.result.code == ResponseCodes.ResponseCodeOk)
+        {
+            if (res.result.data is List<AttendanceDto> result)
+            {
+                tickets = result;
+            }
+            else
+            {
+                _snackbar.Add("Something went wrong, please try again later", Severity.Error);
+            }
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+        }
+        _processing = false;
+        StateHasChanged();
+    }
+
+
+    private async Task ActionMakePayment()
+    {
+        _actionProcessing = true;
+
+        if (string.IsNullOrEmpty(paymentGateWay))
+        {
+            _snackbar.Add("Please choose a payment method", Severity.Error);
+        }
+        else
+        {
+            paymentVM = new MakePaymentVM();
+            paymentVM.orderId = orderId;
+            paymentVM.paymentGateWay = paymentGateWay.ToUpper();
+
+            var res = await _paymentService.GeneratePaymentLink(paymentVM);
+
+            if (res.result.code == ResponseCodes.ResponseCodeOk)
+            {
+                if (res.result.data is List<PaymentDto> result)
+                {
+                    _navigate.NavigateTo(result.FirstOrDefault().link.ToString());
+                }
+                else
+                {
+                    _snackbar.Add("Something went wrong trying to connect to payment gateway, please trying again later.", Severity.Error);
+                }
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+
+
+        }
+
+        _actionProcessing = false;
+    }
+
+
+}

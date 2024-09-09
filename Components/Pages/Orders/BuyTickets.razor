@@ -1,6 +1,13 @@
 ﻿@page "/orders/buy-tickets/{id}"
 
+
 <PageTitle>Iv's - Buy Your Tickets</PageTitle>
+
+@{
+    CultureInfo nigeriaCulture = new CultureInfo("en-NG");
+    Thread.CurrentThread.CurrentCulture = nigeriaCulture;
+    Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
+}
 
 
 <MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="background-color:white">
@@ -44,7 +51,7 @@
                                         @foreach (var tic in com.Tickets)
                                         {
                                             var amount = tic.ticketAmount.numberDecimal.ToString("C");
-                                            <MudItem xs="12" sm="12" md="12" lg="9" xl="9" xxl="9">
+                                            <MudItem xs="12" sm="8" md="8" lg="9" xl="9" xxl="9">
                                                 <div>
                                                     <div><b>@tic.ticketName</b></div>
                                                     <br/>
@@ -55,15 +62,18 @@
                                                 </div>
                                             </MudItem>
 
-                                            <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
+                                            <MudItem xs="12" sm="4" md="4" lg="3" xl="3" xxl="3">
 
                                                 @if (tic.ticketInStock == 0 || date > tic.ticketSalesEndDateAndTime)
                                                 {
-                                                    
+                                                    var notAvailable = tic.ticketInStock == 0 ? "Out of Stock":
+                                                                       date > tic.ticketSalesEndDateAndTime ? "Sales Ended" : "";
+
+                                                        <b style="color:crimson">@notAvailable</b>
                                                 }
                                                 else
                                                 {
-                                                    <MudSelect T="int" Label="Quantity" bind-Value="quantity" Margin="Margin.Dense"  SelectedValuesChanged="@(async (value) => await GenerateCost(tic._id, value))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                                                    <MudSelect T="int" Label="Quantity" bind-Value="quantity" Margin="Margin.Dense"  SelectedValuesChanged="@(async (value) => await GenerateCost(tic._id, com.EventTimeId, value))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
                                                         <MudSelectItem T="int" Value="0" />
                                                         <MudSelectItem T="int" Value="1" />
                                                         <MudSelectItem T="int" Value="2" />
@@ -90,6 +100,56 @@
 
                          
                         }
+                    </div>
+
+                    <br />
+
+                    <div id="discovery-title">
+                        <span id="discovery-title-mid">Contact Information</span>
+                    </div>
+
+                    <br />
+
+                    <div style="font-size:16px; line-height:25px">
+                        We will send all the tickets you selected to the email details provided below after a successful purchase.
+                    </div>
+
+                    <br /><br />
+
+                    <div>
+
+                        <MudGrid>
+
+                            <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
+                                <label>Enter your first name</label>
+                                <MudTextField Label="First Name" Margin="Margin.Dense" @bind-Value="model.firstName" For="@(() => model.firstName)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
+                                <label>Enter your last name</label>
+                                <MudTextField Label="Last Name" Margin="Margin.Dense" @bind-Value="model.lastName" For="@(() => model.lastName)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
+                                <label>Enter your phone number</label>
+                                <MudTextField Label="Phone"  Margin="Margin.Dense" @bind-Value="model.phoneNumber" For="@(() => model.phoneNumber)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" md="6" lg="6" xl="6" xxl="6">
+                                <label>Enter your email</label>
+                                <MudTextField InputType="InputType.Email" Label="Email" Margin="Margin.Dense"  @bind-Value="model.email" For="@(() => model.email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="4" md="4" lg="4" xl="4" xxl="4">
+                                <label>Select your gender</label>
+                                <MudSelect Label="Gender" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="model.gender" For="@(() => model.gender)">
+                                    <MudSelectItem Value="@("M")">M</MudSelectItem>
+                                    <MudSelectItem Value="@("F")">F</MudSelectItem>
+                                </MudSelect>
+                            </MudItem>
+
+                        </MudGrid>
+
                     </div>
                 }
                 else
@@ -165,7 +225,7 @@
                                 </MudItem>
                                 <MudItem xs="5" sm="5" md="5" lg="3" xl="3" xxl="3">
                                     <div style="font-size: large; text-align: end">
-                                        <b>@generateCost.FirstOrDefault().totalServiceFee.ToString("C")</b>
+                                    <b>@generateCost.FirstOrDefault().totalServiceFee.ToString("C")</b>
                                     </div>
                                 </MudItem>
                                 
@@ -193,6 +253,20 @@
                                 </MudItem>
 
                             </MudGrid>
+
+                            <br />
+
+                        <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_saveOrderProcessing" OnClick="@( async () => await ActionSaveOrder())" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                            @if (_saveOrderProcessing)
+                            {
+                                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                <MudText Class="ms-2">Processing</MudText>
+                            }
+                            else
+                            {
+                                <MudText><b>Buy Ticket</b></MudText>
+                            }
+                        </MudButton>
                         }
                         
                         <br/>
@@ -213,26 +287,30 @@
 
 
 @code {
-
     [Parameter] public string? id { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ITicketService? _ticketService { get; set; }
-    [Inject] IOrdersService? _orderService { get; set; }
+    [Inject] IOrdersAndAttendanceService? _orderService { get; set; }
     [Inject] IEventService _eventService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
+    public AttendanceVm? model { get; set; }
 
     IEnumerable<TimeAndTicketGroupingDto> _ticketList = new List<TimeAndTicketGroupingDto>();
-    List<GenerateCostDto> generateCost = new();
+    List<GenerateCostDto> generateCost = [];
+    List<AttendanceVm> _attendanceVms = [];
 
     Dictionary<string, GenerateCostVM> TicketWithQuantity = new();
 
     private bool _processing { get; set; } = false;
     private bool _generateCostProcessing { get; set; } = false;
+    private bool _saveOrderProcessing { get; set; } = false;
     private int quantity { get; set; }
 
 
     protected async override void OnInitialized()
     {
+        model = new AttendanceVm();
+
         _processing = true;
         var res = await _ticketService.GetTicketByEventId(id);
 
@@ -260,7 +338,7 @@
     }
 
 
-    private async Task GenerateCost(string ticketId, IEnumerable<int> value)
+    private async Task GenerateCost(string ticketId, string eventTimeId, IEnumerable<int> value)
     {
         _generateCostProcessing = true;
 
@@ -275,12 +353,13 @@
             var generateCostVm = new GenerateCostVM()
             {
                 eventId = id,
+                eventTimeId = eventTimeId,
                 ticketId = ticketId,
                 quantity = value.FirstOrDefault().ToString()
             };
             TicketWithQuantity[ticketId] = generateCostVm;
         }
-        
+
         var costVm = TicketWithQuantity.Values.ToList();
         if (costVm.Any())
         {
@@ -297,12 +376,86 @@
         }
         else
         {
-            generateCost = new List<GenerateCostDto>();
+            generateCost = [];
         }
 
         _generateCostProcessing = false;
         StateHasChanged();
 
+    }
+
+
+    private async Task ActionSaveOrder()
+    {
+        var context = new ValidationContext(model, serviceProvider: null, items: null);
+        var results = new List<ValidationResult>();
+        Validator.TryValidateObject(model, context, results, true);
+
+        if (results.Any())
+        {
+            foreach (var er in results)
+                _snackbar.Add(er.ErrorMessage, Severity.Error);
+        }
+        else
+        { 
+            if (generateCost.Any())
+            {
+                foreach (var c in generateCost.FirstOrDefault().tickets)
+                {
+                    var dic = TicketWithQuantity[c.ticketId];
+                    var attendance = new AttendanceVm()
+                        {
+                            ivsEventId = id,
+                            eventTimeId = dic.eventTimeId,
+                            ticketId = c.ticketId,
+                            ticketQuantity = c.ticketQuantity.ToString(),
+                            firstName = model.firstName,
+                            lastName = model.lastName,
+                            email = model.email,
+                            phoneNumber = model.phoneNumber,
+                            gender = model.gender,
+                            ticketPrice = c.ticketPrice.ToString(),
+                            ticketServiceFee = c.ticketServiceFee.ToString(),
+                            totalTicketFee = c.totalTicketFee.ToString(),
+                            totalTicketServiceFee = c.totalTicketServiceFee.ToString(),
+                            totalTicketFeeAndServiceFee = c.totalTicketFeeAndServiceFee.ToString(),
+
+                        };
+                    _attendanceVms.Add(attendance);
+                }
+
+                var orderVM = new OrdersVM()
+                {
+                    OrderRequest = new OrderRequest()
+                    {
+                        ivsEventId = id,
+                        totalOrderQuantity = generateCost?.FirstOrDefault()?.totalTicketPurchased.ToString(),
+                        totalServiceFee = generateCost?.FirstOrDefault()?.totalServiceFee.ToString(),
+                        totalTicketFee = generateCost?.FirstOrDefault()?.totalTicketFee.ToString(),
+                        totalFee = generateCost?.FirstOrDefault()?.totalAmount.ToString(),
+                    },
+                    AttendeesRequest = _attendanceVms
+                };
+
+                var order = await _orderService.SaveOrder(orderVM);
+
+                if (order.result.code == ResponseCodes.ResponseCodeOk)
+                {
+                    // https://localhost:5001/orders/payment-method/66ca7841f877ce4ed8d0a593
+                    var orderResult = (OrderDto)order.result.data;
+                    _navigate.NavigateTo($"/orders/payment-method/{orderResult._id}");
+                    _snackbar.Add(order.result.message, Severity.Success);
+                }
+                else
+                {
+                    _snackbar.Add(order.result.message, Severity.Error);
+                }
+            }
+            else
+            {
+                _snackbar.Add("Something went wrong, no tickets were found. Please try again later", Severity.Error);
+            }
+        }
     }
 
 }
