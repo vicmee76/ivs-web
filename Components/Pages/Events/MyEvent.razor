@@ -140,8 +140,7 @@
                      }
                      else
                      {
-                        <MudDataGrid HorizontalScrollbar="true" T="GetEventByUserDto" Elevation="1" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_eventsDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
-                                     Hideable="false">
+                        <MudDataGrid T="GetEventByUserDto" Elevation="1" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_eventsDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter" Hideable="false">
                            <ToolBarContent>
                               <MudText Typo="Typo.h6" Color="Color.Secondary"><b>My Events</b></MudText>
                               <MudSpacer />
@@ -183,7 +182,7 @@
                                     }
                                  </CellTemplate>
                               </TemplateColumn>
-                              <TemplateColumn Title="Created Date" Sortable="true" Filterable="true">
+                              <TemplateColumn Title="Created Date" Sortable="false" Filterable="true">
                                  <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.createdAt).ToString("F") </CellTemplate>
                               </TemplateColumn>
                               <TemplateColumn Title="Share" Sortable="false" Filterable="false">
