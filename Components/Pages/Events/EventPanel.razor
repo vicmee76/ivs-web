@@ -1,0 +1,322 @@
+﻿@page "/events/event-panel/{id}"
+
+<PageTitle>Iv's - Event</PageTitle>
+
+<br />
+<br />
+<br />
+
+<AuthorizeView Roles="User,Admin">
+    <NotAuthorized>
+        No Access
+    </NotAuthorized>
+    <Authorized>
+
+        <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+
+            <MudPaper Elevation="0">
+                <MudToolBar>
+                        
+                    @if (_processing)
+                    {
+                        <MudSkeleton Height="42px" Width="200px" />
+                    }
+                    else
+                    {
+                        @if (eventName != null)
+                        {
+                            <div id="discovery-title-small">@eventName</div>
+                        }
+                    }
+                   
+                    <MudSpacer />
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                </MudToolBar>
+            </MudPaper>
+
+
+            <br /><br />
+
+            <MudTabs Elevation="0" MinimumTabWidth="450px" Border="true" Centered="true" ApplyEffectsToContainer="true" PanelClass="pa-10">
+
+                <MudTabPanel Style="height:70px" Text="About Event">
+                    
+
+                    @if (_processing)
+                    {
+
+                        <MudSkeleton Height="42px" Width="200px" />
+                        <MudSkeleton Height="42px" Width="500px" />
+                        <MudSkeleton Height="42px" Width="800px" />
+                        
+                    }
+                    else
+                    {
+                        <MudPaper Elevation="0" Style="padding:20px">
+
+                            <MudGrid>
+
+                                <MudItem xs="12" sm="12" md="12" lg="4" Style="padding:10px">
+
+                                    <MudText Typo="Typo.body1"><b>Banner</b></MudText>
+
+                                    <br />
+
+                                    <div>
+                                        <MudImage Fluid="true" Src="@_events.eventImagePath" Height="500" Width="500" Alt="Swedish Farm House" Class="rounded-lg" />
+                                    </div>
+
+                                </MudItem>
+
+                                <MudItem xs="12" sm="12" md="12" lg="7" Style="padding:10px">
+
+                                    <MudText Typo="Typo.body1"><b>Event Details</b></MudText>
+
+                                    <br />
+
+
+                                    <div>
+                                        <MudText Typo="Typo.h6"><b>@_events.eventName</b></MudText>
+                                        <br />
+                                        <div>
+                                            <MudChip Size="Size.Medium" Color="Color.Secondary"><b>@_events.eventOption.ToUpper()</b></MudChip>
+                                            <MudChip Size="Size.Medium" Color="Color.Warning"><b>@_events.EventType.FirstOrDefault().name</b></MudChip>
+
+                                        </div>
+                                    </div>
+
+                                    <br />
+
+                                    <div style="line-height:30px; font-size:15px">
+                                        <span>@_events.eventDescription</span>
+                                    </div>
+
+                                    <br /><br />
+
+                                    <div>
+
+                                        <MudText Typo="Typo.body1"><b>Address</b></MudText>
+
+                                        <br />
+
+                                        <div> @_events.eventAddress</div>
+                                        <div> @_events.eventState</div>
+                                        <br />
+                                        <br />
+
+                                        @if (!string.IsNullOrEmpty(_events.adressPin))
+                                        {
+                                            <MudButton Href="@_events.adressPin"
+                                                       Target="_blank"
+                                                       Variant="Variant.Outlined"
+                                                       EndIcon="@Icons.Material.Filled.LocationOn"
+                                                       Color="Color.Secondary"
+                                                       Style="text-transform:none">
+                                                Google address pin link
+                                            </MudButton>
+                                            <br />
+                                        }
+                                    </div>
+
+                                    <br /><br />
+
+
+
+                                    <MudGrid>
+                                        <MudItem xs="12" sm="12" md="12" lg="8" xl="8" xxl="8">
+                                            <div>
+
+                                                <MudText Typo="Typo.body1"><b>Event Time</b></MudText>
+
+                                                <br />
+
+                                                <MudExpansionPanels  DisableBorders="true" MultiExpansion="true" Elevation="0">
+
+                                                    @foreach (var t in _events.EventTime)
+                                                    {
+                                                        <MudExpansionPanel IsExpanded="true" Style="background-color:#fef5ff" Text="@Convert.ToDateTime(t.startDateAndTime).ToString("dddd, dd MMMM yyyy")">
+                                                            <div style="padding:10px; border:1px dashed #f0baf9">
+                                                                <MudText Typo="Typo.body2">Starts At : <b>@Convert.ToDateTime(t.startDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</b> </MudText>
+                                                                <br />
+                                                                <MudText Typo="Typo.body2">Ends At : <b>@Convert.ToDateTime(t.endDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</b> </MudText>
+                                                            </div>
+                                                        </MudExpansionPanel>
+                                                      <br />
+                                                    }
+                                                </MudExpansionPanels>
+
+                                            </div>
+                                        </MudItem>
+
+                                        <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
+                                           
+                                            <div style="text-align:center">
+                                                <MudText Typo="Typo.body1"><b>QR Code</b></MudText>
+
+                                                <br />
+                                                <MudImage Src="@_events.qrCodeLink"></MudImage>
+                                                <br />
+                                                <small>Scan or share this event</small>
+                                            </div>
+
+                                            <br />
+                                        </MudItem>
+                                    </MudGrid>
+
+                                    <br />
+
+
+                                    <div>
+                                        <MudText Typo="Typo.body1"><b>Social Links</b></MudText>
+
+                                        <br />
+
+                                        <div>
+
+                                            @if (!string.IsNullOrWhiteSpace(_events.webLink))
+                                            {
+                                                <div>
+                                                    Visit us on
+                                                    <MudElement HtmlTag="a" Class="ms-1" Style="color:lightsalmon;font-weight:bold;" href="@_events.webLink" target="blank" rel="noopener noreferrer">
+                                                        @_events.webLink
+                                                    </MudElement>
+                                                </div>
+                                                <br />
+                                            }
+
+                                            @if (!string.IsNullOrWhiteSpace(_events.instagramLink))
+                                            {
+                                                <div>
+                                                    Visit us on
+                                                    <MudElement HtmlTag="a" Class="ms-1" Style="color:hotpink;font-weight:bold;" href="@_events.instagramLink" target="blank" rel="noopener noreferrer">
+                                                        @_events.instagramLink
+                                                    </MudElement>
+                                                </div>
+                                                <br />
+                                            }
+
+                                            @if (!string.IsNullOrWhiteSpace(_events.facebookLink))
+                                            {
+                                                <div>
+                                                    Visit us on
+                                                    <MudElement HtmlTag="a" Class="ms-1" Style="color:blue;font-weight:bold;" href="@_events.facebookLink" target="blank" rel="noopener noreferrer">
+                                                        @_events.facebookLink
+                                                    </MudElement>
+                                                </div>
+                                                <br />
+                                            }
+
+                                            @if (!string.IsNullOrWhiteSpace(_events.twitterLink))
+                                            {
+                                                <div>
+                                                    Visit us on
+                                                    <MudElement HtmlTag="a" Class="ms-1" Style="color:black;font-weight:bold;" href="@_events.twitterLink" target="blank" rel="noopener noreferrer">
+                                                        @_events.twitterLink
+                                                    </MudElement>
+                                                </div>
+                                                <br />
+                                            }
+
+
+                                        </div>
+
+                                    </div>
+
+                                </MudItem>
+
+
+
+
+                            </MudGrid>
+
+
+
+                        </MudPaper>
+                    }
+
+
+
+                </MudTabPanel>
+
+
+
+
+
+
+
+                <MudTabPanel Style="height:70px" Text="Tickets">
+                    <MudText>Content Two</MudText>
+                </MudTabPanel>
+
+                <MudTabPanel Style="height:70px" Text="Attendance">
+                    <MudText>Content Three</MudText>
+                </MudTabPanel>
+
+                <MudTabPanel Style="height:70px" Text="Sales">
+                    <MudText>Content Three</MudText>
+                </MudTabPanel>
+
+            </MudTabs>
+
+        </MudContainer>
+
+    </Authorized>
+</AuthorizeView>
+
+
+
+@code {
+
+    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+    [Inject] IEventService _eventService { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+
+    [Parameter] public string? id { get; set; }
+
+    AuthUser authUser = new AuthUser();
+    GetEventDetailsDto _events = new GetEventDetailsDto();
+
+    private string fullname { get; set; }
+    private string userId { get; set; }
+    private string eventName { get; set; }
+    private bool _processing { get; set; } = false;
+
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Events", href: "#"),
+        new BreadcrumbItem("Dashboard", href: "/events/dashboard"),
+        new BreadcrumbItem("Event Details", href: null, disabled: true)
+    };
+
+
+    protected async override void OnInitialized()
+    {
+        _processing = true;
+        var state = await _authStateProvider.GetAuthenticationStateAsync();
+
+        if (!state.User.Identity.IsAuthenticated)
+        {
+            _navigate.NavigateTo("/accounts/login");
+        }
+        else
+        {
+            var auth = await authUser.GetAuthUserAsync(state);
+            userId = auth.Id;
+
+            var res = await _eventService.GetEventDetails(id);
+            if (res.result.code == ResponseCodes.ResponseCodeOk)
+            {
+                _events = res.result.data;
+                eventName = _events.eventName;
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+        _processing = false;
+        StateHasChanged();
+    }
+}

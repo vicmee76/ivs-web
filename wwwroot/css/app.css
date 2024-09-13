@@ -19,6 +19,8 @@
     --bs-nav-link-hover-color: var(--mud-palette-primary-darken) !important;
 }
 
+
+
 #HomeTitle {
     font-size: 5.7rem;
     line-height: 1.4;
@@ -263,6 +265,12 @@
 #discovery-title-mid {
     font-family: "Akaya Telivigala", system-ui;
     font-size: 35px;
+    color: #56375C;
+}
+
+#discovery-title-small {
+    font-family: "Akaya Telivigala", system-ui;
+    font-size: 31px;
     color: #56375C;
 }
 
