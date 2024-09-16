@@ -278,12 +278,22 @@
                                     </MudTimeline>
 
                                     <br />
-
-                                    <center>
-                                        <MudButton ButtonType="ButtonType.Button" Href="@activateUrl" FullWidth="false" Style="height:50px; background-color:#56375C; width:130px" Variant="Variant.Filled" Color="Color.Warning" Class="mt-5">
-                                            <MudText><b>All Done</b></MudText>
-                                        </MudButton>
-                                    </center>
+                                    if (_isActive)
+                                    {
+                                        <center>
+                                            <MudButton ButtonType="ButtonType.Button" Href="@dasboardUrl" FullWidth="false" Style="height:50px; background-color:#56375C; width:130px" Variant="Variant.Filled" Color="Color.Warning" Class="mt-5">
+                                                <MudText><b>Done</b></MudText>
+                                            </MudButton>
+                                        </center>
+                                    }
+                                    else
+                                    {
+                                        <center>
+                                            <MudButton ButtonType="ButtonType.Button" Href="@activateUrl" FullWidth="false" Style="height:50px; background-color:#56375C; width:130px" Variant="Variant.Filled" Color="Color.Warning" Class="mt-5">
+                                                <MudText><b>All Done</b></MudText>
+                                            </MudButton>
+                                        </center>
+                                    }
                                 }
                                 else
                                 {
@@ -342,6 +352,7 @@
     private string userId { get; set; }
     private string eventName { get; set; }
     private string activateUrl { get; set; }
+    private string dasboardUrl { get; set; }
 
     DateTime? date = DateTime.Today;
     TimeSpan? endTime = new TimeSpan(00, 00, 00);
@@ -355,6 +366,8 @@
     private bool _isFreeTicket { get; set; }
     private bool _isLimited { get; set; }
     private bool _isUpdate { get; set; } = false;
+    private bool _isActive { get; set; } = false;
+
 
     private decimal amount { get; set; }
 
@@ -400,14 +413,12 @@
         {
             if (res?.result?.data.status == Helpers.Active)
             {
-                _navigate.NavigateTo("/events/dashboard");
+                _isActive = true;
+                dasboardUrl = "/events/dashboard";
                 _snackbar.Add("Event is already active", Severity.Info);
             }
-            else
-            {
-                eventName = res.result.data.eventName;
-                activateUrl = $"/events/activate-event/{id}";
-            }
+            eventName = res.result.data.eventName;
+            activateUrl = $"/events/activate-event/{id}";
         }
         else
         {

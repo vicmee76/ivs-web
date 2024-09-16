@@ -48,17 +48,23 @@
                         <MudSkeleton Height="42px" Width="200px" />
                         <MudSkeleton Height="42px" Width="500px" />
                         <MudSkeleton Height="42px" Width="800px" />
-                        
+
                     }
                     else
                     {
+
+                        var editBanner = $"/events/upload-banner/{_events._id}";
+                        var editEvent = $"/events/update-event/{_events._id}";
+                        var editTime = $"/events/update-event-time/{_events._id}";
+
+
                         <MudPaper Elevation="0" Style="padding:20px">
 
                             <MudGrid>
 
                                 <MudItem xs="12" sm="12" md="12" lg="4" Style="padding:10px">
 
-                                    <MudText Typo="Typo.body1"><b>Banner</b></MudText>
+                                    <MudText Typo="Typo.body1"><b>Banner</b>  <MudIconButton Href="@editBanner" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton> </MudText>
 
                                     <br />
 
@@ -70,7 +76,7 @@
 
                                 <MudItem xs="12" sm="12" md="12" lg="7" Style="padding:10px">
 
-                                    <MudText Typo="Typo.body1"><b>Event Details</b></MudText>
+                                    <MudText Typo="Typo.body1"><b>Event Details</b> <MudIconButton Href="@editEvent" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton></MudText>
 
                                     <br />
 
@@ -126,7 +132,7 @@
                                         <MudItem xs="12" sm="12" md="12" lg="8" xl="8" xxl="8">
                                             <div>
 
-                                                <MudText Typo="Typo.body1"><b>Event Time</b></MudText>
+                                                <MudText Typo="Typo.body1"><b>Event Time</b> <MudIconButton Href="@editTime" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton> </MudText>
 
                                                 <br />
 

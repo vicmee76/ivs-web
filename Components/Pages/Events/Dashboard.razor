@@ -156,9 +156,11 @@
                                         <CellTemplate Context="ctx">
                                             @{
                                                 var eventPanelUrl = $"/events/event-panel/{ctx.Item.ivsEventId}";
+                                                var updateUrl = $"/events/update-event/{ctx.Item.ivsEventId}";
                                             }
                                             <MudMenu Icon="@Icons.Material.Filled.Settings" Size="Size.Small" Color="Color.Default">
                                                 <MudMenuItem Href="@eventPanelUrl">View event</MudMenuItem>
+                                                <MudMenuItem Href="@updateUrl">Edit event</MudMenuItem>
                                             </MudMenu>
                                         </CellTemplate>
                                     </TemplateColumn>

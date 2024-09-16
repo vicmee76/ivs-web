@@ -194,14 +194,10 @@
             {
                 if (res?.result?.data.status == Helpers.Active)
                 {
-                    _navigate.NavigateTo("/events/dashboard");
                     _snackbar.Add("Event is already active", Severity.Info);
                 }
-                else
-                {
-                    eventName = res?.result?.data.eventName;
-                    imageData = res.result.data.eventImagePath;
-                }
+                eventName = res?.result?.data.eventName;
+                imageData = res.result.data.eventImagePath;
             }
             else
             {
