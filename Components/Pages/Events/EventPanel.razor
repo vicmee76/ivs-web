@@ -1,5 +1,11 @@
 ﻿@page "/events/event-panel/{id}"
 
+@{
+    CultureInfo nigeriaCulture = new CultureInfo("en-NG");
+    Thread.CurrentThread.CurrentCulture = nigeriaCulture;
+    Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
+}
+
 <PageTitle>Iv's - Event</PageTitle>
 
 <br />
@@ -60,7 +66,9 @@
 
                         <MudPaper Elevation="0" Style="padding:20px">
 
-                            <MudGrid>
+                            @if(_events != null)
+                            {
+                                  <MudGrid>
 
                                 <MudItem xs="12" sm="12" md="12" lg="4" Style="padding:10px">
 
@@ -244,7 +252,10 @@
 
 
 
-                            </MudGrid>
+                                </MudGrid>  
+                                
+                              
+                            }
 
 
 
@@ -257,14 +268,124 @@
 
 
                 <MudTabPanel Style="height:70px" Text="Tickets">
-                    <MudText>Content Two</MudText>
+
+
+                    @if (_processing)
+                    {
+
+                        <MudSkeleton Height="42px" Width="200px" />
+                        <MudSkeleton Height="42px" Width="500px" />
+                        <MudSkeleton Height="42px" Width="800px" />
+
+                    }
+                    else
+                    {
+                        var editTickets = $"/events/update-event-tickets/{_events._id}";
+
+
+                        <MudPaper Elevation="0" Style="padding:20px">
+
+                            <MudText Typo="Typo.body1"><b>Event Tickest</b>  <MudIconButton Href="@editTickets" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Title="Edit tickets" Size="Size.Small"></MudIconButton> </MudText>
+
+                            <br />
+
+
+                            @if (_ticketList.Any())
+                            {
+                                foreach (var com in _ticketList)
+                                {
+                                    var title = $"{Convert.ToDateTime(com.StartDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")}";
+
+                                    <div style="font-size: 15px; color: rgb(79 79 80); background-color: #fdf6fdfc; font-weight: bolder; padding: 20px">@title -- <span style="color:dodgerblue">@com.Tickets.Count Ticket(s)</span></div>
+
+                                    <br />
+                                    <div style="padding: 5px">
+
+                                        @if (com.Tickets.Any())
+                                        {
+                                            <MudGrid>
+                                                @foreach (var tic in com.Tickets)
+                                                {
+                                                    var amount = Convert.ToDecimal(tic.ticketAmount.numberDecimal).ToString("C");
+                                                    <MudItem xs="12" sm="12" md="4" lg="3" xl="3" xxl="3">
+                                                     
+                                                        <MudCard>
+                                                            <MudCardHeader>
+                                                                <CardHeaderContent>
+                                                                    <MudText Style="font-size:16px" Color="Color.Dark"><b>@tic.ticketName</b></MudText>
+                                                                </CardHeaderContent>
+                                                                <CardHeaderActions>
+
+                                                                    <MudMenu Icon="@Icons.Material.Filled.Settings" Size="Size.Small" Color="Color.Default">
+                                                                        <MudMenuItem Href="">Add Coupon</MudMenuItem>
+                                                                        <MudMenuItem Href="">View Coupon</MudMenuItem>
+                                                                        <MudMenuItem Href="">View Sales</MudMenuItem>
+                                                                        <MudMenuItem Href="">View Attendance</MudMenuItem>
+                                                                    </MudMenu>
+
+                                                                </CardHeaderActions>
+                                                            </MudCardHeader>
+                                                            <MudCardContent>
+
+                                                                <div style="line-height:30px;">
+
+                                                                    <p> <b>Description : </b> @tic.ticketDescription </p>
+                                                                    <p> <b>Ticket Kind : </b> @tic.ticketKind </p>
+                                                                    <p> <b>Admits : </b> @tic.groupSize </p>
+                                                                    <p> <b>Stock : </b>@tic.ticketInStock in stock</p>
+                                                                    <p><b>Sales Start Date : </b> @tic.ticketSalesStartDateAndTime?.ToString("ddd, dd MMM yyyy, HH:mm tt")</p>
+                                                                    <p> <b>Sales End Date : </b>  @tic.ticketSalesEndDateAndTime?.ToString("ddd, dd MMM yyyy, HH:mm tt")</p>
+                                                                    <p><b>Stock : </b> @tic.ticketInStock.ToString("#,##")</p>
+
+                                                                </div>
+                                                            </MudCardContent>
+                                                            <MudCardActions>
+                                                                <MudButton Variant="Variant.Text" Color="Color.Secondary" Style="font-weight:bold">@amount</MudButton>
+                                                            </MudCardActions>
+                                                        </MudCard>
+
+
+
+                                                    </MudItem>
+
+
+                                                   
+
+                                                }
+
+                                            </MudGrid>
+                                        }
+                                        else
+                                        {
+                                            <b>No Ticket found</b>
+                                        }
+                                    </div>
+
+                                    <br />
+
+
+                                }
+                            }
+
+
+
+
+                        </MudPaper>
+                    }
+
+
+
+
                 </MudTabPanel>
 
-                <MudTabPanel Style="height:70px" Text="Attendance">
+
+
+
+                <MudTabPanel Style="height:70px" Text="General Attendance">
                     <MudText>Content Three</MudText>
                 </MudTabPanel>
 
-                <MudTabPanel Style="height:70px" Text="Sales">
+                <MudTabPanel Style="height:70px" Text=" General Sales">
                     <MudText>Content Three</MudText>
                 </MudTabPanel>
 
@@ -281,6 +402,7 @@
 
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
     [Inject] IEventService _eventService { get; set; }
+    [Inject] ITicketService? _ticketService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
 
@@ -288,6 +410,7 @@
 
     AuthUser authUser = new AuthUser();
     GetEventDetailsDto _events = new GetEventDetailsDto();
+    IEnumerable<TimeAndTicketGroupingDto> _ticketList = new List<TimeAndTicketGroupingDto>();
 
     private string fullname { get; set; }
     private string userId { get; set; }
@@ -317,18 +440,52 @@
             var auth = await authUser.GetAuthUserAsync(state);
             userId = auth.Id;
 
-            var res = await _eventService.GetEventDetails(id);
-            if (res.result.code == ResponseCodes.ResponseCodeOk)
+            var res1 = await _eventService.GetEventDetails(id);
+            if (res1.result.code == ResponseCodes.ResponseCodeOk)
             {
-                _events = res.result.data;
+                _events = res1.result.data;
                 eventName = _events.eventName;
+
+                var res = await _ticketService.GetTicketByEventId(id);
+                if (res.result.code == ResponseCodes.ResponseCodeOk)
+                {
+                    if (res.result.data is List<TicketDto> result)
+                    {
+                        _ticketList = result
+                            .GroupBy(ticket => new { ticket.eventTimeDetails._id, ticket.eventTimeDetails.startDateAndTime })
+                            .Select(group => new TimeAndTicketGroupingDto
+                                {
+                                    EventTimeId = group.Key._id,
+                                    StartDateAndTime = group.Key.startDateAndTime,
+                                    Tickets = group.ToList()
+                                }).ToList();
+                    }
+                }
+                else
+                {
+                    _snackbar.Add(res.result.message, Severity.Error);
+                }
             }
             else
             {
-                _snackbar.Add(res.result.message, Severity.Error);
+                _snackbar.Add(res1.result.message, Severity.Error);
             }
+            
+
         }
         _processing = false;
         StateHasChanged();
+    }
+
+
+    private async void GetEventDetails()
+    {
+       
+    }
+
+
+    private async void GetEventTickets()
+    {
+        
     }
 }
