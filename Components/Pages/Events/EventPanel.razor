@@ -414,7 +414,7 @@
 
                                     <div>
 
-                                    <MudDataGrid @ref="dataGrid" T="AttendanceDto" RowsPerPage="25" ServerData="ServerReload" Filterable="false" Hover="true" Loading="@_attendanceProcessing" LoadingProgressColor="Color.Primary" Striped="true" Bordered="true">
+                                    <MudDataGrid @ref="dataGrid" T="AttendanceDto" RowsPerPage="10" ServerData="ServerReload" Filterable="false" Hover="true" Loading="@_attendanceProcessing" LoadingProgressColor="Color.Primary" Striped="true" Bordered="true">
                                         <ToolBarContent>
 
                                             <MudText Typo="Typo.h6" Color="Color.Secondary"><b>Attendance</b></MudText>
@@ -476,7 +476,7 @@
                                             </TemplateColumn>
 
                                             <TemplateColumn Title="Event Date" Sortable="false" Filterable="false">
-                                                <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.ticketDetails.FirstOrDefault().startDateAndTime).ToString("F") </CellTemplate>
+                                                <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.ticketDetails.FirstOrDefault().startDateAndTime).ToString("ddd, dd MMM yyyy, HH:mm tt") </CellTemplate>
                                             </TemplateColumn>
 
                                            
@@ -618,8 +618,8 @@
 
         if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
         {
-
-            IEnumerable<AttendanceDto> data = (List<AttendanceDto>)res.result.data;
+            var result = (GetAttendanceDto)res.result.data;
+            IEnumerable<AttendanceDto> data = (List<AttendanceDto>)result.paginatedResults;
 
             data = data.Where(element =>
             {
@@ -636,7 +636,7 @@
                 return false;
             }).ToArray();
 
-            var totalItems = data.Count();
+            var totalItems = result.totalCount;
 
             var sortDefinition = state.SortDefinitions.FirstOrDefault();
 
@@ -665,7 +665,7 @@
                 }
             }
 
-            var pagedData = data.Skip(state.Page * state.PageSize).Take(state.PageSize).ToArray();
+            var pagedData = data.ToArray();
 
             _attendanceProcessing = false;
             return new GridData<AttendanceDto>

@@ -1,5 +1,12 @@
 ﻿namespace ivs.Domain.Models.Dtos.Orders
 {
+
+    public class GetAttendanceDto
+    {
+        public int totalCount { get; set; }
+        public List<AttendanceDto> paginatedResults { get; set; }
+    }
+
     public class AttendanceDto
     {
         public string _id { get; set; }
