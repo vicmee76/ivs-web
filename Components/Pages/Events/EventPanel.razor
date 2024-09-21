@@ -417,7 +417,7 @@
                                     <MudDataGrid @ref="dataGrid" T="AttendanceDto" RowsPerPage="25" ServerData="ServerReload" Filterable="false" Hover="true" Loading="@_attendanceProcessing" LoadingProgressColor="Color.Primary" Striped="true" Bordered="true">
                                         <ToolBarContent>
 
-                                            <MudText Typo="Typo.h6">Attendance</MudText>
+                                            <MudText Typo="Typo.h6" Color="Color.Secondary"><b>Attendance</b></MudText>
 
                                             <MudSpacer />
                                             <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start"
@@ -616,7 +616,7 @@
 
         var res = await _ordersAndAttendanceService.GetAttendanceByEventId(id, queryParameter);
 
-        if (res.result.code == ResponseCodes.ResponseCodeOk)
+        if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
         {
 
             IEnumerable<AttendanceDto> data = (List<AttendanceDto>)res.result.data;
