@@ -1,3 +1,5 @@
+using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 using ivs.Domain.Constants;
 using ivs.Domain.Interfaces.General;
 using ivs.Domain.Interfaces.Orders;
@@ -9,9 +11,11 @@ using System.Reflection;
 
 namespace ivs_ui.Components.Data.Services.Orders;
 
-public class OrdersAndAttendanceService(IWebService _webService) : IOrdersAndAttendanceService
+public class OrdersAndAttendanceService(IWebService _webService, ILocalStorageService sessionStorageService) : IOrdersAndAttendanceService
 {
     private const string ApiUrl = "/api/v1/orders/";
+
+    private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
 
     public async Task<ResponseObject> GetOrderById(string id)
     {
@@ -113,5 +117,45 @@ public class OrdersAndAttendanceService(IWebService _webService) : IOrdersAndAtt
                 }
             };
         }
+    }
+
+    public async Task<ResponseObject> GetAttendanceByEventId(string eventId, Dictionary<string, string> queryParam)
+    {
+        try
+        {
+            var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+            var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+
+            var response = await _webService.Call(ApiUrl, $"get-attendance-by-event-id/{eventId}", Method.Get, null, headers, queryParam, null);
+            var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+            var content = res?.result;
+            if (content?.code != ResponseCodes.ResponseCodeOk)
+                return new ResponseObject();
+
+            res.result.data = JsonConvert.DeserializeObject<List<AttendanceDto>>(content?.data?.ToString());
+            return res;
+        }
+        catch (Exception ex)
+        {
+            return new ResponseObject()
+            {
+                result = new ResponseContents()
+                {
+                    message = "Error! Something went wrong trying to get attendace record by, please try again later",
+                }
+            };
+        }
+    }
+
+
+
+    public Task<ResponseObject> GetAttendanceByEventTimeId(string timeId, Dictionary<string, string> queryParam)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<ResponseObject> GetAttendanceByTicketId(string ticketId, Dictionary<string, string> queryParam)
+    {
+        throw new NotImplementedException();
     }
 }

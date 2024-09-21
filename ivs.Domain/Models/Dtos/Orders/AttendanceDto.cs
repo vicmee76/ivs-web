@@ -23,7 +23,7 @@
         public bool emailSent { get; set; }
         public DateTime createdAt { get; set; }
         public string code { get; set; }
-        public string qrCode { get; set; }
+       // public string qrCode { get; set; }
         public string purchaseLink { get; set; }
         public DateTime emailSentAt { get; set; }
         public Ticketdetail[] ticketDetails { get; set; }
@@ -33,5 +33,6 @@
     {
         public string ticketName { get; set; }
         public string ticketKind { get; set; }
+        public string startDateAndTime { get; set; }
     }
 }

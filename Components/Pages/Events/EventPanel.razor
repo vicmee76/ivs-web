@@ -396,7 +396,107 @@
 
 
                 <MudTabPanel Style="height:70px" Text="General Attendance">
-                    <MudText>Content Three</MudText>
+
+                     @if (_processing)
+                    {
+
+                        <MudSkeleton Height="42px" Width="200px" />
+                        <MudSkeleton Height="42px" Width="500px" />
+                        <MudSkeleton Height="42px" Width="800px" />
+
+                    }
+                    else
+                    {
+
+                            <MudCard Elevation="0">
+                               
+                                <MudCardContent>
+
+                                    <div>
+
+                                    <MudDataGrid @ref="dataGrid" T="AttendanceDto" RowsPerPage="25" ServerData="ServerReload" Filterable="false" Hover="true" Loading="@_attendanceProcessing" LoadingProgressColor="Color.Primary" Striped="true" Bordered="true">
+                                        <ToolBarContent>
+
+                                            <MudText Typo="Typo.h6">Attendance</MudText>
+
+                                            <MudSpacer />
+                                            <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start"
+                                                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                            
+                                            <MudMenu Icon="@Icons.Material.Filled.Settings" Size="Size.Small" Color="Color.Default">
+                                                <MudMenuItem Href="">View All Attendance </MudMenuItem>
+                                                @foreach (var com in _ticketList)
+                                                {
+                                                    var title = $"{Convert.ToDateTime(com.StartDateAndTime).ToString("dddd, dd MMMM yyyy")}";
+
+                                                    <MudMenuItem Href="">View Attendance for @title</MudMenuItem>
+                                                }
+                                            </MudMenu>
+                                        </ToolBarContent>
+                                        <Columns>
+
+                                            <TemplateColumn Title="Action" Sortable="false" Filterable="false">
+                                                <CellTemplate Context="ctx">
+                                                    @if (!ctx.Item.isActive)
+                                                    {
+                                                        <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Primary">Admit</MudButton>
+                                                    }
+                                                </CellTemplate>
+                                            </TemplateColumn>
+
+                                            <PropertyColumn Property="x => x.code" Title="Code" />
+                                            <PropertyColumn Property="x => x.firstName" Title="First Name" />
+                                            <PropertyColumn Property="x => x.lastName" Title="Last Name"/>
+                                            <PropertyColumn Property="x => x.email" Title="Email"/>
+                                            <PropertyColumn Property="x => x.phoneNumber" Title="Phone No"/>
+
+                                            <TemplateColumn Title="Checked In" Sortable="false" Filterable="false">
+                                                <CellTemplate Context="ctx"> 
+                                                    @if (ctx.Item.isActive)
+                                                    {
+                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Success">Success</MudChip>
+                                                    }
+                                                    else
+                                                    {
+                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary">Pending</MudChip>
+                                                    }
+                                                </CellTemplate>
+                                            </TemplateColumn>
+
+                                            <TemplateColumn Title="Ticket" Sortable="false" Filterable="false">
+                                                <CellTemplate Context="ctx">
+                                                    <span>@ctx.Item.ticketDetails.FirstOrDefault().ticketName - @ctx.Item.ticketDetails.FirstOrDefault().ticketKind</span>
+                                                </CellTemplate>
+                                            </TemplateColumn>
+
+                                            <PropertyColumn Property="x => x.ticketQuantity" Title="Qty" />
+
+                                            <TemplateColumn Title="Amount Paid" Sortable="false" Filterable="false">
+                                                <CellTemplate Context="ctx"> @Convert.ToDecimal(ctx.Item.totalTicketFee).ToString("C") </CellTemplate>
+                                            </TemplateColumn>
+
+                                            <TemplateColumn Title="Event Date" Sortable="false" Filterable="false">
+                                                <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.ticketDetails.FirstOrDefault().startDateAndTime).ToString("F") </CellTemplate>
+                                            </TemplateColumn>
+
+                                           
+                                          
+                                        </Columns>
+                                        <PagerContent>
+                                            <MudDataGridPager T="AttendanceDto" />
+                                        </PagerContent>
+                                    </MudDataGrid>
+
+                                    </div>
+                                  
+                                </MudCardContent>
+                                <MudCardActions>
+                                    <MudButton Variant="Variant.Text" Color="Color.Secondary" Style="font-weight:bold"></MudButton>
+                                </MudCardActions>
+                            </MudCard>
+                              
+                    }
+
                 </MudTabPanel>
 
 
@@ -420,6 +520,7 @@
 
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
     [Inject] IEventService _eventService { get; set; }
+    [Inject] IOrdersAndAttendanceService _ordersAndAttendanceService { get; set; }
     [Inject] ITicketService? _ticketService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
@@ -430,10 +531,16 @@
     GetEventDetailsDto _events = new GetEventDetailsDto();
     IEnumerable<TimeAndTicketGroupingDto> _ticketList = new List<TimeAndTicketGroupingDto>();
 
+    private List<AttendanceDto> _attendance { get; set; } = null;
+
+    MudDataGrid<AttendanceDto> dataGrid;
+    string searchString = null;
+
     private string fullname { get; set; }
     private string userId { get; set; }
     private string eventName { get; set; }
     private bool _processing { get; set; } = false;
+    private bool _attendanceProcessing { get; set; } = false;
 
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
@@ -478,6 +585,7 @@
                                     Tickets = group.ToList()
                                 }).OrderByDescending(x => Convert.ToDateTime(x.StartDateAndTime)).ToList();
                     }
+
                 }
                 else
                 {
@@ -488,7 +596,7 @@
             {
                 _snackbar.Add(res1.result.message, Severity.Error);
             }
-            
+
 
         }
         _processing = false;
@@ -496,14 +604,94 @@
     }
 
 
-    private async void GetEventDetails()
+
+    private async Task<GridData<AttendanceDto>> ServerReload(GridState<AttendanceDto> state)
     {
-       
+        _attendanceProcessing = true;
+
+        Dictionary<string, string> queryParameter = new Dictionary<string, string> { { "page", state.Page.ToString() }, { "limit", state.PageSize.ToString() } };
+
+        if (!string.IsNullOrWhiteSpace(searchString))
+            queryParameter.Add("searchQuery", searchString.ToLower());
+
+        var res = await _ordersAndAttendanceService.GetAttendanceByEventId(id, queryParameter);
+
+        if (res.result.code == ResponseCodes.ResponseCodeOk)
+        {
+
+            IEnumerable<AttendanceDto> data = (List<AttendanceDto>)res.result.data;
+
+            data = data.Where(element =>
+            {
+                if (string.IsNullOrWhiteSpace(searchString))
+                    return true;
+                if (element.firstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if (element.code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if (element.lastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if ($"{element.firstName} {element.lastName} {element.phoneNumber}".Contains(searchString))
+                    return true;
+                return false;
+            }).ToArray();
+
+            var totalItems = data.Count();
+
+            var sortDefinition = state.SortDefinitions.FirstOrDefault();
+
+            if (sortDefinition != null)
+            {
+                switch (sortDefinition.SortBy)
+                {
+                    case nameof(AttendanceDto.firstName):
+                        data = data.OrderByDirection(
+                            sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
+                            o => o.firstName
+                        );
+                        break;
+                    case nameof(AttendanceDto.lastName):
+                        data = data.OrderByDirection(
+                            sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
+                            o => o.lastName
+                        );
+                        break;
+                    case nameof(AttendanceDto.phoneNumber):
+                        data = data.OrderByDirection(
+                            sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
+                            o => o.phoneNumber
+                        );
+                        break;
+                }
+            }
+
+            var pagedData = data.Skip(state.Page * state.PageSize).Take(state.PageSize).ToArray();
+
+            _attendanceProcessing = false;
+            return new GridData<AttendanceDto>
+                {
+                    TotalItems = totalItems,
+                    Items = pagedData
+                };
+
+        }
+
+        else
+        {
+            _attendanceProcessing = false;
+            return new GridData<AttendanceDto>
+                {
+                    TotalItems = 0,
+                    Items = new List<AttendanceDto>()
+                };
+            
+        }
     }
 
-
-    private async void GetEventTickets()
+    private Task OnSearch(string text)
     {
-        
+        searchString = text;
+        return dataGrid.ReloadServerData();
     }
+
 }

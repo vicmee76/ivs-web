@@ -9,4 +9,7 @@ public interface IOrdersAndAttendanceService
     public Task<ResponseObject> SaveOrder(OrdersVM model);
     public Task<ResponseObject> GetOrderById(string id);
     public Task<ResponseObject> GetAttendanceByOrderId(string orderId);
+    public Task<ResponseObject> GetAttendanceByEventId(string eventId, Dictionary<string, string> queryParam);
+    public Task<ResponseObject> GetAttendanceByEventTimeId(string timeId, Dictionary<string, string> queryParam);
+    public Task<ResponseObject> GetAttendanceByTicketId(string ticketId, Dictionary<string, string> queryParam);
 }
