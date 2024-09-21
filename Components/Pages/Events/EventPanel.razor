@@ -417,10 +417,10 @@
                                     <MudDataGrid @ref="dataGrid" T="AttendanceDto" RowsPerPage="10" ServerData="ServerReload" Filterable="false" Hover="true" Loading="@_attendanceProcessing" LoadingProgressColor="Color.Primary" Striped="true" Bordered="true">
                                         <ToolBarContent>
 
-                                            <MudText Typo="Typo.h6" Color="Color.Secondary"><b>Attendance</b></MudText>
+                                            <MudText Typo="Typo.h6" Color="Color.Secondary"><b>Attendance</b> <MudChip T="string" Variant="Variant.Outlined" Color="Color.Primary"><b>@totalAttendanceCount</b></MudChip></MudText>
 
                                             <MudSpacer />
-                                            <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start"
+                                            <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search with code, name, email, phone" Adornment="Adornment.Start"
                                                           AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                                             
                                             <MudMenu Icon="@Icons.Material.Filled.Settings" Size="Size.Small" Color="Color.Default">
@@ -538,6 +538,7 @@
 
     private string fullname { get; set; }
     private string userId { get; set; }
+    private int totalAttendanceCount { get; set; }
     private string eventName { get; set; }
     private bool _processing { get; set; } = false;
     private bool _attendanceProcessing { get; set; } = false;
@@ -637,6 +638,7 @@
             }).ToArray();
 
             var totalItems = result.totalCount;
+            totalAttendanceCount = result.totalCount;
 
             var sortDefinition = state.SortDefinitions.FirstOrDefault();
 
