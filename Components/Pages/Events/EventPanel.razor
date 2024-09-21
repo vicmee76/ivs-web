@@ -296,85 +296,99 @@
                                 {
                                     var title = $"{Convert.ToDateTime(com.StartDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")}";
 
-                                    <div style="font-size: 15px; color: rgb(79 79 80); background-color: #fdf6fdfc; font-weight: bolder; padding: 20px">@title -- <span style="color:dodgerblue">@com.Tickets.Count Ticket(s)</span></div>
+                                    <MudCard Elevation="2">
+                                        <MudCardHeader Style=" background-color: #fdf6fdfc;">
+                                            <CardHeaderContent>
+                                                <MudText Style="font-size:16px" Color="Color.Dark"><b>@title</b></MudText>
+                                            </CardHeaderContent>
+                                            <CardHeaderActions>
 
-                                    <br />
-                                    <div style="padding: 5px">
+                                                <MudMenu Icon="@Icons.Material.Filled.Menu" Size="Size.Small" Color="Color.Default">
+                                                    <MudMenuItem Href="">View Sales</MudMenuItem>
+                                                    <MudMenuItem Href="">View Attendance</MudMenuItem>
+                                                </MudMenu>
 
-                                        @if (com.Tickets.Any())
-                                        {
-                                            <MudGrid>
-                                                @foreach (var tic in com.Tickets)
+                                            </CardHeaderActions>
+                                        </MudCardHeader>
+                                        <MudCardContent>
+
+                                            <div style="padding: 5px">
+
+                                                @if (com.Tickets.Any())
                                                 {
-                                                    var amount = Convert.ToDecimal(tic.ticketAmount.numberDecimal).ToString("C");
-                                                    <MudItem xs="12" sm="12" md="4" lg="3" xl="3" xxl="3">
-                                                     
-                                                        <MudCard>
-                                                            <MudCardHeader>
-                                                                <CardHeaderContent>
-                                                                    <MudText Style="font-size:16px" Color="Color.Dark"><b>@tic.ticketName</b></MudText>
-                                                                </CardHeaderContent>
-                                                                <CardHeaderActions>
 
-                                                                    <MudMenu Icon="@Icons.Material.Filled.Settings" Size="Size.Small" Color="Color.Default">
-                                                                        <MudMenuItem Href="">Add Coupon</MudMenuItem>
-                                                                        <MudMenuItem Href="">View Coupon</MudMenuItem>
-                                                                        <MudMenuItem Href="">View Sales</MudMenuItem>
-                                                                        <MudMenuItem Href="">View Attendance</MudMenuItem>
-                                                                    </MudMenu>
+                                                    <MudGrid>
+                                                        @foreach (var tic in com.Tickets)
+                                                        {
+                                                            var amount = Convert.ToDecimal(tic.ticketAmount.numberDecimal).ToString("C");
+                                                            <MudItem xs="12" sm="12" md="4" lg="3" xl="3" xxl="3">
 
-                                                                </CardHeaderActions>
-                                                            </MudCardHeader>
-                                                            <MudCardContent>
+                                                                <MudCard Elevation="0" Style="border: 1px dashed">
+                                                                    <MudCardHeader>
+                                                                        <CardHeaderContent>
+                                                                            <MudText Style="font-size:16px" Color="Color.Dark"><b>@tic.ticketName</b></MudText>
+                                                                        </CardHeaderContent>
+                                                                        <CardHeaderActions>
 
-                                                                <div style="line-height:30px;">
+                                                                            <MudMenu Icon="@Icons.Material.Filled.Settings" Size="Size.Small" Color="Color.Default">
+                                                                                <MudMenuItem Href="">Add Coupon</MudMenuItem>
+                                                                                <MudMenuItem Href="">View Coupon</MudMenuItem>
+                                                                                <MudMenuItem Href="">View Sales</MudMenuItem>
+                                                                                <MudMenuItem Href="">View Attendance</MudMenuItem>
+                                                                            </MudMenu>
 
-                                                                    <p> <b>Description : </b> @tic.ticketDescription </p>
-                                                                    <p> <b>Ticket Kind : </b> @tic.ticketKind </p>
-                                                                    <p> <b>Admits : </b> @tic.groupSize </p>
-                                                                    <p> <b>Stock : </b>@tic.ticketInStock in stock</p>
-                                                                    <p><b>Sales Start Date : </b> @tic.ticketSalesStartDateAndTime?.ToString("ddd, dd MMM yyyy, HH:mm tt")</p>
-                                                                    <p> <b>Sales End Date : </b>  @tic.ticketSalesEndDateAndTime?.ToString("ddd, dd MMM yyyy, HH:mm tt")</p>
-                                                                    <p><b>Stock : </b> @tic.ticketInStock.ToString("#,##")</p>
+                                                                        </CardHeaderActions>
+                                                                    </MudCardHeader>
+                                                                    <MudCardContent>
 
-                                                                </div>
-                                                            </MudCardContent>
-                                                            <MudCardActions>
-                                                                <MudButton Variant="Variant.Text" Color="Color.Secondary" Style="font-weight:bold">@amount</MudButton>
-                                                            </MudCardActions>
-                                                        </MudCard>
+                                                                        <div style="line-height:30px;">
+
+                                                                            <p> <b>Description : </b> @tic.ticketDescription </p>
+                                                                            <p> <b>Ticket Kind : </b> @tic.ticketKind </p>
+                                                                            <p> <b>Admits : </b> @tic.groupSize </p>
+                                                                            <p> <b>Stock : </b>@tic.ticketInStock in stock</p>
+                                                                            <p><b>Sales Start Date : </b> @tic.ticketSalesStartDateAndTime?.ToString("ddd, dd MMM yyyy, HH:mm tt")</p>
+                                                                            <p> <b>Sales End Date : </b>  @tic.ticketSalesEndDateAndTime?.ToString("ddd, dd MMM yyyy, HH:mm tt")</p>
+                                                                            <p><b>Stock : </b> @tic.ticketInStock.ToString("#,##")</p>
+
+                                                                        </div>
+                                                                    </MudCardContent>
+                                                                    <MudCardActions>
+                                                                        <MudButton Variant="Variant.Text" Color="Color.Secondary" Style="font-weight:bold">@amount</MudButton>
+                                                                    </MudCardActions>
+                                                                </MudCard>
 
 
 
-                                                    </MudItem>
+                                                            </MudItem>
+                                                        }
 
-
-                                                   
-
+                                                    </MudGrid>
                                                 }
+                                                else
+                                                {
+                                                    <b>No Ticket found</b>
+                                                }
+                                            </div>
 
-                                            </MudGrid>
-                                        }
-                                        else
-                                        {
-                                            <b>No Ticket found</b>
-                                        }
-                                    </div>
 
-                                    <br />
+                                   
+
+                                        </MudCardContent>
+                                        <MudCardActions>
+                                            <MudButton Variant="Variant.Text" Color="Color.Secondary" Style="font-weight:bold"></MudButton>
+                                        </MudCardActions>
+                                    </MudCard>
+
+                                    <br /><br />
 
 
                                 }
                             }
 
 
-
-
                         </MudPaper>
                     }
-
-
-
 
                 </MudTabPanel>
 
@@ -384,6 +398,10 @@
                 <MudTabPanel Style="height:70px" Text="General Attendance">
                     <MudText>Content Three</MudText>
                 </MudTabPanel>
+
+
+
+
 
                 <MudTabPanel Style="height:70px" Text=" General Sales">
                     <MudText>Content Three</MudText>
@@ -458,7 +476,7 @@
                                     EventTimeId = group.Key._id,
                                     StartDateAndTime = group.Key.startDateAndTime,
                                     Tickets = group.ToList()
-                                }).ToList();
+                                }).OrderByDescending(x => Convert.ToDateTime(x.StartDateAndTime)).ToList();
                     }
                 }
                 else
