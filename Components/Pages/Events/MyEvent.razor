@@ -309,7 +309,7 @@
       if (result == true)
       {
          var res = await _eventService.DeleteEvent(id);
-         _snackbar.Add(res.result.message, res.result.code == ResponseCodes.ResponseCodeOk ? Severity.Success : Severity.Error);
+         _snackbar.Add(res.result.message, res.result.success == true ? Severity.Success : Severity.Error);
          await GetEvents();
       }
 

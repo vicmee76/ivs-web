@@ -18,6 +18,21 @@
     </NotAuthorized>
     <Authorized>
 
+
+        <MudMessageBox @ref="admituserMessageBox" Title="Admit user to event" CancelText="Cancel" YesText="Admit" Style="padding:20px;">
+            <MessageContent>
+                Are you sure you want to admit this user to this event?
+            </MessageContent>
+            <YesButton>
+                <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Secondary">Admit</MudButton>
+            </YesButton>
+            <CancelButton>
+                <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Default">Cancel</MudButton>
+            </CancelButton>
+            
+        </MudMessageBox>
+
+
         <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
 
             <MudPaper Elevation="0">
@@ -422,6 +437,11 @@
                                                     {
                                                         <MudButton Variant="Variant.Outlined" OnClick="@(async () => await ActionAdmitUser(ctx.Item._id))" Size="Size.Small" Color="Color.Primary">Admit</MudButton>
                                                     }
+
+                                                    else
+                                                    {
+                                                        <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success"/>
+                                                    }
                                                 </CellTemplate>
                                             </TemplateColumn>
 
@@ -511,12 +531,12 @@
     AuthUser authUser = new AuthUser();
     GetEventDetailsDto _events = new GetEventDetailsDto();
     IEnumerable<TimeAndTicketGroupingDto> _ticketList = new List<TimeAndTicketGroupingDto>();
-
     private List<AttendanceDto> _attendance { get; set; } = null;
-
     MudDataGrid<AttendanceDto> dataGrid;
-    string searchString = null;
 
+    private MudMessageBox admituserMessageBox { get; set; }
+
+    string searchString = null;
     private string fullname { get; set; }
     private string userId { get; set; }
     private int totalAttendanceCount { get; set; }
@@ -681,7 +701,20 @@
 
     private async Task ActionAdmitUser(string attendanceId)
     {
-        
+        bool? result = await admituserMessageBox.Show();
+        if (result == true)
+        {
+            var res = await _ordersAndAttendanceService.AdmitAttendees(attendanceId);
+            if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true)
+            {
+                dataGrid.ReloadServerData();
+                _snackbar.Add(res.result.message, Severity.Success);
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
     }
 
 }

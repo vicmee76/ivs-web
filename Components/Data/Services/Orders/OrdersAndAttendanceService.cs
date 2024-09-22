@@ -175,7 +175,6 @@ public class OrdersAndAttendanceService(IWebService _webService, ILocalStorageSe
             if (content?.code != ResponseCodes.ResponseCodeOk)
                 return new ResponseObject();
 
-            res.result.data = JsonConvert.DeserializeObject<string>(content?.data?.ToString());
             return res;
         }
         catch (Exception ex)
