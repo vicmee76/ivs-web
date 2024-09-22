@@ -8,6 +8,7 @@ public interface IOrdersAndAttendanceService
     public Task<ResponseObject> GenerateCost(List<GenerateCostVM> model);
     public Task<ResponseObject> SaveOrder(OrdersVM model);
     public Task<ResponseObject> GetOrderById(string id);
+    public Task<ResponseObject> AdmitAttendees(string attendanceId);
     public Task<ResponseObject> GetAttendanceByOrderId(string orderId);
     public Task<ResponseObject> GetAttendanceByEventId(string eventId, Dictionary<string, string> queryParam);
     public Task<ResponseObject> GetAttendanceByEventTimeId(string timeId, Dictionary<string, string> queryParam);

@@ -5,6 +5,7 @@ using ivs.Domain.Interfaces.General;
 using ivs.Domain.Interfaces.Orders;
 using ivs.Domain.Models.Dtos.Orders;
 using ivs.Domain.Models.ViewModels.Orders;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Reflection;
@@ -141,7 +142,7 @@ public class OrdersAndAttendanceService(IWebService _webService, ILocalStorageSe
             {
                 result = new ResponseContents()
                 {
-                    message = "Error! Something went wrong trying to get attendace record by, please try again later",
+                    message = "Error! Something went wrong trying to get attendace record by event id, please try again later",
                 }
             };
         }
@@ -157,5 +158,35 @@ public class OrdersAndAttendanceService(IWebService _webService, ILocalStorageSe
     public Task<ResponseObject> GetAttendanceByTicketId(string ticketId, Dictionary<string, string> queryParam)
     {
         throw new NotImplementedException();
+    }
+
+
+
+    public async Task<ResponseObject> AdmitAttendees(string attendanceId)
+    {
+        try
+        {
+            var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+            var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+
+            var response = await _webService.Call(ApiUrl, $"admit-attendees/{attendanceId}", Method.Put, null, headers, null, null);
+            var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+            var content = res?.result;
+            if (content?.code != ResponseCodes.ResponseCodeOk)
+                return new ResponseObject();
+
+            res.result.data = JsonConvert.DeserializeObject<string>(content?.data?.ToString());
+            return res;
+        }
+        catch (Exception ex)
+        {
+            return new ResponseObject()
+            {
+                result = new ResponseContents()
+                {
+                    message = "Error! Something went wrong trying to admit this user to the event, please try again later",
+                }
+            };
+        }
     }
 }

@@ -420,7 +420,7 @@
                                                 <CellTemplate Context="ctx">
                                                     @if (!ctx.Item.isActive)
                                                     {
-                                                        <MudButton Variant="Variant.Outlined" Size="Size.Small" Color="Color.Primary">Admit</MudButton>
+                                                        <MudButton Variant="Variant.Outlined" OnClick="@(async () => await ActionAdmitUser(ctx.Item._id))" Size="Size.Small" Color="Color.Primary">Admit</MudButton>
                                                     }
                                                 </CellTemplate>
                                             </TemplateColumn>
@@ -667,14 +667,21 @@
                     TotalItems = 0,
                     Items = new List<AttendanceDto>()
                 };
-            
+
         }
     }
+
 
     private Task OnSearch(string text)
     {
         searchString = text;
         return dataGrid.ReloadServerData();
+    }
+
+
+    private async Task ActionAdmitUser(string attendanceId)
+    {
+        
     }
 
 }
