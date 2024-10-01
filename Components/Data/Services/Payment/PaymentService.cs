@@ -5,6 +5,7 @@ using ivs.Domain.Models.Dtos.Payment;
 using ivs.Domain.Models.ViewModels.Payments;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Reflection;
 
 namespace ivs_ui.Components.Data.Services.Payment
 {
@@ -23,6 +24,31 @@ namespace ivs_ui.Components.Data.Services.Payment
                     return new ResponseObject();
 
                 res.result.data = JsonConvert.DeserializeObject<List<PaymentDto>>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to connect to payment gateway, please try again later.",
+                    }
+                };
+            }
+        }
+
+        public async Task<ResponseObject> ProcessFreePayment(string orderId)
+        {
+            try
+            {
+                var response = await _webService.Call(ApiUrl, $"process-free-payment/{orderId}", Method.Post, null, null, null, null);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return new ResponseObject();
+
+                res.result.data = JsonConvert.DeserializeObject<List<VerifyPaymentDto>>(content?.data?.ToString());
                 return res;
             }
             catch (Exception ex)

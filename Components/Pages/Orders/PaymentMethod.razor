@@ -84,32 +84,50 @@
                             <br />
                             <br />
 
-                            <div style="background-color:#f3dff65e; padding:10px">
+                            @if(totalAmount > 0)
+                            {
 
-                                <MudRadioGroup @bind-Value="@paymentGateWay">
-                                    <MudRadio Value="@("Flutterwave")" Color="Color.Secondary">
-                                        <div style="display: flex; align-items: center; padding:20px">
-                                            <MudImage Src="images/backgrounds/flutterwavelogo.png" Alt="Flutterwave logo" Elevation="0" Height="40" Class="rounded-circle" />
-                                            <span style="font-size:14px; font-weight:bold; margin-left: 10px;">Pay with Flutterwave</span>
-                                        </div>
-                                    </MudRadio>
-                                </MudRadioGroup>
+                                <div style="background-color:#f3dff65e; padding:10px">
 
-                            </div>
+                                    <MudRadioGroup @bind-Value="@paymentGateWay">
+                                        <MudRadio Value="@("Flutterwave")" Color="Color.Secondary">
+                                            <div style="display: flex; align-items: center; padding:20px">
+                                                <MudImage Src="images/backgrounds/flutterwavelogo.png" Alt="Flutterwave logo" Elevation="0" Height="40" Class="rounded-circle" />
+                                                <span style="font-size:14px; font-weight:bold; margin-left: 10px;">Pay with Flutterwave</span>
+                                            </div>
+                                        </MudRadio>
+                                    </MudRadioGroup>
 
-                            <br />
+                                </div>
 
-                            <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_actionProcessing" OnClick="@( async () => await ActionMakePayment())" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
-                                @if (_actionProcessing)
-                                {
-                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                                    <MudText Class="ms-2">Processing</MudText>
-                                }
-                                else
-                                {
-                                    <MudText><b>Pay Now</b></MudText>
-                                }
-                            </MudButton>
+                                <br />
+
+                                <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_actionProcessing" OnClick="@( async () => await ActionMakePayment())" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                                    @if (_actionProcessing)
+                                    {
+                                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                        <MudText Class="ms-2">Processing</MudText>
+                                    }
+                                    else
+                                    {
+                                        <MudText><b>Pay Now</b></MudText>
+                                    }
+                                </MudButton>
+                            }
+                            else
+                            {
+                                <MudButton ButtonType="ButtonType.Button" FullWidth="true" Disabled="@_actionProcessing" OnClick="@( async () => await ActionGetFreeTickets())" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                                    @if (_actionProcessing)
+                                    {
+                                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                        <MudText Class="ms-2">Processing</MudText>
+                                    }
+                                    else
+                                    {
+                                        <MudText><b>Get Free Ticket</b></MudText>
+                                    }
+                                </MudButton>
+                            }
 
                         </div>
                     }
@@ -150,9 +168,10 @@
 
         if (res.result.code == ResponseCodes.ResponseCodeOk)
         {
-            if (res.result.data is List<AttendanceDto> result)
+            if (res.result.data is GetAttendanceDto result)
             {
-                tickets = result;
+                tickets = (List<AttendanceDto>)result.paginatedResults;
+                totalAmount = tickets.Sum(x => Convert.ToDecimal(x.totalTicketFeeAndServiceFee));
             }
             else
             {
@@ -199,8 +218,32 @@
             {
                 _snackbar.Add(res.result.message, Severity.Error);
             }
+        }
+
+        _actionProcessing = false;
+    }
 
 
+    private async Task ActionGetFreeTickets()
+    {
+        _actionProcessing = true;
+
+        var res = await _paymentService.ProcessFreePayment(orderId);
+
+        if (res.result.code == ResponseCodes.ResponseCodeOk)
+        {
+            if (res.result.data is List<VerifyPaymentDto> result)
+            {
+                _navigate.NavigateTo($"/orders/verify-payment?type={orderId}");
+            }
+            else
+            {
+                _snackbar.Add("Something went wrong trying to connect to payment gateway, please trying again later.", Severity.Error);
+            }
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
         }
 
         _actionProcessing = false;
