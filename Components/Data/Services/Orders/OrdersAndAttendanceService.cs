@@ -150,9 +150,32 @@ public class OrdersAndAttendanceService(IWebService _webService, ILocalStorageSe
 
 
 
-    public Task<ResponseObject> GetAttendanceByEventTimeId(string timeId, Dictionary<string, string> queryParam)
+    public async Task<ResponseObject> GetAttendanceByEventTimeId(string timeId, Dictionary<string, string> queryParam)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+            var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+
+            var response = await _webService.Call(ApiUrl, $"get-attendance-by-event-time-id/{timeId}", Method.Get, null, headers, queryParam, null);
+            var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+            var content = res?.result;
+            if (content?.code != ResponseCodes.ResponseCodeOk)
+                return new ResponseObject();
+
+            res.result.data = JsonConvert.DeserializeObject<GetAttendanceDto>(content?.data?.ToString());
+            return res;
+        }
+        catch (Exception ex)
+        {
+            return new ResponseObject()
+            {
+                result = new ResponseContents()
+                {
+                    message = "Error! Something went wrong trying to get attendace record by event id, please try again later",
+                }
+            };
+        }
     }
 
     public Task<ResponseObject> GetAttendanceByTicketId(string ticketId, Dictionary<string, string> queryParam)

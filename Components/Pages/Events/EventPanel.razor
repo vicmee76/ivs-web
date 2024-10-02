@@ -408,24 +408,29 @@
 
                             <MudCardContent>
 
+
+                                 <MudText Typo="Typo.body2" Color="Color.Secondary"><b>Showing Attendance for @TableDescription</b> </MudText>
+                                 <br /><br />
                                 <div>
 
                                     <MudDataGrid @ref="dataGrid" T="AttendanceDto" RowsPerPage="10" ServerData="ServerReload" Filterable="false" Hover="true" Loading="@_attendanceProcessing" LoadingProgressColor="Color.Primary" Striped="true" Bordered="true">
                                         <ToolBarContent>
 
-                                            <MudText Typo="Typo.h6" Color="Color.Secondary"><b>Attendance</b> <MudChip T="string" Variant="Variant.Outlined" Color="Color.Primary"><b>@totalAttendanceCount</b></MudChip></MudText>
+                                            <MudText Typo="Typo.h6" Color="Color.Secondary"> <MudChip T="string" Variant="Variant.Outlined" Color="Color.Primary"><b>@totalAttendanceCount</b></MudChip></MudText>
 
                                             <MudSpacer />
                                             <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search with code, name, email, phone" Adornment="Adornment.Start"
                                                           AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
 
                                             <MudMenu Icon="@Icons.Material.Filled.Settings" Size="Size.Small" Color="Color.Default">
-                                                <MudMenuItem Href="">View All Attendance </MudMenuItem>
+
+                                                <MudMenuItem OnAction="@(async () => await ActionResetAttendance())">View All Attendance </MudMenuItem>
+
                                                 @foreach (var com in _ticketList)
                                                 {
                                                     var title = $"{Convert.ToDateTime(com.StartDateAndTime).ToString("dddd, dd MMMM yyyy")}";
 
-                                                    <MudMenuItem Href="">View Attendance for @title</MudMenuItem>
+                                                    <MudMenuItem OnAction="@(async () => await ActionGetAttendanceByEventTime(com.EventTimeId, title))">View Attendance for @title</MudMenuItem>
                                                 }
                                             </MudMenu>
                                         </ToolBarContent>
@@ -435,7 +440,7 @@
                                                 <CellTemplate Context="ctx">
                                                     @if (!ctx.Item.isActive)
                                                     {
-                                                        <MudButton Variant="Variant.Outlined" OnClick="@(async () => await ActionAdmitUser(ctx.Item._id))" Size="Size.Small" Color="Color.Primary">Admit</MudButton>
+                                                        <MudButton Variant="Variant.Filled" OnClick="@(async () => await ActionAdmitUser(ctx.Item._id))" Size="Size.Small" Color="Color.Secondary">Admit</MudButton>
                                                     }
 
                                                     else
@@ -536,13 +541,18 @@
 
     private MudMessageBox admituserMessageBox { get; set; }
 
-    string searchString = null;
+    string searchString = null; 
+    string timeId = null;
+    string TableDescription = null;
+
     private string fullname { get; set; }
     private string userId { get; set; }
     private int totalAttendanceCount { get; set; }
     private string eventName { get; set; }
+
     private bool _processing { get; set; } = false;
     private bool _attendanceProcessing { get; set; } = false;
+    private bool options { get; set; } = false;
 
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
@@ -610,13 +620,23 @@
     private async Task<GridData<AttendanceDto>> ServerReload(GridState<AttendanceDto> state)
     {
         _attendanceProcessing = true;
+        var res = new ResponseObject();
 
         Dictionary<string, string> queryParameter = new Dictionary<string, string> { { "page", state.Page.ToString() }, { "limit", state.PageSize.ToString() } };
 
         if (!string.IsNullOrWhiteSpace(searchString))
             queryParameter.Add("searchQuery", searchString.ToLower());
 
-        var res = await _ordersAndAttendanceService.GetAttendanceByEventId(id, queryParameter);
+
+        if (!options)
+        {
+            res = await _ordersAndAttendanceService.GetAttendanceByEventId(id, queryParameter);
+            TableDescription = "All";
+        }
+        else
+        {
+            res = await _ordersAndAttendanceService.GetAttendanceByEventTimeId(timeId, queryParameter);
+        }
 
         if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
         {
@@ -716,5 +736,24 @@
             }
         }
     }
+
+
+    private async Task ActionGetAttendanceByEventTime(string eventTimeId, string tableDescription)
+    {
+        options = true;
+        timeId = eventTimeId;
+        TableDescription = tableDescription;
+        dataGrid.ReloadServerData();
+        StateHasChanged();
+    }
+    
+    private async Task ActionResetAttendance()
+    {
+        options = false;
+        dataGrid.ReloadServerData();
+        StateHasChanged();
+    }
+
+    
 
 }
