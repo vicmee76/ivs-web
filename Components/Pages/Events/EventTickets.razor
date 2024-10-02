@@ -22,6 +22,8 @@
             
             <MudPaper Elevation="0">
                 <MudToolBar>
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                    <MudSpacer />
 
                     @if (!_getEventprocessing)
                     {
@@ -32,8 +34,6 @@
                         <MudText><b style="color:#56375C">Create Event Tickets for -- <b>@eventName</b></b></MudText>
                     }
 
-                    <MudSpacer />
-                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
                 </MudToolBar>
             </MudPaper>
 

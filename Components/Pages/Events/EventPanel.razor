@@ -37,6 +37,9 @@
 
             <MudPaper Elevation="0">
                 <MudToolBar>
+
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                        <MudSpacer />
                         
                     @if (_processing)
                     {
@@ -50,8 +53,8 @@
                         }
                     }
                    
-                    <MudSpacer />
-                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                   
+                   
                 </MudToolBar>
             </MudPaper>
 
@@ -422,15 +425,15 @@
                                             <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search with code, name, email, phone" Adornment="Adornment.Start"
                                                           AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
 
-                                            <MudMenu Icon="@Icons.Material.Filled.Settings" Size="Size.Small" Color="Color.Default">
+                                            <MudMenu Icon="@Icons.Material.Filled.Settings" Dense="true" Size="Size.Small" Color="Color.Default">
 
-                                                <MudMenuItem OnAction="@(async () => await ActionResetAttendance())">View All Attendance </MudMenuItem>
+                                                <MudMenuItem OnAction="@(async () => await ActionResetAttendance())">View All </MudMenuItem>
 
                                                 @foreach (var com in _ticketList)
                                                 {
                                                     var title = $"{Convert.ToDateTime(com.StartDateAndTime).ToString("dddd, dd MMMM yyyy")}";
 
-                                                    <MudMenuItem OnAction="@(async () => await ActionGetAttendanceByEventTime(com.EventTimeId, title))">View Attendance for @title</MudMenuItem>
+                                                    <MudMenuItem OnAction="@(async () => await ActionGetAttendanceByEventTime(com.EventTimeId, title))">View for @title</MudMenuItem>
                                                 }
                                             </MudMenu>
                                         </ToolBarContent>

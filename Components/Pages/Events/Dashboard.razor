@@ -26,6 +26,9 @@
             <MudPaper Elevation="0">
                 <MudToolBar>
 
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                      <MudSpacer />
+
                     @if (_processing)
                     {
                         <MudSkeleton Height="42px" Width="200px" />
@@ -37,8 +40,8 @@
                             <MudText><b style="color:#56375C">Hi, @fullname</b></MudText>
                         }
                     }
-                    <MudSpacer />
-                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                  
+                   
                 </MudToolBar>
             </MudPaper>
 

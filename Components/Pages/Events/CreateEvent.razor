@@ -14,7 +14,8 @@
             
             <MudPaper Elevation="0">
                 <MudToolBar>
-
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                    <MudSpacer />
                     @if (!string.IsNullOrEmpty(id))
                     {
                         <MudText><b style="color:#56375C">Update New Event</b></MudText>
@@ -24,8 +25,7 @@
                         <MudText><b style="color:#56375C">Create New Event</b></MudText>
                     }
 
-                    <MudSpacer />
-                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                  
                 </MudToolBar>
             </MudPaper>
 
