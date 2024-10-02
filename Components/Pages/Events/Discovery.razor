@@ -1,5 +1,13 @@
 ﻿@page "/events/discovery"
 
+@{
+    CultureInfo nigeriaCulture = new CultureInfo("en-NG");
+    nigeriaCulture.NumberFormat.CurrencySymbol = "₦";
+    Thread.CurrentThread.CurrentCulture = nigeriaCulture;
+    Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
+}
+
+
 <PageTitle>Iv's - Discovery</PageTitle>
 
 <MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="background-color:white">
@@ -17,7 +25,7 @@
         else
         {
             <MudItem xl="9" xxl="9" lg="9" md="9" sm="12" xs="12">
-                <MudCarousel Class="mud-width-full" Style="height:425px;" ShowArrows="@arrows" ShowBullets="@bullets" EnableSwipeGesture="@enableSwipeGesture" AutoCycle="@autocycle" AutoCycleTime="@autoCycleTime" TData="object">
+                <MudCarousel Class="mud-width-full" Style="height:465px;" ShowArrows="@arrows" ShowBullets="@bullets" EnableSwipeGesture="@enableSwipeGesture" AutoCycle="@autocycle" AutoCycleTime="@autoCycleTime" TData="object">
                     @if (_latestEvents.Any())
                     {
                         foreach (var e in _latestEvents.Take(4))
@@ -61,6 +69,18 @@
                                                 {
                                                     <div>@e.eventTickets.Count Ticket(s)</div>
                                                     <br />
+                                                    @if (e.paymentOptions.Count > 1)
+                                                    {
+                                                        var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                                        <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Secondary"><b>@amount.ToString("C") +</b></MudText>
+                                                    }
+                                                    else
+                                                    {
+                                                        var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                                        <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Secondary"><b>@amount.ToString("C")</b></MudText>
+                                                    }
                                                 }
 
                                             </div>
@@ -126,6 +146,19 @@
                                     @if (e.eventTickets.Any())
                                     {
                                         <div><MudIcon Icon="@Icons.Material.Filled.BookOnline" Size="Size.Small" Color="Color.Secondary" /> @e.eventTickets.Count Ticket(s)</div>
+                                        <br />
+                                        @if (e.paymentOptions.Count > 1)
+                                        {
+                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                            <div>  <MudIcon Icon="@Icons.Material.Filled.Payments" Size="Size.Small" Color="Color.Secondary" /> @amount.ToString("C") </div>
+                                        }
+                                        else
+                                        {
+                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                            <div> <MudIcon Icon="@Icons.Material.Filled.Payments" Size="Size.Small" Color="Color.Secondary" /> @amount.ToString("C") </div>
+                                        }
                                     }
 
                                 </div>
@@ -202,7 +235,7 @@
                 <MudText Typo="Typo.h6"><b>Latest Events</b></MudText>
             </CardHeaderContent>
             <CardHeaderActions>
-                <MudLink Typo="Typo.body1" Href="@latestLink">See All</MudLink>
+                <MudLink Typo="Typo.body2" Href="@latestLink"><b>See All</b></MudLink>
             </CardHeaderActions>
         </MudCardHeader>
         <MudCardContent>
@@ -270,13 +303,15 @@
                                     <MudCardActions>
                                         @if (e.paymentOptions.Count > 1)
                                         {
-                                            var pays = e.paymentOptions.Select(p => p.name).ToList();
-                                            var pay = string.Join(" & ", pays);
-                                            <MudText Typo="Typo.body2" Style="font-size: x-small" Color="Color.Dark"><b>@pay</b></MudText>
+                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                            <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C") +</b></MudText>
                                         }
                                         else
                                         {
-                                            <MudText Typo="Typo.body2" Style="font-size: x-small" Color="Color.Dark"><b>@e?.paymentOptions?.FirstOrDefault()?.name</b></MudText>
+                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                            <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
                                         }
                                         <MudSpacer></MudSpacer>
                                         <MudButton Variant="Variant.Text" Size="Size.Small" Href="@ticketLink" Target="_blank" Color="Color.Primary"><b>Get Tickets</b></MudButton>
@@ -378,13 +413,15 @@
                                     <MudCardActions>
                                         @if (e.paymentOptions.Count > 1)
                                         {
-                                            var pays = e.paymentOptions.Select(p => p.name).ToList();
-                                            var pay = string.Join(" & ", pays);
-                                            <MudText Typo="Typo.body2" Style="font-size: x-small" Color="Color.Dark"><b>@pay</b></MudText>
+                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                            <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C") +</b></MudText>
                                         }
                                         else
                                         {
-                                            <MudText Typo="Typo.body2" Style="font-size: x-small" Color="Color.Dark"><b>@e?.paymentOptions?.FirstOrDefault()?.name</b></MudText>
+                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                            <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
                                         }
                                         <MudSpacer></MudSpacer>
                                         <MudButton Variant="Variant.Text" Size="Size.Small" Href="@ticketLink" Target="_blank" Color="Color.Primary"><b>Get Tickets</b></MudButton>
@@ -487,13 +524,15 @@
                                     <MudCardActions>
                                         @if (e.paymentOptions.Count > 1)
                                         {
-                                            var pays = e.paymentOptions.Select(p => p.name).ToList();
-                                            var pay = string.Join(" & ", pays);
-                                            <MudText Typo="Typo.body2" Style="font-size: x-small" Color="Color.Dark"><b>@pay</b></MudText>
+                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                            <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C") +</b></MudText>
                                         }
                                         else
                                         {
-                                            <MudText Typo="Typo.body2" Style="font-size: x-small" Color="Color.Dark"><b>@e?.paymentOptions?.FirstOrDefault()?.name</b></MudText>
+                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                            <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
                                         }
                                         <MudSpacer></MudSpacer>
                                         <MudButton Variant="Variant.Text" Size="Size.Small" Href="@ticketLink" Target="_blank" Color="Color.Primary"><b>Get Tickets</b></MudButton>
