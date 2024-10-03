@@ -20,12 +20,12 @@
         font-weight: 500;
     }
 
-    #homeButtons{
+    #homeButtons {
         text-align: center;
     }
 
-    #btnBrightColor{
-        margin-bottom:10px;
+    #btnBrightColor {
+        margin-bottom: 10px;
     }
 
     #reg-title {
@@ -52,7 +52,7 @@
     }
 
     .left {
-       display:none;
+        display: none;
     }
 
     .right {
@@ -64,5 +64,11 @@
         font-size: 1.7em;
         font-family: "Akaya Telivigala", system-ui;
         width: 100%;
+    }
+
+
+    #discovery-title-small {
+        font-size:14px;
+        font-weight:bold
     }
 }

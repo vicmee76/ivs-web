@@ -1,6 +1,13 @@
 ﻿@page "/events/discover-events/{id}";
 @page "/events/discover-events/{id}/{searchQuery}";
 
+@{
+    CultureInfo nigeriaCulture = new CultureInfo("en-NG");
+    nigeriaCulture.NumberFormat.CurrencySymbol = "₦";
+    Thread.CurrentThread.CurrentCulture = nigeriaCulture;
+    Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
+}
+
 <PageTitle>Iv's - Discover Event</PageTitle>
 
 @{
@@ -114,13 +121,15 @@
                                     <MudCardActions>
                                         @if (e.paymentOptions.Count > 1)
                                         {
-                                            var pays = e.paymentOptions.Select(p => p.name).ToList();
-                                            var pay = string.Join(" & ", pays);
-                                            <MudText Typo="Typo.body2" Style="font-size: x-small" Color="Color.Dark"><b>@pay</b></MudText>
+                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                            <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C") +</b></MudText>
                                         }
                                         else
                                         {
-                                            <MudText Typo="Typo.body2" Style="font-size: x-small" Color="Color.Dark"><b>@e?.paymentOptions?.FirstOrDefault()?.name</b></MudText>
+                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                            <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
                                         }
                                         <MudSpacer></MudSpacer>
                                         <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Primary" Target="_blank" Href="@ticketLink"><b>Get Tickets</b></MudButton>

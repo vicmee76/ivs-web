@@ -1,4 +1,4 @@
-using Blazored.LocalStorage;
+﻿using Blazored.LocalStorage;
 using Blazored.SessionStorage;
 using ivs_ui.Components;
 using ivs_ui.Components.Data.Services.Accounts;
@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using MudBlazor.Services;
 using System.Globalization;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +38,19 @@ builder.Services.AddMudServices(config =>
     config.SnackbarConfiguration.HideTransitionDuration = 500;
     config.SnackbarConfiguration.ShowTransitionDuration = 500;
     config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
+});
+
+// Set up custom culture settings
+CultureInfo nigeriaCulture = new CultureInfo("en-NG");
+nigeriaCulture.NumberFormat.CurrencySymbol = "₦";
+
+var supportedCultures = new[] { nigeriaCulture };
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture(nigeriaCulture);
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
 });
 
 
@@ -61,6 +76,13 @@ builder.Services.AddTransient<IPaymentService, PaymentService>();
 
 
 var app = builder.Build();
+
+// Use localization middleware
+var localizationOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>()?.Value;
+if (localizationOptions != null)
+{
+    app.UseRequestLocalization(localizationOptions);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

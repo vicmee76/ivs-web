@@ -36,6 +36,9 @@
             <MudPaper Elevation="0">
                 <MudToolBar>
 
+                    
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                    <MudSpacer />
                     @if (!_getEventprocessing)
                     {
                         <MudSkeleton Animation="Animation.Wave" Width="20%" />
@@ -44,8 +47,7 @@
                     {
                         <MudText><b style="color:#56375C">Preview event for -- <b>@eventName</b></b></MudText>
                     }
-                    <MudSpacer />
-                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                   
                 </MudToolBar>
             </MudPaper>
 
