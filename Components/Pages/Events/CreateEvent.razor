@@ -14,7 +14,8 @@
             
             <MudPaper Elevation="0">
                 <MudToolBar>
-
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                    <MudSpacer />
                     @if (!string.IsNullOrEmpty(id))
                     {
                         <MudText><b style="color:#56375C">Update New Event</b></MudText>
@@ -24,8 +25,7 @@
                         <MudText><b style="color:#56375C">Create New Event</b></MudText>
                     }
 
-                    <MudSpacer />
-                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                  
                 </MudToolBar>
             </MudPaper>
 
@@ -261,7 +261,7 @@
             allState = states.GetStates();
             var res = await _eventTypeService.GetEventTypes();
             _eventTypes = res.result.data ?? new List<GetEventTypesDto>();
-            
+
             if (!string.IsNullOrEmpty(id))
             {
                 var get = await _eventService.GetEventMetaData(id);
@@ -270,24 +270,20 @@
                     var data = get.result.data;
                     if (data.status == Helpers.Active)
                     {
-                        _navigate.NavigateTo("/events/dashboard");
                         _snackbar.Add("Event is already active", Severity.Info);
                     }
-                    else
-                    {
-                        model.adressPin = data.adressPin;
-                        model.eventAddress = data.eventAddress;
-                        model.eventName = data.eventName;
-                        model.eventDescription = data.eventDescription;
-                        model.eventState = data.eventState;
-                        model.eventOption = data.eventOption;
-                        model.eventTypeId = data.eventTypeId;
-                        model.webLink = data.webLink;
-                        model.facebookLink = data.facebookLink;
-                        model.twitterLink = data.twitterLink;
-                        model.instagramLink = data.instagramLink;
-                        isUpdate = true;
-                    }
+                    model.adressPin = data.adressPin;
+                    model.eventAddress = data.eventAddress;
+                    model.eventName = data.eventName;
+                    model.eventDescription = data.eventDescription;
+                    model.eventState = data.eventState;
+                    model.eventOption = data.eventOption;
+                    model.eventTypeId = data.eventTypeId;
+                    model.webLink = data.webLink;
+                    model.facebookLink = data.facebookLink;
+                    model.twitterLink = data.twitterLink;
+                    model.instagramLink = data.instagramLink;
+                    isUpdate = true;
                 }
                 else
                 {

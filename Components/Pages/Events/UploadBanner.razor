@@ -17,7 +17,8 @@
             
             <MudPaper Elevation="0">
                 <MudToolBar>
-
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                    <MudSpacer />
                      @if (!_getEventprocessing)
                     {
                         <MudSkeleton Animation="Animation.Wave" Width="20%" />
@@ -26,9 +27,6 @@
                     {
                     <MudText><b style="color:#56375C">Upload Your Banner for -- <b>@eventName</b></b></MudText>
                     }
-                    <MudSpacer />
-                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
-
                 </MudToolBar>
             </MudPaper>
 
@@ -194,14 +192,10 @@
             {
                 if (res?.result?.data.status == Helpers.Active)
                 {
-                    _navigate.NavigateTo("/events/dashboard");
                     _snackbar.Add("Event is already active", Severity.Info);
                 }
-                else
-                {
-                    eventName = res?.result?.data.eventName;
-                    imageData = res.result.data.eventImagePath;
-                }
+                eventName = res?.result?.data.eventName;
+                imageData = res.result.data.eventImagePath;
             }
             else
             {

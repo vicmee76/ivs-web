@@ -85,7 +85,7 @@
                             @tx_ref
                         </h3>
                         <br />
-                        <div style="font-size:medium">Your payment is pending. Do not close this page till you get confirmation.</div>
+                        <div style="font-size:medium">Your payment is pending. Do not close this page till you get confirmation or you get your ticket via email.</div>
                     </div>
                 }
             }
@@ -99,6 +99,10 @@
 
     [Inject] IPaymentService? _paymentService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "type")]
+    public string? type { get; set; }
 
     [Parameter]
     [SupplyParameterFromQuery(Name = "status")]
@@ -119,27 +123,34 @@
     {
         _processing = true;
 
-        var queryParams = new Dictionary<string, string?>();
-        queryParams.Add("status", status);
-        queryParams.Add("tx_ref", tx_ref);
-        queryParams.Add("transaction_id", transaction_id);
-
-        if (string.IsNullOrEmpty(transaction_id) || string.IsNullOrEmpty(tx_ref) || string.IsNullOrEmpty(status))
+        if (!string.IsNullOrWhiteSpace(type))
         {
-            _isSuccessful = "failed";
+            _isSuccessful = "successful";
         }
         else
         {
-            var res = await _paymentService.VerifyPayment(queryParams);
+            var queryParams = new Dictionary<string, string?>();
+            queryParams.Add("status", status);
+            queryParams.Add("tx_ref", tx_ref);
+            queryParams.Add("transaction_id", transaction_id);
 
-            if (res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true)
+            if (string.IsNullOrEmpty(transaction_id) || string.IsNullOrEmpty(tx_ref) || string.IsNullOrEmpty(status))
             {
-                _isSuccessful = "successful";
+                _isSuccessful = "failed";
             }
             else
             {
-                _isSuccessful = "failed";
-                _snackbar.Add(res.result.message, Severity.Error);
+                var res = await _paymentService.VerifyPayment(queryParams);
+
+                if (res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true)
+                {
+                    _isSuccessful = "successful";
+                }
+                else
+                {
+                    _isSuccessful = "pending";
+                    _snackbar.Add(res.result.message, Severity.Info);
+                }
             }
         }
         _processing = false;
