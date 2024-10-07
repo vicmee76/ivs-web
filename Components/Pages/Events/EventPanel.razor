@@ -779,6 +779,7 @@
             var pagedData = data.ToArray();
 
             _attendanceProcessing = false;
+            StateHasChanged();
             return new GridData<AttendanceDto>
                 {
                     TotalItems = totalItems,
@@ -790,6 +791,7 @@
         else
         {
             _attendanceProcessing = false;
+            StateHasChanged();
             return new GridData<AttendanceDto>
                 {
                     TotalItems = 0,
