@@ -617,27 +617,30 @@
                                 <br /><br />
 
                                 <MudGrid>
-                                    <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
-                                        <MudPaper Class="pa-5" Outlined="true" Style="background-color:#edf8ff">
-                                            <div style="line-height:25px">
-                                                @if (_attendanceProcessing)
+                                    <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="3">
+                                        <MudPaper Class="pa-10" Outlined="true" Style="background-color:#fff6ff">
+                                            <div style="line-height:40px">
+
+                                                <div style="font-size:17px; font-weight: bold">Revenue</div>
+
+                                                @if (_salesProcessing)
                                                 {
                                                     <MudSkeleton Height="42px;" />
                                                 }
                                                 else
                                                 {
-                                                    <h1>@totalAttendanceCount</h1>
+                                                    <h1>@totalSales</h1>
                                                 }
 
-                                                <div>Total Attendance</div>
+                                               
                                             </div>
                                         </MudPaper>
                                     </MudItem>
 
                                     <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
-                                        <MudPaper Class="pa-5" Outlined="true" Style="background-color:#b6ffcf">
+                                        <MudPaper Class="pa-5" Outlined="true">
                                             <div style="line-height:25px">
-                                                @if (_attendanceProcessing)
+                                                @if (_salesProcessing)
                                                 {
                                                     <MudSkeleton Height="42px;" />
                                                 }
@@ -653,7 +656,7 @@
                                     <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
                                         <MudPaper Class="pa-5" Outlined="true" Style="background-color:#ffbcbc">
                                             <div style="line-height:25px">
-                                                @if (_attendanceProcessing)
+                                                @if (_salesProcessing)
                                                 {
                                                     <MudSkeleton Height="42px;" />
                                                 }
@@ -670,7 +673,7 @@
                                         <MudPaper Class="pa-5" Outlined="true" Style="background-color:#fff0db">
 
                                             <div style="line-height:25px">
-                                                @if (_attendanceProcessing)
+                                                @if (_salesProcessing)
                                                 {
                                                     <MudSkeleton Height="42px;" />
                                                 }
@@ -822,6 +825,8 @@
     private bool _salesProcessing { get; set; } = false;
     private bool attendanceOptions { get; set; } = false;
     private bool salesOptions { get; set; } = false;
+
+    private string totalSales { get; set; }
 
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
@@ -1035,6 +1040,7 @@
             }).ToArray();
 
             var totalItems = result.totalCount;
+            totalSales = result.totalTicketSum.ToString("C");
 
             var sortDefinition = state.SortDefinitions.FirstOrDefault();
 
