@@ -596,7 +596,7 @@
 
                 <MudTabPanel Style="height:70px" Text=" General Sales">
 
-                    @if (_salesProcessing)
+                    @if (_processing)
                     {
 
                         <MudSkeleton Height="42px" Width="200px" />
@@ -681,31 +681,37 @@
                                             </MudItem>
 
 
-                                            @if (ticketNameGrouping.Any())
+                                            @if (_salesProcessing)
                                             {
-                                                var cols = ticketNameGrouping.Count == 1 ? 9 : 3;
-                                                
-                                                foreach (var item in ticketNameGrouping)
+                                                <MudSkeleton Height="200px" SkeletonType="SkeletonType.Rectangle" Width="800px" />
+                                            }
+                                            else
+                                            {
+                                                if (ticketNameGrouping.Any())
                                                 {
-                                                    <MudItem xs="12" sm="12" md="6" lg="@cols" xl="@cols" xxl="@cols">
-                                                        <MudPaper Class="pa-3" Outlined="true" Style="background-color: #f4f3ff">
-                                                            <div style="line-height:36px">
+                                                    var cols = ticketNameGrouping.Count == 1 ? 9 : 3;
 
-                                                                <div><b>@item._id</b></div>
-                                                                <MudDivider></MudDivider>
-                                                                <div>Qty : @item.totalTicketQuantity</div>
-                                                                <div>Sales : <b>@item.totalTicketFeeSum.ToString("C")</b></div>
-                                                                @{
-                                                                    var avgSalesForTickets = (item.totalTicketFeeSum / item.totalTicketQuantity).ToString("C");
-                                                                }
-                                                                <div>Avg. Sales : <b>@avgSalesForTickets</b></div>
-                                                            </div>
+                                                    foreach (var item in ticketNameGrouping)
+                                                    {
+                                                        <MudItem xs="12" sm="12" md="6" lg="@cols" xl="@cols" xxl="@cols">
+                                                            <MudPaper Class="pa-3" Outlined="true" Style="background-color: #f4f3ff">
+                                                                <div style="line-height:36px">
 
-                                                        </MudPaper>
-                                                    </MudItem>
+                                                                    <div><b>@item._id</b></div>
+                                                                    <MudDivider></MudDivider>
+                                                                    <div>Qty : @item.totalTicketQuantity</div>
+                                                                    <div>Sales : <b>@item.totalTicketFeeSum.ToString("C")</b></div>
+                                                                    @{
+                                                                        var avgSalesForTickets = (item.totalTicketFeeSum / item.totalTicketQuantity).ToString("C");
+                                                                    }
+                                                                    <div>Avg. Sales : <b>@avgSalesForTickets</b></div>
+                                                                </div>
+
+                                                            </MudPaper>
+                                                        </MudItem>
+                                                    }
                                                 }
                                             }
-                                            
 
 
 
@@ -727,7 +733,7 @@
                                             <MudText Typo="Typo.h6" Color="Color.Secondary"> </MudText>
 
                                             <MudSpacer />
-                                            <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search with code, name, email, phone" Adornment="Adornment.Start"
+                                            <MudTextField T="string" ValueChanged="@(s=>OnSalesSearch(s))" Placeholder="Search with code, name, email, phone" Adornment="Adornment.Start"
                                                           AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
 
                                             <MudMenu Icon="@Icons.Material.Filled.Settings" Dense="true" Size="Size.Small" Color="Color.Default">
@@ -833,7 +839,8 @@
 
     private MudMessageBox admituserMessageBox { get; set; }
 
-    string searchString = null;
+    string attendanceSearchString = string.Empty;
+    string salesSearchString = string.Empty;
     string timeIdForAttendance = null;
     string timeIdForSales = null;
     string TableDescription = null;
@@ -925,8 +932,8 @@
 
         Dictionary<string, string> queryParameter = new Dictionary<string, string> { { "page", state.Page.ToString() }, { "limit", state.PageSize.ToString() } };
 
-        if (!string.IsNullOrWhiteSpace(searchString))
-            queryParameter.Add("searchQuery", searchString.ToLower());
+        if (!string.IsNullOrWhiteSpace(attendanceSearchString))
+            queryParameter.Add("searchQuery", attendanceSearchString.ToLower());
 
 
         if (!attendanceOptions)
@@ -946,15 +953,15 @@
 
             data = data.Where(element =>
             {
-                if (string.IsNullOrWhiteSpace(searchString))
+                if (string.IsNullOrWhiteSpace(attendanceSearchString))
                     return true;
-                if (element.firstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                if (element.firstName.Contains(attendanceSearchString, StringComparison.OrdinalIgnoreCase))
                     return true;
-                if (element.code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                if (element.code.Contains(attendanceSearchString, StringComparison.OrdinalIgnoreCase))
                     return true;
-                if (element.lastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                if (element.lastName.Contains(attendanceSearchString, StringComparison.OrdinalIgnoreCase))
                     return true;
-                if ($"{element.firstName} {element.lastName} {element.phoneNumber}".Contains(searchString))
+                if ($"{element.firstName} {element.lastName} {element.phoneNumber}".Contains(attendanceSearchString))
                     return true;
                 return false;
             }).ToArray();
@@ -1025,8 +1032,8 @@
 
         Dictionary<string, string> queryParameter = new Dictionary<string, string> { { "page", state.Page.ToString() }, { "limit", state.PageSize.ToString() } };
 
-        if (!string.IsNullOrWhiteSpace(searchString))
-            queryParameter.Add("searchQuery", searchString.ToLower());
+        if (!string.IsNullOrWhiteSpace(salesSearchString))
+            queryParameter.Add("searchQuery", salesSearchString.ToLower());
         
         if (!salesOptions)
         {
@@ -1050,15 +1057,15 @@
             
             data = data.Where(element =>
             {
-                if (string.IsNullOrWhiteSpace(searchString))
+                if (string.IsNullOrWhiteSpace(salesSearchString))
                     return true;
-                if (element.firstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                if (element.firstName.Contains(salesSearchString, StringComparison.OrdinalIgnoreCase))
                     return true;
-                if (element.code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                if (element.code.Contains(salesSearchString, StringComparison.OrdinalIgnoreCase))
                     return true;
-                if (element.lastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                if (element.lastName.Contains(salesSearchString, StringComparison.OrdinalIgnoreCase))
                     return true;
-                if ($"{element.firstName} {element.lastName} {element.phoneNumber}".Contains(searchString))
+                if ($"{element.firstName} {element.lastName} {element.phoneNumber}".Contains(salesSearchString))
                     return true;
                 return false;
             }).ToArray();
@@ -1098,7 +1105,6 @@
             var pagedData = data.ToArray();
 
             _salesProcessing = false;
-            StateHasChanged();
             return new GridData<GetSalesDataDto>
                 {
                     TotalItems = totalItems,
@@ -1108,7 +1114,6 @@
         else
         {
             _salesProcessing = false;
-            StateHasChanged();
             return new GridData<GetSalesDataDto>
                 {
                     TotalItems = 0,
@@ -1120,8 +1125,14 @@
 
     private Task OnSearch(string text)
     {
-        searchString = text;
+        attendanceSearchString = text;
         return attendanceDataGrid.ReloadServerData();
+    } 
+    
+    private Task OnSalesSearch(string text)
+    {
+        salesSearchString = text;
+        return salesDataGrid.ReloadServerData();
     }
 
 
