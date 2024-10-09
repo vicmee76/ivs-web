@@ -396,7 +396,7 @@
 
             <MudTabPanel Style="height:70px" Text="General Attendance">
 
-                    @if (_attendanceProcessing)
+                    @if (_processing)
                     {
 
                         <MudSkeleton Height="42px" Width="200px" />
@@ -622,7 +622,7 @@
 
                                                 @if (_salesProcessing)
                                                 {
-                                                    <MudSkeleton Height="42px;" />
+                                                    <MudSkeleton Height="22px;" />
                                                 }
                                                 else
                                                 {
@@ -647,7 +647,7 @@
 
                                                         @if (_salesProcessing)
                                                         {
-                                                        <MudSkeleton Height="42px;" />
+                                                        <MudSkeleton Height="22px;" />
                                                         }
                                                         else
                                                         {
@@ -667,7 +667,7 @@
 
                                                         @if (_salesProcessing)
                                                         {
-                                                        <MudSkeleton Height="42px;" />
+                                                        <MudSkeleton Height="22px;" />
                                                         }
                                                         else
                                                         {
@@ -683,7 +683,7 @@
 
                                             @if (_salesProcessing)
                                             {
-                                                <MudSkeleton Height="200px" SkeletonType="SkeletonType.Rectangle" Width="800px" />
+                                                <MudSkeleton Height="30px" SkeletonType="SkeletonType.Rectangle" Width="700px" />
                                             }
                                             else
                                             {
@@ -1105,6 +1105,7 @@
             var pagedData = data.ToArray();
 
             _salesProcessing = false;
+            StateHasChanged();
             return new GridData<GetSalesDataDto>
                 {
                     TotalItems = totalItems,
@@ -1114,6 +1115,7 @@
         else
         {
             _salesProcessing = false;
+            StateHasChanged();
             return new GridData<GetSalesDataDto>
                 {
                     TotalItems = 0,
@@ -1155,38 +1157,38 @@
     }
 
 
-    private async Task ActionGetAttendanceByEventTime(string eventTimeId, string tableDescription)
+    private Task ActionGetAttendanceByEventTime(string eventTimeId, string tableDescription)
     {
         attendanceOptions = true;
         timeIdForAttendance = eventTimeId;
         TableDescription = tableDescription;
-        attendanceDataGrid.ReloadServerData();
         StateHasChanged();
+       return attendanceDataGrid.ReloadServerData();
     }
 
-    private async Task ActionResetAttendance()
+    private Task ActionResetAttendance()
     {
         attendanceOptions = false;
         TableDescription = "All";
-        attendanceDataGrid.ReloadServerData();
         StateHasChanged();
+        return attendanceDataGrid.ReloadServerData();
     }
     
-    private async Task ActionGetSalesByEventTime(string eventTimeId, string tableDescription)
+    private Task ActionGetSalesByEventTime(string eventTimeId, string tableDescription)
     {
         salesOptions = true;
         timeIdForSales = eventTimeId;
         SalesTableDescription = tableDescription;
-        salesDataGrid.ReloadServerData();
         StateHasChanged();
+        return salesDataGrid.ReloadServerData();
     }
     
-    private async Task ActionResetSales()
+    private Task ActionResetSales()
     {
         salesOptions = false;
         SalesTableDescription = "All";
-        salesDataGrid.ReloadServerData();
         StateHasChanged();
+        return salesDataGrid.ReloadServerData();
     }
 
 
