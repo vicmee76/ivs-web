@@ -615,10 +615,10 @@
 
                                 <MudGrid>
                                     <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
-                                        <MudPaper Class="pa-12" Outlined="true" Style="background-color:#fff6ff">
-                                            <div style="line-height:40px">
+                                        <MudPaper Class="pa-8" Outlined="true" Style="background-color:#fff6ff">
+                                            <div style="line-height:35px">
 
-                                                <div style="font-size:17px; font-weight: bold">Revenue</div>
+                                                <div style="font-size:17px;">Revenue</div>
 
                                                 @if (_salesProcessing)
                                                 {
@@ -627,6 +627,13 @@
                                                 else
                                                 {
                                                     <h1>@totalSales</h1>
+                                               
+
+                                                    <div>
+                                                        <div>Total settlement</div>
+                                                        <MudText Typo="Typo.body2" Color="Color.Secondary"> <b>0.00</b> </MudText>
+                                                    </div>
+
                                                 }
                                                 
                                             </div>
@@ -640,7 +647,7 @@
 
                                             <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="3">
 
-                                                <MudPaper Class="pa-3" Outlined="true" Style="background-color: #fffcf7">
+                                                <MudPaper Class="pa-4" Outlined="true" Style="background-color: #fffcf7">
                                                     <div style="line-height:25px">
 
                                                         <div>Ticket Purchased</div>
@@ -660,7 +667,7 @@
 
                                                 <br/>
 
-                                                <MudPaper Class="pa-3" Outlined="true" Style="background-color: #fffcf7">
+                                                <MudPaper Class="pa-4" Outlined="true" Style="background-color: #fffcf7">
                                                     <div style="line-height:25px">
 
                                                         <div>Avg. Revenue</div>
@@ -694,7 +701,7 @@
                                                     foreach (var item in ticketNameGrouping)
                                                     {
                                                         <MudItem xs="12" sm="12" md="6" lg="@cols" xl="@cols" xxl="@cols">
-                                                            <MudPaper Class="pa-3" Outlined="true" Style="background-color: #f4f3ff">
+                                                            <MudPaper Class="pa-5" Outlined="true" Style="background-color: #f4f3ff">
                                                                 <div style="line-height:36px">
 
                                                                     <div><b>@item._id</b></div>
@@ -730,7 +737,7 @@
                                     <MudDataGrid @ref="salesDataGrid" T="GetSalesDataDto" Dense="false" RowsPerPage="10" ServerData="GetSalesServerReload" Filterable="false" Hover="true" Loading="@_salesProcessing" LoadingProgressColor="Color.Secondary" Striped="true" Bordered="true">
                                         <ToolBarContent>
 
-                                            <MudText Typo="Typo.h6" Color="Color.Secondary"> </MudText>
+                                           
 
                                             <MudSpacer />
                                             <MudTextField T="string" ValueChanged="@(s=>OnSalesSearch(s))" Placeholder="Search with code, name, email, phone" Adornment="Adornment.Start"
