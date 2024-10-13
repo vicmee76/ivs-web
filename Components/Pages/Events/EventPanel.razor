@@ -822,7 +822,8 @@
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
     [Inject] IEventService _eventService { get; set; }
     [Inject] IPaymentService _paymentService { get; set; }
-    [Inject] IOrdersAndAttendanceService _ordersAndAttendanceService { get; set; }
+    [Inject] IOrderService _orderService { get; set; }
+    [Inject] IAttendanceService _attendanceService { get; set; }
     [Inject] ITicketService? _ticketService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
@@ -938,12 +939,12 @@
 
         if (!attendanceOptions)
         {
-            res = await _ordersAndAttendanceService.GetAttendanceByEventId(id, queryParameter);
+            res = await _attendanceService.GetAttendanceByEventId(id, queryParameter);
             TableDescription = "All";
         }
         else
         {
-            res = await _ordersAndAttendanceService.GetAttendanceByEventTimeId(timeIdForAttendance, queryParameter);
+            res = await _attendanceService.GetAttendanceByEventTimeId(timeIdForAttendance, queryParameter);
         }
 
         if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
@@ -1143,7 +1144,7 @@
         bool? result = await admituserMessageBox.Show();
         if (result == true)
         {
-            var res = await _ordersAndAttendanceService.AdmitAttendees(attendanceId);
+            var res = await _attendanceService.AdmitAttendees(attendanceId);
             if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true)
             {
                 attendanceDataGrid.ReloadServerData();

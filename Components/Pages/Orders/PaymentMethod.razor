@@ -144,7 +144,8 @@
 @code {
 
     [Parameter] public string? orderId { get; set; }
-    [Inject] IOrdersAndAttendanceService? _orderService { get; set; }
+    [Inject] IOrderService? _orderService { get; set; }
+    [Inject] IAttendanceService? _attendanceService { get; set; }
     [Inject] IPaymentService? _paymentService { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
@@ -164,7 +165,7 @@
     {
         _processing = true;
 
-        var res = await _orderService.GetAttendanceByOrderId(orderId);
+        var res = await _attendanceService.GetAttendanceByOrderId(orderId);
 
         if (res.result.code == ResponseCodes.ResponseCodeOk)
         {
