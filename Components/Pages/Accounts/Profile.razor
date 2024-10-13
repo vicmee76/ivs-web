@@ -49,7 +49,11 @@
                             <MudDivider></MudDivider>
                             <br />
 
-                            <div></div>
+                            if(userDetails.Count > 0)
+                            {
+                                <div>Email : <b>@userDetails.FirstOrDefault().email</b></div>
+                               
+                            }
 
 
                         }
@@ -59,17 +63,74 @@
 
 
                 <MudItem xs="12" sm="12" md="9" lg="9" xl="9" xxl="9">
-                    <MudTabs Outlined="false" Position="Position.Top" Rounded="false" Border="false"
-                             ApplyEffectsToContainer="true" Class="mt-8" PanelClass="pa-6">
+                    <MudTabs Outlined="false" Position="Position.Top" SliderColor="Color.Secondary" Rounded="true" Border="true"  ApplyEffectsToContainer="true" Class="mt-8" PanelClass="">
+
                         <MudTabPanel Text="Settlement Account" >
-                            <MudText>Content One</MudText>
+
+                            <br /><br />
+
+                            <MudText Typo="Typo.h6">Settlement Account</MudText>
+
+                            <br /><br />
+
+
+                            <MudGrid></MudGrid>
+
+                            @if (_processing)
+                            {
+                                <MudSkeleton Height="42px" Width="200px" />
+                                <MudSkeleton Height="42px" Width="500px" />
+                                <MudSkeleton Height="42px" Width="800px" />
+                            }
+                            else
+                            {
+                               <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6" >
+
+                                    @if (!userDetails.FirstOrDefault().settlementAccounts.Any())
+                                    {
+                                        <MudText Typo="Typo.subtitle2"> You haven't created a settlement account yet. Add settlement account. </MudText>
+
+                                        <br />
+                                    }
+                                    else
+                                    {
+                                    <MudSimpleTable Elevation="0" Dense="false" Hover="true" Bordered="false" Striped="false" Style="overflow-x: auto;">
+                                        <thead>
+                                            <tr>
+                                                <th>Bank Name</th>
+                                                <th>Account Name</th>
+                                                <th>Account Number</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var row in userDetails.FirstOrDefault().settlementAccounts)
+                                            {
+                                                <tr>
+                                                    <td>@row.bankName</td>
+                                                    <td>@row.accountName</td>
+                                                    <td>@row.accountNumber</td>
+                                                    <td><MudIcon Icon="@Icons.Material.Filled.Lock" Size="Size.Small" Color="Color.Error" Title="Locked" /></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </MudSimpleTable>
+                                    }
+
+                               </MudItem>
+                            }
+
+
                         </MudTabPanel>
-                        <MudTabPanel Text="Item Two">
+
+                        <MudTabPanel Text="Privacy">
                             <MudText>Content Two</MudText>
                         </MudTabPanel>
+
                         <MudTabPanel Text="Item Three">
                             <MudText>Content Three</MudText>
                         </MudTabPanel>
+
                     </MudTabs>
                 </MudItem>
 
@@ -93,8 +154,11 @@
 
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+    [Inject] IAccountService _accountService { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
 
     AuthUser authUser = new AuthUser();
+    List<UserDetailsDto> userDetails = new List<UserDetailsDto>();
 
     private bool _processing { get; set; } = false;
     private string? initials {get;set;}
@@ -121,6 +185,16 @@
             var auth = await authUser.GetAuthUserAsync(state);
             initials = auth.NameInitials;
             fullname = auth.SentenceCaseFullName;
+
+            var res = await _accountService.GetUserById(auth.Id);
+            if (res.result.code == ResponseCodes.ResponseCodeOk)
+            {
+                userDetails = (List<UserDetailsDto>)res.result.data;
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
         }
         _processing = false;
         StateHasChanged();

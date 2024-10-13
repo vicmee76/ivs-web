@@ -5,12 +5,15 @@ using ivs.Domain.Interfaces.Accounts;
 using ivs.Domain.Interfaces.General;
 using ivs.Domain.Models.Dtos.Accounts;
 using ivs.Domain.Models.ViewModels.Accounts;
+using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 
 namespace ivs_ui.Components.Data.Services.Accounts
 {
-    public class AccountService(IWebService webService) : IAccountService
+    public class AccountService(IWebService webService, ILocalStorageService sessionStorageService) : IAccountService
     {
         private readonly IWebService _webService = webService;
+        private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
         private const string ApiUsersUrl = "/api/v1/users";
         private const string ApiLoginUrl = "/api/v1/accounts";
 
@@ -174,5 +177,32 @@ namespace ivs_ui.Components.Data.Services.Accounts
 
 
 
+        public async Task<ResponseObject> GetUserById(string userId)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+
+                var response = await _webService.Call(ApiUsersUrl, $"/get-user-by-id/{userId}", Method.Get, null, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
+                res.result.data = JsonConvert.DeserializeObject<List<UserDetailsDto>>(myJsonResponse);
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to publish this event, please try again later",
+                    }
+                };
+            }
+        }
     }
 }

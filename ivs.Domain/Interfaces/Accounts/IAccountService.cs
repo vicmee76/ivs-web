@@ -11,4 +11,5 @@ public interface IAccountService
     Task<ResponseObject> ResetPassword(string id, ForgotPasswordVM model);
     Task<ResponseObject> SendForgotPasswordToken(string email);
     Task<ResponseObject> VerifyAccount(string userId, ActivateAccountVM model);
+    Task<ResponseObject> GetUserById(string userId);
 }
