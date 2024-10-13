@@ -1,0 +1,128 @@
+﻿@page "/user/profile"
+
+@{
+    CultureInfo nigeriaCulture = new CultureInfo("en-NG");
+    Thread.CurrentThread.CurrentCulture = nigeriaCulture;
+    Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
+}
+
+<PageTitle>Iv's - Account</PageTitle>
+
+<br />
+
+
+<AuthorizeView Roles="User,Admin">
+
+    <NotAuthorized>
+        No Access
+    </NotAuthorized>
+
+    <Authorized Context="cntx">
+
+        <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+
+            <MudPaper Elevation="0">
+                <MudToolBar>
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                </MudToolBar>
+            </MudPaper>
+
+            <br />
+
+            <MudGrid Spacing="6">
+
+                <MudItem xs="12" sm="12" md="3" lg="3" xl="3" xxl="3">
+                    <MudPaper Elevation="0" Class="mud-width-full py-10 pa-5" Style="text-align:center;">
+                       
+                        @if (_processing)
+                        {
+                            <MudSkeleton SkeletonType="SkeletonType.Circle" Width="100px" Height="100px" />
+                        }
+                        else
+                        {
+                            <MudAvatar Style="height:80px; width:80px; font-size:2rem; background-color:#55385c; color:white">@initials</MudAvatar>
+                            <br /><br />
+
+                            <MudText Typo="Typo.h5" Style="font-family:'Akaya Telivigala'; color:#55385c"> <b>@fullname</b> </MudText>
+
+                            <br />
+                            <MudDivider></MudDivider>
+                            <br />
+
+                            <div></div>
+
+
+                        }
+
+                    </MudPaper>
+                </MudItem>
+
+
+                <MudItem xs="12" sm="12" md="9" lg="9" xl="9" xxl="9">
+                    <MudTabs Outlined="false" Position="Position.Top" Rounded="false" Border="false"
+                             ApplyEffectsToContainer="true" Class="mt-8" PanelClass="pa-6">
+                        <MudTabPanel Text="Settlement Account" >
+                            <MudText>Content One</MudText>
+                        </MudTabPanel>
+                        <MudTabPanel Text="Item Two">
+                            <MudText>Content Two</MudText>
+                        </MudTabPanel>
+                        <MudTabPanel Text="Item Three">
+                            <MudText>Content Three</MudText>
+                        </MudTabPanel>
+                    </MudTabs>
+                </MudItem>
+
+
+
+            </MudGrid>
+
+
+
+
+        </MudContainer>
+       
+
+    </Authorized>
+</AuthorizeView>
+
+
+
+
+@code {
+
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+
+    AuthUser authUser = new AuthUser();
+
+    private bool _processing { get; set; } = false;
+    private string? initials {get;set;}
+    private string? fullname {get;set;} 
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem("Dashboard", href: "/events/dashboard"),
+        new BreadcrumbItem("Profile", href: null, true)
+    };
+
+
+    protected async override void OnInitialized()
+    {
+        _processing = true;
+        var state = await _authStateProvider.GetAuthenticationStateAsync();
+
+        if (!state.User.Identity.IsAuthenticated)
+        {
+            _navigate.NavigateTo("/accounts/login");
+        }
+        else
+        {
+            var auth = await authUser.GetAuthUserAsync(state);
+            initials = auth.NameInitials;
+            fullname = auth.SentenceCaseFullName;
+        }
+        _processing = false;
+        StateHasChanged();
+    }
+}
