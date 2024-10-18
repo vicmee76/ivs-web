@@ -67,59 +67,102 @@
 
                         <MudTabPanel Text="Settlement Account" >
 
-                            <br /><br />
-
-                            <MudText Typo="Typo.h6">Settlement Account</MudText>
-
-                            <br /><br />
+                           <div style="padding:20px">
 
 
-                            <MudGrid></MudGrid>
+                                <br />
 
-                            @if (_processing)
-                            {
-                                <MudSkeleton Height="42px" Width="200px" />
-                                <MudSkeleton Height="42px" Width="500px" />
-                                <MudSkeleton Height="42px" Width="800px" />
-                            }
-                            else
-                            {
-                               <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6" >
+                                <MudText Typo="Typo.h6">Settlement Account</MudText>
 
-                                    @if (!userDetails.FirstOrDefault().settlementAccounts.Any())
-                                    {
-                                        <MudText Typo="Typo.subtitle2"> You haven't created a settlement account yet. Add settlement account. </MudText>
+                                <br /><br />
 
-                                        <br />
-                                    }
-                                    else
-                                    {
-                                    <MudSimpleTable Elevation="0" Dense="false" Hover="true" Bordered="false" Striped="false" Style="overflow-x: auto;">
-                                        <thead>
-                                            <tr>
-                                                <th>Bank Name</th>
-                                                <th>Account Name</th>
-                                                <th>Account Number</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var row in userDetails.FirstOrDefault().settlementAccounts)
-                                            {
-                                                <tr>
-                                                    <td>@row.bankName</td>
-                                                    <td>@row.accountName</td>
-                                                    <td>@row.accountNumber</td>
-                                                    <td><MudIcon Icon="@Icons.Material.Filled.Lock" Size="Size.Small" Color="Color.Error" Title="Locked" /></td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </MudSimpleTable>
-                                    }
 
-                               </MudItem>
-                            }
+                                @if (_processing)
+                                {
+                                    <MudSkeleton Height="42px" Width="200px" />
+                                    <MudSkeleton Height="42px" Width="500px" />
+                                    <MudSkeleton Height="42px" Width="800px" />
+                                }
+                                else
+                                {
+                                    <MudItem xs="12" sm="12" md="12" lg="8" xl="8" xxl="8">
 
+                                        @if (!userDetails.FirstOrDefault().settlementAccounts.Any())
+                                        {
+                                            <MudText Typo="Typo.subtitle2"> You haven't created a settlement account yet. Add settlement account. </MudText>
+
+                                            <br />
+                                            <MudDivider></MudDivider>
+                                            <br />
+
+                                            <div>
+                                                <MudText Typo="Typo.body1"> <b>Add Account</b> </MudText>
+
+                                                <br />
+
+                                                <MudGrid>
+                                                    <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
+                                                        <MudTextField @bind-Value="accountNumber" Margin="Margin.Dense" Clearable="true" Label="Account Number" Variant="Variant.Outlined"></MudTextField>
+                                                    </MudItem>
+
+                                                    <MudItem xs="12" sm="12" md="12" lg="5" xl="5" xxl="5">
+                                                        <MudAutocomplete @bind-Value="selectedBankName"
+                                                                         SearchFunc="Search"
+                                                                         Variant="Variant.Outlined"
+                                                                         ResetValueOnEmptyText="true"
+                                                                         Dense="true"
+                                                                         Margin="Margin.Dense"
+                                                                         Label="Select Banks"
+                                                                         Placeholder="Search banks"
+                                                                         Clearable="true" />
+                                                    </MudItem>
+
+
+                                                    <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
+                                                        <MudTextField T="string" Label="Pin" Margin="Margin.Dense" Variant="Variant.Outlined" InputType="InputType.Password" />
+                                                    </MudItem>
+
+
+                                                    
+                                                </MudGrid>
+
+
+
+
+                                            </div>
+
+                                        }
+                                        else
+                                        {
+                                            <MudSimpleTable Elevation="0" Dense="false" Hover="true" Bordered="false" Striped="false" Style="overflow-x: auto;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Bank Name</th>
+                                                        <th>Account Name</th>
+                                                        <th>Account Number</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var row in userDetails.FirstOrDefault().settlementAccounts)
+                                                    {
+                                                        <tr>
+                                                            <td>@row.bankName</td>
+                                                            <td>@row.accountName</td>
+                                                            <td>@row.accountNumber</td>
+                                                            <td><MudIcon Icon="@Icons.Material.Filled.Lock" Size="Size.Small" Color="Color.Error" Title="Locked" /></td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </MudSimpleTable>
+                                        }
+
+                                    </MudItem>
+                                }
+
+
+
+                           </div>
 
                         </MudTabPanel>
 
@@ -155,10 +198,15 @@
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
     [Inject] IAccountService _accountService { get; set; }
+    [Inject] IPaymentService _paymentService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
 
+    private string selectedBankName { get; set; }
+    private string accountNumber { get; set; }
     AuthUser authUser = new AuthUser();
     List<UserDetailsDto> userDetails = new List<UserDetailsDto>();
+    List<GetBanksDto> banksDtos = new List<GetBanksDto>();
+    private string[] bankName;
 
     private bool _processing { get; set; } = false;
     private string? initials {get;set;}
@@ -195,8 +243,47 @@
             {
                 _snackbar.Add(res.result.message, Severity.Error);
             }
+
+
+            var banks = await _paymentService.GetBanks("NG");
+            if (banks.result.code == ResponseCodes.ResponseCodeOk)
+            {
+                banksDtos = (List<GetBanksDto>)banks.result.data;
+                bankName = banksDtos.Select(d => d.name).ToArray();
+            }
+            else
+            {
+                _snackbar.Add(banks.result.message, Severity.Error);
+            }
         }
         _processing = false;
         StateHasChanged();
     }
+
+
+    private async Task<IEnumerable<string>> Search(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return bankName;
+
+        return bankName.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private IEnumerable<string> Validate(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            yield return "The State field is required";
+            yield break;
+        }
+
+    
+    }
+
+
+
 }

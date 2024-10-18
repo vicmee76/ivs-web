@@ -44,14 +44,36 @@ namespace ivs_ui.Components.Data.Services.Payment
         }
 
 
+        public async Task<ResponseObject> GetBanks(string country = "NG")
+        {
+            try
+            {
+                var queryParam = new Dictionary<string, string> { { "country", country } };
+
+                var headers = await _webService.GetAuthorizationHeaders();
+
+                var response = await _webService.Call(ApiUrl, $"flutterwave-get-banks/", Method.Get, null, headers, queryParam, null);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return new ResponseObject();
+
+                res.result.data = JsonConvert.DeserializeObject<List<GetBanksDto>>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject() { result = new ResponseContents() { message = "Error! Something went wrong trying to get all banks record, please try again later" } };
+            }
+        }
+
+
 
         public async Task<ResponseObject> GetSales(Dictionary<string, string> queryParam)
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
+                var headers = await _webService.GetAuthorizationHeaders();
                 var response = await _webService.Call(ApiUrl, $"get-sales/", Method.Get, null, headers, queryParam, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;

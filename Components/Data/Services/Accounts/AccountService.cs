@@ -10,10 +10,9 @@ using Blazored.SessionStorage;
 
 namespace ivs_ui.Components.Data.Services.Accounts
 {
-    public class AccountService(IWebService webService, ILocalStorageService sessionStorageService) : IAccountService
+    public class AccountService(IWebService webService) : IAccountService
     {
         private readonly IWebService _webService = webService;
-        private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
         private const string ApiUsersUrl = "/api/v1/users";
         private const string ApiLoginUrl = "/api/v1/accounts";
 

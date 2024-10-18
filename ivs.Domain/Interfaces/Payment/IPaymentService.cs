@@ -9,5 +9,6 @@ namespace ivs.Domain.Interfaces.Payment
         public Task<ResponseObject> VerifyPayment(Dictionary<string, string> model);
         public Task<ResponseObject> ProcessFreePayment(string orderId);
         public Task<ResponseObject> GetSales(Dictionary<string, string> queryParam);
+        public Task<ResponseObject> GetBanks(string country = "NG");
     }
 }
