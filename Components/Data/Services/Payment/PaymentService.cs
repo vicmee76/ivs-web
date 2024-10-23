@@ -56,7 +56,7 @@ namespace ivs_ui.Components.Data.Services.Payment
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
-                    return new ResponseObject();
+                    return res;
 
                 res.result.data = JsonConvert.DeserializeObject<List<GetBanksDto>>(content?.data?.ToString());
                 return res;
@@ -78,7 +78,7 @@ namespace ivs_ui.Components.Data.Services.Payment
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
-                    return new ResponseObject();
+                    return res;
 
                 res.result.data = JsonConvert.DeserializeObject<GetSalesDto>(content?.data?.ToString());
                 return res;
@@ -117,6 +117,33 @@ namespace ivs_ui.Components.Data.Services.Payment
             }
         }
 
+
+
+        public async Task<ResponseObject> VerifyAccountNumber(string bankCode, string accountNumber)
+        {
+            try
+            {
+                var req = new { account_number = accountNumber, account_bank = bankCode };
+
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUrl, $"flutterwave-verify-account-number/", Method.Post, req, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                res.result.data = JsonConvert.DeserializeObject<VerifyAccountDto>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject() { result = new ResponseContents() { message = "Error! Something went wrong trying to verify your account details, please try again later" } };
+            }
+        }
+
+
+
+
         public async Task<ResponseObject> VerifyPayment(Dictionary<string, string> model)
         {
             try
@@ -125,7 +152,7 @@ namespace ivs_ui.Components.Data.Services.Payment
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
-                    return new ResponseObject();
+                    return res;
 
                 res.result.data = JsonConvert.DeserializeObject<List<VerifyPaymentDto>>(content?.data?.ToString());
                 return res;

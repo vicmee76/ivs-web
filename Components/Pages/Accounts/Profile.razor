@@ -19,6 +19,21 @@
 
     <Authorized Context="cntx">
 
+
+        <MudMessageBox @ref="createSettlementMessageBox" Title="Create Settlement Account" CancelText="Cancel" YesText="Add Account" Style="padding:20px;">
+            <MessageContent>
+                Are you sure you want add this account as your settlement account? <br /> You might need to contact us if you ever want to change it.
+            </MessageContent>
+            <YesButton>
+                <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Success">Yes</MudButton>
+            </YesButton>
+            <CancelButton>
+                <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Default">Cancel</MudButton>
+            </CancelButton>
+
+        </MudMessageBox>
+
+
         <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
 
             <MudPaper Elevation="0">
@@ -87,74 +102,104 @@
                                 {
                                     <MudItem xs="12" sm="12" md="12" lg="8" xl="8" xxl="8">
 
-                                        @if (!userDetails.FirstOrDefault().settlementAccounts.Any())
+                                        @if(userDetails.Any())
                                         {
-                                            <MudText Typo="Typo.subtitle2"> You haven't created a settlement account yet. Add settlement account. </MudText>
-
-                                            <br />
-                                            <MudDivider></MudDivider>
-                                            <br />
-
-                                            <div>
-                                                <MudText Typo="Typo.body1"> <b>Add Account</b> </MudText>
+                                            if (!userDetails.FirstOrDefault().settlementAccounts.Any())
+                                            {
+                                                <MudText Typo="Typo.subtitle2"> You haven't created a settlement account yet. Add settlement account. </MudText>
 
                                                 <br />
+                                                <MudDivider></MudDivider>
+                                                <br />
 
-                                                <MudGrid>
-                                                    <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
-                                                        <MudTextField @bind-Value="accountNumber" Margin="Margin.Dense" Clearable="true" Label="Account Number" Variant="Variant.Outlined"></MudTextField>
-                                                    </MudItem>
+                                                <div>
+                                                    <MudText Typo="Typo.body1"> <b>Add Account</b> </MudText>
 
-                                                    <MudItem xs="12" sm="12" md="12" lg="5" xl="5" xxl="5">
-                                                        <MudAutocomplete @bind-Value="selectedBankName"
-                                                                         SearchFunc="Search"
-                                                                         Variant="Variant.Outlined"
-                                                                         ResetValueOnEmptyText="true"
-                                                                         Dense="true"
-                                                                         Margin="Margin.Dense"
-                                                                         Label="Select Banks"
-                                                                         Placeholder="Search banks"
-                                                                         Clearable="true" />
-                                                    </MudItem>
+                                                    <br />
+
+                                                    <MudGrid>
+                                                        <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
+                                                            <MudTextField @bind-Value="accountNumber" OnClearButtonClick="ResetAccountNumber" Margin="Margin.Dense" Clearable="true" Label="Account Number" Variant="Variant.Outlined"></MudTextField>
+                                                            <br />
+
+                                                            @if (_accountVerificationProcessing)
+                                                            {
+                                                                <MudProgressCircular Size="Size.Small" Indeterminate="true" />
+                                                                <span Class="ms-2">Processing</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                if (!string.IsNullOrWhiteSpace(accountName))
+                                                                {
+
+                                                                    <div style="background-color:#ecebff; padding:10px">
+                                                                        <MudText><b>@accountName</b></MudText>
+                                                                    </div>
+                                                                }
+                                                            }
+                                                               
+                                                           
+                                                        </MudItem>
+
+                                                        <MudItem xs="12" sm="12" md="12" lg="5" xl="5" xxl="5">
+                                                            <MudAutocomplete @bind-Value="selectedBankName"
+                                                                             SearchFunc="Search"
+                                                                             Variant="Variant.Outlined"
+                                                                             ResetValueOnEmptyText="true"
+                                                                             Dense="true"
+                                                                             Margin="Margin.Dense"
+                                                                             Label="Select Banks"
+                                                                             Placeholder="Search your bank banks"
+                                                                             Clearable="true" 
+                                                                             IsOpenChanged="VerifyAccountNumber"
+                                                                             OnClearButtonClick="ResetAccountNumber"
+                                                                             />
+                                                        </MudItem>
 
 
-                                                    <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
-                                                        <MudTextField T="string" Label="Pin" Margin="Margin.Dense" Variant="Variant.Outlined" InputType="InputType.Password" />
-                                                    </MudItem>
+                                                        <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
 
+                                                            <MudButton FullWidth="true" Disabled="@_createSettlementActionProcessing" OnClick="@(async () => await ActionCreateSettlementAccount())" Style="background:#54385b" Variant="Variant.Filled" Size="Size.Large" Color="Color.Primary">
+                                                                @if (_createSettlementActionProcessing)
+                                                                {
+                                                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                                                    <MudText Class="ms-2">Processing</MudText>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <MudText>Add Account</MudText>
+                                                                }
+                                                            </MudButton>
+                                                        </MudItem>
+                                                    </MudGrid>
 
-                                                    
-                                                </MudGrid>
+                                                </div>
 
-
-
-
-                                            </div>
-
-                                        }
-                                        else
-                                        {
-                                            <MudSimpleTable Elevation="0" Dense="false" Hover="true" Bordered="false" Striped="false" Style="overflow-x: auto;">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Bank Name</th>
-                                                        <th>Account Name</th>
-                                                        <th>Account Number</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (var row in userDetails.FirstOrDefault().settlementAccounts)
-                                                    {
+                                            }
+                                            else
+                                            {
+                                                <MudSimpleTable Elevation="0" Dense="false" Hover="true" Bordered="false" Striped="false" Style="overflow-x: auto;">
+                                                    <thead>
                                                         <tr>
-                                                            <td>@row.bankName</td>
-                                                            <td>@row.accountName</td>
-                                                            <td>@row.accountNumber</td>
-                                                            <td><MudIcon Icon="@Icons.Material.Filled.Lock" Size="Size.Small" Color="Color.Error" Title="Locked" /></td>
+                                                            <th>Bank Name</th>
+                                                            <th>Account Name</th>
+                                                            <th>Account Number</th>
+                                                            <th></th>
                                                         </tr>
-                                                    }
-                                                </tbody>
-                                            </MudSimpleTable>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var row in userDetails.FirstOrDefault().settlementAccounts)
+                                                        {
+                                                            <tr>
+                                                                <td>@row.bankName</td>
+                                                                <td>@row.accountName</td>
+                                                                <td>@row.accountNumber</td>
+                                                                <td><MudIcon Icon="@Icons.Material.Filled.Lock" Size="Size.Small" Color="Color.Error" Title="Locked" /></td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </MudSimpleTable>
+                                            }
                                         }
 
                                     </MudItem>
@@ -200,17 +245,23 @@
     [Inject] IAccountService _accountService { get; set; }
     [Inject] IPaymentService _paymentService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
+    private MudMessageBox createSettlementMessageBox { get; set; }
 
     private string selectedBankName { get; set; }
     private string accountNumber { get; set; }
+    private string accountName { get; set; }
+
     AuthUser authUser = new AuthUser();
     List<UserDetailsDto> userDetails = new List<UserDetailsDto>();
     List<GetBanksDto> banksDtos = new List<GetBanksDto>();
     private string[] bankName;
 
     private bool _processing { get; set; } = false;
+    private bool _createSettlementActionProcessing { get; set; } = false;
+    private bool _accountVerificationProcessing { get; set; } = false;
     private string? initials {get;set;}
     private string? fullname {get;set;} 
+    private string? userId {get;set;} 
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
@@ -233,6 +284,7 @@
             var auth = await authUser.GetAuthUserAsync(state);
             initials = auth.NameInitials;
             fullname = auth.SentenceCaseFullName;
+            userId = auth.Id;
 
             var res = await _accountService.GetUserById(auth.Id);
             if (res.result.code == ResponseCodes.ResponseCodeOk)
@@ -264,24 +316,111 @@
     private async Task<IEnumerable<string>> Search(string value)
     {
         // In real life use an asynchronous function for fetching data from an api.
-        await Task.Delay(5);
+        await Task.Delay(1);
 
         // if text is null or empty, show complete list
         if (string.IsNullOrEmpty(value))
             return bankName;
 
-        return bankName.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+        return bankName.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase)).Distinct();
     }
 
-    private IEnumerable<string> Validate(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            yield return "The State field is required";
-            yield break;
-        }
 
-    
+
+
+    private async Task VerifyAccountNumber()
+    {
+        _accountVerificationProcessing = true;
+
+        if (!string.IsNullOrWhiteSpace(selectedBankName))
+        {
+            if (string.IsNullOrWhiteSpace(accountNumber))
+            {
+                accountName = string.Empty;
+                _snackbar.Add("Enter a valid account number", Severity.Error);
+            }
+            else
+            {
+                var bank = banksDtos.Where(x => x.name.Equals(selectedBankName, StringComparison.InvariantCultureIgnoreCase));
+
+                if (bank.Any() && accountNumber.Length == 10)
+                {
+                    var res = await _paymentService.VerifyAccountNumber(bank.FirstOrDefault().code, accountNumber);
+                    if (res.result.code == ResponseCodes.ResponseCodeOk)
+                    {
+                        var accName = (VerifyAccountDto)res.result.data;
+                        accountName = accName.account_name;
+                    }
+                    else
+                    {
+                        accountName = string.Empty;
+                        _snackbar.Add(res.result.message, Severity.Error);
+                    }
+                }
+                else
+                {
+                    accountName = string.Empty;
+                    _snackbar.Add("Account number must be 10 digit.", Severity.Error);
+                }
+            }
+        }
+        _accountVerificationProcessing = false;
+    }
+
+
+    private void ResetAccountNumber()
+    {
+        accountName = string.Empty;
+        accountNumber = string.Empty;
+        selectedBankName = string.Empty;
+    }
+
+
+    private async Task ActionCreateSettlementAccount()
+    {
+        bool? result = await createSettlementMessageBox.Show();
+
+        _createSettlementActionProcessing = true;
+
+        if (string.IsNullOrEmpty(accountName) || string.IsNullOrEmpty(selectedBankName) || string.IsNullOrEmpty(accountNumber))
+        {
+            _snackbar.Add("Please verify your account first before creating a settlement account.", Severity.Error);
+        }
+        else
+        {
+            if (result == true)
+            {
+
+                var bank = banksDtos.Where(x => x.name.Equals(selectedBankName, StringComparison.InvariantCultureIgnoreCase));
+
+                var model = new CreateSettlementAccountDto()
+                    {
+                        accountName = accountName,
+                        accountNumber = accountNumber,
+                        bankCode = bank.FirstOrDefault().code,
+                        bankName = selectedBankName,
+                        userId = userId
+                    };
+
+                var res = await _accountService.CreateSettlementAccount(model);
+
+                if (res.result.code == ResponseCodes.ResponseCodeCreated)
+                {
+                    accountName = string.Empty;
+                    accountNumber = string.Empty;
+                    selectedBankName = string.Empty;
+                    _snackbar.Add(res.result.message, Severity.Success);
+
+                    OnInitialized();
+                    StateHasChanged();
+                }
+                else
+                {
+                    _snackbar.Add(res.result.message, Severity.Error);
+                }
+            }
+        }
+        _createSettlementActionProcessing = false;
     }
 
 

@@ -5,8 +5,6 @@ using ivs.Domain.Interfaces.Accounts;
 using ivs.Domain.Interfaces.General;
 using ivs.Domain.Models.Dtos.Accounts;
 using ivs.Domain.Models.ViewModels.Accounts;
-using Blazored.LocalStorage;
-using Blazored.SessionStorage;
 
 namespace ivs_ui.Components.Data.Services.Accounts
 {
@@ -199,6 +197,29 @@ namespace ivs_ui.Components.Data.Services.Accounts
                     result = new ResponseContents()
                     {
                         message = "Error! Something went wrong trying to publish this event, please try again later",
+                    }
+                };
+            }
+        }
+
+
+
+        public async Task<ResponseObject> CreateSettlementAccount(CreateSettlementAccountDto model)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUsersUrl, $"/settlement/create-settlement-account/", Method.Post, model, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to create this settlement account, please try again later",
                     }
                 };
             }
