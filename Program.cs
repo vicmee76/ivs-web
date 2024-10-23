@@ -71,7 +71,8 @@ builder.Services.AddTransient<IPaymentOptionService, PaymentOptionService>();
 builder.Services.AddTransient<IEventService, EventService>();
 builder.Services.AddTransient<IEventTimeService, EventTimeService>();
 builder.Services.AddTransient<ITicketService, TicketService>();
-builder.Services.AddTransient<IOrdersAndAttendanceService, OrdersAndAttendanceService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
+builder.Services.AddTransient<IAttendanceService, AttendanceService>();
 builder.Services.AddTransient<IPaymentService, PaymentService>();
 
 

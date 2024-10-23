@@ -8,4 +8,5 @@ public class UserAuthDto
     public string? Role { get; set; }
     public string? FirstName { get; set; }
     public string? SentenceCaseFullName { get; set; }
+    public string? NameInitials { get; set; }
 }

@@ -145,7 +145,6 @@
                     {
                         @if (_eventsDto.Any())
                         {
-
                             <MudDataGrid T="UpcomingEventsDto" Elevation="1" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_eventsDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
                                          Hideable="false">
                                 <ToolBarContent>
@@ -202,8 +201,12 @@
                         else
                         {
                             <div style="text-align:center;">
-                                <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="130" Class="rounded-lg" />
-                                <br />
+                                
+                                <br/><br/>
+                                <br/><br/>
+
+                                <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="130" Class="rounded-lg"/>
+                                <br/>
                                 <MudText Typo="Typo.h5"> <b>You don't have any upcoming event yet!</b></MudText>
                                 <br>
                                 <MudText> Your upcoming event(s) will show up here 2 weeks before they start.</MudText>

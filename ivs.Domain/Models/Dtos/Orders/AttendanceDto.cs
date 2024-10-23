@@ -4,6 +4,9 @@
     public class GetAttendanceDto
     {
         public int totalCount { get; set; }
+        public int addmittedUsersCount { get; set; }
+        public int notAddmittedUsersCount { get; set; }
+        public int totalTicketQuantity { get; set; }
         public List<AttendanceDto> paginatedResults { get; set; }
     }
 

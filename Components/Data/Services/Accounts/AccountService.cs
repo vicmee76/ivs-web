@@ -174,5 +174,55 @@ namespace ivs_ui.Components.Data.Services.Accounts
 
 
 
+        public async Task<ResponseObject> GetUserById(string userId)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+
+                var response = await _webService.Call(ApiUsersUrl, $"/get-user-by-id/{userId}", Method.Get, null, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
+                res.result.data = JsonConvert.DeserializeObject<List<UserDetailsDto>>(myJsonResponse);
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to publish this event, please try again later",
+                    }
+                };
+            }
+        }
+
+
+
+        public async Task<ResponseObject> CreateSettlementAccount(CreateSettlementAccountDto model)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUsersUrl, $"/settlement/create-settlement-account/", Method.Post, model, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to create this settlement account, please try again later",
+                    }
+                };
+            }
+        }
     }
 }

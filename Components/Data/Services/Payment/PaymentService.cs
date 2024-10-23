@@ -1,6 +1,9 @@
-﻿using ivs.Domain.Constants;
+﻿using Blazored.LocalStorage;
+using Blazored.SessionStorage;
+using ivs.Domain.Constants;
 using ivs.Domain.Interfaces.General;
 using ivs.Domain.Interfaces.Payment;
+using ivs.Domain.Models.Dtos.Orders;
 using ivs.Domain.Models.Dtos.Payment;
 using ivs.Domain.Models.ViewModels.Payments;
 using Newtonsoft.Json;
@@ -9,9 +12,11 @@ using System.Reflection;
 
 namespace ivs_ui.Components.Data.Services.Payment
 {
-    public class PaymentService(IWebService _webService) : IPaymentService
+    public class PaymentService(IWebService _webService, ILocalStorageService sessionStorageService) : IPaymentService
     {
         private const string ApiUrl = "/api/v1/payments/";
+
+        private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
 
         public async Task<ResponseObject> GeneratePaymentLink(MakePaymentVM model)
         {
@@ -38,6 +43,55 @@ namespace ivs_ui.Components.Data.Services.Payment
             }
         }
 
+
+        public async Task<ResponseObject> GetBanks(string country = "NG")
+        {
+            try
+            {
+                var queryParam = new Dictionary<string, string> { { "country", country } };
+
+                var headers = await _webService.GetAuthorizationHeaders();
+
+                var response = await _webService.Call(ApiUrl, $"flutterwave-get-banks/", Method.Get, null, headers, queryParam, null);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                res.result.data = JsonConvert.DeserializeObject<List<GetBanksDto>>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject() { result = new ResponseContents() { message = "Error! Something went wrong trying to get all banks record, please try again later" } };
+            }
+        }
+
+
+
+        public async Task<ResponseObject> GetSales(Dictionary<string, string> queryParam)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUrl, $"get-sales/", Method.Get, null, headers, queryParam, null);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                res.result.data = JsonConvert.DeserializeObject<GetSalesDto>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject() { result = new ResponseContents() { message = "Error! Something went wrong trying to get sales record, please try again later" } };
+            }
+        }
+
+
+
+
         public async Task<ResponseObject> ProcessFreePayment(string orderId)
         {
             try
@@ -63,6 +117,33 @@ namespace ivs_ui.Components.Data.Services.Payment
             }
         }
 
+
+
+        public async Task<ResponseObject> VerifyAccountNumber(string bankCode, string accountNumber)
+        {
+            try
+            {
+                var req = new { account_number = accountNumber, account_bank = bankCode };
+
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUrl, $"flutterwave-verify-account-number/", Method.Post, req, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                res.result.data = JsonConvert.DeserializeObject<VerifyAccountDto>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject() { result = new ResponseContents() { message = "Error! Something went wrong trying to verify your account details, please try again later" } };
+            }
+        }
+
+
+
+
         public async Task<ResponseObject> VerifyPayment(Dictionary<string, string> model)
         {
             try
@@ -71,7 +152,7 @@ namespace ivs_ui.Components.Data.Services.Payment
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
-                    return new ResponseObject();
+                    return res;
 
                 res.result.data = JsonConvert.DeserializeObject<List<VerifyPaymentDto>>(content?.data?.ToString());
                 return res;
