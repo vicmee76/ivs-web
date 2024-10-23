@@ -1,13 +1,17 @@
-﻿using ivs.Domain.Interfaces.General;
+﻿using Blazored.LocalStorage;
+using Blazored.SessionStorage;
+using ivs.Domain.Constants;
+using ivs.Domain.Interfaces.General;
 using ivs.Domain.Models.ViewModels.Events;
 using Newtonsoft.Json;
 using RestSharp;
 
 namespace ivs_ui.Components.Data.Services.General
 {
-    public class WebService(IConfiguration config) : IWebService
+    public class WebService(IConfiguration config, ILocalStorageService sessionStorageService) : IWebService
     {
         private readonly IConfiguration _config = config;
+        private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
 
         public async Task<RestResponse> Call(string apiPathUrl, string absoluteUrl, Method method, dynamic? body, Dictionary<string, string>? headers = null, Dictionary<string, string>? queryParameter = null, UploadFileVM? file = null)
         {
@@ -42,5 +46,13 @@ namespace ivs_ui.Components.Data.Services.General
             return response;
         }
 
+
+
+        public async Task<Dictionary<string, string>> GetAuthorizationHeaders()
+        {
+            var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
+            var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+            return headers;
+        }
     }
 }

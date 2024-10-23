@@ -8,8 +8,8 @@ public class ResponseObject
 
 public class ResponseContents
 {
-    public int? code { get; set; }
-    public bool? success { get; set; }
+    public int? code { get; set; } = 0;
+    public bool? success { get; set; } = false;
     public string? message { get; set; }
     public string? token { get; set; }
     public dynamic? data { get; set; }

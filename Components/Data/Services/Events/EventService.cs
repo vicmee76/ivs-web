@@ -10,19 +10,16 @@ using ivs.Domain.Models.ViewModels.Events;
 
 namespace ivs_ui.Components.Data.Services.Events
 {
-    public class EventService(IWebService webService, ILocalStorageService sessionStorageService) : IEventService
+    public class EventService(IWebService webService ) : IEventService
     {
         private readonly IWebService _webService = webService;
-        private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
         private const string ApiUrl = "/api/v1/ivs-events/";
 
         public async Task<ResponseObject> ActivateEvent(string id)
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
+                var headers = await _webService.GetAuthorizationHeaders();
                 var response = await _webService.Call(ApiUrl, $"activate-event/{id}", Method.Put, null, headers, null, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
@@ -47,8 +44,7 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+                var headers = await _webService.GetAuthorizationHeaders();
                 var response = await _webService.Call(ApiUrl, $"delete-ivs-event/{id}", Method.Delete, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 return res;
@@ -69,9 +65,7 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
+                var headers = await _webService.GetAuthorizationHeaders();
                 var response = await _webService.Call(ApiUrl, "create-event", Method.Post, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
@@ -123,9 +117,7 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
+                var headers = await _webService.GetAuthorizationHeaders();
                 var response = await _webService.Call(ApiUrl, $"get-ivs-event-by-userid/{userid}", Method.Get, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
@@ -178,9 +170,7 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
+                var headers = await _webService.GetAuthorizationHeaders();
                 var response = await _webService.Call(ApiUrl, $"get-ivs-event-meta-data-by-id/{id}", Method.Get, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
@@ -208,9 +198,7 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
+                var headers = await _webService.GetAuthorizationHeaders();
                 var response = await _webService.Call(ApiUrl, $"update-event/{id}", Method.Put, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
@@ -238,9 +226,7 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
+                var headers = await _webService.GetAuthorizationHeaders();
                 var response = await _webService.Call(ApiUrl, $"upload-event-photo/{model.ivsEventId}", Method.Put, model, headers, null, file);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;

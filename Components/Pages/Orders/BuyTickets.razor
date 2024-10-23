@@ -290,7 +290,7 @@
     [Parameter] public string? id { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ITicketService? _ticketService { get; set; }
-    [Inject] IOrdersAndAttendanceService? _orderService { get; set; }
+    [Inject] IOrderService? _orderService { get; set; }
     [Inject] IEventService _eventService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
     public AttendanceVm? model { get; set; }
