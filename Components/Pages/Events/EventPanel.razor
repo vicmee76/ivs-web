@@ -59,7 +59,7 @@
 
             <br /><br />
 
-            <MudTabs Elevation="0" MinimumTabWidth="400px" Border="true" Centered="true" ApplyEffectsToContainer="true" PanelClass="pa-10">
+            <MudTabs Elevation="0" MinimumTabWidth="330px" Border="true" Centered="true" ApplyEffectsToContainer="true" PanelClass="pa-10">
 
                 <MudTabPanel Style="height:70px" Text="About Event">
 
@@ -272,8 +272,8 @@
 
                 </MudTabPanel>
 
-            
-            
+
+
                 <MudTabPanel Style="height:70px" Text="Tickets">
 
 
@@ -391,10 +391,10 @@
                     }
 
                 </MudTabPanel>
-                
-            
 
-            <MudTabPanel Style="height:70px" Text="General Attendance">
+
+
+                <MudTabPanel Style="height:70px" Text="General Attendance">
 
                     @if (_processing)
                     {
@@ -412,7 +412,7 @@
                             <MudCardContent>
 
                                 <MudText Typo="Typo.body2" Color="Color.Secondary"><b>Showing Attendance for @TableDescription</b> </MudText>
-                                <br /><br />    
+                                <br /><br />
 
                                 <MudGrid>
                                     <MudItem xs="12" sm="6" md="3" lg="3" xl="3" xxl="3">
@@ -466,19 +466,19 @@
 
                                     <MudItem xs="12" sm="6" md="3" lg="3" xl="3" xxl="3">
                                         <MudPaper Class="pa-5" Outlined="true" Style="background-color:#fff0db">
-                                            
-                                                <div style="line-height:25px">
+
+                                            <div style="line-height:25px">
                                                 @if (_attendanceProcessing)
-                                                    {
-                                                        <MudSkeleton Height="42px;" />
-                                                    }
-                                                    else
-                                                    {
-                                                        <h1>@totalTicketQuantity</h1>
-                                                    }
-                                                    <div>Total Tickets Qty.</div>
-                                                </div>
-                                            
+                                                {
+                                                    <MudSkeleton Height="42px;" />
+                                                }
+                                                else
+                                                {
+                                                    <h1>@totalTicketQuantity</h1>
+                                                }
+                                                <div>Total Tickets Qty.</div>
+                                            </div>
+
                                         </MudPaper>
                                     </MudItem>
 
@@ -561,11 +561,12 @@
                                             <PropertyColumn Property="x => x.ticketQuantity" Title="Qty" />
 
                                             <TemplateColumn Title="Amount Paid" Sortable="false" Filterable="false">
-                                                <CellTemplate Context="ctx"> 
+                                                <CellTemplate Context="ctx">
                                                     @{
                                                         var amount = Convert.ToDecimal(ctx.Item.totalTicketFee);
                                                     }
-                                                    @amount.ToString("C") </CellTemplate>
+                                                    @amount.ToString("C")
+                                                </CellTemplate>
                                             </TemplateColumn>
 
                                             <TemplateColumn Title="Event Date" Sortable="false" Filterable="false">
@@ -592,7 +593,7 @@
 
                 </MudTabPanel>
 
-                
+
 
                 <MudTabPanel Style="height:70px" Text=" General Sales">
 
@@ -602,7 +603,6 @@
                         <MudSkeleton Height="42px" Width="200px" />
                         <MudSkeleton Height="42px" Width="500px" />
                         <MudSkeleton Height="42px" Width="800px" />
-
                     }
                     else
                     {
@@ -611,7 +611,7 @@
 
                             <MudCardContent>
 
-                               <br/>
+                                <br />
 
                                 <MudGrid>
                                     <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
@@ -627,58 +627,57 @@
                                                 else
                                                 {
                                                     <h1>@totalSales</h1>
-                                               
 
-                                                    <div>
-                                                        <div>Total settlement</div>
-                                                        <MudText Typo="Typo.body2" Color="Color.Secondary"> <b>0.00</b> </MudText>
+                                                    <div style="margin-top: 8px">
+                                                        <div style="font-size:17px;">Total settlement</div>
+                                                        <MudText Style="font-size:16px" Color="Color.Warning"> <b>@totalAmountSettled</b>  </MudText>
                                                     </div>
 
                                                 }
-                                                
+
                                             </div>
                                         </MudPaper>
                                     </MudItem>
 
                                     <MudItem xs="12" sm="12" md="12" lg="9" xl="9" xxl="9">
-                                        
+
                                         <MudGrid>
 
 
                                             <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="3">
 
-                                                <MudPaper Class="pa-4" Outlined="true" Style="background-color: #fffcf7">
+                                                <MudPaper Class="pa-5" Outlined="true" Style="background-color: #fffcf7">
                                                     <div style="line-height:25px">
 
                                                         <div>Ticket Purchased</div>
 
                                                         @if (_salesProcessing)
                                                         {
-                                                        <MudSkeleton Height="22px;" />
+                                                            <MudSkeleton Height="22px;" />
                                                         }
                                                         else
                                                         {
-                                                        <b>@totalSalesTicketQuantity</b>
+                                                            <b>@totalSalesTicketQuantity</b>
                                                         }
 
                                                     </div>
 
                                                 </MudPaper>
 
-                                                <br/>
+                                                <br />
 
-                                                <MudPaper Class="pa-4" Outlined="true" Style="background-color: #fffcf7">
+                                                <MudPaper Class="pa-5" Outlined="true" Style="background-color: #fffcf7">
                                                     <div style="line-height:25px">
 
                                                         <div>Avg. Revenue</div>
 
                                                         @if (_salesProcessing)
                                                         {
-                                                        <MudSkeleton Height="22px;" />
+                                                            <MudSkeleton Height="22px;" />
                                                         }
                                                         else
                                                         {
-                                                        <b>@averageSalesRevenue</b>
+                                                            <b>@averageSalesRevenue</b>
                                                         }
 
                                                     </div>
@@ -701,7 +700,7 @@
                                                     foreach (var item in ticketNameGrouping)
                                                     {
                                                         <MudItem xs="12" sm="12" md="6" lg="@cols" xl="@cols" xxl="@cols">
-                                                            <MudPaper Class="pa-5" Outlined="true" Style="background-color: #f4f3ff">
+                                                            <MudPaper Class="pa-7" Outlined="true" Style="background-color: #f4f3ff">
                                                                 <div style="line-height:36px">
 
                                                                     <div><b>@item._id</b></div>
@@ -727,17 +726,19 @@
                                     </MudItem>
 
                                 </MudGrid>
-                                
-                                <br /><br /> 
-                                <MudText Typo="Typo.body2" Color="Color.Secondary"><b>Showing Sales for @SalesTableDescription</b> </MudText>
+
+                                <br /><br />
+                                <divv>
+
+                                    <MudText Typo="Typo.body2" Color="Color.Secondary"><b>Showing Sales for @SalesTableDescription</b> </MudText>
+
+                                </divv>
                                 <br /><br />
 
                                 <div>
 
                                     <MudDataGrid @ref="salesDataGrid" T="GetSalesDataDto" Dense="false" RowsPerPage="10" ServerData="GetSalesServerReload" Filterable="false" Hover="true" Loading="@_salesProcessing" LoadingProgressColor="Color.Secondary" Striped="true" Bordered="true">
                                         <ToolBarContent>
-
-                                           
 
                                             <MudSpacer />
                                             <MudTextField T="string" ValueChanged="@(s=>OnSalesSearch(s))" Placeholder="Search with code, name, email, phone" Adornment="Adornment.Start"
@@ -757,7 +758,7 @@
                                         </ToolBarContent>
                                         <Columns>
 
-                                         
+
                                             <PropertyColumn Property="x => x.code" Title="Code" />
 
                                             <TemplateColumn Title="Fullname" Sortable="false" Filterable="false">
@@ -774,7 +775,7 @@
                                             <TemplateColumn Title="Trans Date" Sortable="false" Filterable="false">
                                                 <CellTemplate Context="ctx"> <b>@Convert.ToDateTime(ctx.Item.paymentDetails.paymentGateWayTransactionDate).ToString("ddd, dd MMM yyyy, HH:mm tt")</b> </CellTemplate>
                                             </TemplateColumn>
-                                          
+
                                             <TemplateColumn Title="Ticket" Sortable="false" Filterable="false">
                                                 <CellTemplate Context="ctx">
                                                     <span>@ctx.Item.ticketDetails.FirstOrDefault().ticketName - @ctx.Item.ticketDetails.FirstOrDefault().ticketKind</span>
@@ -811,10 +812,83 @@
                         </MudCard>
 
                     }
-                    
+
                 </MudTabPanel>
 
-            
+
+
+
+                <MudTabPanel Style="height:70px" Text="Settlement">
+
+                    @if (_processing)
+                    {
+                        <MudSkeleton Height="42px" Width="200px" />
+                        <MudSkeleton Height="42px" Width="500px" />
+                        <MudSkeleton Height="42px" Width="800px" />
+                    }
+                    else
+                    {
+
+                        <MudCard Elevation="0">
+
+                            <MudCardContent>
+
+                                <MudGrid>
+
+                                    <MudItem sm="12" xs="12" md="3" lg="3" xl="3" xxl="3">
+
+                                        <MudPaper Elevation="0" Outlined="false" MaxWidth="500px" Square="false">
+
+                                            <div style="text-align:left; line-height:30px">
+
+                                                <MudText Style="text-align:left; font-size:17px"><b>Request settlement</b></MudText>
+
+                                                <MudDivider Class="my-4" />
+
+                                                <div style="font-size:small">Request for a portion or all of your revenue. After the first successful request, your next request will be in 7 days time. Minimum withdrawal amount is NGN 5,000 </div>
+                                            </div>
+
+                                            <br />
+
+                                            <div class="d-flex">
+                                                <MudTextField @bind-Value="settlementAmount" Clearable="true" OnClearButtonClick="@( async () => await ClearSettlementAction())" OnBlur="@(async () => await GetFeeAction())" Label="Settlemennt Amount" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentColor="Color.Success" AdornmentIcon="@Icons.Material.Filled.Payments" />
+                                            </div>
+
+                                            <MudText Style="margin-top:7px" Color="Color.Dark"> <b> Fee : @serviceFee </b></MudText>
+
+                                            <br />
+
+                                            <MudButton Variant="Variant.Filled" OnClick="@( async () => await SettlementTransferAction())" Disabled="@_settlementRequestAction" Size="Size.Medium" Color="Color.Success">Request</MudButton>
+
+                                        </MudPaper>
+
+
+
+                                    </MudItem>
+
+
+                                    <MudItem sm="12" xs="12" md="9" lg="9" xl="9" xxl="9">
+
+                                    </MudItem>
+
+
+                                </MudGrid>
+
+
+
+
+
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudButton Variant="Variant.Text" Color="Color.Secondary" Style="font-weight:bold"></MudButton>
+                            </MudCardActions>
+                        </MudCard>
+
+                    }
+
+                </MudTabPanel>
+
+
             </MudTabs>
 
         </MudContainer>
@@ -860,13 +934,18 @@
     private int addmitedUsersCount { get; set; }
     private int notAdmittedUsersCount { get; set; }
     private int totalTicketQuantity { get; set; }
+    private string totalAmountSettled { get; set; }
     private string eventName { get; set; }
+
+    private decimal settlementAmount { get; set; }
+    private decimal serviceFee { get; set; } = 0.00M;
 
     private bool _processing { get; set; } = false;
     private bool _attendanceProcessing { get; set; }
     private bool _salesProcessing { get; set; }
     private bool attendanceOptions { get; set; } = false;
     private bool salesOptions { get; set; } = false;
+    private bool _settlementRequestAction { get; set; } = true;
 
     private string totalSales { get; set; }
     private int totalSalesTicketQuantity { get; set; }
@@ -980,6 +1059,7 @@
             notAdmittedUsersCount = result.notAddmittedUsersCount;
             totalTicketQuantity = result.totalTicketQuantity;
 
+
             var sortDefinition = state.SortDefinitions.FirstOrDefault();
 
             if (sortDefinition != null)
@@ -1042,7 +1122,7 @@
 
         if (!string.IsNullOrWhiteSpace(salesSearchString))
             queryParameter.Add("searchQuery", salesSearchString.ToLower());
-        
+
         if (!salesOptions)
         {
             queryParameter.Add("type", "event");
@@ -1054,7 +1134,7 @@
             queryParameter.Add("type", "time");
             queryParameter.Add("id", timeIdForSales);
         }
-        
+
         res = await _paymentService.GetSales(queryParameter);
 
         if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
@@ -1062,7 +1142,7 @@
             var result = (GetSalesDto)res.result.data;
             IEnumerable<GetSalesDataDto> data = (List<GetSalesDataDto>)result.paginatedResults;
             ticketNameGrouping = result.TicketNameGroupingTotal;
-            
+
             data = data.Where(element =>
             {
                 if (string.IsNullOrWhiteSpace(salesSearchString))
@@ -1081,6 +1161,7 @@
             var totalItems = result.totalCount;
             totalSales = result.totalTicketSum.ToString("C");
             totalSalesTicketQuantity = result.totalTicketQuantity;
+            totalAmountSettled = result.totalAmountSettled.ToString("C");
             averageSalesRevenue = (result.totalTicketSum / result.totalTicketQuantity).ToString("C");
 
             var sortDefinition = state.SortDefinitions.FirstOrDefault();
@@ -1137,12 +1218,56 @@
     {
         attendanceSearchString = text;
         return attendanceDataGrid.ReloadServerData();
-    } 
-    
+    }
+
     private Task OnSalesSearch(string text)
     {
         salesSearchString = text;
         return salesDataGrid.ReloadServerData();
+    }
+
+
+    private async Task GetFeeAction()
+    {
+        if (settlementAmount >= Helpers.MinimumWithdrawalAmount)
+        {
+            var res = await _paymentService.GetTransferFee(settlementAmount);
+            if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true){
+                var result = (GetTransferFeeDto)res.result.data;
+                serviceFee = result.totalDeduction;
+                _settlementRequestAction = false;
+                StateHasChanged();
+            }
+            else
+            {
+                _settlementRequestAction = true;
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+        else
+        {
+            _settlementRequestAction = true;
+        }
+    }
+
+
+    private async Task SettlementTransferAction()
+    {
+        if(settlementAmount >= Helpers.MinimumWithdrawalAmount){
+            
+        }
+        else
+        {
+            _snackbar.Add(GeneralMessages.MinimumWithdrawalAmountMessage, Severity.Info);
+        }
+    }
+
+
+    private async Task ClearSettlementAction()
+    {
+        _settlementRequestAction = true;
+        serviceFee = 0.00M;
+        StateHasChanged();
     }
 
 
@@ -1171,7 +1296,7 @@
         timeIdForAttendance = eventTimeId;
         TableDescription = tableDescription;
         StateHasChanged();
-       return attendanceDataGrid.ReloadServerData();
+        return attendanceDataGrid.ReloadServerData();
     }
 
     private Task ActionResetAttendance()
@@ -1181,7 +1306,7 @@
         StateHasChanged();
         return attendanceDataGrid.ReloadServerData();
     }
-    
+
     private Task ActionGetSalesByEventTime(string eventTimeId, string tableDescription)
     {
         salesOptions = true;
@@ -1190,7 +1315,7 @@
         StateHasChanged();
         return salesDataGrid.ReloadServerData();
     }
-    
+
     private Task ActionResetSales()
     {
         salesOptions = false;

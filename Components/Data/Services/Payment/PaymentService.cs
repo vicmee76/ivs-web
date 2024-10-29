@@ -15,6 +15,7 @@ namespace ivs_ui.Components.Data.Services.Payment
     public class PaymentService(IWebService _webService, ILocalStorageService sessionStorageService) : IPaymentService
     {
         private const string ApiUrl = "/api/v1/payments/";
+        private const string SettlementUrl = "/api/v1/users/settlement/settlement-transfer/";
 
         private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
 
@@ -90,7 +91,32 @@ namespace ivs_ui.Components.Data.Services.Payment
         }
 
 
+            
+        public async Task<ResponseObject> GetTransferFee(decimal settlementAmount)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(SettlementUrl, $"get-transfer-fee/{settlementAmount}", Method.Get, null, headers, null, null);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return new ResponseObject();
 
+                res.result.data = JsonConvert.DeserializeObject<GetTransferFeeDto>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to connect to payment gateway, please try again later.",
+                    }
+                };
+            }
+        }
 
         public async Task<ResponseObject> ProcessFreePayment(string orderId)
         {
