@@ -3,9 +3,11 @@ using Blazored.SessionStorage;
 using ivs.Domain.Constants;
 using ivs.Domain.Interfaces.General;
 using ivs.Domain.Interfaces.Payment;
+using ivs.Domain.Models.Dtos.Accounts;
 using ivs.Domain.Models.Dtos.Orders;
 using ivs.Domain.Models.Dtos.Payment;
 using ivs.Domain.Models.ViewModels.Payments;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Reflection;
@@ -15,6 +17,7 @@ namespace ivs_ui.Components.Data.Services.Payment
     public class PaymentService(IWebService _webService, ILocalStorageService sessionStorageService) : IPaymentService
     {
         private const string ApiUrl = "/api/v1/payments/";
+        private const string SettlementUrl = "/api/v1/users/settlement/settlement-transfer/";
 
         private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
 
@@ -92,6 +95,109 @@ namespace ivs_ui.Components.Data.Services.Payment
 
 
 
+        public async Task<ResponseObject> GetSettlementByEventId(string eventId, Dictionary<string, string> queryParam)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(SettlementUrl, $"get-settlement-by-event-id/{eventId}", Method.Get, null, headers, queryParam, null);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                res.result.data = JsonConvert.DeserializeObject<List<GetSettlementResponseModel>>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject() { result = new ResponseContents() { message = "Error! Something went wrong trying to get settlement by event id, please try again later" } };
+            }
+        }
+
+
+
+
+        public async Task<ResponseObject> GetSettlementByUserId(string userId, Dictionary<string, string> queryParam)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(SettlementUrl, $"get-settlement-by-user-id/{userId}", Method.Get, null, headers, queryParam, null);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                res.result.data = JsonConvert.DeserializeObject<List<GetSettlementResponseModel>>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject() { result = new ResponseContents() { message = "Error! Something went wrong trying to get settlement by user id, please try again later" } };
+            }
+        }
+
+
+
+
+        public async Task<ResponseObject> GetTransferFee(decimal settlementAmount)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(SettlementUrl, $"get-transfer-fee/{settlementAmount}", Method.Get, null, headers, null, null);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                res.result.data = JsonConvert.DeserializeObject<GetTransferFeeDto>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to get transfer settlement fees, please try again later.",
+                    }
+                };
+            }
+        }
+
+
+
+        public async Task<ResponseObject> PostSettlement(PostSettlementDto model)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(SettlementUrl, $"post-settlement", Method.Post, model, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                var myJsonResponse = content.data.ToString().Trim().TrimStart('{').TrimEnd('}');
+                res.result.data = JsonConvert.DeserializeObject<List<PostSettlementResponseDto>>(content.data.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to post settlement transfers, please try again later.",
+                    }
+                };
+            }
+        }
+        
+
+
         public async Task<ResponseObject> ProcessFreePayment(string orderId)
         {
             try
@@ -100,7 +206,7 @@ namespace ivs_ui.Components.Data.Services.Payment
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
-                    return new ResponseObject();
+                    return res;
 
                 res.result.data = JsonConvert.DeserializeObject<List<VerifyPaymentDto>>(content?.data?.ToString());
                 return res;
