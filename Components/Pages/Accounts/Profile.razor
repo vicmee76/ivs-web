@@ -212,7 +212,84 @@
                         </MudTabPanel>
 
                         <MudTabPanel Text="Settlement History">
-                            <MudText>Content Two</MudText>
+
+                             <br />
+
+                                <MudText Typo="Typo.h6">Settlement History</MudText>
+
+                                <br /><br />
+
+
+                            <MudDataGrid @ref="settlementDataGrid" T="GetSettlementData" Dense="false" RowsPerPage="50" ServerData="GetSettlementServerReload" Filterable="false" Hover="true" Loading="@_getSettlementProcessing" LoadingProgressColor="Color.Secondary" Striped="true" Bordered="true">
+                                <ToolBarContent>
+
+                                    <MudSpacer />
+                                    <MudTextField T="string" ValueChanged="@(s=>OnSettlementSearch(s))" Placeholder="Search with status, account name and number" Adornment="Adornment.Start"
+                                                  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                </ToolBarContent>
+                                <Columns>
+
+                                    <PropertyColumn Property="x => x.paymentGateWayTransactionId" Title="TranId" />
+
+                                    <TemplateColumn Title="Payout" Sortable="false" Filterable="false">
+                                        <CellTemplate Context="ctx">
+                                            @ctx.Item.amountSettled.ToString("C")
+                                        </CellTemplate>
+                                    </TemplateColumn>
+
+                                    <TemplateColumn Title="Fee" Sortable="false" Filterable="false">
+                                        <CellTemplate Context="ctx">
+                                            @ctx.Item.totalServiceFee.ToString("C")
+                                        </CellTemplate>
+                                    </TemplateColumn>
+
+                                    <TemplateColumn Title="Total Settlement" Sortable="false" Filterable="false">
+                                        <CellTemplate Context="ctx">
+                                            @ctx.Item.totalAmountSettled.ToString("C")
+                                        </CellTemplate>
+                                    </TemplateColumn>
+
+                                    <TemplateColumn Title="Status" Sortable="false" Filterable="false">
+                                        <CellTemplate Context="ctx">
+
+                                            @if (ctx.Item.paymentGateWayTransactionStatus.Equals(Helpers.NewStatus, StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                <MudText Color="Color.Warning"><b>@Helpers.PendingStatus</b></MudText>
+                                            }
+                                            else if (ctx.Item.paymentGateWayTransactionStatus.Equals(Helpers.FailedStatus, StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                <MudText Color="Color.Error"><b>@Helpers.FailedStatus</b></MudText>
+                                            }
+                                            else if (ctx.Item.paymentGateWayTransactionStatus.Equals(Helpers.SuccessStatus, StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                <MudText Color="Color.Success"><b>@Helpers.SuccessStatus</b></MudText>
+                                            }
+                                            else
+                                            {
+                                                <MudText Color="Color.Primary"><b>@ctx.Item.paymentGateWayTransactionStatus</b></MudText>
+                                            }
+                                        </CellTemplate>
+                                    </TemplateColumn>
+
+                                    <TemplateColumn Title="Bank" Sortable="false" Filterable="false">
+                                        <CellTemplate Context="ctx">
+                                            @ctx.Item.bankName - @ctx.Item.accountName (@ctx.Item.accountNumber)
+                                        </CellTemplate>
+                                    </TemplateColumn>
+
+                                    <TemplateColumn Title="Trans Date" Sortable="false" Filterable="false">
+                                        <CellTemplate Context="ctx">@Convert.ToDateTime(ctx.Item.createdAt).ToString("ddd, dd MMM yyyy, HH:mm tt") </CellTemplate>
+                                    </TemplateColumn>
+
+                                </Columns>
+                                <PagerContent>
+                                    <MudDataGridPager T="GetSettlementData" />
+                                </PagerContent>
+                            </MudDataGrid>
+
+
+
+
                         </MudTabPanel>
 
                         <MudTabPanel Text="Privacy">
@@ -255,14 +332,18 @@
     AuthUser authUser = new AuthUser();
     List<UserDetailsDto> userDetails = new List<UserDetailsDto>();
     List<GetBanksDto> banksDtos = new List<GetBanksDto>();
+    MudDataGrid<GetSettlementData> settlementDataGrid;
     private string[] bankName;
 
+    private bool _getSettlementProcessing { get; set; } = false;
     private bool _processing { get; set; } = false;
     private bool _createSettlementActionProcessing { get; set; } = false;
     private bool _accountVerificationProcessing { get; set; } = false;
     private string? initials {get;set;}
     private string? fullname {get;set;} 
     private string? userId {get;set;} 
+    string settlementSearchString = string.Empty;
+
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
@@ -325,8 +406,6 @@
 
         return bankName.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase)).Distinct();
     }
-
-
 
 
     private async Task VerifyAccountNumber()
@@ -424,6 +503,96 @@
         _createSettlementActionProcessing = false;
     }
 
+
+
+    private async Task<GridData<GetSettlementData>> GetSettlementServerReload(GridState<GetSettlementData> state)
+    {
+        _getSettlementProcessing = true;
+        var res = new ResponseObject();
+
+        var queryParameter = new Dictionary<string, string>();
+
+        if (!string.IsNullOrWhiteSpace(settlementSearchString))
+            queryParameter.Add("searchQuery", settlementSearchString.ToLower());
+
+        res = await _paymentService.GetSettlementByUserId(userId, queryParameter);
+
+        if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
+        {
+            var result = (List<GetSettlementResponseModel>)res.result.data;
+            IEnumerable<GetSettlementData> data = (List<GetSettlementData>)result.FirstOrDefault().records;
+
+            data = data.Where(element =>
+            {
+                if (string.IsNullOrWhiteSpace(settlementSearchString))
+                    return true;
+                if (element.paymentGateWayTransactionStatus.Contains(settlementSearchString, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if (element.accountName.Contains(settlementSearchString, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if (element.accountNumber.Contains(settlementSearchString, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if ($"{element.paymentGateWayTransactionStatus} {element.accountName} {element.accountNumber}".Contains(settlementSearchString))
+                    return true;
+                return false;
+            }).ToArray();
+
+            var sortDefinition = state.SortDefinitions.FirstOrDefault();
+
+            if (sortDefinition != null)
+            {
+                switch (sortDefinition.SortBy)
+                {
+                    case nameof(GetSalesDataDto.firstName):
+                        data = data.OrderByDirection(
+                            sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
+                            o => o.accountName
+                        );
+                        break;
+                    case nameof(GetSalesDataDto.lastName):
+                        data = data.OrderByDirection(
+                            sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
+                            o => o.paymentGateWayTransactionStatus
+                        );
+                        break;
+                    case nameof(GetSalesDataDto.phoneNumber):
+                        data = data.OrderByDirection(
+                            sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
+                            o => o.accountNumber
+                        );
+                        break;
+                }
+            }
+
+            var pagedData = data.ToArray();
+
+            _getSettlementProcessing = false;
+            StateHasChanged();
+            return new GridData<GetSettlementData>
+                {
+                    TotalItems = pagedData.Count(),
+                    Items = pagedData
+                };
+        }
+        else
+        {
+            _getSettlementProcessing = false;
+            StateHasChanged();
+            return new GridData<GetSettlementData>
+                {
+                    TotalItems = 0,
+                    Items = new List<GetSettlementData>()
+                };
+        }
+    }
+
+
+
+    private Task OnSettlementSearch(string text)
+    {
+        settlementSearchString = text;
+        return settlementDataGrid.ReloadServerData();
+    }
 
 
 }

@@ -12,4 +12,8 @@ public class Helpers
     public static readonly string DiscoverEventFree = "free-event";
     public static readonly string DiscoverEventPaid = "paid-event";
     public static readonly decimal MinimumWithdrawalAmount = 5000;
+    public static readonly string NewStatus = "NEW";
+    public static readonly string SuccessStatus = "SUCCESSFUL";
+    public static readonly string FailedStatus = "FAILED";
+    public static readonly string PendingStatus = "PENDING";
 }
