@@ -1,4 +1,5 @@
 ﻿using ivs.Domain.Constants;
+using ivs.Domain.Models.Dtos.Payment;
 using ivs.Domain.Models.ViewModels.Payments;
 
 namespace ivs.Domain.Interfaces.Payment
@@ -11,5 +12,9 @@ namespace ivs.Domain.Interfaces.Payment
         public Task<ResponseObject> GetSales(Dictionary<string, string> queryParam);
         public Task<ResponseObject> GetBanks(string country = "NG");
         public Task<ResponseObject> VerifyAccountNumber(string bankCode, string accountNumber);
+        public Task<ResponseObject> GetTransferFee(decimal settlementAmount);
+        public Task<ResponseObject> PostSettlement(PostSettlementDto model);
+        public Task<ResponseObject> GetSettlementByUserId(string userId, Dictionary<string, string> queryParam);
+        public Task<ResponseObject> GetSettlementByEventId(string eventId, Dictionary<string, string> queryParam);
     }
 }
