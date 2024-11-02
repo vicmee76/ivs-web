@@ -81,6 +81,12 @@
     font-weight: bolder;
 }
 
+
+#dasboard-count{
+    font-size: 30px;
+    font-weight: bold;
+}
+
 .event-lisiting-mobile{
     display: none;
 }

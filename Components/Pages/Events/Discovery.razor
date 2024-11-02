@@ -391,7 +391,7 @@
                             var ticketLink = $"/events/get-tickets/{e._id}";
 
                             var eventName = e.eventName.Length > 19 ? e.eventName[..20] + " ..." : e.eventName;
-                            var address = e.eventAddress.Length > 25 ? e.eventAddress[..25] + " ..." : e.eventAddress;
+                            var address = e.eventAddress.Length > 20 ? e.eventAddress[..20] + " ..." : e.eventAddress;
 
                             <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
                                 <div class="event-lisiting-web">

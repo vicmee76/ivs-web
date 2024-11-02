@@ -18,6 +18,14 @@
     display: none;
 }
 
+    #dasboard-count {
+        font-size: 20px;
+    }
+
+    #dasboard-count-title{
+        font-size: small;
+    }
+
     .event-lisiting-mobile{
         display: flex;
     }

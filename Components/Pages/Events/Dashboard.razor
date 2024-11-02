@@ -48,11 +48,11 @@
             <MudCard Elevation="0" Style="padding:20px">
                 <MudCardHeader>
                     <CardHeaderContent>
-                        <MudText Typo="Typo.h6"><b>Dashboard</b></MudText>
+                        <MudText id="discovery-title-mid">Dashboard</MudText>
                     </CardHeaderContent>
 
                     <CardHeaderActions>
-                        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.AddCircle" Size="Size.Medium" Href="/events/create-event" Color="Color.Secondary">Create Event</MudButton>
+                        <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.AddCircle" Size="Size.Small" Href="/events/create-event" Color="Color.Secondary">Create Event</MudButton>
                     </CardHeaderActions>
                 </MudCardHeader>
                 <MudCardContent>
@@ -61,68 +61,68 @@
 
                         <MudGrid>
                             <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
-                                <MudPaper Class="pa-8" Outlined="true" Style="background-color:#ffedf7">
-                                    <div style="line-height:35px">
+                                <MudPaper Class="pa-5" Outlined="true" Style="background-color:#ffedf7">
+                                    <div style="line-height:25px">
                                         @if (_processing)
                                         {
                                             <MudSkeleton Height="42px;" />
                                         }
                                         else
                                         {
-                                            <h1>@totalEvent</h1>
+                                            <div id="dasboard-count">@totalEvent</div>
                                         }
 
-                                        <div>Total Events</div>
+                                        <div id="dasboard-count-title">Created Events</div>
                                     </div>
                                 </MudPaper>
                             </MudItem>
 
                             <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
-                                <MudPaper Class="pa-8" Outlined="true" Style="background-color:#ededff">
-                                    <div style="line-height:35px">
+                                <MudPaper Class="pa-5" Outlined="true" Style="background-color:#ededff">
+                                    <div style="line-height:25px">
                                         @if (_processing)
                                         {
                                             <MudSkeleton Height="42px;" />
                                         }
                                         else
                                         {
-                                            <h1>@upcomingEvent</h1>
+                                            <div id="dasboard-count">@upcomingEvent</div>
                                         }
-                                        <div>Upcoming Schedules </div>
+                                        <div id="dasboard-count-title">Upcoming Schedules </div>
                                     </div>
                                 </MudPaper>
                             </MudItem>
 
                             <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
-                                <MudPaper Class="pa-8" Outlined="true" Style="background-color:#ffffed">
-                                    <div style="line-height:35px">
+                                <MudPaper Class="pa-5" Outlined="true" Style="background-color:#ffffed">
+                                    <div style="line-height:25px">
                                         @if (_processing)
                                         {
                                             <MudSkeleton Height="42px;" />
                                         }
                                         else
                                         {
-                                            <h1>@totalAmount</h1>
+                                            <div id="dasboard-count">@totalAmount</div>
                                         }
-                                        <div>Total Amount</div>
+                                        <div id="dasboard-count-title">Total Amount</div>
                                     </div>
                                 </MudPaper>
                             </MudItem>
 
                             <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
-                                <MudPaper Class="pa-8" Outlined="true" Style="background-color:#ffeded">
-                                    <div style="line-height:35px">
-                                        <div style="line-height:35px">
+                                <MudPaper Class="pa-5" Outlined="true" Style="background-color:#ffeded">
+                                    <div style="line-height:25px">
+                                       
                                             @if (_processing)
                                             {
                                                 <MudSkeleton Height="42px;" />
                                             }
                                             else
                                             {
-                                                <h1>@totalSettlements</h1>
+                                                <div id="dasboard-count">@totalSettlements</div>
                                             }
-                                            <div>Total Settlements</div>
-                                        </div>
+                                            <div id="dasboard-count-title">Total Settlements</div>
+                                      
                                     </div>
                                 </MudPaper>
                             </MudItem>
@@ -148,7 +148,7 @@
                             <MudDataGrid T="UpcomingEventsDto" Elevation="1" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_eventsDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
                                          Hideable="false">
                                 <ToolBarContent>
-                                    <MudText Typo="Typo.h6" Color="Color.Secondary"><b>Upcoming Events (2 weeks)</b></MudText>
+                                    <MudText id="dasboard-count-title" Color="Color.Secondary"><b>Upcoming Events (2 weeks)</b></MudText>
                                     <MudSpacer />
                                     <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
                                                   AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
