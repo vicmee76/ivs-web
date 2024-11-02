@@ -1,10 +1,9 @@
 ﻿/* Media query for screens smaller than 768px */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 968px) {
     #HomeTitle {
-        font-size: 3.2rem;
+        font-size: 2.5rem;
         line-height: 1.4;
         font-weight: 600;
-        /*color: #011b33;*/
         text-align: center;
         align-content: center;
         font-family: "Akaya Telivigala", system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
@@ -13,7 +12,7 @@
 
 
     #homeSubTitle {
-        font-size: 0.9rem;
+        font-size: 0.7rem;
         line-height: 30px;
         font-family: Roboto;
         margin-top: 25px;
@@ -28,8 +27,21 @@
         margin-bottom: 10px;
     }
 
+    .sign-up-form-div-space {
+        padding: 5px;
+    }
+
     #reg-title {
-        font-size: 1.5em;
+        font-size: 1.3rem;
+    }
+
+
+    #reg-sub-title {
+        font-size: 0.7rem;
+    }
+
+    #reg-sub-title > a{
+        font-size: 0.7rem;
     }
 
     .login-container {

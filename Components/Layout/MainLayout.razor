@@ -22,7 +22,6 @@
  
 </style>
 
-
 <MudLayout Style="background-color:white">
    
     <MudAppBar Fixed="true"  Elevation="0" Style="padding:12px" Dense="true" DisableGutters="true" Class="muudstrap-navbar">
@@ -66,41 +65,26 @@
     </div>
 
      <AuthorizeView>
-        <NotAuthorized>
-            <div class="d-flex d-md-none relative mud-width-full mud-height-full">
-                <MudExpansionPanels Square="true" Elevation="0" Class="absolute mud-width-full mud-height-full" Style="top:0px;left:0; background-color:Inherit;">
-                    <MudExpansionPanel HideIcon="true" Class="mud-width-full mud-height-full">
+            <NotAuthorized>
+                <div class="d-flex d-md-none relative mud-width-full mud-height-full"
+                <MudExpansionPanels Square="true"  Elevation="0" Class="absolute mud-width-full mud-height-full" Style="top:0px;left:0; background-color:Inherit;">
+                        <MudExpansionPanel HideIcon="true" IsExpanded="@_isExpanded"  Class="mud-width-full mud-height-full">
                         <TitleContent>
                             <div class="d-flex justify-space-between mud-width-full align-center">
-                       
+
                                         <div class="d-flex align-center">
                                             <MudImage Src="/images/logos/ivs3.png" Alt="Ivs Logo" Elevation="0" Height="55" Class=" text-center" />
                                         <a href="/"> <div id="logoTitle" class="ml-1">ivs</div> </a>
                                         </div>
-                       
-                                <MudIcon Icon="@Icons.Material.Filled.Menu" />
+
+                                    <MudIconButton Icon="@Icons.Material.Filled.Notes" Color="Color.Dark" Edge="Edge.Start" OnClick="@((e) => UnAuthorizedDrawerToggle())" />
+
                             </div>
                         </TitleContent>
-                        <ChildContent>
-                            <div class="py-6 mx-n6 muudstrap-navbar-expand">
-                                <MudNavMenu>
-                                    <MudNavLink Href="/home">Home</MudNavLink>
-                                    <MudNavLink Href="/">All Events</MudNavLink>
-                                    <MudNavLink Href="/">About Us</MudNavLink>
-                                    <MudNavLink Href="/">Contact Us</MudNavLink>
-                                    <MudNavLink Href="/">FAQ</MudNavLink>
-                            
-                                    <MudNavLink Href="/accounts/login">Login</MudNavLink>
-                                    <MudNavLink Href="/accounts/signup">Sing up</MudNavLink>
-                                  
-                                </MudNavMenu>
-                            </div>
-                        </ChildContent>
                     </MudExpansionPanel>
                 </MudExpansionPanels>
             </div>
-
-        </NotAuthorized>
+            </NotAuthorized>
 
         <Authorized>
                <div class="d-flex d-md-none relative mud-width-full mud-height-full">
@@ -125,7 +109,23 @@
                 <NavMenu />
             </MudDrawer>
         </Authorized>
+
+
+        <NotAuthorized>
+            <MudDrawer @bind-Open="_UnAuthorizedDrawerOpen" Elevation="1" Style="margin-top:-21px">
+                <MudDrawerHeader Style="background-color: #F3DFF6; height:73px" Class="" Dense="true">
+
+                    <MudImage Src="/images/logos/ivs3.png" Alt="Ivs Logo" Elevation="0" Height="55" Class=" text-center" />
+                    <div id="logoTitle"><a href="/">ivs</a></div>
+
+                </MudDrawerHeader>
+                <NavMenu />
+            </MudDrawer>
+        </NotAuthorized>
+
     </AuthorizeView>
+
+
 
      <AuthorizeView>
         <Authorized>
@@ -149,15 +149,28 @@
 @code {
 
     [Inject] NavigationManager? _navigate { get; set; }
-    [Inject] ISessionStorageService _sessionStorageService { get; set; }
     [Inject] ILocalStorageService _localStorageService { get; set; }
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
 
     private bool _drawerOpen = true;
+    private bool _UnAuthorizedDrawerOpen = false;
+    private bool _isExpanded = false;
+
+
+
+    protected async override void OnInitialized()
+    {
+        
+    }
 
     private void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    private void UnAuthorizedDrawerToggle()
+    {
+        _UnAuthorizedDrawerOpen = !_UnAuthorizedDrawerOpen;
     }
 
     private async Task ActionLogOut()
@@ -166,6 +179,7 @@
         await _authStateProvider.GetAuthenticationStateAsync();
         _navigate.NavigateTo("/", true);
     }
+
 
     MudTheme MuudstrapTheme = new MudTheme()
         {

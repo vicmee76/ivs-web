@@ -5,14 +5,25 @@
 
         <MudNavLink Href="/events/discovery">Discovery</MudNavLink>
 
-        <MudNavLink Href="/events/dashboard">Dashboard</MudNavLink>
+       <AuthorizeView>
+           <Authorized>
+                <MudNavLink Href="/events/dashboard">Dashboard</MudNavLink>
 
-        <MudNavGroup Title="Events" Icon="" Expanded="false" Class="">
-            <MudNavLink Href="/events/create-event">Create Event</MudNavLink>
-            <MudNavLink Href="/events/my-events">My Event</MudNavLink>
-        </MudNavGroup>
+                <MudNavGroup Title="Events" Icon="" Expanded="false" Class="">
+                    <MudNavLink Href="/events/create-event">Create Event</MudNavLink>
+                    <MudNavLink Href="/events/my-events">My Event</MudNavLink>
+                </MudNavGroup>
 
-        <MudNavLink Href="/user/profile">My Profile</MudNavLink>
+                <MudNavLink Href="/user/profile">My Profile</MudNavLink>
+           </Authorized>
+           
+           <NotAuthorized>
+                <MudNavLink Href="/accounts/login">Login</MudNavLink>
+
+                <MudNavLink Href="/accounts/signup">Sign up</MudNavLink>
+           </NotAuthorized>
+
+       </AuthorizeView>
 
         <MudNavLink Href="/about-us">About Us</MudNavLink>
 
@@ -20,7 +31,11 @@
 
         <MudNavLink Href="/faq">FAQ</MudNavLink>
 
-        <MudNavLink OnClick="ActionLogOut">Log out </MudNavLink>
+        <AuthorizeView>
+            <Authorized>
+                <MudNavLink OnClick="ActionLogOut">Log out </MudNavLink>
+            </Authorized>
+        </AuthorizeView>
           
     </MudNavMenu>
 </MudPaper>
@@ -31,12 +46,12 @@
 
 
     [Inject] NavigationManager? _navigate { get; set; }
-    [Inject] ISessionStorageService _sessionStorageService { get; set; }
+    [Inject] ILocalStorageService _localStorageService { get; set; }
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
 
     private async Task ActionLogOut()
     {
-        await _sessionStorageService.ClearAsync();
+        await _localStorageService.ClearAsync();
         await _authStateProvider.GetAuthenticationStateAsync();
         _navigate.NavigateTo("/", true);
     }
