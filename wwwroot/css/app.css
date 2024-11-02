@@ -56,7 +56,7 @@
     }
 
 #homeSubTitle {
-    font-size: 1.2rem;
+    font-size: 1.0rem;
     line-height: 30px;
     font-family: Roboto;
     margin-top: 25px;
@@ -77,11 +77,19 @@
 #btnDarkColor-Search {
     background-color: #56375C;
     color: white;
-    height: 60px;
     text-transform: none;
     font-weight: bolder;
 }
 
+.event-lisiting-mobile{
+    display: none;
+}
+
+
+#discovery-text{
+    font-size: 17px;
+    font-weight: bold;
+}
 
 #btnBrightColor {
     color: #e18501f7;

@@ -9,7 +9,22 @@
         font-family: "Akaya Telivigala", system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
         color: #56375C
     }
+.login-container{
+    background-color: white;
+    box-shadow: 0 0 0 0;
+}
 
+.event-lisiting-web{
+    display: none;
+}
+
+    .event-lisiting-mobile{
+        display: flex;
+    }
+
+    #discovery-title-mid {
+        font-size: 20px;
+    }
 
     #homeSubTitle {
         font-size: 0.7rem;
