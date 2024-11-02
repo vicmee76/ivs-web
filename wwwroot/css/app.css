@@ -42,6 +42,10 @@
     color: #56375C
 }
 
+
+.sign-up-form-div-space {
+    padding: 5px;
+}
     #logoTitle > a {
         color: #56375C
     }
@@ -52,7 +56,7 @@
     }
 
 #homeSubTitle {
-    font-size: 1.2rem;
+    font-size: 1.0rem;
     line-height: 30px;
     font-family: Roboto;
     margin-top: 25px;
@@ -73,11 +77,25 @@
 #btnDarkColor-Search {
     background-color: #56375C;
     color: white;
-    height: 60px;
     text-transform: none;
     font-weight: bolder;
 }
 
+
+#dasboard-count{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.event-lisiting-mobile{
+    display: none;
+}
+
+
+#discovery-text{
+    font-size: 17px;
+    font-weight: bold;
+}
 
 #btnBrightColor {
     color: #e18501f7;

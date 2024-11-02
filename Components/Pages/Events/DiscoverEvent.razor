@@ -19,22 +19,20 @@
 
 <MudContainer Fixed="true" MaxWidth="MaxWidth.Medium" Style="background-color:white">
     <br /><br />
-    <div style="background-color: #faf2fb; padding:20px">
+    <div style="padding:10px">
 
-        <div id="discovery-title">
-            <span id="discovery-title-mid">Discover every moment - @title @searchCriteria</span>
-        </div>
-
-        <br />
+        <span id="discovery-title-mid">Discover every moment - @title @searchCriteria</span>
+        
+        <br /><br/>
 
         <MudGrid>
             <MudItem xs="12" sm="12" md="7" lg="7" xl="7" xxl="7">
                 <div>
-                    <MudTextField T="string" @bind-Value="@eventNameString" Label="Enter an event name" Variant="Variant.Outlined" />
+                    <MudTextField T="string" Margin="Margin.Dense" @bind-Value="@eventNameString" Label="Enter an event name" Variant="Variant.Outlined" />
                 </div>
             </MudItem>
             <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
-                <MudSelect T="string" Label="Event Types*" HelperText="Select types" Variant="Variant.Outlined" @bind-Value="@eventTypeString" HelperTextOnFocus="true" Clearable="true">
+                <MudSelect T="string" Label="Event Types*" Margin="Margin.Dense" HelperText="Select types" Variant="Variant.Outlined" @bind-Value="@eventTypeString" HelperTextOnFocus="true" Clearable="true">
                     @if (_eventTypes != null)
                     {
                         foreach (var com in _eventTypes)
@@ -53,8 +51,6 @@
         </MudGrid>
         <br />
     </div>
-
-    <br />
 
     <MudCard Elevation="0">
         <MudCardContent>
@@ -75,26 +71,25 @@
                         {
                             var ticketLink = $"/events/get-tickets/{e._id}";
                             var eventName = e.eventName.Length > 19 ? e.eventName[..20] + " ..." : e.eventName;
-                            var address = e.eventAddress.Length > 25 ? e.eventAddress[..25] + " ..." : e.eventAddress;
+                            var address = e.eventAddress.Length > 20 ? e.eventAddress[..20] + " ..." : e.eventAddress;
 
                             <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
+                                <div class="event-lisiting-web">
                                 <MudCard>
-                                    <MudCardMedia Image="@e.eventImagePath" Height="200" />
+                                    <MudCardMedia Image="@e.eventImagePath" Height="150"/>
                                     <MudCardContent>
-                                        <br />
-                                        <div style="font-size: medium"><b>@eventName</b></div>
-                                        <br />
-                                        <div style="line-height: 40px">
-                                            <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" Color="Color.Secondary" /> <span>@address</span>
-                                            <br />
-                                            <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" Size="Size.Small" Color="Color.Secondary" />
+                                        <div style="line-height: 30px">
+                                            <div style="font-size: medium"><b>@eventName</b></div>
+                                            <span>@address</span>
+                                            <br/>
+
                                             <span>
                                                 @if (e.eventTimes.Any())
                                                 {
                                                     @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
                                                 }
                                             </span>
-                                            <br />
+                                            <br/>
 
                                             <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@e.eventOption</b></MudChip>
 
@@ -115,7 +110,7 @@
                                             {
                                                 <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Ticket</MudChip>
                                             }
-                                            <br />
+                                            <br/>
                                         </div>
                                     </MudCardContent>
                                     <MudCardActions>
@@ -135,6 +130,33 @@
                                         <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Primary" Target="_blank" Href="@ticketLink"><b>Get Tickets</b></MudButton>
                                     </MudCardActions>
                                 </MudCard>
+                                </div>
+
+                                <div class="event-lisiting-mobile">
+                                    <MudGrid>
+                                        <MudItem sm="5" xs="5">
+                                            <MudCard>
+                                                <MudCardMedia Image="@e.eventImagePath" Height="120"/>
+                                            </MudCard>
+                                        </MudItem>
+                                        <MudItem sm="7" xs="7">
+                                            <div style="line-height: 30px">
+
+                                                <div style="font-size: small"><b>@eventName</b></div>
+                                                <span>@address</span>
+                                                <br/>
+                                                <span>
+                                                    @if (e.eventTimes.Any())
+                                                    {
+                                                        @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
+                                                    }
+                                                </span>
+
+                                                <MudButton Variant="Variant.Text" Size="Size.Small" Href="@ticketLink" Target="_blank" Color="Color.Primary"><b>Get Tickets</b></MudButton>
+                                            </div>
+                                        </MudItem>
+                                    </MudGrid>
+                                </div>
                             </MudItem>
                             
                         }

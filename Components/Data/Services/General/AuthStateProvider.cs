@@ -9,14 +9,12 @@ namespace ivs_ui.Components.Data.Services.General
 {
     public class AuthStateProvider : AuthenticationStateProvider
     {
-        private readonly ISessionStorageService _sessionStorageService;
         private readonly ILocalStorageService _localStorageService;
         private readonly HttpClient _http;
         private ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
 
         public AuthStateProvider(HttpClient http, ISessionStorageService sessionStorageService, ILocalStorageService localStorageService)
         {
-            _sessionStorageService = sessionStorageService ?? throw new ArgumentNullException(nameof(sessionStorageService));
             _localStorageService = localStorageService ?? throw new ArgumentNullException(nameof(localStorageService));
             _http = http;
         }
