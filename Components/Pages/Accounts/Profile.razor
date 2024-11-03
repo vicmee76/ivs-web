@@ -78,7 +78,7 @@
 
 
                 <MudItem xs="12" sm="12" md="9" lg="9" xl="9" xxl="9">
-                    <MudTabs Outlined="false" Position="Position.Top" SliderColor="Color.Secondary" Rounded="true" Border="true"  ApplyEffectsToContainer="true" Class="mt-8" PanelClass="">
+                    <MudTabs Outlined="false" Position="Position.Top" MinimumTabWidth="250px" SliderColor="Color.Secondary" Rounded="true" Border="true"  ApplyEffectsToContainer="true" PanelClass="pa-10">
 
                         <MudTabPanel Text="Settlement Account" >
 
@@ -213,7 +213,7 @@
 
                         <MudTabPanel Text="Settlement History">
 
-                             <br />
+                            <br /><br/>
 
                                 <MudText Typo="Typo.h6">Settlement History</MudText>
 
@@ -273,7 +273,7 @@
 
                                     <TemplateColumn Title="Bank" Sortable="false" Filterable="false">
                                         <CellTemplate Context="ctx">
-                                            @ctx.Item.bankName - @ctx.Item.accountName (@ctx.Item.accountNumber)
+                                            @MaskNumber(ctx.Item.accountNumber)
                                         </CellTemplate>
                                     </TemplateColumn>
 
@@ -586,7 +586,16 @@
         }
     }
 
+    private string MaskNumber(string number)
+    {
+        if (number.Length <= 4)
+            return number; // If the number is too short, just return it as-is.
 
+        int lengthToMask = number.Length - 4;
+        string maskedPart = new string('*', lengthToMask);
+        string visiblePart = number.Substring(lengthToMask);
+        return maskedPart + visiblePart;
+    }
 
     private Task OnSettlementSearch(string text)
     {

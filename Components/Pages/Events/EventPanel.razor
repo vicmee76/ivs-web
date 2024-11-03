@@ -170,7 +170,7 @@
 
                                                         @foreach (var t in _events.EventTime)
                                                         {
-                                                            <MudExpansionPanel IsExpanded="true" Style="background-color:#fef5ff; font-weight:bold" Text="@Convert.ToDateTime(t.startDateAndTime).ToString("dddd, dd MMMM yyyy")">
+                                                            <MudExpansionPanel IsExpanded="true" Style="background-color:white; font-weight:bold" Text="@Convert.ToDateTime(t.startDateAndTime).ToString("dddd, dd MMMM yyyy")">
                                                                 <div style="padding:10px; border:1px dashed #f0baf9">
                                                                     <MudText Typo="Typo.body2">Starts At : <span>@Convert.ToDateTime(t.startDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</span> </MudText>
                                                                     <br />
@@ -295,7 +295,7 @@
                     {
                         var editTickets = $"/events/update-event-tickets/{_events._id}";
 
-                        <MudPaper Elevation="0" Style="padding:20px">
+                        <MudPaper Elevation="0">
 
                             <MudText Typo="Typo.body1"><b>Event Tickest</b>  <MudIconButton Href="@editTickets" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Title="Edit tickets" Size="Size.Small"></MudIconButton> </MudText>
 
@@ -338,7 +338,7 @@
                                                                 <MudCard Elevation="0" Style="border: 1px dashed">
                                                                     <MudCardHeader>
                                                                         <CardHeaderContent>
-                                                                            <MudText Style="font-size:16px" Color="Color.Dark"><b>@tic.ticketName</b></MudText>
+                                                                            <MudText Style="font-size:medium" Color="Color.Primary"><b>@tic.ticketName</b></MudText>
                                                                         </CardHeaderContent>
                                                                         <CardHeaderActions>
 
@@ -358,15 +358,23 @@
                                                                             <p> <b>Description : </b> @tic.ticketDescription </p>
                                                                             <p> <b>Ticket Kind : </b> @tic.ticketKind </p>
                                                                             <p> <b>Admits : </b> @tic.groupSize </p>
-                                                                            <p> <b>Stock : </b>@tic.ticketInStock in stock</p>
+                                                                            <p> <b>Stock : </b>
+                                                                                @if (tic.ticketInStock >= Int32.MaxValue)
+                                                                                {
+                                                                                    <span>Unlimited</span>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <span>@tic.ticketInStock.ToString("#,##") in stock</span>
+                                                                                }
+                                                                            
+                                                                                </p>
                                                                             <p><b>Sales Start Date : </b> @tic.ticketSalesStartDateAndTime?.ToString("ddd, dd MMM yyyy, HH:mm tt")</p>
                                                                             <p> <b>Sales End Date : </b>  @tic.ticketSalesEndDateAndTime?.ToString("ddd, dd MMM yyyy, HH:mm tt")</p>
-                                                                            <p><b>Stock : </b> @tic.ticketInStock.ToString("#,##")</p>
-
                                                                         </div>
                                                                     </MudCardContent>
                                                                     <MudCardActions>
-                                                                        <MudButton Variant="Variant.Text" Color="Color.Secondary" Style="font-weight:bold; font-size:20px">@amount</MudButton>
+                                                                        <MudButton Variant="Variant.Text" Color="Color.Primary" Style="font-weight:bold; font-size:medium">@amount</MudButton>
                                                                     </MudCardActions>
                                                                 </MudCard>
 
@@ -734,8 +742,8 @@
                                     </MudItem>
 
                                 </MudGrid>
-
-                                <br /><br />
+                                
+                                <br/><br/>
                                 <divv>
 
                                     <MudText Typo="Typo.body2" Color="Color.Secondary"><b>Showing Sales for @SalesTableDescription</b> </MudText>
@@ -766,9 +774,6 @@
                                         </ToolBarContent>
                                         <Columns>
 
-
-                                            <PropertyColumn Property="x => x.code" Title="Code" />
-
                                             <TemplateColumn Title="Fullname" Sortable="false" Filterable="false">
                                                 <CellTemplate Context="ctx">
                                                     <span>@ctx.Item.firstName @ctx.Item.lastName</span>
@@ -776,23 +781,23 @@
                                             </TemplateColumn>
 
                                             <PropertyColumn Property="x => x.email" Title="Email" />
-                                            <PropertyColumn Property="x => x.phoneNumber" Title="Phone No" />
-                                            <PropertyColumn Property="x => x.paymentDetails.paymentGateWayTransactionRef" Title="Trans Ref" />
+                                            <PropertyColumn Property="x => x.phoneNumber" Title="PhoneNo" />
+                                            <PropertyColumn Property="x => x.paymentDetails.paymentGateWayTransactionRef" Title="TransRef" />
                                             <PropertyColumn Property="x => x.paymentDetails.paymentGateWayTransactionStatus" Title="Status" />
 
-                                            <TemplateColumn Title="Trans Date" Sortable="false" Filterable="false">
-                                                <CellTemplate Context="ctx"> <b>@Convert.ToDateTime(ctx.Item.paymentDetails.paymentGateWayTransactionDate).ToString("ddd, dd MMM yyyy, HH:mm tt")</b> </CellTemplate>
+                                            <TemplateColumn Title="TransDate" Sortable="false" Filterable="false">
+                                                <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.paymentDetails.paymentGateWayTransactionDate).ToString("dd MMM yyyy, HH:mm tt") </CellTemplate>
                                             </TemplateColumn>
 
                                             <TemplateColumn Title="Ticket" Sortable="false" Filterable="false">
                                                 <CellTemplate Context="ctx">
-                                                    <span>@ctx.Item.ticketDetails.FirstOrDefault().ticketName - @ctx.Item.ticketDetails.FirstOrDefault().ticketKind</span>
+                                                    <small>@ctx.Item.ticketDetails.FirstOrDefault().ticketName - @ctx.Item.ticketDetails.FirstOrDefault().ticketKind</small>
                                                 </CellTemplate>
                                             </TemplateColumn>
 
-                                            <PropertyColumn Property="x => x.ticketQuantity" Title="Qty" />
+                                            <PropertyColumn Resizable="true" Property="x => x.ticketQuantity" Title="Qty" />
 
-                                            <TemplateColumn Title="Amount Paid" Sortable="false" Filterable="false">
+                                            <TemplateColumn Title="AmountPaid" Sortable="false" Filterable="false">
                                                 <CellTemplate Context="ctx">
                                                     @{
                                                         var amount = Convert.ToDecimal(ctx.Item.totalTicketFee);
@@ -802,7 +807,7 @@
                                             </TemplateColumn>
 
                                             <TemplateColumn Title="Event Date" Sortable="false" Filterable="false">
-                                                <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.ticketDetails.FirstOrDefault().startDateAndTime).ToString("ddd, dd MMM yyyy, HH:mm tt") </CellTemplate>
+                                                <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.ticketDetails.FirstOrDefault().startDateAndTime).ToString("dd MMM yyyy, HH:mm tt") </CellTemplate>
                                             </TemplateColumn>
 
                                         </Columns>
@@ -889,12 +894,14 @@
 
                                     <MudItem sm="12" xs="12" md="9" lg="9" xl="9" xxl="9">
 
-                                        <MudText Style="text-align:left; font-size:17px"><b>Event settlement</b></MudText>
+                                        <MudText Style="text-align:left;">Total Settlement : <b style="color: green; font-size:20px"> @settlementList?.FirstOrDefault()?.totalAmountSettledSum.ToString("C")</b></MudText>
+                                        
+                                        <br/>
 
                                         <br />
 
 
-                                        <MudDataGrid @ref="settlementDataGrid" T="GetSettlementData" Dense="true" RowsPerPage="50" ServerData="GetSettlementServerReload" Filterable="false" Hover="true" Loading="@_getSettlementProcessing" LoadingProgressColor="Color.Secondary" Striped="true" Bordered="true">
+                                        <MudDataGrid @ref="settlementDataGrid" T="GetSettlementData" Dense="false" RowsPerPage="50" ServerData="GetSettlementServerReload" Filterable="false" Hover="true" Loading="@_getSettlementProcessing" LoadingProgressColor="Color.Secondary" Striped="true" Bordered="true">
                                             <ToolBarContent>
 
                                                 <MudSpacer />
@@ -947,12 +954,12 @@
 
                                                 <TemplateColumn Title="Bank" Sortable="false" Filterable="false">
                                                     <CellTemplate Context="ctx">
-                                                        @ctx.Item.bankName - @ctx.Item.accountName (@ctx.Item.accountNumber)
+                                                        @MaskNumber(ctx.Item.accountNumber)
                                                     </CellTemplate>
                                                 </TemplateColumn>
 
                                                 <TemplateColumn Title="Trans Date" Sortable="false" Filterable="false">
-                                                    <CellTemplate Context="ctx">@Convert.ToDateTime(ctx.Item.createdAt).ToString("ddd, dd MMM yyyy, HH:mm tt") </CellTemplate>
+                                                    <CellTemplate Context="ctx">@Convert.ToDateTime(ctx.Item.createdAt).ToString("dd MMM yyyy, HH:mm tt") </CellTemplate>
                                                 </TemplateColumn>
 
                                             </Columns>
@@ -1007,6 +1014,7 @@
     MudDataGrid<AttendanceDto> attendanceDataGrid;
     MudDataGrid<GetSalesDataDto> salesDataGrid;
     MudDataGrid<GetSettlementData> settlementDataGrid;
+   private List<GetSettlementResponseModel> settlementList { get; set; }
     List<TicketNameGroupingTotalResult> ticketNameGrouping = new List<TicketNameGroupingTotalResult>();
 
     private MudMessageBox admituserMessageBox { get; set; }
@@ -1044,13 +1052,23 @@
     private string totalSales { get; set; }
     private int totalSalesTicketQuantity { get; set; }
     private string averageSalesRevenue { get; set; }
-
-
+    
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
         new BreadcrumbItem("Events", href: "#"),
         new BreadcrumbItem("Details", href: null, disabled: true)
     };
+    
+    private string MaskNumber(string number)
+    {
+        if (number.Length <= 4)
+            return number; // If the number is too short, just return it as-is.
+
+        int lengthToMask = number.Length - 4;
+        string maskedPart = new string('*', lengthToMask);
+        string visiblePart = number.Substring(lengthToMask);
+        return maskedPart + visiblePart;
+    }
 
 
     protected async override void OnInitialized()
@@ -1322,6 +1340,7 @@
         if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
         {
             var result = (List<GetSettlementResponseModel>)res.result.data;
+            settlementList = result;
             IEnumerable<GetSettlementData> data = (List<GetSettlementData>)result.FirstOrDefault().records;
            
             data = data.Where(element =>

@@ -54,7 +54,7 @@
 
     <MudCard Elevation="0">
         <MudCardContent>
-            <MudGrid Spacing="6">
+            <MudGrid Spacing="3">
                 @if (_processing)
                 {
                     <MudItem xs="12" sm="12" md="12" lg="12">
@@ -70,8 +70,8 @@
                         foreach (var e in _events)
                         {
                             var ticketLink = $"/events/get-tickets/{e._id}";
-                            var eventName = e.eventName.Length > 19 ? e.eventName[..20] + " ..." : e.eventName;
-                            var address = e.eventAddress.Length > 20 ? e.eventAddress[..20] + " ..." : e.eventAddress;
+                            var eventName = e.eventName.Length > 15 ? e.eventName[..15] + " ..." : e.eventName;
+                            var address = e.eventAddress.Length > 15 ? e.eventAddress[..15] + " ..." : e.eventAddress;
 
                             <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
                                 <div class="event-lisiting-web">
@@ -136,11 +136,11 @@
                                     <MudGrid>
                                         <MudItem sm="5" xs="5">
                                             <MudCard>
-                                                <MudCardMedia Image="@e.eventImagePath" Height="120"/>
+                                                <MudCardMedia Image="@e.eventImagePath" Height="100"/>
                                             </MudCard>
                                         </MudItem>
                                         <MudItem sm="7" xs="7">
-                                            <div style="line-height: 30px">
+                                            <div style="line-height: 24px">
 
                                                 <div style="font-size: small"><b>@eventName</b></div>
                                                 <span>@address</span>
@@ -148,7 +148,7 @@
                                                 <span>
                                                     @if (e.eventTimes.Any())
                                                     {
-                                                        @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
+                                                    @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
                                                     }
                                                 </span>
 
@@ -179,8 +179,6 @@
     </MudCard>
 
     <div>
-        <br />
-        <br />
         <br />
         <br />
     </div>
