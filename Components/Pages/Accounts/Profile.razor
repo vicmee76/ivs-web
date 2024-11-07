@@ -520,6 +520,18 @@
         if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
         {
             var result = (List<GetSettlementResponseModel>)res.result.data;
+
+            if (result.Count == 0)
+            {
+                _getSettlementProcessing = false;
+                StateHasChanged();
+                return new GridData<GetSettlementData>
+                    {
+                        TotalItems = 0,
+                        Items = new List<GetSettlementData>()
+                    };
+            }
+
             IEnumerable<GetSettlementData> data = (List<GetSettlementData>)result.FirstOrDefault().records;
 
             data = data.Where(element =>

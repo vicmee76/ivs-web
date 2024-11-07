@@ -1014,7 +1014,7 @@
     MudDataGrid<AttendanceDto> attendanceDataGrid;
     MudDataGrid<GetSalesDataDto> salesDataGrid;
     MudDataGrid<GetSettlementData> settlementDataGrid;
-   private List<GetSettlementResponseModel> settlementList { get; set; }
+    private List<GetSettlementResponseModel> settlementList { get; set; }
     List<TicketNameGroupingTotalResult> ticketNameGrouping = new List<TicketNameGroupingTotalResult>();
 
     private MudMessageBox admituserMessageBox { get; set; }
@@ -1052,13 +1052,13 @@
     private string totalSales { get; set; }
     private int totalSalesTicketQuantity { get; set; }
     private string averageSalesRevenue { get; set; }
-    
+
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
         new BreadcrumbItem("Events", href: "#"),
         new BreadcrumbItem("Details", href: null, disabled: true)
     };
-    
+
     private string MaskNumber(string number)
     {
         if (number.Length <= 4)
@@ -1340,6 +1340,18 @@
         if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
         {
             var result = (List<GetSettlementResponseModel>)res.result.data;
+
+            if(result.Count == 0)
+            {
+                _getSettlementProcessing = false;
+                StateHasChanged();
+                return new GridData<GetSettlementData>
+                    {
+                        TotalItems = 0,
+                        Items = new List<GetSettlementData>()
+                    };
+            }
+
             settlementList = result;
             IEnumerable<GetSettlementData> data = (List<GetSettlementData>)result.FirstOrDefault().records;
            
