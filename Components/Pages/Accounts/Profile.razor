@@ -230,6 +230,7 @@
                                 <Columns>
 
                                     <PropertyColumn Property="x => x.paymentGateWayTransactionId" Title="TranId" />
+                                    <PropertyColumn Property="x => x.eventName" Title="Event" />
 
                                     <TemplateColumn Title="Payout" Sortable="false" Filterable="false">
                                         <CellTemplate Context="ctx">
@@ -544,7 +545,9 @@
                     return true;
                 if (element.accountNumber.Contains(settlementSearchString, StringComparison.OrdinalIgnoreCase))
                     return true;
-                if ($"{element.paymentGateWayTransactionStatus} {element.accountName} {element.accountNumber}".Contains(settlementSearchString))
+                if (element.eventName.Contains(settlementSearchString, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if ($"{element.paymentGateWayTransactionStatus} {element.accountName} {element.eventName} {element.accountNumber}".Contains(settlementSearchString))
                     return true;
                 return false;
             }).ToArray();

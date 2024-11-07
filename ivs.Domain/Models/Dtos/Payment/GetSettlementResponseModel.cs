@@ -22,10 +22,12 @@ namespace ivs.Domain.Models.Dtos.Payment
         public DateTime createdAt { get; set; }
         public string paymentGateWayTransactionId { get; set; }
         public string bankName { get; set; }
+        public string eventName { get; set; }
         public string accountNumber { get; set; }
         public string accountName { get; set; }
         public decimal amountSettled { get; set; }
         public decimal totalAmountSettled { get; set; }
         public decimal totalServiceFee { get; set; }
+
     }
 }
