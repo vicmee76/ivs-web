@@ -301,36 +301,12 @@
 }
 
 
-.image-container {
-    position: relative;
-    margin: 0 auto; /* Center it */
-    text-align:center;
-    justify-content:center;
-    align-content:center;
-    height:auto;
-}
-
-    .image-container .image-centered {
-        position: absolute; /* Position the background text */
-        bottom: 0; /* At the bottom. Use top:0 to append it to the top */
-        background: rgb(0, 0, 0); /* Fallback color */
-        background: rgba(0, 0, 0, 0.6); /* Black background with 0.5 opacity */
-        color: #f1f1f1; /* Grey text */
-        width: 100%; /* Full width */
-        height:100%;
-        padding: 20px; /* Some padding */
-    }   
-
-.image-centered div {
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
 
 #event-title {
-    font-size: 3.0em;
+    font-size: 3.25rem;
+    color: #1e0a3c;
+    word-break: break-word;
+    line-height: 4rem;
     font-family: "Akaya Telivigala", system-ui;
     width:100%;
 }

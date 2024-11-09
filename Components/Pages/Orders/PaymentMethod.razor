@@ -14,7 +14,7 @@
 <MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="background-color:white">
 <br/>
     <center>
-        <MudPaper Elevation="0" Outlined="false" MaxWidth="500px" Square="false" Class="ma-2 pa-5">
+        <MudPaper Elevation="1" Outlined="false" MaxWidth="500px" Square="false" Class="ma-2 pa-10">
             <div style="text-align:left">
 
                 <div id="reg-title">Choose a payment method.</div>
@@ -41,12 +41,12 @@
                                 @foreach (var t in tickets)
                                 {
                                     <MudItem xs="7" sm="7" md="7" lg="9" xl="9" xxl="9">
-                                        <div style="line-height: 23px">
+                                        <div style="line-height: 23px; font-size: small">
                                             <p>@t.ticketQuantity X @t.ticketDetails.FirstOrDefault().ticketName</p>
                                         </div>
                                     </MudItem>
                                     <MudItem xs="5" sm="5" md="5" lg="3" xl="3" xxl="3">
-                                        <div style="font-size: medium; text-align: end">
+                                        <div style="font-size: small; text-align: end">
                                             <b>@Convert.ToDecimal(t.totalTicketFeeAndServiceFee).ToString("C")</b>
                                         </div>
                                     </MudItem>
@@ -66,7 +66,7 @@
                                     <div style="font-size: medium; text-align: end">
                                         <b>@tickets.Sum(x => Convert.ToDecimal(x.totalTicketFeeAndServiceFee)).ToString("C")</b>
                                        <div>
-                                            <small style="font-size:small; color:palevioletred;">Includes <span>@tickets.Sum(x => Convert.ToDecimal(x.totalTicketServiceFee)).ToString("C") </span> fees</small>
+                                            <small style="font-size:x-small; color:palevioletred;">Includes <span>@tickets.Sum(x => Convert.ToDecimal(x.totalTicketServiceFee)).ToString("C") </span> fees</small>
                                        </div>
                                     </div>
                                 </MudItem>
@@ -74,7 +74,6 @@
                             </MudGrid>
 
 
-                            <br />
                             <br />
 
                             @if(totalAmount > 0)
@@ -93,7 +92,7 @@
 
                                 </div>
                                 
-                                <br/><br/>
+                                <br/>
 
                                 <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_actionProcessing" OnClick="@( async () => await ActionMakePayment())" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
                                     @if (_actionProcessing)
