@@ -100,7 +100,14 @@
                                             var amount = tic.ticketAmount.numberDecimal.ToString("C");
                                             <MudItem xs="8" sm="8" md="8" lg="9" xl="9" xxl="9">
                                                 <div>
-                                                    <div><b>@tic.ticketName</b></div>
+                                                    <div><b>@tic.ticketName</b> &nbsp;
+                                                    
+                                                        @if(tic.ticketKind == Helpers.GroupTicket)
+                                                        {
+                                                            <MudChip Size="Size.Small" Color="Color.Secondary"><b>@tic.ticketKind</b></MudChip>
+                                                        }
+
+                                                    </div>
                                                     <br/>
                                                     <div><b style="color: #e1901d">@amount</b></div>
                                                     <br/>
@@ -127,15 +134,26 @@
                                                 }
                                                 else
                                                 {
-                                                    <MudSelect T="int" Label="Quantity" bind-Value="quantity" Margin="Margin.Dense" SelectedValuesChanged="@(async (value) => await GenerateCost(tic._id, com.EventTimeId, value))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
-                                                        <MudSelectItem T="int" Value="0"/>
-                                                        <MudSelectItem T="int" Value="1"/>
-                                                        <MudSelectItem T="int" Value="2"/>
-                                                        <MudSelectItem T="int" Value="3"/>
-                                                        <MudSelectItem T="int" Value="4"/>
-                                                        <MudSelectItem T="int" Value="5"/>
-                                                    </MudSelect>
-                                                    
+                                                    @if (tic.ticketKind == Helpers.GroupTicket)
+                                                    {
+                                                        <MudSelect T="int" Label="Quantity" bind-Value="quantity" Margin="Margin.Dense" SelectedValuesChanged="@(async (value) => await GenerateCost(tic._id, com.EventTimeId, value))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                                                            <MudSelectItem T="int" Value="0" />
+                                                            <MudSelectItem T="int" Value="1" />
+                                                            <MudSelectItem T="int" Value="2" />
+                                                        </MudSelect>
+                                                    }
+                                                    else
+                                                    {
+                                                        <MudSelect T="int" Label="Quantity" bind-Value="quantity" Margin="Margin.Dense" SelectedValuesChanged="@(async (value) => await GenerateCost(tic._id, com.EventTimeId, value))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                                                            <MudSelectItem T="int" Value="0" />
+                                                            <MudSelectItem T="int" Value="1" />
+                                                            <MudSelectItem T="int" Value="2" />
+                                                            <MudSelectItem T="int" Value="3" />
+                                                            <MudSelectItem T="int" Value="4" />
+                                                            <MudSelectItem T="int" Value="5" />
+                                                        </MudSelect>
+                                                    }
+                                                   
                                                     <br/>
                                                     
                                                 }
@@ -423,7 +441,6 @@
                             totalTicketFee = c.totalTicketFee.ToString(),
                             totalTicketServiceFee = c.totalTicketServiceFee.ToString(),
                             totalTicketFeeAndServiceFee = c.totalTicketFeeAndServiceFee.ToString(),
-
                         };
                     _attendanceVms.Add(attendance);
                 }

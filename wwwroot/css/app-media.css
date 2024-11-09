@@ -99,11 +99,12 @@
     }
 
     #event-title {
-        font-size: 2rem;
+        font-size: 1.5rem;
         font-family: "Akaya Telivigala", system-ui;
         width: 100%;
         color: #1e0a3c;
         word-break: break-word;
+        line-height: 2.0rem;
         font-weight: 800;
     }
 

@@ -303,10 +303,11 @@
 
 
 #event-title {
-    font-size: 3.25rem;
+    font-size: 2.0rem;
     color: #1e0a3c;
+    font-weight:600;
     word-break: break-word;
-    line-height: 4rem;
+    line-height: 3rem;
     font-family: "Akaya Telivigala", system-ui;
     width:100%;
 }
