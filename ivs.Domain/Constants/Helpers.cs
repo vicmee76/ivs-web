@@ -16,4 +16,6 @@ public class Helpers
     public static readonly string SuccessStatus = "SUCCESSFUL";
     public static readonly string FailedStatus = "FAILED";
     public static readonly string PendingStatus = "PENDING";
+    public static readonly string GroupTicket = "GROUP";
+    public static readonly string SingleTicket = "SINGLE";
 }

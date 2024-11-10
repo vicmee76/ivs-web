@@ -78,7 +78,7 @@
 
 
                 <MudItem xs="12" sm="12" md="9" lg="9" xl="9" xxl="9">
-                    <MudTabs Outlined="false" Position="Position.Top" SliderColor="Color.Secondary" Rounded="true" Border="true"  ApplyEffectsToContainer="true" Class="mt-8" PanelClass="">
+                    <MudTabs Outlined="false" Position="Position.Top" MinimumTabWidth="250px" SliderColor="Color.Secondary" Rounded="true" Border="true"  ApplyEffectsToContainer="true" PanelClass="pa-10">
 
                         <MudTabPanel Text="Settlement Account" >
 
@@ -213,7 +213,7 @@
 
                         <MudTabPanel Text="Settlement History">
 
-                             <br />
+                            <br /><br/>
 
                                 <MudText Typo="Typo.h6">Settlement History</MudText>
 
@@ -230,6 +230,7 @@
                                 <Columns>
 
                                     <PropertyColumn Property="x => x.paymentGateWayTransactionId" Title="TranId" />
+                                    <PropertyColumn Property="x => x.eventName" Title="Event" />
 
                                     <TemplateColumn Title="Payout" Sortable="false" Filterable="false">
                                         <CellTemplate Context="ctx">
@@ -273,7 +274,7 @@
 
                                     <TemplateColumn Title="Bank" Sortable="false" Filterable="false">
                                         <CellTemplate Context="ctx">
-                                            @ctx.Item.bankName - @ctx.Item.accountName (@ctx.Item.accountNumber)
+                                            @MaskNumber(ctx.Item.accountNumber)
                                         </CellTemplate>
                                     </TemplateColumn>
 
@@ -286,8 +287,6 @@
                                     <MudDataGridPager T="GetSettlementData" />
                                 </PagerContent>
                             </MudDataGrid>
-
-
 
 
                         </MudTabPanel>
@@ -520,6 +519,18 @@
         if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
         {
             var result = (List<GetSettlementResponseModel>)res.result.data;
+
+            if (result.Count == 0)
+            {
+                _getSettlementProcessing = false;
+                StateHasChanged();
+                return new GridData<GetSettlementData>
+                    {
+                        TotalItems = 0,
+                        Items = new List<GetSettlementData>()
+                    };
+            }
+
             IEnumerable<GetSettlementData> data = (List<GetSettlementData>)result.FirstOrDefault().records;
 
             data = data.Where(element =>
@@ -532,7 +543,9 @@
                     return true;
                 if (element.accountNumber.Contains(settlementSearchString, StringComparison.OrdinalIgnoreCase))
                     return true;
-                if ($"{element.paymentGateWayTransactionStatus} {element.accountName} {element.accountNumber}".Contains(settlementSearchString))
+                if (element.eventName.Contains(settlementSearchString, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if ($"{element.paymentGateWayTransactionStatus} {element.accountName} {element.eventName} {element.accountNumber}".Contains(settlementSearchString))
                     return true;
                 return false;
             }).ToArray();
@@ -586,7 +599,16 @@
         }
     }
 
+    private string MaskNumber(string number)
+    {
+        if (number.Length <= 4)
+            return number; // If the number is too short, just return it as-is.
 
+        int lengthToMask = number.Length - 4;
+        string maskedPart = new string('*', lengthToMask);
+        string visiblePart = number.Substring(lengthToMask);
+        return maskedPart + visiblePart;
+    }
 
     private Task OnSettlementSearch(string text)
     {

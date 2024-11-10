@@ -53,7 +53,7 @@ public class OrderService(IWebService _webService, ILocalStorageService sessionS
             var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
             var content = res?.result;
             if (content?.code != ResponseCodes.ResponseCodeOk)
-                return new ResponseObject();
+                return res;
 
             res.result.data = JsonConvert.DeserializeObject<List<GenerateCostDto>>(content?.data?.ToString());
             return res;

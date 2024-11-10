@@ -142,12 +142,12 @@
                      {
                         <MudDataGrid T="GetEventByUserDto" Elevation="1" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_eventsDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter" Hideable="false">
                            <ToolBarContent>
-                              <MudText Typo="Typo.h6" Color="Color.Secondary"><b>My Events</b></MudText>
+                              <MudText Typo="Typo.body2" Color="Color.Secondary"><b>My Events</b></MudText>
                               <MudSpacer />
                               <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
                                             AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                            </ToolBarContent>
-                           <Columns>
+                           <Columns >
                               <TemplateColumn  Title="Actions" Sortable="false" Filterable="false">
                                  <CellTemplate Context="ctx">
                                     @{
@@ -167,10 +167,10 @@
                                     </MudMenu>
                                  </CellTemplate>
                               </TemplateColumn>
-                              <PropertyColumn Property="x => x.eventOption" Title="Privacy" Sortable="true" Filterable="true"/>
-                              <PropertyColumn Property="x => x.eventName" Title="Event Name" Sortable="true" Filterable="true"/>
-                              <PropertyColumn Property="x => x.eventAddress" Title="Event Address" Sortable="false" Filterable="true"/>
-                              <TemplateColumn Title="Status" Sortable="true" Filterable="true">
+                              <PropertyColumn Resizable="true" Property="x => x.eventOption" Title="Privacy" Sortable="true" Filterable="true"/>
+                              <PropertyColumn Resizable="true" Property="x => x.eventName" Title="Event Name" Sortable="true" Filterable="true"/>
+                              <PropertyColumn Resizable="true" Property="x => x.eventAddress" Title="Event Address" Sortable="false" Filterable="true"/>
+                              <TemplateColumn Resizable="true" Title="Status" Sortable="true" Filterable="true">
                                  <CellTemplate Context="ctx">
                                     @if (ctx.Item.status == Helpers.Pending)
                                     {
@@ -182,15 +182,15 @@
                                     }
                                  </CellTemplate>
                               </TemplateColumn>
-                              <TemplateColumn Title="Created Date" Sortable="false" Filterable="true">
+                              <TemplateColumn Resizable="true" Title="Created Date" Sortable="false" Filterable="true">
                                  <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.createdAt).ToString("F") </CellTemplate>
                               </TemplateColumn>
-                              <TemplateColumn Title="Share" Sortable="false" Filterable="false">
+                              <TemplateColumn Resizable="true" Title="Share" Sortable="false" Filterable="false">
                                  <CellTemplate Context="ctx">
                                     <MudIconButton Icon="@Icons.Material.Filled.Share" Size="Size.Small" Title="Click to copy" Color="Color.Warning"/>
                                  </CellTemplate>
                               </TemplateColumn>
-                              <TemplateColumn Title="Published" Sortable="false" Filterable="false">
+                              <TemplateColumn Resizable="true" Title="Published" Sortable="false" Filterable="false">
                                  <CellTemplate Context="ctx">
                                     @{
                                         var activateUrl = $"/events/activate-event/{ctx.Item._id}";

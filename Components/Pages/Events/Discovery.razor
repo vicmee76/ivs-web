@@ -183,17 +183,14 @@
     <br />
 
     <div style="background-color:white; padding:20px">
-
-        <div id="discovery-title">
-            <span id="discovery-title-mid">Discover every moment - Quick search</span>
-        </div>
-
-        <br />
+        
+        <span id="discovery-title-mid">Discover every moment - Quick search</span>
+        <br/><br/>
 
         <MudGrid>
             <MudItem xs="12" sm="12" md="7" lg="7" xl="7" xxl="7">
                 <div>
-                    <MudTextField T="string" Margin="Margin.Dense" @bind-Value="@eventNameString" Label="Enter an event name" Variant="Variant.Outlined" />
+                    <MudTextField T="string" Margin="Margin.Dense" @bind-Value="@eventNameString" Label="Enter an event name" Variant="Variant.Outlined"/>
                 </div>
             </MudItem>
             <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
@@ -236,7 +233,7 @@
             </CardHeaderActions>
         </MudCardHeader>
         <MudCardContent>
-            <MudGrid Spacing="6">
+            <MudGrid Spacing="3">
                 @if (_LatestEventProcessing)
                 {
                     <MudItem xs="12" sm="12" md="12" lg="12">
@@ -253,8 +250,8 @@
                         {
                             var ticketLink = $"/events/get-tickets/{e._id}";
 
-                            var eventName = e.eventName.Length > 19 ? e.eventName[..20] + " ..." : e.eventName;
-                            var address = e.eventAddress.Length > 20 ? e.eventAddress[..20] + " ..." : e.eventAddress;
+                            var eventName = e.eventName.Length > 15 ? e.eventName[..15] + " ..." : e.eventName;
+                            var address = e.eventAddress.Length > 15 ? e.eventAddress[..15] + " ..." : e.eventAddress;
 
                             <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
                                 <div class="event-lisiting-web">
@@ -319,11 +316,11 @@
                                     <MudGrid>
                                         <MudItem sm="5" xs="5">
                                             <MudCard>
-                                                <MudCardMedia Image="@e.eventImagePath" Height="120"/>
+                                                <MudCardMedia Image="@e.eventImagePath" Height="100"/>
                                             </MudCard>
                                         </MudItem>
                                         <MudItem sm="7" xs="7">
-                                            <div style="line-height: 30px">
+                                            <div style="line-height: 24px">
 
                                                 <div style="font-size: small"><b>@eventName</b></div>
                                                 <span>@address</span>
@@ -352,7 +349,7 @@
                                 <br />
                                 <MudText id="discovery-text">No new event yet!</MudText>
                                 <br>
-                                <MudText> Once a new event is created, you will see them here.</MudText>
+                                <small> Once a new event is created, you will see them here.</small>
                             </div>
                         </MudItem>
                     }
@@ -373,7 +370,7 @@
             </CardHeaderActions>
         </MudCardHeader>
         <MudCardContent>
-            <MudGrid Spacing="6">
+            <MudGrid Spacing="3">
                 @if (_freeEventProcessing)
                 {
                     <MudItem xs="12" sm="12" md="12" lg="12">
@@ -390,8 +387,8 @@
                         {
                             var ticketLink = $"/events/get-tickets/{e._id}";
 
-                            var eventName = e.eventName.Length > 19 ? e.eventName[..20] + " ..." : e.eventName;
-                            var address = e.eventAddress.Length > 20 ? e.eventAddress[..20] + " ..." : e.eventAddress;
+                            var eventName = e.eventName.Length > 15 ? e.eventName[..15] + " ..." : e.eventName;
+                            var address = e.eventAddress.Length > 15 ? e.eventAddress[..15] + " ..." : e.eventAddress;
 
                             <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
                                 <div class="event-lisiting-web">
@@ -458,11 +455,11 @@
                                     <MudGrid>
                                         <MudItem sm="5" xs="5">
                                             <MudCard>
-                                                <MudCardMedia Image="@e.eventImagePath" Height="120"/>
+                                                <MudCardMedia Image="@e.eventImagePath" Height="100"/>
                                             </MudCard>
                                         </MudItem>
                                         <MudItem sm="7" xs="7">
-                                            <div style="line-height: 30px">
+                                            <div style="line-height: 24px">
 
                                                 <div style="font-size: small"><b>@eventName</b></div>
                                                 <span>@address</span>
@@ -511,7 +508,7 @@
             </CardHeaderActions>
         </MudCardHeader>
         <MudCardContent>
-            <MudGrid Spacing="6">
+            <MudGrid Spacing="3">
                 @if (_paidEventProcessing)
                 {
                     <MudItem xs="12" sm="12" md="12" lg="12">
@@ -528,8 +525,8 @@
                         {
                             var ticketLink = $"/events/get-tickets/{e._id}";
 
-                            var eventName = e.eventName.Length > 19 ? e.eventName[..20] + " ..." : e.eventName;
-                            var address = e.eventAddress.Length > 20 ? e.eventAddress[..20] + " ..." : e.eventAddress;
+                            var eventName = e.eventName.Length > 15 ? e.eventName[..15] + " ..." : e.eventName;
+                            var address = e.eventAddress.Length > 15 ? e.eventAddress[..15] + " ..." : e.eventAddress;
 
                             <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
                                 
@@ -597,11 +594,11 @@
                                     <MudGrid>
                                         <MudItem sm="5" xs="5">
                                             <MudCard>
-                                                <MudCardMedia Image="@e.eventImagePath" Height="120" />
+                                                <MudCardMedia Image="@e.eventImagePath" Height="100" />
                                             </MudCard>
                                         </MudItem>
                                         <MudItem sm="7" xs="7">
-                                            <div style="line-height: 30px">
+                                            <div style="line-height: 24px">
 
                                                 <div style="font-size: small"><b>@eventName</b></div>
                                                 <span>@address</span>
