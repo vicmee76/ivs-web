@@ -631,10 +631,10 @@
 
                                 <MudGrid>
                                     <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
-                                        <MudPaper Class="pa-8" Outlined="true" Style="background-color:#fff6ff">
-                                            <div style="line-height:35px">
+                                        <MudPaper Class="pa-10" Outlined="true" Style="background-color:#fff6ff">
+                                            <div style="line-height:40px">
 
-                                                <div style="font-size:17px;">Revenue</div>
+                                                <div style="font-size:17px;">Total Revenue</div>
 
                                                 @if (_salesProcessing)
                                                 {
@@ -642,13 +642,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <h1>@totalSales</h1>
-
-                                                    <div style="margin-top: 8px">
-                                                        <div style="font-size:17px;">Total settlement</div>
-                                                        <MudText Style="font-size:16px" Color="Color.Warning"> <b>@totalAmountSettled</b>  </MudText>
-                                                    </div>
-
+                                                    <h1>@totalSales.ToString("C")</h1>
                                                 }
 
                                             </div>
@@ -658,14 +652,13 @@
                                     <MudItem xs="12" sm="12" md="12" lg="9" xl="9" xxl="9">
 
                                         <MudGrid>
+                                            
+                                            <MudItem xs="6" sm="6" md="6" lg="2" xl="2" xxl="2">
 
-
-                                            <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="3">
-
-                                                <MudPaper Class="pa-5" Outlined="true" Style="background-color: #fffcf7">
+                                                <MudPaper Class="pa-3" Outlined="true" Style="background-color: #fffcf7">
                                                     <div style="line-height:25px">
 
-                                                        <div>Ticket Purchased</div>
+                                                        <div>Total Settlement</div>
 
                                                         @if (_salesProcessing)
                                                         {
@@ -673,7 +666,7 @@
                                                         }
                                                         else
                                                         {
-                                                            <b>@totalSalesTicketQuantity</b>
+                                                            <MudText Style="font-size:13px" Color="Color.Warning"> <b>@totalAmountSettled.ToString("C")</b>  </MudText>
                                                         }
 
                                                     </div>
@@ -682,10 +675,10 @@
 
                                                 <br />
 
-                                                <MudPaper Class="pa-5" Outlined="true" Style="background-color: #fffcf7">
+                                                <MudPaper Class="pa-3" Outlined="true" Style="background-color: #fffcf7">
                                                     <div style="line-height:25px">
 
-                                                        <div>Avg. Revenue</div>
+                                                        <div>Available Balance</div>
 
                                                         @if (_salesProcessing)
                                                         {
@@ -693,7 +686,50 @@
                                                         }
                                                         else
                                                         {
-                                                            <b>@averageSalesRevenue</b>
+                                                            var balance = Convert.ToDecimal(totalSales) - Convert.ToDecimal(totalAmountSettled);
+                                                            <MudText Style="font-size:13px" Color="Color.Success"> <b>@balance.ToString("C")</b>  </MudText>
+                                                        }
+
+                                                    </div>
+
+                                                </MudPaper>
+
+                                            </MudItem>
+
+                                            <MudItem xs="6" sm="6" md="6" lg="2" xl="2" xxl="2">
+
+                                                <MudPaper Class="pa-3" Outlined="true" Style="background-color: #fffcf7">
+                                                    <div style="line-height:25px">
+
+                                                        <div>Ticket Purchased</div>
+
+                                                        @if (_salesProcessing)
+                                                        {
+                                                        <MudSkeleton Height="22px;" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <MudText Style="font-size: 13px"> <b>@totalSalesTicketQuantity</b> </MudText>
+                                                        }
+
+                                                    </div>
+
+                                                </MudPaper>
+
+                                                <br />
+
+                                                <MudPaper Class="pa-3" Outlined="true" Style="background-color: #fffcf7">
+                                                    <div style="line-height:25px">
+
+                                                        <div>Average Revenue</div>
+
+                                                        @if (_salesProcessing)
+                                                        {
+                                                        <MudSkeleton Height="22px;" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <MudText Style="font-size: 13px"> <b>@averageSalesRevenue</b></MudText>
                                                         }
 
                                                     </div>
@@ -711,13 +747,13 @@
                                             {
                                                 if (ticketNameGrouping.Any())
                                                 {
-                                                    var cols = ticketNameGrouping.Count == 1 ? 9 : 3;
+                                                    var cols = ticketNameGrouping.Count == 1 ? 8 : 4;
 
                                                     foreach (var item in ticketNameGrouping)
                                                     {
                                                         <MudItem xs="12" sm="12" md="6" lg="@cols" xl="@cols" xxl="@cols">
-                                                            <MudPaper Class="pa-7" Outlined="true" Style="background-color: #f4f3ff">
-                                                                <div style="line-height:36px">
+                                                            <MudPaper Class="pa-5" Outlined="true" Style="background-color: #f4f3ff">
+                                                                <div style="line-height:29px">
 
                                                                     <div><b>@item._id</b></div>
                                                                     <MudDivider></MudDivider>
@@ -867,7 +903,7 @@
                                                 <MudTextField @bind-Value="settlementAmount" Clearable="true" OnClearButtonClick="@( async () => await ClearSettlementAction())" OnBlur="@(async () => await GetFeeAction())" Label="Settlemennt Amount" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentColor="Color.Success" AdornmentIcon="@Icons.Material.Filled.Payments" />
                                             </div>
 
-                                            <MudText Style="margin-top:7px" Color="Color.Secondary"> <b> @serviceFee </b></MudText>
+                                            <MudText Style="margin-top:7px; font-size: small" Color="Color.Secondary"> <b> @serviceFee </b></MudText>
 
                                             <br />
 
@@ -894,7 +930,7 @@
 
                                     <MudItem sm="12" xs="12" md="9" lg="9" xl="9" xxl="9">
 
-                                        <MudText Style="text-align:left;">Total Settlement : <b style="color: green; font-size:20px"> @settlementList?.FirstOrDefault()?.totalAmountSettledSum.ToString("C")</b></MudText>
+                                        <MudText Style="text-align:left;">Total Settlement : <b style="color: green; font-size:20px"> @totalSettledAmount.ToString("C")</b></MudText>
                                         
                                         <br/>
 
@@ -1014,7 +1050,7 @@
     MudDataGrid<AttendanceDto> attendanceDataGrid;
     MudDataGrid<GetSalesDataDto> salesDataGrid;
     MudDataGrid<GetSettlementData> settlementDataGrid;
-    private List<GetSettlementResponseModel> settlementList { get; set; }
+   // private List<GetSettlementResponseModel> settlementList { get; set; }
     List<TicketNameGroupingTotalResult> ticketNameGrouping = new List<TicketNameGroupingTotalResult>();
 
     private MudMessageBox admituserMessageBox { get; set; }
@@ -1034,8 +1070,9 @@
     private int addmitedUsersCount { get; set; }
     private int notAdmittedUsersCount { get; set; }
     private int totalTicketQuantity { get; set; }
-    private string totalAmountSettled { get; set; }
+    private decimal totalAmountSettled { get; set; }
     private string eventName { get; set; }
+    private decimal totalSettledAmount { get; set; }
 
     private decimal settlementAmount { get; set; }
     private string serviceFee { get; set; }
@@ -1049,7 +1086,7 @@
     private bool _settlementProcessing { get; set; } = false;
     private bool _getSettlementProcessing { get; set; } = false;
 
-    private string totalSales { get; set; }
+    private decimal totalSales { get; set; }
     private int totalSalesTicketQuantity { get; set; }
     private string averageSalesRevenue { get; set; }
 
@@ -1207,7 +1244,6 @@
                     TotalItems = totalItems,
                     Items = pagedData
                 };
-
         }
         else
         {
@@ -1218,7 +1254,6 @@
                     TotalItems = 0,
                     Items = new List<AttendanceDto>()
                 };
-
         }
     }
 
@@ -1270,9 +1305,9 @@
             }).ToArray();
 
             var totalItems = result.totalCount;
-            totalSales = result.totalTicketSum.ToString("C");
+            totalSales = result.totalTicketSum;
             totalSalesTicketQuantity = result.totalTicketQuantity;
-            totalAmountSettled = result.totalAmountSettled.ToString("C");
+            totalAmountSettled = result.totalAmountSettled;
             averageSalesRevenue = (result.totalTicketSum / result.totalTicketQuantity).ToString("C");
 
             var sortDefinition = state.SortDefinitions.FirstOrDefault();
@@ -1351,9 +1386,9 @@
                         Items = new List<GetSettlementData>()
                     };
             }
-
-            settlementList = result;
-            IEnumerable<GetSettlementData> data = (List<GetSettlementData>)result.FirstOrDefault().records;
+            
+            totalSettledAmount = result.FirstOrDefault().records.Where(x => x.paymentGateWayTransactionStatus == Helpers.SuccessStatus).Sum(x => x.totalAmountSettled);
+            IEnumerable<GetSettlementData> data = result.FirstOrDefault().records;
            
             data = data.Where(element =>
             {
@@ -1445,7 +1480,7 @@
     {
         if (settlementAmount >= Helpers.MinimumWithdrawalAmount)
         {
-            var res = await _paymentService.GetTransferFee(settlementAmount);
+            var res = await _paymentService.GetTransferFee(settlementAmount, id);
             if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true){
                 var result = (GetTransferFeeDto)res.result.data;
                 serviceFee = $"Fee : {result.totalDeduction.ToString("C")}; Payout Amount : {result.payoutAmount.ToString("C")}";
