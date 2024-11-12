@@ -292,7 +292,41 @@
                         </MudTabPanel>
 
                         <MudTabPanel Text="Privacy">
-                            <MudText>Content Two</MudText>
+<br/>
+                            <MudText Typo="Typo.h6">Change your password </MudText>
+                            <br /><br />
+
+                            <MudGrid>
+                                <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+
+                                    <EditForm Model="@model" OnValidSubmit="ActionChangePassword">
+                                        <DataAnnotationsValidator />
+
+                                        <MudTextField InputType="@PasswordInput" Label="Old password" Margin="Margin.Dense" HelperText="Enter your old password" @bind-Value="model.OldPassword" For="@(() => model.OldPassword)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
+                                        <div class="sign-up-form-div-space"></div>
+
+                                        <MudTextField InputType="@PasswordInput" Label="New password" Margin="Margin.Dense" HelperText="Enter your new password" @bind-Value="model.NewPassword" For="@(() => model.NewPassword)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
+                                        <div class="sign-up-form-div-space"></div>
+
+                                        <MudTextField InputType="@PasswordInput" Label="Confirm new password" Margin="Margin.Dense" HelperText="Confirm your new password" @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
+                                        <div class="sign-up-form-div-space"></div>
+
+
+                                        <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#56375C" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                                            @if (_changePasswordProcessing)
+                                            {
+                                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                            <MudText Class="ms-2">Processing</MudText>
+                                            }
+                                            else
+                                            {
+                                            <MudText><b>Change Password</b></MudText>
+                                            }
+                                        </MudButton>
+                                    </EditForm>
+                                    
+                                </MudItem>
+                            </MudGrid>
                         </MudTabPanel>
 
 
@@ -322,11 +356,17 @@
     [Inject] IAccountService _accountService { get; set; }
     [Inject] IPaymentService _paymentService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
+    [SupplyParameterFromForm] public ChangePasswordVM? model { get; set; }
+    
     private MudMessageBox createSettlementMessageBox { get; set; }
+    
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
     private string selectedBankName { get; set; }
     private string accountNumber { get; set; }
     private string accountName { get; set; }
+    private string email { get; set; }
 
     AuthUser authUser = new AuthUser();
     List<UserDetailsDto> userDetails = new List<UserDetailsDto>();
@@ -334,10 +374,12 @@
     MudDataGrid<GetSettlementData> settlementDataGrid;
     private string[] bankName;
 
+    bool isShow;
     private bool _getSettlementProcessing { get; set; } = false;
     private bool _processing { get; set; } = false;
     private bool _createSettlementActionProcessing { get; set; } = false;
     private bool _accountVerificationProcessing { get; set; } = false;
+    private bool _changePasswordProcessing { get; set; } = false;
     private string? initials {get;set;}
     private string? fullname {get;set;} 
     private string? userId {get;set;} 
@@ -354,6 +396,7 @@
     protected async override void OnInitialized()
     {
         _processing = true;
+        model = new ChangePasswordVM();
         var state = await _authStateProvider.GetAuthenticationStateAsync();
 
         if (!state.User.Identity.IsAuthenticated)
@@ -366,6 +409,7 @@
             initials = auth.NameInitials;
             fullname = auth.SentenceCaseFullName;
             userId = auth.Id;
+            email = auth.Email;
 
             var res = await _accountService.GetUserById(auth.Id);
             if (res.result.code == ResponseCodes.ResponseCodeOk)
@@ -469,9 +513,7 @@
         {
             if (result == true)
             {
-
                 var bank = banksDtos.Where(x => x.name.Equals(selectedBankName, StringComparison.InvariantCultureIgnoreCase));
-
                 var model = new CreateSettlementAccountDto()
                     {
                         accountName = accountName,
@@ -482,7 +524,6 @@
                     };
 
                 var res = await _accountService.CreateSettlementAccount(model);
-
                 if (res.result.code == ResponseCodes.ResponseCodeCreated)
                 {
                     accountName = string.Empty;
@@ -502,8 +543,7 @@
         _createSettlementActionProcessing = false;
         StateHasChanged();
     }
-
-
+    
 
     private async Task<GridData<GetSettlementData>> GetSettlementServerReload(GridState<GetSettlementData> state)
     {
@@ -600,6 +640,7 @@
         }
     }
 
+    
     private string MaskNumber(string number)
     {
         if (number.Length <= 4)
@@ -611,6 +652,42 @@
         return maskedPart + visiblePart;
     }
 
+
+    private async Task ActionChangePassword()
+    {
+        _changePasswordProcessing = true;
+
+        var res = await _accountService.ChangePassword(email, model);
+        if (res.result.code == ResponseCodes.ResponseCodeOk)
+        {
+            model = new ChangePasswordVM();
+            _snackbar.Add(res.result.message, Severity.Success);
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+        }
+
+        StateHasChanged();
+        _changePasswordProcessing = false;
+    }
+
+    void ButtoShowPasswordClick()
+    {
+        if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+    
     private Task OnSettlementSearch(string text)
     {
         settlementSearchString = text;

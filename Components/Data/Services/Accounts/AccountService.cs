@@ -224,5 +224,27 @@ namespace ivs_ui.Components.Data.Services.Accounts
                 };
             }
         }
+
+        public async Task<ResponseObject> ChangePassword(string email, ChangePasswordVM model)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUsersUrl, $"/change-password/{email}", Method.Put, model,
+                    headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                return res;
+            }
+            catch (Exception e)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to change your password, please try again later",
+                    }
+                };
+            }
+        }
     }
 }
