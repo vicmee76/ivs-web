@@ -141,12 +141,12 @@ namespace ivs_ui.Components.Data.Services.Payment
 
 
 
-        public async Task<ResponseObject> GetTransferFee(decimal settlementAmount)
+        public async Task<ResponseObject> GetTransferFee(decimal settlementAmount, string eventId)
         {
             try
             {
                 var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(SettlementUrl, $"get-transfer-fee/{settlementAmount}", Method.Get, null, headers, null, null);
+                var response = await _webService.Call(SettlementUrl, $"get-transfer-fee/{settlementAmount}/{eventId}", Method.Get, null, headers, null, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)

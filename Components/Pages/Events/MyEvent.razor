@@ -300,7 +300,8 @@
    private async Task GetEvents()
    {
       var res2 = await _eventService.GetEventByUser(userId);
-      _eventsDto = res2.result.data ?? new List<GetEventByUserDto>();
+      var events  = (List<GetEventByUserDataDto>)res2.result.data ?? [];
+      _eventsDto = events.FirstOrDefault().record;
    }
 
    private async Task DeleteEventAction(string id)

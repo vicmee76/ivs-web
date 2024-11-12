@@ -1,5 +1,13 @@
 namespace ivs.Domain.Models.Dtos.Events;
 
+
+public class GetEventByUserDataDto
+{
+    public decimal totalSales { get; set; }
+    public decimal totalSettlement { get; set; }
+    public List<GetEventByUserDto> record { get; set; }
+}
+
 public class GetEventByUserDto
 {
     public string? _id { get; set; }
