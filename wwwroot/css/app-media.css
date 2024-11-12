@@ -9,17 +9,17 @@
         font-family: "Akaya Telivigala", system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
         color: #56375C
     }
-.login-container{
-    background-color: white;
-    box-shadow: 0 0 0 0;
-}
+    .login-container{
+        background-color: white;
+        box-shadow: 0 0 0 0;
+    }
 
-.event-lisiting-web{
-    display: none;
-}
+    .event-lisiting-web{
+        display: none;
+    }
 
     #dasboard-count {
-        font-size: 20px;
+        font-size: 13px;
     }
 
     #dasboard-count-title{

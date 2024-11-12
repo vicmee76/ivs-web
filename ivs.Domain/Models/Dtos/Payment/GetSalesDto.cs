@@ -9,7 +9,7 @@ namespace ivs.Domain.Models.Dtos.Payment
 {
     public class GetSalesDto
     {
-        public double totalTicketSum { get; set; }
+        public decimal totalTicketSum { get; set; }
         public int totalCount { get; set; }
         public int totalTicketQuantity { get; set; }
         public decimal totalAmountSettled { get; set; }

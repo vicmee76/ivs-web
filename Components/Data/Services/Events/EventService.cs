@@ -124,7 +124,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
 
-                res.result.data = JsonConvert.DeserializeObject<List<GetEventByUserDto>>(content.data.ToString());
+                res.result.data = JsonConvert.DeserializeObject<List<GetEventByUserDataDto>>(content.data.ToString());
                 return res;
             }
             catch (Exception ex)
