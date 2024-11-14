@@ -36,9 +36,20 @@ namespace ivs_ui.Components.Data.Services.General
             var identity = new ClaimsIdentity();
             _http.DefaultRequestHeaders.Authorization = null;
 
+            // log out when token expires
             if (!string.IsNullOrEmpty(token))
                 identity = new ClaimsIdentity(ParseClaimsFromJwt(token), Tokens.JwtName);
-            
+
+            var expiryTime = identity.Claims.Where(x => x.Type == "exp").FirstOrDefault();
+            DateTime expDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expiryTime.Value)).UtcDateTime;
+
+            if(DateTime.Now > expDate)
+            {
+               await _localStorageService.ClearAsync();
+                return new AuthenticationState(_anonymous);
+            }
+                
+
             _anonymous = new ClaimsPrincipal(identity);
             var state = new AuthenticationState(_anonymous);
 
