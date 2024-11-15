@@ -4,18 +4,21 @@ using System.Security.Claims;
 using System.Text.Json;
 using Blazored.LocalStorage;
 using ivs.Domain.Constants;
+using ivs.Domain.Interfaces.Accounts;
 
 namespace ivs_ui.Components.Data.Services.General
 {
     public class AuthStateProvider : AuthenticationStateProvider
     {
         private readonly ILocalStorageService _localStorageService;
+        private readonly IAccountService _accountService;
         private readonly HttpClient _http;
         private ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
 
-        public AuthStateProvider(HttpClient http, ISessionStorageService sessionStorageService, ILocalStorageService localStorageService)
+        public AuthStateProvider(HttpClient http, ILocalStorageService localStorageService, IAccountService accountService)
         {
             _localStorageService = localStorageService ?? throw new ArgumentNullException(nameof(localStorageService));
+            _accountService = accountService;
             _http = http;
         }
        
@@ -41,15 +44,16 @@ namespace ivs_ui.Components.Data.Services.General
                 identity = new ClaimsIdentity(ParseClaimsFromJwt(token), Tokens.JwtName);
 
             var expiryTime = identity.Claims.Where(x => x.Type == "exp").FirstOrDefault();
-            DateTime expDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expiryTime.Value)).UtcDateTime;
+            var userId = identity.Claims.FirstOrDefault(x => x.Type == "userid")?.Value.ToString();
+            var refresherToken = identity.Claims.FirstOrDefault(x => x.Type == "r")?.Value.ToString();
+            var expDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expiryTime.Value)).UtcDateTime;
 
-            if(DateTime.Now > expDate)
+            if(DateTime.UtcNow > expDate)
             {
                await _localStorageService.ClearAsync();
-                return new AuthenticationState(_anonymous);
+               await ReLogin(userId, refresherToken);
             }
-                
-
+            
             _anonymous = new ClaimsPrincipal(identity);
             var state = new AuthenticationState(_anonymous);
 
@@ -95,5 +99,24 @@ namespace ivs_ui.Components.Data.Services.General
         }
 
 
+        private async Task ReLogin(string userId, string refreshToken)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(refreshToken))
+            {
+                new AuthenticationState(_anonymous);
+                return;
+            }
+
+            var res = await _accountService.ReLogin(userId, refreshToken);
+            if (res.result.code != ResponseCodes.ResponseCodeOk)
+            {
+                new AuthenticationState(_anonymous);
+                return;
+            }
+            
+            await _localStorageService.SetItemAsync(Tokens.TokenName, res.result.token);
+            await _localStorageService.SetItemAsync(Tokens.RefreshTokenName, res.result.refreshToken);
+            await GetAuthenticationStateAsync();
+        }
     }
 }

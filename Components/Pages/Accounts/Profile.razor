@@ -646,9 +646,9 @@
         if (number.Length <= 4)
             return number; // If the number is too short, just return it as-is.
 
-        int lengthToMask = number.Length - 4;
-        string maskedPart = new string('*', lengthToMask);
-        string visiblePart = number.Substring(lengthToMask);
+        var lengthToMask = number.Length - 4;
+        var maskedPart = new string('*', lengthToMask);
+        var visiblePart = number.Substring(lengthToMask);
         return maskedPart + visiblePart;
     }
 

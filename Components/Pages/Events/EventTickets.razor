@@ -369,9 +369,7 @@
     private bool _isUpdate { get; set; } = false;
     private bool _isActive { get; set; } = false;
 
-
     private decimal amount { get; set; }
-
     private string selectTickStock { get; set; }
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
@@ -569,7 +567,6 @@
         timeOptions = new List<string>() { item.eventTimeId };
         multiSelect = false;
         selectAll = false;
-
         StateHasChanged();
     }
 

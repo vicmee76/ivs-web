@@ -64,6 +64,31 @@ namespace ivs_ui.Components.Data.Services.Accounts
             }
         }
 
+        public async Task<ResponseObject> ReLogin(string userId, string refreshToken)
+        {
+            try
+            {
+                var response = await _webService.Call(ApiLoginUrl, $"/refresh-user-token/{userId}/{refreshToken}", Method.Post, null);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res!;
+
+                var myJsonResponse = content.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
+                res.result.data = JsonConvert.DeserializeObject<UserDto>(content.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)    
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to login, please try again later",
+                    }
+                };
+            }
+        }
 
 
         public async Task<ResponseObject> ResendVerificationCode(string userId)
