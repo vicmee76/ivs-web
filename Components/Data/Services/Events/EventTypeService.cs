@@ -9,10 +9,9 @@ using ivs.Domain.Models.Dtos.Events;
 
 namespace ivs_ui.Components.Data.Services.Events
 {
-    public class EventTypeService(IWebService webService, ILocalStorageService sessionStorageService) : IEventTypeService
+    public class EventTypeService(IWebService webService) : IEventTypeService
     {
         private readonly IWebService _webService = webService;
-        private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
         private const string ApiUrl = "/api/v1/event-types";
 
 
@@ -20,7 +19,7 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var response = await _webService.Call(ApiUrl, "/", Method.Get, null, null);
+                var response = await _webService.Call(ApiUrl, "/", Method.Get, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)

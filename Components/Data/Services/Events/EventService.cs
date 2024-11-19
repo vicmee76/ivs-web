@@ -144,7 +144,7 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var response = await _webService.Call(ApiUrl, $"get-ivs-event-by-id/{id}", Method.Get, null, null);
+                var response = await _webService.Call(ApiUrl, $"get-ivs-event-by-id/{id}", Method.Get, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)

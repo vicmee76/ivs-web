@@ -1101,9 +1101,9 @@
         if (number.Length <= 4)
             return number; // If the number is too short, just return it as-is.
 
-        int lengthToMask = number.Length - 4;
-        string maskedPart = new string('*', lengthToMask);
-        string visiblePart = number.Substring(lengthToMask);
+        var lengthToMask = number.Length - 4;
+        var maskedPart = new string('*', lengthToMask);
+        var visiblePart = number.Substring(lengthToMask);
         return maskedPart + visiblePart;
     }
 
@@ -1126,27 +1126,35 @@
             if (res1.result.code == ResponseCodes.ResponseCodeOk)
             {
                 _events = res1.result.data;
-                eventName = _events.eventName;
 
-                var res = await _ticketService.GetTicketByEventId(id);
-                if (res.result.code == ResponseCodes.ResponseCodeOk)
+                var isUserEvent = _events.Users.Where(x => x._id == userId);
+                if (!isUserEvent.Any())
                 {
-                    if (res.result.data is List<TicketDto> result)
+                    _snackbar.Add("Unauthorized event access", Severity.Error);
+                }
+                else
+                {
+                    eventName = _events.eventName;
+
+                    var res = await _ticketService.GetTicketByEventId(id);
+                    if (res.result.code == ResponseCodes.ResponseCodeOk)
                     {
-                        _ticketList = result
-                            .GroupBy(ticket => new { ticket.eventTimeDetails._id, ticket.eventTimeDetails.startDateAndTime })
-                            .Select(group => new TimeAndTicketGroupingDto
+                        if (res.result.data is List<TicketDto> result)
+                        {
+                            _ticketList = result
+                                .GroupBy(ticket => new { ticket.eventTimeDetails._id, ticket.eventTimeDetails.startDateAndTime })
+                                .Select(group => new TimeAndTicketGroupingDto
                                 {
                                     EventTimeId = group.Key._id,
                                     StartDateAndTime = group.Key.startDateAndTime,
                                     Tickets = group.ToList()
                                 }).ToList();
+                        }
                     }
-
-                }
-                else
-                {
-                    _snackbar.Add(res.result.message, Severity.Error);
+                    else
+                    {
+                        _snackbar.Add(res.result.message, Severity.Error);
+                    }
                 }
             }
             else

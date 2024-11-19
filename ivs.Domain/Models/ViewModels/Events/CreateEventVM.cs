@@ -7,12 +7,14 @@ public class CreateEventVM
     public string? user_id { get; set; }
     
     [Required(ErrorMessage = "Event name is required")]
+    [MinLength(3, ErrorMessage = "Event name should be more than 3 characters.")]
     public string? eventName { get; set; }
     
     [Required(ErrorMessage = "Event description is required")]
     public string? eventDescription { get; set; }
     
     [Required(ErrorMessage = "Event address is required")]
+    [MinLength(5, ErrorMessage = "Address should be more than 5 characters.")]
     public string? eventAddress { get; set; }
     
     [Required(ErrorMessage = "Event state is required")]

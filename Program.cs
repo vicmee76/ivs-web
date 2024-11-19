@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using MudBlazor;
 using MudBlazor.Services;
 using System.Globalization;
+using Microsoft.AspNetCore.Components.Server.Circuits;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
 
@@ -53,7 +54,8 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.SupportedUICultures = supportedCultures;
 });
 
-
+builder.Services.AddScoped<JsInteropService>();
+builder.Services.AddSingleton<CircuitHandler, CustomCircuitHandler>();
 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddAuthenticationCore();
