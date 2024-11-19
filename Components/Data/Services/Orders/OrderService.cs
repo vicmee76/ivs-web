@@ -12,17 +12,15 @@ using System.Reflection;
 
 namespace ivs_ui.Components.Data.Services.Orders;
 
-public class OrderService(IWebService _webService, ILocalStorageService sessionStorageService) : IOrderService
+public class OrderService(IWebService _webService) : IOrderService
 {
     private const string ApiUrl = "/api/v1/orders/";
-
-    private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
 
     public async Task<ResponseObject> GetOrderById(string id)
     {
         try
         {
-            var response = await _webService.Call(ApiUrl, $"get-order-by-id/{id}", Method.Get, null, null, null, null);
+            var response = await _webService.Call(ApiUrl, $"get-order-by-id/{id}", Method.Get, null);
             var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
             var content = res?.result;
             if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -49,7 +47,7 @@ public class OrderService(IWebService _webService, ILocalStorageService sessionS
     {
         try
         {
-            var response = await _webService.Call(ApiUrl, "generate-cost", Method.Post, model, null, null, null);
+            var response = await _webService.Call(ApiUrl, "generate-cost", Method.Post, model);
             var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
             var content = res?.result;
             if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -74,7 +72,7 @@ public class OrderService(IWebService _webService, ILocalStorageService sessionS
     {
         try
         {
-            var response = await _webService.Call(ApiUrl, "save-order", Method.Post, model, null, null, null);
+            var response = await _webService.Call(ApiUrl, "save-order", Method.Post, model);
             var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
             var content = res?.result;
             if (content?.code != ResponseCodes.ResponseCodeOk)

@@ -8,6 +8,7 @@ public interface IAccountService
 {
     Task<ResponseObject> CreateUser(SignUpVM model);
     Task<ResponseObject> Login(LoginVM model);
+    Task<ResponseObject> ReLogin(string userId, string refreshToken);
     Task<ResponseObject> ResendVerificationCode(string userId);
     Task<ResponseObject> ResetPassword(string id, ForgotPasswordVM model);
     Task<ResponseObject> SendForgotPasswordToken(string email);

@@ -16,7 +16,7 @@ namespace ivs_ui.Components.Data.Services.Organisations
         {
             try
             {
-                var response = await _webService.Call(ApiUrl, "", Method.Get, null, null, null, null);
+                var response = await _webService.Call(ApiUrl, "", Method.Get, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)

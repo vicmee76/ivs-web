@@ -14,18 +14,16 @@ using System.Reflection;
 
 namespace ivs_ui.Components.Data.Services.Payment
 {
-    public class PaymentService(IWebService _webService, ILocalStorageService sessionStorageService) : IPaymentService
+    public class PaymentService(IWebService _webService) : IPaymentService
     {
         private const string ApiUrl = "/api/v1/payments/";
         private const string SettlementUrl = "/api/v1/users/settlement/settlement-transfer/";
-
-        private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
 
         public async Task<ResponseObject> GeneratePaymentLink(MakePaymentVM model)
         {
             try
             {
-                var response = await _webService.Call(ApiUrl, $"generate-flutterwave-payment-link", Method.Post, model, null, null, null);
+                var response = await _webService.Call(ApiUrl, $"generate-flutterwave-payment-link", Method.Post, model);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -52,10 +50,8 @@ namespace ivs_ui.Components.Data.Services.Payment
             try
             {
                 var queryParam = new Dictionary<string, string> { { "country", country } };
-
                 var headers = await _webService.GetAuthorizationHeaders();
-
-                var response = await _webService.Call(ApiUrl, $"flutterwave-get-banks/", Method.Get, null, headers, queryParam, null);
+                var response = await _webService.Call(ApiUrl, $"flutterwave-get-banks/", Method.Get, null, headers, queryParam);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -77,7 +73,7 @@ namespace ivs_ui.Components.Data.Services.Payment
             try
             {
                 var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"get-sales/", Method.Get, null, headers, queryParam, null);
+                var response = await _webService.Call(ApiUrl, $"get-sales/", Method.Get, null, headers, queryParam);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -100,7 +96,7 @@ namespace ivs_ui.Components.Data.Services.Payment
             try
             {
                 var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(SettlementUrl, $"get-settlement-by-event-id/{eventId}", Method.Get, null, headers, queryParam, null);
+                var response = await _webService.Call(SettlementUrl, $"get-settlement-by-event-id/{eventId}", Method.Get, null, headers, queryParam);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -123,7 +119,7 @@ namespace ivs_ui.Components.Data.Services.Payment
             try
             {
                 var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(SettlementUrl, $"get-settlement-by-user-id/{userId}", Method.Get, null, headers, queryParam, null);
+                var response = await _webService.Call(SettlementUrl, $"get-settlement-by-user-id/{userId}", Method.Get, null, headers, queryParam);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -146,7 +142,7 @@ namespace ivs_ui.Components.Data.Services.Payment
             try
             {
                 var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(SettlementUrl, $"get-transfer-fee/{settlementAmount}/{eventId}", Method.Get, null, headers, null, null);
+                var response = await _webService.Call(SettlementUrl, $"get-transfer-fee/{settlementAmount}/{eventId}", Method.Get, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -202,7 +198,7 @@ namespace ivs_ui.Components.Data.Services.Payment
         {
             try
             {
-                var response = await _webService.Call(ApiUrl, $"process-free-payment/{orderId}", Method.Post, null, null, null, null);
+                var response = await _webService.Call(ApiUrl, $"process-free-payment/{orderId}", Method.Post, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -230,7 +226,6 @@ namespace ivs_ui.Components.Data.Services.Payment
             try
             {
                 var req = new { account_number = accountNumber, account_bank = bankCode };
-
                 var headers = await _webService.GetAuthorizationHeaders();
                 var response = await _webService.Call(ApiUrl, $"flutterwave-verify-account-number/", Method.Post, req, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
@@ -254,7 +249,7 @@ namespace ivs_ui.Components.Data.Services.Payment
         {
             try
             {
-                var response = await _webService.Call(ApiUrl, $"verify-flutterwave-payment", Method.Post, null, null, model, null);
+                var response = await _webService.Call(ApiUrl, $"verify-flutterwave-payment", Method.Post, null, null, model);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)

@@ -19,9 +19,7 @@ namespace ivs_ui.Components.Data.Services.Payment
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
+                var headers = await _webService.GetAuthorizationHeaders();
                 var response = await _webService.Call(ApiUrl, "get-all-payment-options", Method.Get, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;

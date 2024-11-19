@@ -360,7 +360,16 @@
             if (res.result.code == ResponseCodes.ResponseCodeOk)
             {
                 _events = res.result.data;
-                eventName = _events.eventName;
+                
+                var isUserEvent = _events.Users.Where(x => x._id == userId);
+                if (!isUserEvent.Any())
+                {
+                    _snackbar.Add("Unauthorized event access", Severity.Error);
+                }
+                else
+                {
+                    eventName = _events.eventName;
+                }
             }
             else
             {

@@ -12,5 +12,6 @@ public class ResponseContents
     public bool? success { get; set; } = false;
     public string? message { get; set; }
     public string? token { get; set; }
+    public string? refreshToken { get; set; }
     public dynamic? data { get; set; }
 }

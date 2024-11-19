@@ -5,8 +5,8 @@
 
         <MudNavLink Href="/events/discovery">Discovery</MudNavLink>
 
-       <AuthorizeView>
-           <Authorized>
+        <AuthorizeView Roles="User,Admin">
+            <Authorized>
                 <MudNavLink Href="/events/dashboard">Dashboard</MudNavLink>
 
                 <MudNavGroup Title="Events" Icon="" Expanded="false" Class="">
@@ -15,15 +15,27 @@
                 </MudNavGroup>
 
                 <MudNavLink Href="/user/profile">My Profile</MudNavLink>
-           </Authorized>
-           
-           <NotAuthorized>
+            </Authorized>
+            <NotAuthorized>
                 <MudNavLink Href="/accounts/login">Login</MudNavLink>
 
                 <MudNavLink Href="/accounts/signup">Sign up</MudNavLink>
-           </NotAuthorized>
-
-       </AuthorizeView>
+            </NotAuthorized>
+        </AuthorizeView>
+        
+        <AuthorizeView Roles="Admin">
+            <Authorized>
+                <MudNavGroup Title="Configurations" Icon="" Expanded="false" Class="">
+                    <MudNavLink Href="/events/create-event">Users</MudNavLink>
+                    <MudNavLink Href="/events/my-events">Events</MudNavLink>
+                    <MudNavLink Href="/events/my-events">Organizations</MudNavLink>
+                    <MudNavLink Href="/events/my-events">Event Types</MudNavLink>
+                    <MudNavLink Href="/events/my-events">Payment Options</MudNavLink>
+                    <MudNavLink Href="/events/my-events">Event Sales</MudNavLink>
+                    <MudNavLink Href="/events/my-events">Revenues</MudNavLink>
+                </MudNavGroup>
+            </Authorized>
+        </AuthorizeView>
 
         <MudNavLink Href="/about-us">About Us</MudNavLink>
 

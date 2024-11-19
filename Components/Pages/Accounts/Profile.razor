@@ -297,7 +297,7 @@
                             <br /><br />
 
                             <MudGrid>
-                                <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+                                <MudItem xs="12" sm="12" md="6" lg="4" xl="4" xxl="4">
 
                                     <EditForm Model="@model" OnValidSubmit="ActionChangePassword">
                                         <DataAnnotationsValidator />
@@ -646,9 +646,9 @@
         if (number.Length <= 4)
             return number; // If the number is too short, just return it as-is.
 
-        int lengthToMask = number.Length - 4;
-        string maskedPart = new string('*', lengthToMask);
-        string visiblePart = number.Substring(lengthToMask);
+        var lengthToMask = number.Length - 4;
+        var maskedPart = new string('*', lengthToMask);
+        var visiblePart = number.Substring(lengthToMask);
         return maskedPart + visiblePart;
     }
 
