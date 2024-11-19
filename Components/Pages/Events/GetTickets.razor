@@ -86,12 +86,17 @@
                         <br/>
 
                         <div style="">
-                            <MudText Typo="Typo.h6"><b>QR Code</b></MudText>
+                            <MudText Typo="Typo.h6"><b>QR Code</b> &nbsp;
+                                <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="@((e) => ActionShareEvent(_events.eventShortLink))" EndIcon="@Icons.Material.Filled.Share" Color="Color.Secondary" Style="text-transform:none">
+                                    Share
+                                </MudButton>
+                            
+                                </MudText>
 
                             <br />
                             <MudImage Src="@_events.qrCodeLink"></MudImage>
                             <br />
-                            <small>Scan or share this event</small>
+                           
                         </div>
 
                         <br />
@@ -202,8 +207,11 @@
     [Inject] IEventService _eventService { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
+    [Inject] IDialogService DialogService { get; set; }
 
     GetEventDetailsDto _events = new();
+    
+    private string eventName { get; set; }
 
     private bool _getEventprocessing { get; set; }
 
@@ -215,6 +223,7 @@
         if (res.result.code == ResponseCodes.ResponseCodeOk)
         {
             _events = res.result.data;
+            eventName = _events.eventName;
         }
         else
         {
@@ -226,4 +235,23 @@
     }
 
 
+    private async Task ActionShareEvent(string link)
+    {
+        DialogOptions opts = new DialogOptions()
+        {
+            MaxWidth = MaxWidth.Large,
+            FullWidth = true,
+            CloseButton = true,
+            CloseOnEscapeKey = true
+        };
+
+        var parameters = new DialogParameters<ShareEventDialog> { { x => x.eventLink, link }, { x => x.eventName, eventName } };
+        var dialog = await DialogService.ShowAsync<ShareEventDialog>("Share event", parameters, opts);
+
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            StateHasChanged();
+        }
+    }
 }

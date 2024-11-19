@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Akaya+Telivigala&display=swap" rel="stylesheet">
-
+    
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
     <link href="/css/app.css?version=0.1" rel="stylesheet" />
     <link href="/css/app-media.css" rel="stylesheet" />
@@ -26,12 +26,34 @@
     <script src="https://kit.fontawesome.com/d2cbc29c68.js" crossorigin="anonymous"></script>
 
     <script>
+        
         function reloadPage() {
             location.reload();
         }
+        
+        async function shareContent(title, text, url) {
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title, text, url });
+                    console.log('Content shared successfully');
+                } catch (error) {
+                    console.error('Error sharing content:', error);
+                }
+            } else {
+                alert('Sharing is not supported in this browser.');
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                console.log('Text copied to clipboard');
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+            });
+        }
+        
     </script>
     
     
     </body>
-
 </html>
