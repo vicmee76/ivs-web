@@ -1,0 +1,77 @@
+<MudDialog Style="width: 380px">
+   <TitleContent>
+         <h4>Share event</h4>
+   </TitleContent>
+   <DialogContent>
+
+      <div style="text-align:center; margin:5px;">
+
+         <div style="line-height: 30px">
+            <h4>Copy</h4>
+            <MudButton EndIcon="@Icons.Material.Filled.ContentCopy" OnClick="CopyTextAction" Style="text-transform:none" Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Small">@eventLink</MudButton>
+         </div>
+         
+         <MudDivider DividerType="DividerType.FullWidth" Class="my-4"/>
+
+         <div style="line-height: 30px">
+            <h4>Share event</h4>
+            <MudButton EndIcon="@Icons.Material.Filled.Share" OnClick="ShareViaWebApiAction" Style="text-transform:none" Color="Color.Secondary" Variant="Variant.Outlined" Size="Size.Small">@eventLink</MudButton>
+         </div>
+         
+         <MudDivider DividerType="DividerType.FullWidth" Class="my-4"/>
+
+         <div style="line-height: 30px; text-align: center">
+            <h4>Share via social media:</h4>
+
+            @{
+               var xlink = $"https://twitter.com/intent/tweet?text={Uri.EscapeDataString(eventLink)}";
+               var facebooklink = $"https://www.facebook.com/sharer/sharer.php?u={Uri.EscapeDataString(eventLink)}";
+               var applink = $"https://api.whatsapp.com/send?text={Uri.EscapeDataString(eventLink)}";
+            }
+            <MudButton Href="@xlink" Target="_blank" Style="text-transform:none" Color="Color.Dark" Variant="Variant.Outlined" Size="Size.Small"><b>X</b></MudButton>&nbsp;
+            <MudButton Href="@facebooklink" Target="_blank" Style="text-transform:none" Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Small"><b>Facebook</b></MudButton>&nbsp;
+            <MudButton Href="@applink" Target="_blank" Style="text-transform:none"  Color="Color.Success" Variant="Variant.Outlined" Size="Size.Small"><b>WhatsApp</b></MudButton>
+         </div>
+         
+      </div>
+
+      <br/>
+   </DialogContent>
+   <DialogActions>
+
+   </DialogActions>
+
+</MudDialog>
+
+@code {
+   [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+   [Parameter] public string eventLink { get; set; }
+   [Parameter] public string eventName { get; set; }
+   [Inject] IJSRuntime? js { get; set; }
+   [Inject] ISnackbar? _snackbar { get; set; }
+   private void Cancel() { MudDialog.Cancel(); }
+   
+   private async Task ShareViaWebApiAction()
+   {
+      string title = $"Share {eventName}";
+      string text = "Share this event for others to see and attend.";
+      try
+      {
+         await js.InvokeVoidAsync("shareContent", title, text, eventLink);
+      }
+      catch (Exception)
+      {
+         
+      }
+   }
+   
+   
+   private async Task CopyTextAction()
+   {
+      if (!string.IsNullOrWhiteSpace(eventLink))
+      {
+         await js.InvokeVoidAsync("copyToClipboard", eventLink);
+         _snackbar.Add("Link copied.", Severity.Success);
+      }
+   }
+}
