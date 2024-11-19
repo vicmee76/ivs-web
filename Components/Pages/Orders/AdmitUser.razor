@@ -1,0 +1,159 @@
+@page "/ivs/attendance/{code}"
+
+
+<PageTitle>Iv's - Admit User</PageTitle>
+
+<MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="background-color:white">
+
+   <MudMessageBox @ref="admituserMessageBox" Title="Admit user to event" CancelText="Cancel" YesText="Admit" Style="padding:20px;">
+      <MessageContent>
+         Are you sure you want to admit this user to this event?
+      </MessageContent>
+      <YesButton>
+         <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Secondary">Admit</MudButton>
+      </YesButton>
+      <CancelButton>
+         <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Default">Cancel</MudButton>
+      </CancelButton>
+   </MudMessageBox>
+
+   @if (_admitProcessing)
+   {
+      <MudContainer>
+         <div style="text-align:center">
+            <br/>
+            <div id="reg-title">Please wait...</div>
+            <br/>
+            <MudProgressCircular Color="Color.Secondary" Style="height:40px;width:40px;" Indeterminate="true"/>
+         </div>
+      </MudContainer>
+   }
+   else
+   {
+      <MudContainer>
+         <br/><br/>
+         <center>
+            <MudPaper Elevation="1" Outlined="false" MaxWidth="650px" Square="false" Class="ma-2 pa-10">
+
+               @if (_userAttendance.paginatedResults.Any())
+               {
+                  <div>
+                     <div id="reg-title">@_events.eventName</div>
+                     <MudDivider DividerType="DividerType.Middle" Class="my-6"/>
+
+                     <div>
+                        <MudText Typo="Typo.body2"><b>@_userAttendance.paginatedResults.FirstOrDefault().firstName @_userAttendance.paginatedResults.FirstOrDefault().lastName </b></MudText>
+                        <br/>
+                        <MudText Typo="Typo.body2"><b>@_userAttendance.paginatedResults.FirstOrDefault().email</b></MudText>
+                        <br/>
+                        <MudText Typo="Typo.body2"><b>@_userAttendance.paginatedResults.FirstOrDefault().phoneNumber</b></MudText>
+                     </div>
+                     <MudDivider DividerType="DividerType.FullWidth" Class="my-6"/>
+
+                     <MudGrid>
+                        @foreach (var t in _userAttendance.paginatedResults)
+                        {
+                           <MudItem xs="7" sm="7" md="7" lg="9" xl="9" xxl="9">
+                              <div style="line-height: 23px; font-size: small">
+                                 <b>@t.ticketQuantity X @t.ticketDetails.FirstOrDefault().ticketName</b>
+                              </div>
+                           </MudItem>
+                           <MudItem xs="5" sm="5" md="5" lg="3" xl="3" xxl="3">
+                              <div style="font-size: small; text-align: end">
+                                 <b>@Convert.ToDecimal(t.totalTicketFee).ToString("C")</b>
+                              </div>
+                           </MudItem>
+                           <br/>
+                        }
+                     </MudGrid>
+
+                     <MudDivider DividerType="DividerType.FullWidth" Class="my-6"/>
+                     <br/>
+                     
+                     <MudButton Variant="Variant.Filled" OnClick="@(async () => await ActionAdmitUser(_userAttendance.paginatedResults.FirstOrDefault()._id))"  FullWidth="true" Color="Color.Secondary">Admit</MudButton>
+                     
+                  </div>
+               }
+               else
+               {
+                  <div>
+
+                     <div style="text-align:center;">
+                        <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="50" Class="rounded-lg"/>
+                        <br/>
+                        <MudText Typo="Typo.body2"> <b>No user found </b></MudText>
+                        <MudText Typo="Typo.caption"> This user was not found for this event.</MudText>
+                     </div>
+                  </div>
+               }
+            </MudPaper>
+         </center>
+      </MudContainer>
+
+   }
+
+
+</MudContainer>
+
+
+@code {
+   [Parameter] public string? code { get; set; }
+   [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+   [Inject] IAttendanceService _attendanceService { get; set; }
+   [Inject] IEventService _eventService { get; set; }
+   [Inject] ISnackbar? _snackbar { get; set; }
+   [Inject] NavigationManager? _navigate { get; set; }
+   [Inject] IJSRuntime? js { get; set; }
+   private MudMessageBox admituserMessageBox { get; set; }
+   
+   private bool _admitProcessing { get; set; }
+   GetEventDetailsDto _events = new();
+   GetAttendanceDto _userAttendance = new();
+   
+   protected async override void OnInitialized()
+   {
+      _admitProcessing = true;
+      
+      var state = await _authStateProvider.GetAuthenticationStateAsync();
+
+      if (!state.User.Identity.IsAuthenticated)
+      {
+         _navigate.NavigateTo("/accounts/login");
+      }
+      else
+      {
+         var admit = await _attendanceService.GetAttendanceByUserCode(code);
+         if (admit.result.code == ResponseCodes.ResponseCodeOk)
+         {
+            _userAttendance = admit.result.data;
+            var res = await _eventService.GetEventDetails(_userAttendance.paginatedResults.FirstOrDefault()?.ivsEventId);
+            if (res.result.code == ResponseCodes.ResponseCodeOk)
+            {
+               _events = res.result.data;
+            }
+            else
+            {
+               _snackbar.Add(res.result.message, Severity.Error);
+            }
+         }
+         else
+         {
+            _snackbar.Add(admit.result.message, Severity.Error);
+         }
+      }
+      _admitProcessing = false;
+      StateHasChanged();
+   }
+   
+   
+   private async Task ActionAdmitUser(string attendanceId)
+   {
+      bool? result = await admituserMessageBox.Show();
+      if (result == true)
+      {
+         js.InvokeVoidAsync("window.close");
+        
+      }
+   }
+
+}

@@ -20,7 +20,7 @@ namespace ivs_ui.Components.Data.Services.Orders
         {
             try
             {
-                var response = await _webService.Call(ApiUrl, $"get-attendance-by-order-id/{orderId}", Method.Get, null, null, null, null);
+                var response = await _webService.Call(ApiUrl, $"get-attendance-by-order-id/{orderId}", Method.Get, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -41,14 +41,38 @@ namespace ivs_ui.Components.Data.Services.Orders
             }
         }
 
-        public async Task<ResponseObject> GetAttendanceByEventId(string eventId, Dictionary<string, string> queryParam)
+        public async Task<ResponseObject> GetAttendanceByUserCode(string code)
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUrl, $"get-attendance-by-code/{code}", Method.Get, null, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
 
-                var response = await _webService.Call(ApiUrl, $"get-attendance-by-event-id/{eventId}", Method.Get, null, headers, queryParam, null);
+                res.result.data = JsonConvert.DeserializeObject<GetAttendanceDto>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to get attendance record by user code, please try again later",
+                    }
+                };
+            }
+        }
+
+        public async Task<ResponseObject> GetAttendanceByEventId(string eventId, Dictionary<string, string> queryParam)
+        {
+            try
+            { 
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUrl, $"get-attendance-by-event-id/{eventId}", Method.Get, null, headers, queryParam);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -63,7 +87,7 @@ namespace ivs_ui.Components.Data.Services.Orders
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get attendace record by event id, please try again later",
+                        message = "Error! Something went wrong trying to get attendance record by event id, please try again later",
                     }
                 };
             }
@@ -75,10 +99,8 @@ namespace ivs_ui.Components.Data.Services.Orders
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
-                var response = await _webService.Call(ApiUrl, $"get-attendance-by-event-time-id/{timeId}", Method.Get, null, headers, queryParam, null);
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUrl, $"get-attendance-by-event-time-id/{timeId}", Method.Get, null, headers, queryParam);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -93,7 +115,7 @@ namespace ivs_ui.Components.Data.Services.Orders
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get attendace record by event id, please try again later",
+                        message = "Error! Something went wrong trying to get attendance record by event id, please try again later",
                     }
                 };
             }
@@ -110,15 +132,9 @@ namespace ivs_ui.Components.Data.Services.Orders
         {
             try
             {
-                var token = await _sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
-                var response = await _webService.Call(ApiUrl, $"admit-attendees/{attendanceId}", Method.Put, null, headers, null, null);
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUrl, $"admit-attendees/{attendanceId}", Method.Put, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
-                var content = res?.result;
-                if (content?.code != ResponseCodes.ResponseCodeOk)
-                    return new ResponseObject();
-
                 return res;
             }
             catch (Exception ex)

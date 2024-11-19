@@ -18,9 +18,7 @@ namespace ivs_ui.Components.Data.Services.Tickets
         {
             try
             {
-                var token = await sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
+                var headers = await webService.GetAuthorizationHeaders();
                 var response = await webService.Call(ApiUrl, "create-event-tickets", Method.Post, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
@@ -45,9 +43,7 @@ namespace ivs_ui.Components.Data.Services.Tickets
         {
             try
             {
-                var token = await sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
+                var headers = await webService.GetAuthorizationHeaders();
                 var response = await webService.Call(ApiUrl, $"delete-event-with-tickets/{ticketId}", Method.Delete, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
@@ -73,7 +69,7 @@ namespace ivs_ui.Components.Data.Services.Tickets
         {
             try
             {
-                var response = await webService.Call(ApiUrl, $"get-all-event-with-tickets-by-event-id/{eventId}", Method.Get, null, null);
+                var response = await webService.Call(ApiUrl, $"get-all-event-with-tickets-by-event-id/{eventId}", Method.Get, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -98,9 +94,7 @@ namespace ivs_ui.Components.Data.Services.Tickets
         {
             try
             {
-                var token = await sessionStorageService.GetItemAsync<string>(Tokens.TokenName);
-                var headers = new Dictionary<string, string> { { "Authorization", $"Bearer {token}" } };
-
+                var headers = await webService.GetAuthorizationHeaders();
                 var response = await webService.Call(ApiUrl, $"update-event-with-tickets/{ticketIdd}", Method.Put, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;

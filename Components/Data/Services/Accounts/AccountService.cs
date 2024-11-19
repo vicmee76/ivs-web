@@ -204,7 +204,6 @@ namespace ivs_ui.Components.Data.Services.Accounts
             try
             {
                 var headers = await _webService.GetAuthorizationHeaders();
-
                 var response = await _webService.Call(ApiUsersUrl, $"/get-user-by-id/{userId}", Method.Get, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;

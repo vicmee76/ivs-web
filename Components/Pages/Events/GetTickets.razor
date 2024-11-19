@@ -5,7 +5,7 @@
 
 <MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="background-color:white">
 
-    @if (!_getEventprocessing)
+    @if (_getEventprocessing)
     {
         <MudSkeleton Height="42px;" />
         <MudSkeleton Height="42px;" />
@@ -203,14 +203,14 @@
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
 
-    GetEventDetailsDto _events = new GetEventDetailsDto();
+    GetEventDetailsDto _events = new();
 
-    private bool _getEventprocessing { get; set; } = false;
+    private bool _getEventprocessing { get; set; }
 
 
     protected async override void OnInitialized()
     {
-        _getEventprocessing = false;
+        _getEventprocessing = true;
         var res = await _eventService.GetEventDetails(id);
         if (res.result.code == ResponseCodes.ResponseCodeOk)
         {
@@ -221,7 +221,7 @@
             _snackbar.Add(res.result.message, Severity.Error);
         }
 
-        _getEventprocessing = true;
+        _getEventprocessing = false;
         StateHasChanged();
     }
 

@@ -48,12 +48,12 @@ namespace ivs_ui.Components.Data.Services.General
             var refresherToken = identity.Claims.FirstOrDefault(x => x.Type == "r")?.Value.ToString();
             var expDate = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expiryTime.Value)).UtcDateTime;
 
-            if(DateTime.UtcNow > expDate)
+            if (DateTime.UtcNow > expDate)
             {
-               await _localStorageService.ClearAsync();
-               await ReLogin(userId, refresherToken);
+                await _localStorageService.ClearAsync();
+                identity = await ReLogin(userId, refresherToken);
             }
-            
+
             _anonymous = new ClaimsPrincipal(identity);
             var state = new AuthenticationState(_anonymous);
 
@@ -99,24 +99,20 @@ namespace ivs_ui.Components.Data.Services.General
         }
 
 
-        private async Task ReLogin(string userId, string refreshToken)
+        private async Task<ClaimsIdentity> ReLogin(string userId, string refreshToken)
         {
+            var identity = new ClaimsIdentity();
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(refreshToken))
-            {
-                new AuthenticationState(_anonymous);
-                return;
-            }
+                return identity;
 
             var res = await _accountService.ReLogin(userId, refreshToken);
             if (res.result.code != ResponseCodes.ResponseCodeOk)
-            {
-                new AuthenticationState(_anonymous);
-                return;
-            }
+                return identity;
             
+            identity = new ClaimsIdentity(ParseClaimsFromJwt(res.result.token), Tokens.JwtName);
             await _localStorageService.SetItemAsync(Tokens.TokenName, res.result.token);
             await _localStorageService.SetItemAsync(Tokens.RefreshTokenName, res.result.refreshToken);
-            await GetAuthenticationStateAsync();
+            return identity;
         }
     }
 }
