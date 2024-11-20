@@ -148,7 +148,7 @@
    
    private async Task ActionAdmitUser(string attendanceId)
    {
-      bool? result = await admituserMessageBox.Show();
+      bool? result = await admituserMessageBox.ShowAsync();
       if (result == true)
       {
          var res = await _attendanceService.AdmitAttendees(attendanceId);

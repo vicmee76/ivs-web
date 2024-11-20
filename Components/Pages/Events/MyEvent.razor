@@ -114,11 +114,11 @@
 
                                        @if (item.status == Helpers.Pending)
                                        {
-                                          <MudChip Variant="Variant.Text" Color="Color.Warning"><b>Not published</b></MudChip>
+                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Warning"><b>Not published</b></MudChip>
                                        }
                                        else
                                        {
-                                          <MudChip Variant="Variant.Text" Color="Color.Success"><b>Published</b></MudChip>
+                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Success"><b>Published</b></MudChip>
                                        }
 
                                        <MudSpacer></MudSpacer>
@@ -307,7 +307,7 @@
    private async Task DeleteEventAction(string id)
    {
       _processing = true;
-      bool? result = await deleteEventMessageBox.Show();
+      bool? result = await deleteEventMessageBox.ShowAsync();
       if (result == true)
       {
          var res = await _eventService.DeleteEvent(id);
