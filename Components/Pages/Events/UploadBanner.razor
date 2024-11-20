@@ -87,13 +87,13 @@
                                     </MudText>
                                     @foreach (var file in _fileNames)
                                     {
-                                        <MudChip Color="Color.Primary" Text="@file" />
+                                        <MudChip T="string" Color="Color.Primary" Text="@file" />
                                     }
                                 </MudPaper>
 
                                 <MudToolBar DisableGutters="true" Class="relative d-flex justify-end gap-4 z-30">
                                     
-                                    <MudButton HtmlTag="label" Color="Color.Primary" for="@context.Id" Icon="@Icons.Material.Filled.Image" Disabled="_processing" Variant="Variant.Outlined"> Browse </MudButton>
+                                    <MudButton HtmlTag="label" Color="Color.Primary"  Icon="@Icons.Material.Filled.Image" Disabled="_processing" Variant="Variant.Outlined"> Browse </MudButton>
                                     
                                     <MudButton OnClick="@(async () => await Upload())" Style="background-color:#56375C; color:white" Disabled="@(!_fileNames.Any())" Variant="Variant.Filled">
                                         @if (_processing)

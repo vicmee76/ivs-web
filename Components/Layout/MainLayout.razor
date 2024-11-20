@@ -3,6 +3,7 @@
 <MudDialogProvider />
 <MudSnackbarProvider />
 <MudThemeProvider Theme="MuudstrapTheme" />
+<MudPopoverProvider />
 
 <style>
   .mud-expand-panel, .muudstrap-navbar-expand{
@@ -183,7 +184,7 @@
 
     MudTheme MuudstrapTheme = new MudTheme()
         {
-            Palette = new Palette()
+            PaletteLight = new PaletteLight()
             {
                 AppbarBackground = "#F3DFF6",
                 AppbarText = "#181819"

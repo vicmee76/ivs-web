@@ -29,8 +29,8 @@
                             <span id="event-title">@_events.eventName</span>
                             <br /><br />
                             <div>
-                                <MudChip Size="Size.Small" Color="Color.Secondary"><b>@_events.eventOption.ToUpper()</b></MudChip>
-                                <MudChip Size="Size.Small" Color="Color.Warning"><b>@_events.EventType.FirstOrDefault().name</b></MudChip>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Secondary"><b>@_events.eventOption.ToUpper()</b></MudChip>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@_events.EventType.FirstOrDefault().name</b></MudChip>
 
                             </div>
                         </div>
@@ -249,7 +249,7 @@
         var dialog = await DialogService.ShowAsync<ShareEventDialog>("Share event", parameters, opts);
 
         var result = await dialog.Result;
-        if (!result.Cancelled)
+        if (!result.Canceled)
         {
             StateHasChanged();
         }
