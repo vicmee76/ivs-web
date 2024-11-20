@@ -93,7 +93,7 @@
 
                             @if (_events != null)
                             {
-                                <MudGrid Spacing="10">
+                                <MudGrid Spacing="1">
 
                                     <MudItem xs="12" sm="12" md="12" lg="4" Style="padding:10px">
 
@@ -117,8 +117,8 @@
                                             <MudText Typo="Typo.h6"><b>@_events.eventName</b></MudText>
                                             <br />
                                             <div>
-                                                <MudChip Size="Size.Small" Color="Color.Secondary"><b>@_events.eventOption.ToUpper()</b></MudChip>
-                                                <MudChip Size="Size.Small" Color="Color.Warning"><b>@_events.EventType.FirstOrDefault().name</b></MudChip>
+                                                <MudChip T="string" Size="Size.Small" Color="Color.Secondary"><b>@_events.eventOption.ToUpper()</b></MudChip>
+                                                <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@_events.EventType.FirstOrDefault().name</b></MudChip>
 
                                             </div>
                                         </div>
@@ -1517,7 +1517,7 @@
         _settlementRequestAction = true;
         if(settlementAmount >= Helpers.MinimumWithdrawalAmount){
 
-            bool? result = await postSettlementMessageBox.Show();
+            bool? result = await postSettlementMessageBox.ShowAsync();
             if (result == true)
             {
                 var postSettlement = new PostSettlementDto
@@ -1560,7 +1560,7 @@
 
     private async Task ActionAdmitUser(string attendanceId)
     {
-        bool? result = await admituserMessageBox.Show();
+        bool? result = await admituserMessageBox.ShowAsync();
         if (result == true)
         {
             var res = await _attendanceService.AdmitAttendees(attendanceId);
@@ -1626,7 +1626,8 @@
         var dialog = await DialogService.ShowAsync<ShareEventDialog>("Share event", parameters, opts);
 
         var result = await dialog.Result;
-        if (!result.Cancelled)
+
+        if (!result.Canceled)
         {
             StateHasChanged();
         }

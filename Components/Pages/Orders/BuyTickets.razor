@@ -11,7 +11,7 @@
 
 <MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="background-color:white">
     
-    <MudGrid Spacing="10">
+    <MudGrid Spacing="20">
 
         <MudItem xs="12" sm="12" md="6" lg="7" xl="7" xxl="7">
 
@@ -104,7 +104,7 @@
                                                     
                                                         @if(tic.ticketKind == Helpers.GroupTicket)
                                                         {
-                                                            <MudChip Size="Size.Small" Color="Color.Secondary"><b>@tic.ticketKind</b></MudChip>
+                                                            <MudChip T="string" Size="Size.Small" Color="Color.Secondary"><b>@tic.ticketKind</b></MudChip>
                                                         }
 
                                                     </div>
@@ -233,7 +233,7 @@
                                         </div>
                                     </MudItem>
                                     <br/>
-                                    <MudDivider></MudDivider>
+                                    <hr />
                                 }
                             </MudGrid>
 

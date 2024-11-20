@@ -91,8 +91,8 @@
                                         <MudText Typo="Typo.h6"><b>@_events.eventName</b></MudText>
                                         <br />
                                         <div>
-                                            <MudChip Size="Size.Medium" Color="Color.Secondary"><b>@_events.eventOption.ToUpper()</b></MudChip>
-                                            <MudChip Size="Size.Medium" Color="Color.Warning"><b>@_events.EventType.FirstOrDefault().name</b></MudChip>
+                                            <MudChip T="string" Size="Size.Medium" Color="Color.Secondary"><b>@_events.eventOption.ToUpper()</b></MudChip>
+                                            <MudChip T="string" Size="Size.Medium" Color="Color.Warning"><b>@_events.EventType.FirstOrDefault().name</b></MudChip>
 
                                             </div>
                                         </div>
@@ -388,14 +388,13 @@
                 MaxWidth = MaxWidth.Small,
                 FullWidth = true,
                 CloseButton = true,
-                ClassBackground = "my-custom-class"
             };
 
         var parameters = new DialogParameters<QrCodeDialog> { { x => x.qrCodeData, qrCode }};
         var dialog = await DialogService.ShowAsync<QrCodeDialog>("QR Code", parameters, opts);
 
         var result = await dialog.Result;
-        if (!result.Cancelled)
+        if (!result.Canceled)
         {
             StateHasChanged();
         }
@@ -407,7 +406,7 @@
     {
         _processing = true;
 
-        bool? result = await publishMessageBox.Show();
+        bool? result = await publishMessageBox.ShowAsync();
         if (result == true)
         {
             var res = await _eventService.ActivateEvent(id);
