@@ -14,6 +14,15 @@
         box-shadow: 0 0 0 0;
     }
 
+    #logoTitle {
+        font-family: "Akaya Telivigala", system-ui;
+        font-weight: 900;
+        font-style: normal;
+        font-size: 1.9rem;
+        letter-spacing: 3px;
+        color: #56375C
+    }
+
     .event-lisiting-web{
         display: none;
     }
