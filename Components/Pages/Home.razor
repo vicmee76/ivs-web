@@ -20,21 +20,11 @@
 
         <div id="homeButtons">
 
-                <MudButton Variant="Variant.Outlined" Color="Color.Warning" Size="Size.Large" Href="/events/discovery" id="btnBrightColor">See up coming events</MudButton>
+                <MudButton Variant="Variant.Outlined" Size="Size.Small" Href="/events/discovery" id="btnDarkColor">Future events</MudButton>
             &nbsp;&nbsp;
-
-                <AuthorizeView>
-                    <NotAuthorized>
-                        <MudButton Variant="Variant.Filled" id="btnDarkColor" Href="/events/discovery" Size="Size.Large">
-                            See up coming events
-                        </MudButton>
-                    </NotAuthorized>
-                    <Authorized>
-                        <MudButton Variant="Variant.Filled" id="btnDarkColor" Href="/events/create-event" Size="Size.Large">
-                            Create Your Event
-                        </MudButton>
-                    </Authorized>
-                </AuthorizeView>
+            <MudButton Variant="Variant.Filled" id="btnDarkColor" Href="/events/create-event" Size="Size.Small">
+                Create event
+            </MudButton>
 
         </div>
 

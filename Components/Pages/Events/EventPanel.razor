@@ -10,8 +10,6 @@
 <PageTitle>Iv's - Event</PageTitle>
 
 <br />
-<br />
-<br />
 
 <AuthorizeView Roles="User,Admin">
     <NotAuthorized>
@@ -36,7 +34,6 @@
         <MudMessageBox @ref="postSettlementMessageBox" Title="Request for settlement" CancelText="Cancel" YesText="Confirm" Style="padding:20px;">
             <MessageContent>
                 Are you sure you want to perform this settlement transfer? <br /> When done, you can request for another settlement in the next 7 days
-             
             </MessageContent>
             <YesButton>
                 <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Secondary">Confirm</MudButton>
@@ -45,7 +42,6 @@
                 <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Default">Cancel</MudButton>
             </CancelButton>
         </MudMessageBox>
-
 
         <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
 
@@ -69,10 +65,9 @@
                 </MudToolBar>
             </MudPaper>
 
+        <br />
 
-            <br /><br />
-
-            <MudTabs Elevation="0" MinimumTabWidth="300px" Border="true" Centered="true" ApplyEffectsToContainer="true" PanelClass="pa-10">
+        <MudTabs Elevation="0" MinimumTabWidth="300px" Border="true" Centered="true" ApplyEffectsToContainer="true" PanelClass="pa-2">
 
                 <MudTabPanel Style="height:70px" Text="About Event">
 
@@ -89,15 +84,15 @@
                         var editEvent = $"/events/update-event/{_events._id}";
                         var editTime = $"/events/update-event-time/{_events._id}";
 
-                        <MudPaper Elevation="0" Style="padding:20px">
+                        <MudPaper Elevation="0">
 
                             @if (_events != null)
                             {
                                 <MudGrid Spacing="1">
 
-                                    <MudItem xs="12" sm="12" md="12" lg="4" Style="padding:10px">
+                                    <MudItem xs="12" sm="12" md="12" lg="4" Style="padding:5px">
 
-                                        <MudText Typo="Typo.body1"><b>Banner</b>  <MudIconButton Href="@editBanner" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton> </MudText>
+                                        <MudText Typo="Typo.body2"><b>Banner</b>  <MudIconButton Href="@editBanner" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton> </MudText>
 
                                         <br />
 
@@ -105,43 +100,36 @@
                                             <MudImage Fluid="true" Src="@_events.eventImagePath" Height="450" Width="450" Alt="" Class="rounded-lg" />
                                         </div>
 
+                                        <br/>
                                     </MudItem>
 
-                                    <MudItem xs="12" sm="12" md="12" lg="7" Style="padding:10px">
+                                    <MudItem xs="12" sm="12" md="12" lg="7" xl="7" xxl="7" Style="padding:5px">
 
-                                        <MudText Typo="Typo.body1"><b>Event Details</b> <MudIconButton Href="@editEvent" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton></MudText>
-
-                                        <br />
-
-                                        <div>
-                                            <MudText Typo="Typo.h6"><b>@_events.eventName</b></MudText>
-                                            <br />
-                                            <div>
-                                                <MudChip T="string" Size="Size.Small" Color="Color.Secondary"><b>@_events.eventOption.ToUpper()</b></MudChip>
-                                                <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@_events.EventType.FirstOrDefault().name</b></MudChip>
-
-                                            </div>
-                                        </div>
-
-                                        <br />
-
+                                        <MudText Typo="Typo.body2"><b>Event Details</b> <MudIconButton Href="@editEvent" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton></MudText>
+                                        <MudDivider Class="pa-2"  />
+                                        <MudText Typo="Typo.h6"><b>@_events.eventName</b>
+                                            <MudChipSet T="string">
+                                                <MudChip Size="Size.Small" Color="Color.Secondary"><b>@_events.EventType.FirstOrDefault().name | @_events.eventOption.ToUpper()</b></MudChip>
+                                            </MudChipSet>
+                                        </MudText>
+                                        <br/><br/>
+                                        
+                                        <MudText Typo="Typo.body2"><b>Description</b></MudText>
+                                        <MudDivider Class="pa-2"  />
                                         <div style="line-height:35px; font-size:14px">
                                             <span>@_events.eventDescription</span>
                                         </div>
 
-                                        <br /><br />
+                                        <br /><br/>
 
                                         <div>
 
-                                            <MudText Typo="Typo.body1"><b>Address</b></MudText>
-
-                                            <br />
-
+                                            <MudText Typo="Typo.body2"><b>Address</b></MudText>
+                                            <MudDivider Class="pa-2"  />
                                             <div> @_events.eventAddress</div>
                                             <div> @_events.eventState</div>
                                             <br />
-                                            <br />
-
+                                            
                                             @if (!string.IsNullOrEmpty(_events.adressPin))
                                             {
                                                 <MudButton Href="@_events.adressPin"
@@ -156,38 +144,88 @@
                                             }
                                         </div>
 
-                                        <br /><br />
+                                        <br />
 
                                         <MudGrid>
                                             <MudItem xs="12" sm="12" md="12" lg="8" xl="8" xxl="8">
+                                                
                                                 <div>
-
-                                                    <MudText Typo="Typo.body1"><b>Event Time</b> <MudIconButton Href="@editTime" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton> </MudText>
-
-                                                    <br />
-
-                                                    <MudExpansionPanels DisableBorders="true" MultiExpansion="true" Elevation="0">
-
-                                                        @foreach (var t in _events.EventTime)
-                                                        {
-                                                            <MudExpansionPanel IsExpanded="true" Style="background-color:white; font-weight:bold" Text="@Convert.ToDateTime(t.startDateAndTime).ToString("dddd, dd MMMM yyyy")">
-                                                                <div style="padding:10px; border:1px dashed #f0baf9">
-                                                                    <MudText Typo="Typo.body2">Starts At : <span>@Convert.ToDateTime(t.startDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</span> </MudText>
-                                                                    <br />
-                                                                    <MudText Typo="Typo.body2">Ends At : <span>@Convert.ToDateTime(t.endDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</span> </MudText>
-                                                                </div>
-                                                            </MudExpansionPanel>
-
-                                                        }
-                                                    </MudExpansionPanels>
-
+                                                    <MudText Typo="Typo.body2"><b>Event Time</b> <MudIconButton Href="@editTime" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton> </MudText>
+                                                    <MudDivider Class="pa-2"/>
+                                                    @foreach (var t in _events.EventTime)
+                                                    {
+                                                        <div style="padding:5px; margin: 2px; border:1px dashed #f0baf9">
+                                                            <MudText Typo="Typo.body2"> Date : <span>@Convert.ToDateTime(t.startDateAndTime).ToString("ddd, d-M-yyyy HH tt")</span> </MudText>
+                                                        </div>
+                                                    }
                                                 </div>
+                                                <br/><br/>
+
+                                                <div>
+                                                    <MudText Typo="Typo.body2"><b>Social Links</b></MudText>
+                                                    <MudDivider Class="pa-2"/>
+                                                    <div>
+                                                        <MudGrid>
+                                                            @if (!string.IsNullOrWhiteSpace(_events.instagramLink))
+                                                            {
+                                                                <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                                                    <div>
+                                                                        Visit us on
+                                                                        <MudElement HtmlTag="a" Class="ms-1" Style="color:hotpink;font-weight:bold;" href="@_events.instagramLink" target="blank" rel="noopener noreferrer">
+                                                                            Instagram
+                                                                        </MudElement>
+                                                                    </div>
+                                                                </MudItem>
+                                                            }
+
+                                                            @if (!string.IsNullOrWhiteSpace(_events.facebookLink))
+                                                            {
+                                                                <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                                                    <div>
+                                                                        Visit us on
+                                                                        <MudElement HtmlTag="a" Class="ms-1" Style="color:blue;font-weight:bold;" href="@_events.facebookLink" target="blank" rel="noopener noreferrer">
+                                                                            FacebookLink
+                                                                        </MudElement>
+                                                                    </div>
+                                                                    <br/>
+                                                                </MudItem>
+                                                            }
+
+                                                            @if (!string.IsNullOrWhiteSpace(_events.twitterLink))
+                                                            {
+                                                                <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                                                    <div>
+                                                                        Visit us on
+                                                                        <MudElement HtmlTag="a" Class="ms-1" Style="color:black;font-weight:bold;" href="@_events.twitterLink" target="blank" rel="noopener noreferrer">
+                                                                            Twitter
+                                                                        </MudElement>
+                                                                    </div>
+                                                                    <br/>
+                                                                </MudItem>
+                                                            }
+
+                                                            @if (!string.IsNullOrWhiteSpace(_events.webLink))
+                                                            {
+                                                                <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                                                    <div>
+                                                                        Visit us on
+                                                                        <MudElement HtmlTag="a" Class="ms-1" Style="color:lightsalmon;font-weight:bold;" href="@_events.webLink" target="blank" rel="noopener noreferrer">
+                                                                            Web
+                                                                        </MudElement>
+                                                                    </div>
+                                                                    <br/>
+                                                                </MudItem>
+                                                            }
+                                                        </MudGrid>
+                                                    </div>
+                                                </div>
+                                                <br/><br/>
                                             </MudItem>
 
                                             <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
 
                                                 <div style="text-align:center">
-                                                    <MudText Typo="Typo.body1"><b>QR Code</b></MudText>
+                                                    <MudText Typo="Typo.body2"><b>QR Code</b></MudText>
 
                                                     <br />
                                                     <MudImage Src="@_events.qrCodeLink"></MudImage>
@@ -199,77 +237,10 @@
 
                                                 <br />
                                             </MudItem>
+                                            
                                         </MudGrid>
 
-                                        <br /><br />
-
-                                        <div>
-                                            <MudText Typo="Typo.body1"><b>Social Links</b></MudText>
-
-                                            <br />
-
-                                            <div>
-
-                                                <MudGrid>
-
-                                                    @if (!string.IsNullOrWhiteSpace(_events.instagramLink))
-                                                    {
-                                                        <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
-                                                            <div>
-                                                                Visit us on
-                                                                <MudElement HtmlTag="a" Class="ms-1" Style="color:hotpink;font-weight:bold;" href="@_events.instagramLink" target="blank" rel="noopener noreferrer">
-                                                                    Instagram
-                                                                </MudElement>
-                                                            </div>
-                                                        </MudItem>
-                                                    }
-
-                                                    @if (!string.IsNullOrWhiteSpace(_events.facebookLink))
-                                                    {
-                                                        <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
-                                                            <div>
-                                                                Visit us on
-                                                                <MudElement HtmlTag="a" Class="ms-1" Style="color:blue;font-weight:bold;" href="@_events.facebookLink" target="blank" rel="noopener noreferrer">
-                                                                    FacebookLink
-                                                                </MudElement>
-                                                            </div>
-                                                            <br />
-                                                        </MudItem>
-                                                    }
-
-                                                    @if (!string.IsNullOrWhiteSpace(_events.twitterLink))
-                                                    {
-                                                        <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
-                                                            <div>
-                                                                Visit us on
-                                                                <MudElement HtmlTag="a" Class="ms-1" Style="color:black;font-weight:bold;" href="@_events.twitterLink" target="blank" rel="noopener noreferrer">
-                                                                    Twitter
-                                                                </MudElement>
-                                                            </div>
-                                                            <br />
-                                                        </MudItem>
-                                                    }
-
-                                                    @if (!string.IsNullOrWhiteSpace(_events.webLink))
-                                                    {
-                                                        <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
-                                                            <div>
-                                                                Visit us on
-                                                                <MudElement HtmlTag="a" Class="ms-1" Style="color:lightsalmon;font-weight:bold;" href="@_events.webLink" target="blank" rel="noopener noreferrer">
-                                                                    Web
-                                                                </MudElement>
-                                                            </div>
-                                                            <br />
-                                                        </MudItem>
-                                                    }
-
-
-                                                </MudGrid>
-
-
-                                            </div>
-
-                                        </div>
+                                        <br />
 
                                     </MudItem>
 
@@ -308,9 +279,9 @@
                             {
                                 foreach (var com in _ticketList)
                                 {
-                                    var title = $"{Convert.ToDateTime(com.StartDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")}";
+                                    var title = $"{Convert.ToDateTime(com.StartDateAndTime).ToString("ddd, d-M-yyyy HH tt")}";
 
-                                    <MudCard Elevation="2">
+                                    <MudCard Elevation="1">
                                         <MudCardHeader Style=" background-color: #fdf6fdfc;">
                                             <CardHeaderContent>
                                                 <MudText Style="font-size:16px" Color="Color.Dark"><b>@title</b></MudText>
@@ -326,11 +297,10 @@
                                         </MudCardHeader>
                                         <MudCardContent>
 
-                                            <div style="padding: 5px">
+                                            <div style="padding: 2px">
 
                                                 @if (com.Tickets.Any())
                                                 {
-
                                                     <MudGrid>
                                                         @foreach (var tic in com.Tickets)
                                                         {
@@ -371,8 +341,8 @@
                                                                                 }
                                                                             
                                                                                 </p>
-                                                                            <p><b>Sales Start Date : </b> @tic.ticketSalesStartDateAndTime?.ToString("ddd, dd MMM yyyy, HH:mm tt")</p>
-                                                                            <p> <b>Sales End Date : </b>  @tic.ticketSalesEndDateAndTime?.ToString("ddd, dd MMM yyyy, HH:mm tt")</p>
+                                                                            <p><b>Sales Start Date : </b> @tic.ticketSalesStartDateAndTime?.ToString("ddd, d-M-yyyy HH tt")</p>
+                                                                            <p> <b>Sales End Date : </b>  @tic.ticketSalesEndDateAndTime?.ToString("ddd, d-M-yyyy HH tt")</p>
                                                                         </div>
                                                                     </MudCardContent>
                                                                     <MudCardActions>
@@ -416,11 +386,9 @@
 
                     @if (_processing)
                     {
-
                         <MudSkeleton Height="42px" Width="200px" />
                         <MudSkeleton Height="42px" Width="500px" />
                         <MudSkeleton Height="42px" Width="800px" />
-
                     }
                     else
                     {
@@ -432,7 +400,7 @@
                                 <MudText Typo="Typo.body2" Color="Color.Secondary"><b>Showing Attendance for @TableDescription</b> </MudText>
                                 <br /><br />
 
-                                <MudGrid>
+                                <MudGrid Spacing=2>
                                     <MudItem xs="12" sm="6" md="3" lg="3" xl="3" xxl="3">
                                         <MudPaper Class="pa-5" Outlined="true" Style="background-color:#edf8ff">
                                             <div style="line-height:25px">
@@ -631,7 +599,7 @@
 
                                 <br />
 
-                                <MudGrid>
+                                <MudGrid Spacing="2">
                                     <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
                                         <MudPaper Class="pa-10" Outlined="true" Style="background-color:#fff6ff">
                                             <div style="line-height:40px">
@@ -653,7 +621,7 @@
 
                                     <MudItem xs="12" sm="12" md="12" lg="9" xl="9" xxl="9">
 
-                                        <MudGrid>
+                                        <MudGrid Spacing="2">
                                             
                                             <MudItem xs="6" sm="6" md="6" lg="2" xl="2" xxl="2">
 

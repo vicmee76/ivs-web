@@ -9,7 +9,7 @@
     </NotAuthorized>
     <Authorized>
 
-        <br /><br />
+        <br />
         <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
             <MudMessageBox @ref="deleteEventMessageBox" Title="Delete event" CancelText="Cancel" YesText="Delete" Style="padding:20px;">
                 <MessageContent>
@@ -40,12 +40,10 @@
                             <MudText><b style="color:#56375C">Hi, @fullname</b></MudText>
                         }
                     }
-                  
-                   
                 </MudToolBar>
             </MudPaper>
 
-            <MudCard Elevation="0" Style="padding:20px">
+            <MudCard Elevation="0" Style="padding:5px">
                 <MudCardHeader>
                     <CardHeaderContent>
                         <MudText id="discovery-title-mid">Dashboard</MudText>
@@ -59,7 +57,7 @@
 
                     <div>
 
-                        <MudGrid>
+                        <MudGrid Spacing="1">
                             <MudItem xs="6" sm="6" md="6" lg="3" xl="3" xxl="3">
                                 <MudPaper Class="pa-5" Outlined="true" Style="background-color:#ffedf7">
                                     <div style="line-height:25px">
