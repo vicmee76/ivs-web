@@ -74,6 +74,24 @@
 }
 
 
+
+#btn-home-find-event {
+    background-color: #e18501f7;
+    border: 1px solid #e18501f7;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+    border-radius: 8px;
+    padding: 16px 24px;
+    cursor: pointer;
+    text-align: center;
+    text-transform: initial;
+    transition: color .3s ease, background .3s ease;
+}
+
+
+
 #btnDarkColor-Search {
     background-color: #56375C;
     color: white;
