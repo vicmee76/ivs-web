@@ -4,28 +4,166 @@
 <PageTitle>Iv's - Home</PageTitle>
 <MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="background-color:white">
     <br /><br />
-<MudGrid>
-    
-    <MudItem xs="12">
-
-        <div id="HomeTitle">
-            <span id="titleOne">Create,
-            </span> <span id="titleTwo">Share</span>  <br />
-            <span id="titleThree">Unforgettable </span>  <span id="titleFour">Moments.</span>
-            <br />
-            <div id="homeSubTitle">
-                <span> Effortlessly create and share your events.<br /> Bring your vision to life and invite others to join in the excitement.</span>
+    <MudGrid>
+        <MudItem xs="12">
+            <div id="HomeTitle">
+                <span id="titleOne">Create,
+                </span> <span id="titleTwo">Share</span>  <br />
+                <span id="titleThree">Unforgettable </span>  <span id="titleFour">Moments.</span>
+                <br />
+                <div id="homeSubTitle">
+                    <span> Effortlessly create and share your events.<br /> Bring your vision to life and invite others to join in the excitement.</span>
+                </div>
             </div>
-        </div>
         
-        <div id="homeButtons">
+            <div id="homeButtons">
                 <MudButton Variant="Variant.Outlined" Size="Size.Small" Href="/events/discovery" id="btn-home-find-event">Find an event</MudButton>
-        </div>
-
-    </MudItem>
-   
+            </div>
+        </MudItem>
+    </MudGrid>
     
-</MudGrid>
+    
+    
+    <div Style="text-align: center;">
+
+        <MudGrid Spacing="15" Class="home-div">
+
+            <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12" Style="text-align: center">
+                <div id="home-title-header-one"> Create & Management Your Events; Buy and Sell Tickets</div>
+
+                <br/><br/>
+
+                <div id="home-title-header-description-one" style="text-align: center">
+                    Whether you're organizing a conference, concert, workshop, or any gathering, our tools are designed to streamline every step of the process with adequate customisations.
+                </div>
+                
+                <br/>
+
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="12" lg="7" xl="7" xxl="7">
+                <MudImage Src="images/backgrounds/buy-tickets.png" Fluid="true" Alt="Create event" Elevation="25" Class="rounded-lg"/>
+            </MudItem>
+
+
+            <MudItem xs="12" sm="12" md="12" lg="5" xl="5" xxl="5" Style="align-items: center; justify-content: center; display: flex">
+                <div id="home-title-sub-header"> Create events with ease, set up ticket sales, and give your attendees a smooth and secure purchasing experience. </div>
+            </MudItem>
+            
+        </MudGrid>
+
+    </div>
+
+    <br/><br/><br/> <br/><br/><br/>
+
+    <div Style="margin-top: 50px; margin-bottom: 50px">
+
+        <MudGrid Spacing="15">
+
+            <MudItem xs="12" sm="12" md="6" lg="6" xl="6" xxl="6" Style="text-align: center">
+                <MudImage Src="images/backgrounds/Dash.png" Fluid="true" Alt="Ivs Dashboard" Elevation="25" Class="rounded-lg"/>
+            </MudItem>
+            <MudItem xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
+
+                <div id="home-title-one">Navigate Success at a Glance.</div>
+                
+                <br/>
+                
+                <div id="home-title-purple-description">
+
+                    Gain a clear perspective of your event performance with real-time metrics. Track total events, upcoming schedules, revenue milestones, and settlement summaries—all in one place.
+                    
+                </div>
+                
+                <br/><br/>
+                
+                <MudButton FullWidth="true" Href="/accounts/login" Variant="Variant.Filled" Style="height: 55px; text-decoration: none" Size="Size.Large" Color="Color.Warning" > <b>Start for free</b> </MudButton>
+
+
+            </MudItem>
+        </MudGrid>
+        
+    </div>
+
+    <div Style="margin-top: 50px; margin-bottom: 50px">
+
+        <MudGrid Spacing="15">
+            
+            <MudItem xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
+
+                <div id="home-title-two">Insights for Future Growth</div>
+
+                <br/>
+
+                <div id="home-title-purple-description">
+
+                    A holistic breakdown of financial activities, offering clarity on patterns, trends, and opportunities. 
+                    
+                    Empower yourself to make data-driven decisions, refine strategies, and stay ahead by anticipating potential outcomes.
+
+                </div>
+
+                <br/><br/>
+
+                <MudButton FullWidth="true" Href="/accounts/login" Variant="Variant.Filled" Style="height: 55px; text-decoration: none" Size="Size.Large" Color="Color.Secondary"> <b>Start for free</b> </MudButton>
+
+
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="6" lg="6" xl="6" xxl="6" Style="text-align: center">
+                <MudImage Src="images/backgrounds/Transactions.png" Fluid="true" Alt="Ivs Dashboard" Elevation="25" Class="rounded-lg"/>
+            </MudItem>
+            
+        </MudGrid>
+
+    </div>
+
+    <br/><br/><br/> <br/><br/><br/>
+
+    <div Style="text-align: center">
+
+        <MudGrid Spacing="15">
+
+            <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12" Style="text-align: center">
+                <div id="home-title-header-one"> Every User Has a Journey to Share</div>
+
+                <br/>
+
+                <div id="home-title-header-description-one" style="text-align: center">
+                    Discover how events are transforming with ivs. Hear their stories, insights, and successes that inspire growth and innovation.
+                    </div>
+
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
+
+                <MudCarousel Class="mud-width-full" Style="height:200px;" ShowArrows="true" ShowBullets="true" EnableSwipeGesture="true" AutoCycle="true" TData="object">
+                    <MudCarouselItem Transition="Transition.Slide" Color="@Color.Default">
+                        <div class="d-flex" style="height:100%">
+                            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+                        </div>
+                    </MudCarouselItem>
+                    <MudCarouselItem Transition="Transition.Slide" Color="@Color.Default">
+                        <div class="d-flex" style="height:100%">
+                            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+                        </div>
+                    </MudCarouselItem>
+                    <MudCarouselItem Transition="Transition.Slide">
+                        <div class="d-flex" style="height:100%">
+                            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Color="@Color.Primary" Size="@Size.Large" />
+                        </div>
+                    </MudCarouselItem>
+                </MudCarousel>
+
+            </MudItem>
+
+
+        </MudGrid>
+
+    </div>
+
+    <br/><br/><br/>
+
 
 </MudContainer>
 

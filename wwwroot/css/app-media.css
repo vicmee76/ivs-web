@@ -136,4 +136,34 @@
         font-size:14px;
         font-weight:bold
     }
+
+    #home-title-one{
+        font-size: 1.3rem;
+        text-align: center;
+    }
+
+    #home-title-two{
+        font-size: 1.3rem;
+        text-align: center;
+    }
+
+    #home-title-purple-description {
+        font-size: 13px;
+        line-height: 30px;
+        text-align: center;
+    }
+    
+    #home-title-header {
+        font-size: 1.3rem;
+        letter-spacing: 12px;
+    }
+
+    #home-title-header-one{
+    font-size: 1.5rem;
+    }
+
+    #home-title-header-description-one {
+        font-size: 14px;
+        line-height: 30px;
+    }
 }
