@@ -82,6 +82,12 @@
     color: #929391
 }
 
+#testimonies-description{
+    font-size: 14px;
+    line-height: 30px;
+    font-style: italic;
+}
+
 
 #logoTitle {
     font-family: "Akaya Telivigala", system-ui;
