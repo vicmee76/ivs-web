@@ -14,6 +14,15 @@
         box-shadow: 0 0 0 0;
     }
 
+    #logoTitle {
+        font-family: "Akaya Telivigala", system-ui;
+        font-weight: 900;
+        font-style: normal;
+        font-size: 1.9rem;
+        letter-spacing: 3px;
+        color: #56375C
+    }
+
     .event-lisiting-web{
         display: none;
     }
@@ -38,11 +47,25 @@
     }
 
     #homeSubTitle {
-        font-size: 0.7rem;
-        line-height: 30px;
+        font-size: 0.8rem;
+        line-height: 25px;
         font-family: Roboto;
         margin-top: 25px;
         font-weight: 500;
+    }
+
+    #btn-home-find-event {
+        background-color: #e18501f7;
+        border: 1px solid #e18501f7;
+        color: #fff;
+        font-weight: bold;
+        font-size: 12px;
+        border-radius: 8px;
+        padding: 10px;
+        width: 80%;
+        cursor: pointer;
+        text-align: center;
+        text-transform: initial;
     }
 
     #homeButtons {
@@ -112,5 +135,35 @@
     #discovery-title-small {
         font-size:14px;
         font-weight:bold
+    }
+
+    #home-title-one{
+        font-size: 1.3rem;
+        text-align: center;
+    }
+
+    #home-title-two{
+        font-size: 1.3rem;
+        text-align: center;
+    }
+
+    #home-title-purple-description {
+        font-size: 13px;
+        line-height: 30px;
+        text-align: center;
+    }
+    
+    #home-title-header {
+        font-size: 1.3rem;
+        letter-spacing: 12px;
+    }
+
+    #home-title-header-one{
+    font-size: 1.5rem;
+    }
+
+    #home-title-header-description-one {
+        font-size: 14px;
+        line-height: 30px;
     }
 }
