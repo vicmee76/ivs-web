@@ -67,55 +67,56 @@
 
               <MudGrid>
 
-                <MudItem xs="12" sm="12" md="12" lg="5">
+                  <MudItem xs="12" sm="12" md="12" lg="5">
+                      
+                      <MudStack Style="width:100%">
+                          <MudFileUpload T="IBrowserFile"
+                                         OnFilesChanged="OnInputFileChanged"
+                                         Hidden="@false"
+                                         Accept=".png, .jpg, .jpeg"
+                                         InputClass="absolute mud-width-full mud-height-full overflow-hidden z-20"
+                                         InputStyle="opacity:0"
+                                         @ondrop="@ClearDragClass"
+                                         @ondragenter="@SetDragClass"
+                                         @ondragleave="@ClearDragClass"
+                                         @ondragend="@ClearDragClass">
+                              <ActivatorContent>
 
-                    <MudStack Style="width:100%">
-                        <MudFileUpload T="IBrowserFile"
-                                       OnFilesChanged="OnInputFileChanged"
-                                       Hidden="@false"
-                                       Accept=".png, .jpg, .jpeg"
-                                       InputClass="absolute mud-width-full mud-height-full overflow-hidden z-20"
-                                       InputStyle="opacity:0"
-                                       @ondragenter="@SetDragClass"
-                                       @ondragleave="@ClearDragClass"
-                                       @ondragend="@ClearDragClass">
-                            <ButtonTemplate>
+                                  <MudPaper Height="100px" Outlined="true"Class="@_dragClass">
+                                      <MudText Typo="Typo.h6">
+                                          Drag and drop files here or click
+                                      </MudText>
+                                      @foreach (var file in _fileNames)
+                                      {
+                                          <MudChip T="string" Color="Color.Primary" Text="@file"/>
+                                      }
+                                  </MudPaper>
 
-                                <MudPaper Height="100px" Outlined="true"Class="@_dragClass">
-                                    <MudText Typo="Typo.h6">
-                                        Drag and drop files here or click
-                                    </MudText>
-                                    @foreach (var file in _fileNames)
-                                    {
-                                        <MudChip T="string" Color="Color.Primary" Text="@file" />
-                                    }
-                                </MudPaper>
+                                  <MudToolBar DisableGutters="true" Class="relative d-flex justify-end gap-4 z-30">
 
-                                <MudToolBar DisableGutters="true" Class="relative d-flex justify-end gap-4 z-30">
-                                    
-                                    <MudButton HtmlTag="label" Color="Color.Primary"  Icon="@Icons.Material.Filled.Image" Disabled="_processing" Variant="Variant.Outlined"> Browse </MudButton>
-                                    
-                                    <MudButton OnClick="@(async () => await Upload())" Style="background-color:#56375C; color:white" Disabled="@(!_fileNames.Any())" Variant="Variant.Filled">
-                                        @if (_processing)
-                                        {
-                                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                                            <MudText Class="ms-2">Processing</MudText>
-                                        }
-                                        else
-                                        {
-                                            <MudText> Upload & Continue</MudText>
-                                        }
-                                    </MudButton>
+                                      <MudButton HtmlTag="label" Color="Color.Primary" Icon="@Icons.Material.Filled.Image" Disabled="_processing" Variant="Variant.Outlined"> Browse </MudButton>
 
-                                    <MudButton OnClick="@Clear" Color="Color.Error" Disabled="@(!_fileNames.Any())" Variant="Variant.Outlined"> Clear </MudButton>
-                                    <MudButton OnClick="@Clear" Color="Color.Primary" Href="@skipUrl" Disabled="@_processing" Variant="Variant.Filled"> Skip </MudButton>
-                                </MudToolBar>
+                                      <MudButton OnClick="@(async () => await Upload())" Size="Size.Small" Style="background-color:#56375C; color:white" Disabled="@(!_fileNames.Any())" Variant="Variant.Filled">
+                                          @if (_processing)
+                                          {
+                                              <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                                              <MudText Class="ms-2">Processing</MudText>
+                                          }
+                                          else
+                                          {
+                                              <MudText> Upload & Continue</MudText>
+                                          }
+                                      </MudButton>
 
-                            </ButtonTemplate>
-                        </MudFileUpload>
-                    </MudStack>
+                                      <MudButton OnClick="@Clear" Color="Color.Error" Disabled="@(!_fileNames.Any())" Variant="Variant.Outlined"> Clear </MudButton>
+                                      <MudButton OnClick="@Clear" Color="Color.Primary" Href="@skipUrl" Disabled="@_processing" Variant="Variant.Filled"> Skip </MudButton>
+                                  </MudToolBar>
 
-                </MudItem>
+                              </ActivatorContent>
+                          </MudFileUpload>
+                      </MudStack>
+
+                  </MudItem>
 
 
                 <MudItem xs="12" sm="12" md="12" lg="7" Style="text-align:center">
