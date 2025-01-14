@@ -106,16 +106,14 @@
                                     <MudItem xs="12" sm="12" md="12" lg="7" xl="7" xxl="7" Style="padding:5px">
 
                                         <MudText Typo="Typo.body2"><b>Event Details</b> <MudIconButton Href="@editEvent" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton></MudText>
-                                        <MudDivider Class="pa-2"  />
-                                        <MudText Typo="Typo.h6"><b>@_events.eventName</b>
-                                            <MudChipSet T="string">
-                                                <MudChip Size="Size.Small" Color="Color.Secondary"><b>@_events.EventType.FirstOrDefault().name | @_events.eventOption.ToUpper()</b></MudChip>
-                                            </MudChipSet>
+                                       
+                                        <MudText Typo="Typo.h6">
+                                            <span><b>@_events.eventName</b></span> <span id="title-bag"> <b>@_events.EventType.FirstOrDefault().name | @_events.eventOption.ToUpper()</b> </span>
                                         </MudText>
                                         <br/><br/>
                                         
                                         <MudText Typo="Typo.body2"><b>Description</b></MudText>
-                                        <MudDivider Class="pa-2"  />
+                                       
                                         <div style="line-height:35px; font-size:14px">
                                             <span>@_events.eventDescription</span>
                                         </div>
@@ -125,7 +123,7 @@
                                         <div>
 
                                             <MudText Typo="Typo.body2"><b>Address</b></MudText>
-                                            <MudDivider Class="pa-2"  />
+                                           
                                             <div> @_events.eventAddress</div>
                                             <div> @_events.eventState</div>
                                             <br />
@@ -151,19 +149,22 @@
                                                 
                                                 <div>
                                                     <MudText Typo="Typo.body2"><b>Event Time</b> <MudIconButton Href="@editTime" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton> </MudText>
-                                                    <MudDivider Class="pa-2"/>
-                                                    @foreach (var t in _events.EventTime)
+                                                   
+                                                    @if (_events.EventTime.Any())
                                                     {
-                                                        <div style="padding:5px; margin: 2px; border:1px dashed #f0baf9">
-                                                            <MudText Typo="Typo.body2"> Date : <span>@Convert.ToDateTime(t.startDateAndTime).ToString("ddd, d-M-yyyy HH tt")</span> </MudText>
-                                                        </div>
+                                                        foreach (var t in _events.EventTime)
+                                                        {
+                                                            <div style="padding:5px; margin: 2px; border:1px dashed #f0baf9">
+                                                                <MudText Typo="Typo.body2"> Date : <span>@Convert.ToDateTime(t.startDateAndTime).ToString("ddd, d-M-yyyy HH tt")</span> </MudText>
+                                                            </div>
+                                                        }
                                                     }
                                                 </div>
                                                 <br/><br/>
 
                                                 <div>
                                                     <MudText Typo="Typo.body2"><b>Social Links</b></MudText>
-                                                    <MudDivider Class="pa-2"/>
+                                                  
                                                     <div>
                                                         <MudGrid>
                                                             @if (!string.IsNullOrWhiteSpace(_events.instagramLink))
