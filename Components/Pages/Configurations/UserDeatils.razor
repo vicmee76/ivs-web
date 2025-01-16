@@ -1,0 +1,11 @@
+@page "/configuration/user-details/{id}"
+
+@code {
+   
+   [Parameter] public string? id { get; set; }
+   [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+   [Inject] ISnackbar? _snackbar { get; set; }
+   [Inject] NavigationManager? _navigate { get; set; }
+   
+   AuthUser authUser = new AuthUser();
+}

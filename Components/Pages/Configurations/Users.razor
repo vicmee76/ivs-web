@@ -91,7 +91,7 @@
                            <TemplateColumn Title="View" Sortable="false" Filterable="false">
                               <CellTemplate Context="ctx">
                                  @{
-                                    var eventPanelUrl = $"/configuration/users-details/{ctx.Item._id}";
+                                    var eventPanelUrl = $"/configuration/user-details/{ctx.Item._id}";
                                  }
                                  <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleRight" Href="@eventPanelUrl" Title="View event" Size="Size.Medium" Color="Color.Secondary" />
                               </CellTemplate>

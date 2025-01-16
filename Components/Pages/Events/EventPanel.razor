@@ -962,7 +962,7 @@
 
                                                 <TemplateColumn Title="Bank" Sortable="false" Filterable="false">
                                                     <CellTemplate Context="ctx">
-                                                        @MaskNumber(ctx.Item.accountNumber)
+                                                        @GeneralClass.MaskNumber(ctx.Item.accountNumber)
                                                     </CellTemplate>
                                                 </TemplateColumn>
 
@@ -1069,16 +1069,7 @@
         new BreadcrumbItem("Details", href: null, disabled: true)
     };
 
-    private string MaskNumber(string number)
-    {
-        if (number.Length <= 4)
-            return number; // If the number is too short, just return it as-is.
-
-        var lengthToMask = number.Length - 4;
-        var maskedPart = new string('*', lengthToMask);
-        var visiblePart = number.Substring(lengthToMask);
-        return maskedPart + visiblePart;
-    }
+   
 
 
     protected async override void OnInitialized()
