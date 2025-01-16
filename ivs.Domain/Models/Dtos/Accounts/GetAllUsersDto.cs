@@ -13,4 +13,5 @@ public class GetAllUsersDto
     public string activatedOn { get; set; }
     public string passwordUpdatedOn { get; set; }
     public string role { get; set; }
+    public int eventCount { get; set; }
 }
