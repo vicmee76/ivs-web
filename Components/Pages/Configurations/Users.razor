@@ -1,0 +1,36 @@
+@page "/configuration/users"
+
+<PageTitle>Iv's - Users</PageTitle>
+
+<br />
+
+<AuthorizeView Roles="Admin">
+
+   <NotAuthorized>
+      No Access
+   </NotAuthorized>
+
+   <Authorized Context="cntx">
+
+      <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+         <MudPaper Elevation="0">
+            <MudToolBar>
+               <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+            </MudToolBar>
+         </MudPaper>
+
+      </MudContainer>
+
+   </Authorized>
+
+</AuthorizeView>
+
+@code {
+   
+   
+   private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+   {
+      new BreadcrumbItem("Configurations", href: "#"),
+      new BreadcrumbItem("Users", href: null, disabled: true)
+   };
+}
