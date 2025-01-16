@@ -125,7 +125,7 @@
         fadeClass = "fade-out";  // Start fade-out effect
         await InvokeAsync(StateHasChanged);
         
-        await Task.Delay(500); // Wait for fade-out animation
+        await Task.Delay(1000); // Wait for fade-out animation
 
         displayText = messages[counter % messages.Length];
         counter++;
