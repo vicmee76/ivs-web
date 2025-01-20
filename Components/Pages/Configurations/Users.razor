@@ -6,140 +6,158 @@
 
 <AuthorizeView Roles="Admin">
 
-   <NotAuthorized>
-      No Access
-   </NotAuthorized>
+    <NotAuthorized>
+        No Access
+    </NotAuthorized>
 
-   <Authorized Context="cntx">
+    <Authorized Context="cntx">
 
-      <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
-         <MudPaper Elevation="0">
-            <MudToolBar>
-               <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
-            </MudToolBar>
-         </MudPaper>
 
-         <MudCard Elevation="0" Style="padding:5px">
-            <MudCardHeader>
-               <CardHeaderContent>
-                  <MudText id="discovery-title-mid">Users</MudText>
-               </CardHeaderContent>
-            </MudCardHeader>
-            <MudCardContent>
+        <MudMessageBox @ref="userActionMessageBox" Title="User Action" CancelText="Cancel" YesText="@userAction" Style="padding:20px;">
+            <MessageContent>
+                Are you sure you want to @userAction this user ?
+            </MessageContent>
+            <YesButton>
+                <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Secondary">@userAction</MudButton>
+            </YesButton>
+            <CancelButton>
+                <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Default">Cancel</MudButton>
+            </CancelButton>
+        </MudMessageBox>
 
-               @if (_processing)
-               {
-                  <MudSkeleton Height="42px;" />
-                  <MudSkeleton Height="42px;" />
-                  <MudSkeleton Height="42px;" />
-               }
-               else
-               {
-                  @if (_usersDto.Any())
-                  {
-                     <MudDataGrid T="GetAllUsersDto" Elevation="1" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_usersDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
-                                  Hideable="false">
-                        <ToolBarContent>
-                           <MudText id="dasboard-count-title" Color="Color.Secondary"><b>@_usersDto.Count() User(s)</b></MudText>
-                           <MudSpacer />
-                           <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
-                                         AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                        </ToolBarContent>
-                        <Columns>
-                           <PropertyColumn Property="x => x.fullname" Title="Fullname" Sortable="true" Filterable="true" />
 
-                           <PropertyColumn Property="x => x.email" Title="Email" Sortable="true" Filterable="true" />
+        <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+            <MudPaper Elevation="0">
+                <MudToolBar>
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                </MudToolBar>
+            </MudPaper>
 
-                           <PropertyColumn Property="x => x.role" Title="Role" Sortable="false" Filterable="false" />
+            <MudCard Elevation="0" Style="padding:5px">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText id="discovery-title-mid">Users</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
 
-                           <TemplateColumn Title="Verified" Sortable="false" Filterable="false">
-                              <CellTemplate Context="ctx">
-                                 @if (ctx.Item.isVerified)
-                                 {
-                                    <MudChip T="string" Variant="Variant.Text" Color="Color.Success"><b>Verified</b></MudChip>
-                                 }
-                                 else
-                                 {
-                                    <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary"><b>Not Verified</b></MudChip>
-                                 }
-                              </CellTemplate>
-                           </TemplateColumn>
+                    @if (_processing)
+                    {
+                        <MudSkeleton Height="42px;" />
+                        <MudSkeleton Height="42px;" />
+                        <MudSkeleton Height="42px;" />
+                    }
+                    else
+                    {
+                        @if (_usersDto.Any())
+                        {
+                            <MudDataGrid T="GetAllUsersDto" Elevation="1" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_usersDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
+                            Hideable="false">
+                                <ToolBarContent>
+                                    <MudText id="dasboard-count-title" Color="Color.Secondary"><b>@_usersDto.Count() User(s)</b></MudText>
+                                    <MudSpacer />
+                                    <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                </ToolBarContent>
+                                <Columns>
+                                    <PropertyColumn Property="x => x.fullname" Title="Fullname" Sortable="true" Filterable="true" />
 
-                           <TemplateColumn Title="Active" Sortable="false" Filterable="false">
-                              <CellTemplate Context="ctx">
-                                 @if (ctx.Item.isActive)
-                                 {
-                                    <MudChip T="string" Variant="Variant.Text" Color="Color.Success"><b>Activated</b></MudChip>
-                                 }
-                                 else
-                                 {
-                                    <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary"><b>Inactive</b></MudChip>
-                                 }
-                              </CellTemplate>
-                           </TemplateColumn>
+                                    <PropertyColumn Property="x => x.email" Title="Email" Sortable="true" Filterable="true" />
 
-                           <TemplateColumn Title="Joined Date" Sortable="false" Filterable="false">
-                              <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.createdAt).ToString("MMMM dd, yyyy") </CellTemplate>
-                           </TemplateColumn>
+                                    <PropertyColumn Property="x => x.role" Title="Role" Sortable="false" Filterable="false" />
 
-                           <TemplateColumn Title="Activation Date" Sortable="false" Filterable="false">
-                              <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.activatedOn).ToString("MMMM dd, yyyy") </CellTemplate>
-                           </TemplateColumn>
+                                    <TemplateColumn Title="Verified" Sortable="false" Filterable="false">
+                                        <CellTemplate Context="ctx">
+                                            @if (ctx.Item.isVerified)
+                                            {
+                                                <MudChip T="string" Variant="Variant.Text" Color="Color.Success"><b>Verified</b></MudChip>
+                                            }
+                                            else
+                                            {
+                                                <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary"><b>Not Verified</b></MudChip>
+                                            }
+                                        </CellTemplate>
+                                    </TemplateColumn>
 
-                           <PropertyColumn Property="x => x.eventCount" Title="Events" Sortable="false" Filterable="false" />
-                           
-                           <TemplateColumn Title="View" Sortable="false" Filterable="false">
-                              <CellTemplate Context="ctx">
-                                 @{
-                                    var eventPanelUrl = $"/configuration/user-details/{ctx.Item._id}";
-                                 }
-                                 <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleRight" Href="@eventPanelUrl" Title="View event" Size="Size.Medium" Color="Color.Secondary" />
-                              </CellTemplate>
-                           </TemplateColumn>
+                                    <TemplateColumn Title="Active" Sortable="false" Filterable="false">
+                                        <CellTemplate Context="ctx">
+                                            @if (ctx.Item.isActive)
+                                            {
+                                                <MudChip T="string" Variant="Variant.Text" Color="Color.Success"><b>Activated</b></MudChip>
+                                                <MudIconButton Icon="@Icons.Material.Filled.DoNotDisturbOff" aria-label="Deactivate" Color="Color.Secondary" OnClick="@(async () => await ActionUser(ctx.Item._id, false))" />
+                                            }
+                                            else
+                                            {
+                                                <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary"><b>Inactive</b></MudChip>
+                                                <MudIconButton Icon="@Icons.Material.Filled.DoneAll" aria-label="Activate" Color="Color.Success" OnClick="@(async () => await ActionUser(ctx.Item._id, true))" />
+                                            }
+                                        </CellTemplate>
+                                    </TemplateColumn>
 
-                        </Columns>
-                        <PagerContent>
-                           <MudDataGridPager T="GetAllUsersDto" />
-                        </PagerContent>
-                     </MudDataGrid>
-                  }
-                  else
-                  {
-                     <div style="text-align:center;">
+                                    <TemplateColumn Title="Joined Date" Sortable="false" Filterable="false">
+                                        <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.createdAt).ToString("MMMM dd, yyyy") </CellTemplate>
+                                    </TemplateColumn>
 
-                        <br/><br/>
-                        <br/><br/>
+                                    <TemplateColumn Title="Activation Date" Sortable="false" Filterable="false">
+                                        <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.activatedOn).ToString("MMMM dd, yyyy") </CellTemplate>
+                                    </TemplateColumn>
 
-                        <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="130" Class="rounded-lg"/>
-                        <br/>
-                        <MudText Typo="Typo.h5"> <b>No users yet!</b></MudText>
-                        <br>
-                        <MudText> When users sign up, you will see them here.</MudText>
-                     </div>
-                  }
-               }
+                                    <PropertyColumn Property="x => x.eventCount" Title="Events" Sortable="false" Filterable="false" />
 
-            </MudCardContent>
-         </MudCard>
+                                    <TemplateColumn Title="View" Sortable="false" Filterable="false">
+                                        <CellTemplate Context="ctx">
+                                            @{
+                                                var eventPanelUrl = $"/configuration/user-details/{ctx.Item._id}";
+                                            }
+                                            <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleRight" Href="@eventPanelUrl" Title="View event" Size="Size.Medium" Color="Color.Secondary" />
+                                        </CellTemplate>
+                                    </TemplateColumn>
 
-      </MudContainer>
+                                </Columns>
+                                <PagerContent>
+                                    <MudDataGridPager T="GetAllUsersDto" />
+                                </PagerContent>
+                            </MudDataGrid>
+                        }
+                        else
+                        {
+                            <div style="text-align:center;">
 
-   </Authorized>
+                                <br/><br/>
+                                <br/><br/>
+
+                                <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="130" Class="rounded-lg"/>
+                                <br/>
+                                <MudText Typo="Typo.h5"> <b>No users yet!</b></MudText>
+                                <br>
+                                <MudText> When users sign up, you will see them here.</MudText>
+                            </div>
+                        }
+                    }
+
+                </MudCardContent>
+            </MudCard>
+
+        </MudContainer>
+
+    </Authorized>
 
 </AuthorizeView>
 
 @code {
 
-   [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
-   [Inject] NavigationManager? _navigate { get; set; }
-   [Inject] ISnackbar? _snackbar { get; set; }
-   [Inject] IAccountService? _accountService { get; set; }
-   
-   
-   AuthUser authUser = new AuthUser();
-   IEnumerable<GetAllUsersDto> _usersDto = new List<GetAllUsersDto>();
-   
-   private bool _processing { get; set; } = false;
+    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+    [Inject] IAccountService? _accountService { get; set; }
+
+
+    AuthUser authUser = new AuthUser();
+    IEnumerable<GetAllUsersDto> _usersDto = new List<GetAllUsersDto>();
+
+    private MudMessageBox userActionMessageBox { get; set; }
+    private string userAction { get; set; }
+    private bool _processing { get; set; } = false;
    private string fullname { get; set; }
    private string userId { get; set; }
    private string _searchString;
@@ -170,6 +188,26 @@
       _processing = false;
       StateHasChanged();
    }
+
+    private async Task ActionUser(string userId, bool action)
+    {
+        userAction = action ? "Activate" : "Deativate";
+
+        bool? result = await userActionMessageBox.ShowAsync();
+        if (result == true)
+        {
+            // var res = await _attendanceService.AdmitAttendees(attendanceId);
+            // if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true)
+            // {
+            //     attendanceDataGrid.ReloadServerData();
+            //     _snackbar.Add(res.result.message, Severity.Success);
+            // }
+            // else
+            // {
+            //     _snackbar.Add(res.result.message, Severity.Error);
+            // }
+        }
+    }
    
    
    private Func<GetAllUsersDto, bool> _quickFilter => x =>
