@@ -198,6 +198,27 @@ namespace ivs_ui.Components.Data.Services.Accounts
         }
 
 
+        public async Task<ResponseObject> UserAction(string userId, bool isActive)
+        {
+            try
+            {
+                var queryParameter = new Dictionary<string, string> { { "action", isActive.ToString().ToLower() } };
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUsersUrl, $"/user-action/{userId}", Method.Put, null, headers, queryParameter);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to perform user action, please try again later",
+                    }
+                };
+            }
+        }
 
         public async Task<ResponseObject> GetUsers()
         {

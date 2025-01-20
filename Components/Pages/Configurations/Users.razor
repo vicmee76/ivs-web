@@ -189,27 +189,27 @@
       StateHasChanged();
    }
 
-    private async Task ActionUser(string userId, bool action)
-    {
-        userAction = action ? "Activate" : "Deativate";
+   private async Task ActionUser(string userId, bool action)
+   {
+       userAction = action ? "Activate" : "Deativate";
 
-        bool? result = await userActionMessageBox.ShowAsync();
-        if (result == true)
-        {
-            // var res = await _attendanceService.AdmitAttendees(attendanceId);
-            // if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true)
-            // {
-            //     attendanceDataGrid.ReloadServerData();
-            //     _snackbar.Add(res.result.message, Severity.Success);
-            // }
-            // else
-            // {
-            //     _snackbar.Add(res.result.message, Severity.Error);
-            // }
-        }
-    }
-   
-   
+       bool? result = await userActionMessageBox.ShowAsync();
+       if (result == true)
+       {
+           var res = await _accountService.UserAction(userId, action);
+           if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
+           {
+               await GetUsers();
+               _snackbar.Add(res.result.message, Severity.Success);
+           }
+           else
+           {
+               _snackbar.Add(res.result.message, Severity.Error);
+           }
+       }
+   }
+
+
    private Func<GetAllUsersDto, bool> _quickFilter => x =>
    {
       if (string.IsNullOrWhiteSpace(_searchString))

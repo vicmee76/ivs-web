@@ -14,6 +14,7 @@ public interface IAccountService
     Task<ResponseObject> SendForgotPasswordToken(string email);
     Task<ResponseObject> VerifyAccount(string userId, ActivateAccountVM model);
     Task<ResponseObject> GetUserById(string userId);
+    Task<ResponseObject> UserAction(string userId, bool isActive);
     Task<ResponseObject> GetUsers();
     Task<ResponseObject> CreateSettlementAccount(CreateSettlementAccountDto model);
     Task<ResponseObject> ChangePassword(string email, ChangePasswordVM model);
