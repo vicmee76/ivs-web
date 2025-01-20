@@ -5,6 +5,7 @@ namespace ivs.Domain.Models.ViewModels.Accounts;
 public class SignUpVM
 {
     [Required(ErrorMessage = "Full Name is required")]
+    [StringLength(100, MinimumLength = 3, ErrorMessage = "Fullname and must be at least 3 characters long")]
     public string? fullname { get; set; }
 
     [Required(ErrorMessage = "Email Address is required")]
@@ -12,7 +13,7 @@ public class SignUpVM
     public string? email { get; set; }
 
     [Required(ErrorMessage = "Password is required")]
-    [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters long")]
+    [StringLength(100, MinimumLength = 8, ErrorMessage = "Password must include uppercase, lowercase, numbers and special characters and must be at least 8 characters long")]
     public string? password { get; set; }
 
     [Compare("password", ErrorMessage = "The password and confirmation password do not match")]
