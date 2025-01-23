@@ -98,13 +98,31 @@
     color: #56375C
 }
 
+#logoTitle > a {
+    color: #56375C
+}
+
+#logo-title-footer {
+    font-family: "Akaya Telivigala", system-ui;
+    font-weight: 900;
+    font-style: normal;
+    font-size: 2.7rem;
+    letter-spacing: 3px;
+    color: #56375C
+}
+
+#logo-title-footer > a {
+    color: #56375C
+}
+
+#footer-listing > li{
+    line-height: 35px;
+}
 
 .sign-up-form-div-space {
     padding: 5px;
 }
-    #logoTitle > a {
-        color: #56375C
-    }
+   
 
 
     #titleOne, #titleFour {

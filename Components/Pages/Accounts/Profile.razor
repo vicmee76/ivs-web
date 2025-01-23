@@ -151,7 +151,7 @@
                                                                              Label="Select Banks"
                                                                              Placeholder="Search your bank banks"
                                                                              Clearable="true" 
-                                                                             IsOpenChanged="VerifyAccountNumber"
+                                                                             OpenChanged="VerifyAccountNumber"
                                                                              OnClearButtonClick="ResetAccountNumber"
                                                                              />
                                                         </MudItem>
@@ -193,7 +193,7 @@
                                                             <tr>
                                                                 <td>@row.bankName</td>
                                                                 <td>@row.accountName</td>
-                                                                <td>@row.accountNumber</td>
+                                                                <td>@GeneralClass.MaskNumber(row.accountNumber)</td>
                                                                 <td><MudIcon Icon="@Icons.Material.Filled.Lock" Size="Size.Small" Color="Color.Error" Title="Locked" /></td>
                                                             </tr>
                                                         }
