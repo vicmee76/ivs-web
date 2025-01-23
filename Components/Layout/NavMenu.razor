@@ -26,22 +26,15 @@
         <AuthorizeView Roles="Admin">
             <Authorized>
                 <MudNavGroup Title="Configurations" Icon="" Expanded="false" Class="">
-                    <MudNavLink Href="/events/create-event">Users</MudNavLink>
-                    <MudNavLink Href="/events/my-events">Events</MudNavLink>
                     <MudNavLink Href="/events/my-events">Organizations</MudNavLink>
                     <MudNavLink Href="/events/my-events">Event Types</MudNavLink>
                     <MudNavLink Href="/events/my-events">Payment Options</MudNavLink>
-                    <MudNavLink Href="/events/my-events">Event Sales</MudNavLink>
-                    <MudNavLink Href="/events/my-events">Revenues</MudNavLink>
+                    <MudNavLink Href="/configuration/users">Users</MudNavLink>
+                    <MudNavLink Href="/configuration/events">Events</MudNavLink>
+                    <MudNavLink Href="/events/my-events">My Revenues</MudNavLink>
                 </MudNavGroup>
             </Authorized>
         </AuthorizeView>
-
-        <MudNavLink Href="/about-us">About Us</MudNavLink>
-
-        <MudNavLink Href="/contact-us">Contact Us</MudNavLink>
-
-        <MudNavLink Href="/faq">FAQ</MudNavLink>
 
         <AuthorizeView>
             <Authorized>

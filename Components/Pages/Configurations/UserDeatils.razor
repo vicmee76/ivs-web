@@ -1,0 +1,204 @@
+@page "/configuration/user-details/{id}"
+
+<PageTitle>Iv's - User Details</PageTitle>
+
+<br />
+
+<AuthorizeView Roles="Admin">
+
+    <NotAuthorized>
+        No Access
+    </NotAuthorized>
+
+    <Authorized Context="cntx">
+
+        <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+
+            <MudPaper Elevation="0">
+                <MudToolBar>
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                </MudToolBar>
+            </MudPaper>
+
+            <MudCard Elevation="0" Style="padding:5px">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText id="discovery-title-mid">Users</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+
+                    <MudTabs Outlined="false" Position="Position.Top" Rounded="true" Border="true" ApplyEffectsToContainer="true" Class="" PanelClass="pa-10">
+
+                        <MudTabPanel Text="Events">
+
+                            @if (_processing)
+                            {
+                                <MudSkeleton Height="42px;" />
+                                <MudSkeleton Height="42px;" />
+                                <MudSkeleton Height="42px;" />
+                            }
+                            else
+                            {
+                                @if (_eventsDto.Any())
+                                {
+
+                                    <MudDataGrid T="GetEventByUserDto" Elevation="0" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_eventsDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter" Hideable="false">
+                                        <ToolBarContent>
+                                            <MudText Typo="Typo.body2" Color="Color.Secondary"><b>Events List</b></MudText>
+                                            <MudSpacer />
+                                            <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                                                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                        </ToolBarContent>
+                                        <Columns>
+
+                                            <PropertyColumn Resizable="true" Property="x => x.eventName" Title="Event Name" Sortable="true" Filterable="true" />
+                                            <PropertyColumn Resizable="true" Property="x => x.eventOption" Title="Privacy" Sortable="true" Filterable="true" />
+                                            <PropertyColumn Resizable="true" Property="x => x.eventAddress" Title="Event Address" Sortable="false" Filterable="true" />
+                                            <TemplateColumn Resizable="true" Title="Status" Sortable="true" Filterable="true">
+                                                <CellTemplate Context="ctx">
+                                                    @if (ctx.Item.status == Helpers.Pending)
+                                                    {
+                                                        <MudChip Variant="Variant.Text" Color="Color.Warning"><b>Not published</b></MudChip>
+                                                    }
+                                                    else
+                                                    {
+                                                        <MudChip Variant="Variant.Text" Color="Color.Success"><b>Published</b></MudChip>
+                                                    }
+                                                </CellTemplate>
+                                            </TemplateColumn>
+                                            <TemplateColumn Resizable="true" Title="Created Date" Sortable="false" Filterable="true">
+                                                <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.createdAt).ToString("F") </CellTemplate>
+                                            </TemplateColumn>
+                                          
+                                            <TemplateColumn Resizable="true" Title="View" Sortable="false" Filterable="false">
+                                                <CellTemplate Context="ctx">
+                                                    @{
+                                                        var eventPanelUrl = $"/configuration/user-event-panel/{ctx.Item._id}";
+                                                    }
+                                                    <MudIconButton Href="@eventPanelUrl" Target="_blank" Icon="@Icons.Material.Filled.ArrowCircleRight" Title="View event" Size="Size.Medium" Color="Color.Secondary" />
+
+                                                </CellTemplate>
+                                            </TemplateColumn>
+                                        </Columns>
+                                        <PagerContent>
+                                            <MudDataGridPager T="GetEventByUserDto" />
+                                        </PagerContent>
+                                    </MudDataGrid>
+
+                                }
+                                else
+                                {
+                                    <div style="text-align:center;">
+                                        <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="130" Class="rounded-lg" />
+                                        <br />
+                                        <MudText Typo="Typo.h5"> <b>No event yet!</b></MudText>
+                                        <br>
+                                        <MudText> Once an event is created you will be able to visualize and track them.</MudText>
+                                    </div>
+                                }
+                            }
+
+
+                        </MudTabPanel>
+
+
+                        <MudTabPanel Text="Ticket Revenue">
+                            <MudText>Content Three</MudText>
+                        </MudTabPanel>
+
+
+                        <MudTabPanel Text="Settlements">
+                            <MudText>Content Three</MudText>
+                        </MudTabPanel>
+
+
+
+                    </MudTabs>
+
+
+                </MudCardContent>
+            </MudCard>
+
+        </MudContainer>
+
+    </Authorized>
+
+</AuthorizeView>
+
+@code {
+
+    [Parameter] public string? id { get; set; }
+    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] IEventService _eventService { get; set; }
+
+    IEnumerable<GetEventByUserDto> _eventsDto = new List<GetEventByUserDto>();
+    AuthUser authUser = new AuthUser();
+
+    private bool _processing { get; set; } = false;
+    private bool isGridView { get; set; } = true;
+
+    private string _searchString;
+    private bool _sortNameByLength;
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+   {
+      new BreadcrumbItem("Configurations", href: "#", disabled: true),
+      new BreadcrumbItem("Users", href: "/configuration/users"),
+      new BreadcrumbItem("User Details", href: null, disabled: false)
+   };
+
+
+
+    protected async override void OnInitialized()
+    {
+        _processing = true;
+        var state = await _authStateProvider.GetAuthenticationStateAsync();
+
+        if (!state.User.Identity.IsAuthenticated)
+        {
+            _navigate.NavigateTo("/accounts/login");
+        }
+        else
+        {
+            var auth = await authUser.GetAuthUserAsync(state);
+            await GetEvents();
+        }
+        _processing = false;
+        StateHasChanged();
+    }
+
+
+
+    private async Task GetEvents()
+    {
+        var res2 = await _eventService.GetEventByUser(id);
+        var events = (List<GetEventByUserDataDto>)res2.result.data ?? [];
+        _eventsDto = events.FirstOrDefault().record;
+    }
+
+
+
+    private Func<GetEventByUserDto, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(_searchString))
+            return true;
+
+        if (x.eventName.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.status.Contains(_searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if ($"{x.eventName} {x.status} {x.eventOption}".Contains(_searchString))
+            return true;
+
+        return false;
+    };
+
+
+
+
+}

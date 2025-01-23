@@ -1,8 +1,9 @@
-﻿@page "/events/event-panel/{id}"
+﻿
+@page "/configuration/user-event-panel/{id}"
 
 @{
     CultureInfo nigeriaCulture = new CultureInfo("en-NG");
-    nigeriaCulture.NumberFormat.CurrencySymbol = "₦";
+    nigeriaCulture.NumberFormat.CurrencySymbol = "?";
     Thread.CurrentThread.CurrentCulture = nigeriaCulture;
     Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
 }
@@ -65,10 +66,10 @@
                 </MudToolBar>
             </MudPaper>
 
-        <br />
-
-        <MudTabs Elevation="0" MinimumTabWidth="300px" Border="true" Centered="true" ApplyEffectsToContainer="true" PanelClass="pa-2">
             <br />
+
+            <MudTabs Elevation="0" MinimumTabWidth="300px" Border="true" Centered="true" ApplyEffectsToContainer="true" PanelClass="pa-2">
+                <br />
 
                 <MudTabPanel Style="height:70px" Text="About Event">
 
@@ -101,42 +102,42 @@
                                             <MudImage Fluid="true" Src="@_events.eventImagePath" Height="450" Width="450" Alt="" Class="rounded-lg" />
                                         </div>
 
-                                        <br/>
+                                        <br />
                                     </MudItem>
 
                                     <MudItem xs="12" sm="12" md="12" lg="7" xl="7" xxl="7" Style="padding:5px">
 
                                         <MudText Typo="Typo.body2"><b>Event Details</b> <MudIconButton Href="@editEvent" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton></MudText>
-                                       
+
                                         <MudText Typo="Typo.h6">
                                             <span><b>@_events.eventName</b></span> <span id="title-bag"> <b>@_events.EventType.FirstOrDefault().name </b> </span>
                                         </MudText>
-                                        <br/><br/>
-                                        
+                                        <br /><br />
+
                                         <MudText Typo="Typo.body2"><b>Description</b></MudText>
-                                       
+
                                         <div style="line-height:35px; font-size:14px">
                                             <span>@_events.eventDescription</span>
                                         </div>
 
-                                        <br /><br/>
+                                        <br /><br />
 
                                         <div>
 
                                             <MudText Typo="Typo.body2"><b>Address</b></MudText>
-                                           
+
                                             <div> @_events.eventAddress</div>
                                             <div> @_events.eventState</div>
                                             <br />
-                                            
+
                                             @if (!string.IsNullOrEmpty(_events.adressPin))
                                             {
                                                 <MudButton Href="@_events.adressPin"
-                                                           Target="_blank"
-                                                           Variant="Variant.Outlined"
-                                                           EndIcon="@Icons.Material.Filled.LocationOn"
-                                                           Color="Color.Secondary"
-                                                           Style="text-transform:none">
+                                                Target="_blank"
+                                                Variant="Variant.Outlined"
+                                                EndIcon="@Icons.Material.Filled.LocationOn"
+                                                Color="Color.Secondary"
+                                                Style="text-transform:none">
                                                     Google address pin link
                                                 </MudButton>
                                                 <br />
@@ -147,10 +148,10 @@
 
                                         <MudGrid>
                                             <MudItem xs="12" sm="12" md="12" lg="8" xl="8" xxl="8">
-                                                
+
                                                 <div>
                                                     <MudText Typo="Typo.body2"><b>Event Time</b> <MudIconButton Href="@editTime" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton> </MudText>
-                                                   
+
                                                     @if (_events.EventTime.Any())
                                                     {
                                                         foreach (var t in _events.EventTime)
@@ -161,11 +162,11 @@
                                                         }
                                                     }
                                                 </div>
-                                                <br/><br/>
+                                                <br /><br />
 
                                                 <div>
                                                     <MudText Typo="Typo.body2"><b>Social Links</b></MudText>
-                                                  
+
                                                     <div>
                                                         <MudGrid>
                                                             @if (!string.IsNullOrWhiteSpace(_events.instagramLink))
@@ -189,7 +190,7 @@
                                                                             FacebookLink
                                                                         </MudElement>
                                                                     </div>
-                                                                    <br/>
+                                                                    <br />
                                                                 </MudItem>
                                                             }
 
@@ -202,7 +203,7 @@
                                                                             Twitter
                                                                         </MudElement>
                                                                     </div>
-                                                                    <br/>
+                                                                    <br />
                                                                 </MudItem>
                                                             }
 
@@ -215,13 +216,13 @@
                                                                             Web
                                                                         </MudElement>
                                                                     </div>
-                                                                    <br/>
+                                                                    <br />
                                                                 </MudItem>
                                                             }
                                                         </MudGrid>
                                                     </div>
                                                 </div>
-                                                <br/><br/>
+                                                <br /><br />
                                             </MudItem>
 
                                             <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
@@ -231,15 +232,12 @@
 
                                                     <br />
                                                     <MudImage Src="@_events.qrCodeLink"></MudImage>
-                                                    <br /><br/>
-                                                    <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="@((e) => ActionShareEvent(_events.eventShortLink))" StartIcon="@Icons.Material.Filled.Share" Color="Color.Secondary" Style="text-transform:none">
-                                                        Share
-                                                    </MudButton>
+                                                   
                                                 </div>
 
                                                 <br />
                                             </MudItem>
-                                            
+
                                         </MudGrid>
 
                                         <br />
@@ -332,7 +330,8 @@
                                                                             <p> <b>Description : </b> @tic.ticketDescription </p>
                                                                             <p> <b>Ticket Kind : </b> @tic.ticketKind </p>
                                                                             <p> <b>Admits : </b> @tic.groupSize </p>
-                                                                            <p> <b>Stock : </b>
+                                                                            <p>
+                                                                                <b>Stock : </b>
                                                                                 @if (tic.ticketInStock >= Int32.MaxValue)
                                                                                 {
                                                                                     <span>Unlimited</span>
@@ -341,8 +340,8 @@
                                                                                 {
                                                                                     <span>@tic.ticketInStock.ToString("#,##") in stock</span>
                                                                                 }
-                                                                            
-                                                                                </p>
+
+                                                                            </p>
                                                                             <p><b>Sales Start Date : </b> @tic.ticketSalesStartDateAndTime?.ToString("ddd, d-M-yyyy HH tt")</p>
                                                                             <p> <b>Sales End Date : </b>  @tic.ticketSalesEndDateAndTime?.ToString("ddd, d-M-yyyy HH tt")</p>
                                                                         </div>
@@ -486,7 +485,7 @@
 
                                             <MudSpacer />
                                             <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search with code, name, email, phone" Adornment="Adornment.Start"
-                                                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
 
                                             <MudMenu Icon="@Icons.Material.Filled.Settings" Dense="true" Size="Size.Small" Color="Color.Default">
 
@@ -504,12 +503,7 @@
 
                                             <TemplateColumn Title="Action" Sortable="false" Filterable="false">
                                                 <CellTemplate Context="ctx">
-                                                    @if (!ctx.Item.isActive)
-                                                    {
-                                                        <MudButton Variant="Variant.Filled" OnClick="@(async () => await ActionAdmitUser(ctx.Item._id))" Size="Size.Small" Color="Color.Secondary">Admit</MudButton>
-                                                    }
-
-                                                    else
+                                                    @if (ctx.Item.isActive)
                                                     {
                                                         <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" />
                                                     }
@@ -624,7 +618,7 @@
                                     <MudItem xs="12" sm="12" md="12" lg="9" xl="9" xxl="9">
 
                                         <MudGrid Spacing="2">
-                                            
+
                                             <MudItem xs="6" sm="6" md="6" lg="2" xl="2" xxl="2">
 
                                                 <MudPaper Class="pa-3" Outlined="true" Style="background-color: #fffcf7">
@@ -677,7 +671,7 @@
 
                                                         @if (_salesProcessing)
                                                         {
-                                                        <MudSkeleton Height="22px;" />
+                                                            <MudSkeleton Height="22px;" />
                                                         }
                                                         else
                                                         {
@@ -697,7 +691,7 @@
 
                                                         @if (_salesProcessing)
                                                         {
-                                                        <MudSkeleton Height="22px;" />
+                                                            <MudSkeleton Height="22px;" />
                                                         }
                                                         else
                                                         {
@@ -750,8 +744,8 @@
                                     </MudItem>
 
                                 </MudGrid>
-                                
-                                <br/><br/>
+
+                                <br /><br />
                                 <divv>
 
                                     <MudText Typo="Typo.body2" Color="Color.Secondary"><b>Showing Sales for @SalesTableDescription</b> </MudText>
@@ -766,7 +760,7 @@
 
                                             <MudSpacer />
                                             <MudTextField T="string" ValueChanged="@(s=>OnSalesSearch(s))" Placeholder="Search with code, name, email, phone" Adornment="Adornment.Start"
-                                                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
 
                                             <MudMenu Icon="@Icons.Material.Filled.Settings" Dense="true" Size="Size.Small" Color="Color.Default">
 
@@ -854,57 +848,13 @@
 
                             <MudCardContent>
 
-                                <MudGrid Spacing="10">
+                                <MudGrid Spacing="6">
 
-                                    <MudItem sm="12" xs="12" md="3" lg="3" xl="3" xxl="3">
-
-                                        <MudPaper Elevation="0" Outlined="false" MaxWidth="500px" Square="false">
-
-                                            <div style="text-align:left; line-height:30px">
-
-                                                <MudText Style="text-align:left; font-size:17px"><b>Request settlement</b></MudText>
-
-                                                <MudDivider Class="my-4" />
-
-                                                <div style="font-size:small">Request for a portion or all of your revenue. After the first successful request, your next request will be in 7 days time. Minimum withdrawal amount is NGN 5,000 </div>
-                                            </div>
-
-                                            <br />
-
-                                            <div class="d-flex">
-                                                <MudTextField @bind-Value="settlementAmount" Clearable="true" OnClearButtonClick="@( async () => await ClearSettlementAction())" OnBlur="@(async () => await GetFeeAction())" Label="Settlemennt Amount" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentColor="Color.Success" AdornmentIcon="@Icons.Material.Filled.Payments" />
-                                            </div>
-
-                                            <MudText Style="margin-top:7px; font-size: small" Color="Color.Secondary"> <b> @serviceFee </b></MudText>
-
-                                            <br />
-
-                                            <MudButton Variant="Variant.Filled" OnClick="@( async () => await SettlementTransferAction())" Disabled="@_settlementRequestAction" Size="Size.Medium" Color="Color.Success">
-
-                                                @if (_settlementProcessing)
-                                                {
-                                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                                                    <MudText Class="ms-2">Processing</MudText>
-                                                }
-                                                else
-                                                {
-                                                    <MudText><b>Request</b></MudText>
-                                                }
-                                            </MudButton>
-
-
-                                        </MudPaper>
-
-
-
-                                    </MudItem>
-
-
-                                    <MudItem sm="12" xs="12" md="9" lg="9" xl="9" xxl="9">
+                                    <MudItem sm="12" xs="12" md="12" lg="12" xl="12" xxl="12">
 
                                         <MudText Style="text-align:left;">Total Settlement : <b style="color: green; font-size:20px"> @totalSettledAmount.ToString("C")</b></MudText>
-                                        
-                                        <br/>
+
+                                        <br />
 
                                         <br />
 
@@ -914,7 +864,7 @@
 
                                                 <MudSpacer />
                                                 <MudTextField T="string" ValueChanged="@(s=>OnSettlementSearch(s))" Placeholder="Search with status, account name and number" Adornment="Adornment.Start"
-                                                              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                                AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                                             </ToolBarContent>
                                             <Columns>
 
@@ -928,13 +878,13 @@
 
                                                 <TemplateColumn Title="Fee" Sortable="false" Filterable="false">
                                                     <CellTemplate Context="ctx">
-                                                         @ctx.Item.totalServiceFee.ToString("C")
+                                                        @ctx.Item.totalServiceFee.ToString("C")
                                                     </CellTemplate>
                                                 </TemplateColumn>
 
                                                 <TemplateColumn Title="Total Settlement" Sortable="false" Filterable="false">
                                                     <CellTemplate Context="ctx">
-                                                         @ctx.Item.totalAmountSettled.ToString("C")
+                                                        @ctx.Item.totalAmountSettled.ToString("C")
                                                     </CellTemplate>
                                                 </TemplateColumn>
 
@@ -1013,7 +963,7 @@
     [Inject] ISnackbar? _snackbar { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] IDialogService DialogService { get; set; }
-    
+
     [Parameter] public string? id { get; set; }
 
     AuthUser authUser = new AuthUser();
@@ -1023,7 +973,7 @@
     MudDataGrid<AttendanceDto> attendanceDataGrid;
     MudDataGrid<GetSalesDataDto> salesDataGrid;
     MudDataGrid<GetSettlementData> settlementDataGrid;
-   // private List<GetSettlementResponseModel> settlementList { get; set; }
+    // private List<GetSettlementResponseModel> settlementList { get; set; }
     List<TicketNameGroupingTotalResult> ticketNameGrouping = new List<TicketNameGroupingTotalResult>();
 
     private MudMessageBox admituserMessageBox { get; set; }
@@ -1069,7 +1019,7 @@
         new BreadcrumbItem("Details", href: null, disabled: true)
     };
 
-   
+
 
 
     protected async override void OnInitialized()
@@ -1091,35 +1041,28 @@
             {
                 _events = res1.result.data;
 
-                var isUserEvent = _events.Users.Where(x => x._id == userId);
-                if (!isUserEvent.Any())
-                {
-                    _snackbar.Add("Unauthorized event access", Severity.Error);
-                }
-                else
-                {
-                    eventName = _events.eventName;
+                eventName = _events.eventName;
 
-                    var res = await _ticketService.GetTicketByEventId(id);
-                    if (res.result.code == ResponseCodes.ResponseCodeOk)
+                var res = await _ticketService.GetTicketByEventId(id);
+                if (res.result.code == ResponseCodes.ResponseCodeOk)
+                {
+                    if (res.result.data is List<TicketDto> result)
                     {
-                        if (res.result.data is List<TicketDto> result)
-                        {
-                            _ticketList = result
-                                .GroupBy(ticket => new { ticket.eventTimeDetails._id, ticket.eventTimeDetails.startDateAndTime })
-                                .Select(group => new TimeAndTicketGroupingDto
+                        _ticketList = result
+                            .GroupBy(ticket => new { ticket.eventTimeDetails._id, ticket.eventTimeDetails.startDateAndTime })
+                            .Select(group => new TimeAndTicketGroupingDto
                                 {
                                     EventTimeId = group.Key._id,
                                     StartDateAndTime = group.Key.startDateAndTime,
                                     Tickets = group.ToList()
                                 }).ToList();
-                        }
-                    }
-                    else
-                    {
-                        _snackbar.Add(res.result.message, Severity.Error);
                     }
                 }
+                else
+                {
+                    _snackbar.Add(res.result.message, Severity.Error);
+                }
+
             }
             else
             {
@@ -1348,7 +1291,7 @@
         {
             var result = (List<GetSettlementResponseModel>)res.result.data;
 
-            if(result.Count == 0)
+            if (result.Count == 0)
             {
                 _getSettlementProcessing = false;
                 StateHasChanged();
@@ -1358,10 +1301,10 @@
                         Items = new List<GetSettlementData>()
                     };
             }
-            
+
             totalSettledAmount = result.FirstOrDefault().records.Where(x => x.paymentGateWayTransactionStatus == Helpers.SuccessStatus).Sum(x => x.totalAmountSettled);
             IEnumerable<GetSettlementData> data = result.FirstOrDefault().records;
-           
+
             data = data.Where(element =>
             {
                 if (string.IsNullOrWhiteSpace(settlementSearchString))
@@ -1448,94 +1391,11 @@
         return settlementDataGrid.ReloadServerData();
     }
 
-    private async Task GetFeeAction()
-    {
-        if (settlementAmount >= Helpers.MinimumWithdrawalAmount)
-        {
-            var res = await _paymentService.GetTransferFee(settlementAmount, id);
-            if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true){
-                var result = (GetTransferFeeDto)res.result.data;
-                serviceFee = $"Fee : {result.totalDeduction.ToString("C")}; Payout Amount : {result.payoutAmount.ToString("C")}";
-                _settlementRequestAction = false;
-                StateHasChanged();
-            }
-            else
-            {
-                _settlementRequestAction = true;
-                _snackbar.Add(res.result.message, Severity.Error);
-            }
-        }
-        else
-        {
-            _settlementRequestAction = true;
-        }
-    }
 
 
-    private async Task SettlementTransferAction()
-    {
-        _settlementProcessing = true;
-        _settlementRequestAction = true;
-        if(settlementAmount >= Helpers.MinimumWithdrawalAmount){
-
-            bool? result = await postSettlementMessageBox.ShowAsync();
-            if (result == true)
-            {
-                var postSettlement = new PostSettlementDto
-                    {
-                        userId = userId,
-                        eventId = id,
-                        amountSettled = settlementAmount.ToString()
-                    };
-
-                var res = await _paymentService.PostSettlement(postSettlement);
-                if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true)
-                {
-                    await ClearSettlementAction();
-                    _snackbar.Add(res.result.message, Severity.Success);
-                }
-                else
-                {
-                    _snackbar.Add(res.result.message, Severity.Error);
-                }
-            }
-        }
-        else
-        {
-            _snackbar.Add(GeneralMessages.MinimumWithdrawalAmountMessage, Severity.Info);
-        }
-        _settlementProcessing = false;
-        _settlementRequestAction = false;
-    }
 
 
-    private async Task ClearSettlementAction()
-    {
-        _settlementRequestAction = true;
-        serviceFee = string.Empty;
-        settlementAmount = 0.00M;
-        settlementDataGrid.ReloadServerData();
-        StateHasChanged();
-    }
-
-
-    private async Task ActionAdmitUser(string attendanceId)
-    {
-        bool? result = await admituserMessageBox.ShowAsync();
-        if (result == true)
-        {
-            var res = await _attendanceService.AdmitAttendees(attendanceId);
-            if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true)
-            {
-                attendanceDataGrid.ReloadServerData();
-                _snackbar.Add(res.result.message, Severity.Success);
-            }
-            else
-            {
-                _snackbar.Add(res.result.message, Severity.Error);
-            }
-        }
-    }
+   
 
 
     private Task ActionGetAttendanceByEventTime(string eventTimeId, string tableDescription)
@@ -1572,27 +1432,8 @@
         return salesDataGrid.ReloadServerData();
     }
 
-    
-    private async Task ActionShareEvent(string link)
-    {
-        DialogOptions opts = new DialogOptions()
-        {
-            MaxWidth = MaxWidth.Large,
-            FullWidth = true,
-            CloseButton = true,
-            CloseOnEscapeKey = true
-        };
 
-        var parameters = new DialogParameters<ShareEventDialog> { { x => x.eventLink, link }, { x => x.eventName, eventName } };
-        var dialog = await DialogService.ShowAsync<ShareEventDialog>("Share event", parameters, opts);
-
-        var result = await dialog.Result;
-
-        if (!result.Canceled)
-        {
-            StateHasChanged();
-        }
-    }
+  
 
 
 }

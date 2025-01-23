@@ -13,9 +13,19 @@
         margin: 0;
     }
 
+    .fade-in {
+        opacity: 1;
+        transition: opacity 0.5s ease-in;
+    }
+
+    .fade-out {
+        opacity: 0;
+        transition: opacity 0.5s ease-out;
+    }
+
 </style>
 
-<MudContainer >
+<MudContainer>
 
     <div class="login-container">
 
@@ -63,7 +73,7 @@
                 </div>
 
             <div class="column left" id="transparent-image" style="">
-                <div id="login-middle-title">Hello, Glad to see you! </div>
+                <div id="login-middle-title"> @displayText </div>
             </div>
         </div>
     </div>
@@ -75,7 +85,6 @@
 
     [Inject] IAccountService? _accountService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
-    [Inject] ISessionStorageService _sessionStorageService { get; set; }
     [Inject] ILocalStorageService _localStorageService { get; set; }
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
 
@@ -86,6 +95,13 @@
     private bool _processing = false;
     InputType PasswordInput = InputType.Password;
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+    
+    
+    private System.Timers.Timer _timer;
+    private string displayText = "Welcome Back!";
+    private int counter = 0;
+    private string fadeClass = "fade-in";
+    private string[] messages = ["Hello...", "So glad to see you here!", "Kindly sign in to your account.", "You can also sign up!"];
 
     protected async override void OnInitialized()
     {
@@ -95,6 +111,31 @@
         {
             _navigate.NavigateTo("/");
         }
+        
+        _timer = new System.Timers.Timer(5000); // Change text every 2 seconds
+        _timer.Elapsed += UpdateText;
+        _timer.AutoReset = true;
+        _timer.Start();
+        
+    }
+    
+    private async void UpdateText(object sender, System.Timers.ElapsedEventArgs e)
+    {
+        fadeClass = "fade-out";  // Start fade-out effect
+        await InvokeAsync(StateHasChanged);
+        
+        await Task.Delay(1000); // Wait for fade-out animation
+
+        displayText = messages[counter % messages.Length];
+        counter++;
+
+        fadeClass = "fade-in";  // Start fade-in effect
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
     }
 
     private async Task ActionLogin()
