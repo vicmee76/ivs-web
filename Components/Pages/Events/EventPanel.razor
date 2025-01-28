@@ -1108,7 +1108,7 @@
                             _ticketList = result
                                 .GroupBy(ticket => new { ticket.eventTimeDetails._id, ticket.eventTimeDetails.startDateAndTime })
                                 .Select(group => new TimeAndTicketGroupingDto
-                                {
+                                {   
                                     EventTimeId = group.Key._id,
                                     StartDateAndTime = group.Key.startDateAndTime,
                                     Tickets = group.ToList()
