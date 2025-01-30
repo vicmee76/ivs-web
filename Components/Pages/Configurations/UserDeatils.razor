@@ -176,7 +176,9 @@
     {
         var res2 = await _eventService.GetEventByUser(id);
         var events = (List<GetEventByUserDataDto>)res2.result.data ?? [];
-        _eventsDto = events.FirstOrDefault().record;
+        if(events.Count > 0){
+            _eventsDto = events.FirstOrDefault().record;
+        }
     }
 
 
