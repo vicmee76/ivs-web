@@ -10,6 +10,7 @@ namespace ivs.Domain.Interfaces.Payment
         public Task<ResponseObject> VerifyPayment(Dictionary<string, string> model);
         public Task<ResponseObject> ProcessFreePayment(string orderId);
         public Task<ResponseObject> GetSales(Dictionary<string, string> queryParam);
+        public Task<ResponseObject> GetUserSales(Dictionary<string, string> queryParam);
         public Task<ResponseObject> GetBanks(string country = "NG");
         public Task<ResponseObject> VerifyAccountNumber(string bankCode, string accountNumber);
         public Task<ResponseObject> GetTransferFee(decimal settlementAmount, string eventId);
