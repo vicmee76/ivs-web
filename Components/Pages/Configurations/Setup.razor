@@ -1,0 +1,87 @@
+﻿@page "/configuration/set-up"
+
+<PageTitle>Iv's - Set up</PageTitle>
+
+@{
+    CultureInfo nigeriaCulture = new CultureInfo("en-NG");
+    nigeriaCulture.NumberFormat.CurrencySymbol = "₦";
+    Thread.CurrentThread.CurrentCulture = nigeriaCulture;
+    Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
+}
+
+<br />
+
+
+<AuthorizeView Roles="Admin">
+
+    <NotAuthorized>
+        No Access
+    </NotAuthorized>
+
+    <Authorized Context="cntx">
+
+
+        <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+
+            <MudPaper Elevation="0">
+                <MudToolBar>
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                </MudToolBar>
+            </MudPaper>
+
+            <MudCard Elevation="0" Style="padding:5px">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText id="discovery-title-mid">Set up</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+
+                    <MudTabs Outlined="false" Position="Position.Top" Rounded="true" Border="true" ApplyEffectsToContainer="true" Class="" PanelClass="pa-10">
+
+                        <MudTabPanel Text="Organizations">
+
+                           
+
+
+                        </MudTabPanel>
+
+
+                        <MudTabPanel Text="Payment Options">
+
+                          
+
+                        </MudTabPanel>
+
+
+                        <MudTabPanel Text="Event Types">
+
+                           
+
+                        </MudTabPanel>
+
+
+
+                    </MudTabs>
+
+
+                </MudCardContent>
+            </MudCard>
+
+        </MudContainer>
+
+    </Authorized>
+
+</AuthorizeView>
+
+@code {
+
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+   {
+      new BreadcrumbItem("Configurations", href: "#", disabled: true),
+      new BreadcrumbItem("Set up", href: "/configuration/set-up")
+   };
+
+
+}

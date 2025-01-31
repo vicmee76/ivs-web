@@ -63,7 +63,7 @@
 
 @code {
 
-    [Inject] IOrganisationService? _organisationService { get; set; }
+    [Inject] IOrganizationService? _organisationService { get; set; }
     [Inject] IAccountService? _accountService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
     [Inject] ISessionStorageService _sessionStorageService { get; set; }
@@ -89,7 +89,7 @@
         }
         else
         {
-            var res = await _organisationService.GetOrganisations();
+            var res = await _organisationService.GetOrganizations();
             _orgs = res.result.data ?? new List<GetOrganisationsDto>();
         }
     }
