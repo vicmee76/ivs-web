@@ -119,5 +119,31 @@ namespace ivs_ui.Components.Data.Services.Organisations
                 };
             }
         }
+
+        public async Task<ResponseObject> RemoveOrganizations(string id)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUrl, $"remove-organisation/{id}", Method.Delete, null, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                res.result.data = JsonConvert.DeserializeObject<GetOrganisationsDto>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to update a single organisation, please try again later.",
+                    }
+                };
+            }
+        }
     }
 }

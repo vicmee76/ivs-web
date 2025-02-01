@@ -109,12 +109,12 @@
                                         @if (_orgsDto.Any())
                                         {
                                             <MudDataGrid T="GetOrganisationsDto" Elevation="1" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_orgsDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
-                                                         Hideable="false">
+                                            Hideable="false">
                                                 <ToolBarContent>
                                                     <MudText id="dasboard-count-title" Color="Color.Secondary"><b>@_orgsDto.Count() Organisation(s)</b></MudText>
                                                     <MudSpacer />
                                                     <MudTextField @bind-Value="_organisationSearchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
-                                                                  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                                                 </ToolBarContent>
                                                 <Columns>
                                                     <PropertyColumn Property="x => x.name" Title="Org. Name" Sortable="true" Filterable="true" />
@@ -129,6 +129,8 @@
                                                     <TemplateColumn Title="Action" Sortable="false" Filterable="false">
                                                         <CellTemplate Context="ctx">
                                                             <MudIconButton Icon="@Icons.Material.Filled.Edit" Variant="Variant.Outlined" OnClick="@(async () => await ActionUpdateOrganisation(ctx.Item))" Color="Color.Primary" Size="Size.Small" Ripple="true" />
+                                                           
+                                                            <MudIconButton Icon="@Icons.Material.Filled.DeleteSweep" Variant="Variant.Filled" OnClick="@(async () => await ActioRemoveOrganisation(ctx.Item._id))" Color="Color.Error" Size="Size.Small" Ripple="true" />
                                                         </CellTemplate>
                                                     </TemplateColumn>
 
@@ -247,6 +249,7 @@
 
     }
 
+    #region Organisation Set up
 
     private Func<GetOrganisationsDto, bool> _quickFilter => x =>
        {
@@ -263,6 +266,7 @@
         var orgs = res.result.data ?? new List<GetOrganisationsDto>();
         _orgsDto = orgs;
     }
+
 
     private async Task ActionOrganisation()
     {
@@ -306,6 +310,7 @@
         }
     }
 
+
     private async Task ActionUpdateOrganisation(GetOrganisationsDto model)
     {
         isOrganisationUpdate = true;
@@ -318,6 +323,28 @@
         StateHasChanged();
     }
 
+
+    private async Task ActioRemoveOrganisation(string id)
+    {
+        userAction = "Remove";
+
+        bool? result = await organisationActionMessageBox.ShowAsync();
+        if (result == true)
+        {
+            var res = await _organizationService.RemoveOrganizations(id);
+            if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
+            {
+                await ResetOrganisation();
+                _snackbar.Add(res.result.message, Severity.Success);
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+    }
+
+
     private async Task ResetOrganisation()
     {
         await GetOrganisation();
@@ -327,5 +354,7 @@
         isOrganisationUpdate = false;
     }
 
+
+    #endregion
 
 }

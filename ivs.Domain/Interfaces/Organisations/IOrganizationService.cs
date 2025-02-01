@@ -9,4 +9,5 @@ public interface IOrganizationService
     public Task<ResponseObject> CreateOrganizations(CreateOrganizationDto model);
     public Task<ResponseObject> GetOrganizationsById(string id);
     public Task<ResponseObject> UpdateOrganizations(string id, CreateOrganizationDto model);
+    public Task<ResponseObject> RemoveOrganizations(string id);
 }
