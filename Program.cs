@@ -66,7 +66,7 @@ builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddHttpClient<AuthenticationStateProvider, AuthStateProvider>();
 builder.Services.AddScoped<IWebService, WebService>();
-builder.Services.AddTransient<IOrganisationService, OrganisationService>();
+builder.Services.AddTransient<IOrganizationService, OrganizationService>();
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IEventTypeService, EventTypeService>();
 builder.Services.AddTransient<IPaymentOptionService, PaymentOptionService>();

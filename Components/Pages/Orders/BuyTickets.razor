@@ -4,6 +4,7 @@
 
 @{
     CultureInfo nigeriaCulture = new CultureInfo("en-NG");
+    nigeriaCulture.NumberFormat.CurrencySymbol = "₦";
     Thread.CurrentThread.CurrentCulture = nigeriaCulture;
     Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
 }
