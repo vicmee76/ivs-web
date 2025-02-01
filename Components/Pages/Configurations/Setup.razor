@@ -21,6 +21,20 @@
     <Authorized Context="cntx">
 
 
+        <MudMessageBox @ref="organisationActionMessageBox" Title="User Action" CancelText="Cancel" YesText="@userAction" Style="padding:20px;">
+            <MessageContent>
+                Are you sure you want to @userAction this organisation ?
+            </MessageContent>
+            <YesButton>
+                <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Secondary">@userAction</MudButton>
+            </YesButton>
+            <CancelButton>
+                <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Default">Cancel</MudButton>
+            </CancelButton>
+
+        </MudMessageBox>
+
+
         <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
 
             <MudPaper Elevation="0">
@@ -39,9 +53,113 @@
 
                     <MudTabs Outlined="false" Position="Position.Top" Rounded="true" Border="true" ApplyEffectsToContainer="true" Class="" PanelClass="pa-10">
 
-                        <MudTabPanel Text="Organizations">
+                        <MudTabPanel Text="Organisations">
 
-                           
+                            <MudGrid Spacing="10">
+
+                                <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
+
+                                    <MudPaper Class="pa-10">
+
+                                        <MudText Typo="Typo.body1" Style="font-weight:bold">Create Organisation</MudText>
+                                        <br />
+
+                                        <EditForm Model="@organisationModel" OnValidSubmit="ActionOrganisation">
+                                            <DataAnnotationsValidator />
+
+                                            <MudTextField InputType="InputType.Text" Label="Name" Margin="Margin.Dense" HelperText="Enter Organisation name" @bind-Value="organisationModel.name" For="@(() => organisationModel.name)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+
+                                            <MudTextField InputType="InputType.Text" Label="Description" Margin="Margin.Dense" HelperText="Enter Description" @bind-Value="organisationModel.description" For="@(() => organisationModel.description)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+
+                                            <MudButton ButtonType="ButtonType.Submit" Disabled="@_processing" Style="background:#56375C" Variant="Variant.Filled" Color="Color.Primary" Class="mt-2">
+                                                @if (_processing)
+                                                {
+                                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                                    <MudText Class="ms-2">Processing</MudText>
+                                                }
+                                                else
+                                                {
+                                                    if (isOrganisationUpdate)
+                                                    {
+                                                        <MudText>Update</MudText>
+                                                    }
+                                                    else
+                                                    {
+                                                        <MudText>Create</MudText>
+                                                    }
+                                                }
+                                            </MudButton>
+                                        </EditForm>
+
+                                    </MudPaper>
+
+
+                                </MudItem>
+
+                                <MudItem xs="12" sm="12" md="12" lg="9" xl="9" xxl="9">
+
+                                    @if (_processing)
+                                    {
+                                        <MudSkeleton Height="42px;" />
+                                        <MudSkeleton Height="42px;" />
+                                        <MudSkeleton Height="42px;" />
+                                    }
+                                    else
+                                    {
+                                        @if (_orgsDto.Any())
+                                        {
+                                            <MudDataGrid T="GetOrganisationsDto" Elevation="1" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_orgsDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
+                                                         Hideable="false">
+                                                <ToolBarContent>
+                                                    <MudText id="dasboard-count-title" Color="Color.Secondary"><b>@_orgsDto.Count() Organisation(s)</b></MudText>
+                                                    <MudSpacer />
+                                                    <MudTextField @bind-Value="_organisationSearchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                                                                  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                                </ToolBarContent>
+                                                <Columns>
+                                                    <PropertyColumn Property="x => x.name" Title="Org. Name" Sortable="true" Filterable="true" />
+
+                                                    <PropertyColumn Property="x => x.description" Title="Description" Sortable="false" Filterable="false" />
+
+
+                                                    <TemplateColumn Title="CreatedAt" Sortable="false" Filterable="false">
+                                                        <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.createdAt).ToString("MMMM dd, yyyy") </CellTemplate>
+                                                    </TemplateColumn>
+
+                                                    <TemplateColumn Title="Action" Sortable="false" Filterable="false">
+                                                        <CellTemplate Context="ctx">
+                                                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Variant="Variant.Outlined" OnClick="@(async () => await ActionUpdateOrganisation(ctx.Item))" Color="Color.Primary" Size="Size.Small" Ripple="true" />
+                                                        </CellTemplate>
+                                                    </TemplateColumn>
+
+                                                </Columns>
+                                                <PagerContent>
+                                                    <MudDataGridPager T="GetOrganisationsDto" />
+                                                </PagerContent>
+                                            </MudDataGrid>
+                                        }
+                                        else
+                                        {
+                                            <div style="text-align:center;">
+
+                                                <br /><br />
+                                                <br /><br />
+
+                                                <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="70" Class="rounded-lg" />
+                                                <br />
+                                                <div>  <b>No organisation yet!</b></div>
+                                                <br>
+                                                <MudText Typo="Typo.caption"> When organisation(s) are created, you will see them here.</MudText>
+                                            </div>
+                                        }
+                                    }
+
+
+
+
+                                </MudItem>
+
+                            </MudGrid>
 
 
                         </MudTabPanel>
@@ -49,14 +167,14 @@
 
                         <MudTabPanel Text="Payment Options">
 
-                          
+
 
                         </MudTabPanel>
 
 
                         <MudTabPanel Text="Event Types">
 
-                           
+
 
                         </MudTabPanel>
 
@@ -82,6 +200,132 @@
       new BreadcrumbItem("Configurations", href: "#", disabled: true),
       new BreadcrumbItem("Set up", href: "/configuration/set-up")
    };
+
+    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+    [Inject] IOrganizationService _organizationService { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+    [SupplyParameterFromForm] public CreateOrganizationDto? organisationModel { get; set; }
+
+
+    AuthUser authUser = new AuthUser();
+    IEnumerable<GetOrganisationsDto> _orgsDto = new List<GetOrganisationsDto>();
+    private MudMessageBox organisationActionMessageBox { get; set; }
+    private string userAction { get; set; }
+
+    private string fullname { get; set; }
+    private string userId { get; set; }
+
+    private bool _processing { get; set; }
+    private bool isOrganisationUpdate { get; set; } = false;
+    private string organisationId { get; set; } = string.Empty;
+
+    private string _organisationSearchString;
+
+
+    protected async override void OnInitialized()
+    {
+        organisationModel = new CreateOrganizationDto();
+
+        _processing = true;
+        var state = await _authStateProvider.GetAuthenticationStateAsync();
+
+        if (!state.User.Identity.IsAuthenticated)
+        {
+            _navigate.NavigateTo("/accounts/login");
+        }
+        else
+        {
+            var auth = await authUser.GetAuthUserAsync(state);
+            userId = auth.Id;
+            fullname = auth.SentenceCaseFullName;
+
+            await GetOrganisation();
+        }
+        _processing = false;
+        StateHasChanged();
+
+    }
+
+
+    private Func<GetOrganisationsDto, bool> _quickFilter => x =>
+       {
+           if (string.IsNullOrWhiteSpace(_organisationSearchString))
+               return true;
+
+           return x.name.Contains(_organisationSearchString, StringComparison.OrdinalIgnoreCase);
+       };
+
+
+    private async Task GetOrganisation()
+    {
+        var res = await _organizationService.GetOrganizations();
+        var orgs = res.result.data ?? new List<GetOrganisationsDto>();
+        _orgsDto = orgs;
+    }
+
+    private async Task ActionOrganisation()
+    {
+
+        if (!isOrganisationUpdate)
+        {
+            userAction = "Create";
+
+            bool? result = await organisationActionMessageBox.ShowAsync();
+            if (result == true)
+            {
+                var res = await _organizationService.CreateOrganizations(organisationModel);
+                if (res.result != null && res.result.code == ResponseCodes.ResponseCodeCreated)
+                {
+                    await ResetOrganisation();
+                    _snackbar.Add(res.result.message, Severity.Success);
+                }
+                else
+                {
+                    _snackbar.Add(res.result.message, Severity.Error);
+                }
+            }
+        }
+        else
+        {
+            userAction = "Update";
+            bool? result = await organisationActionMessageBox.ShowAsync();
+            if (result == true)
+            {
+                var res = await _organizationService.UpdateOrganizations(organisationId, organisationModel);
+                if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
+                {
+                    await ResetOrganisation();
+                    _snackbar.Add(res.result.message, Severity.Success);
+                }
+                else
+                {
+                    _snackbar.Add(res.result.message, Severity.Error);
+                }
+            }
+        }
+    }
+
+    private async Task ActionUpdateOrganisation(GetOrganisationsDto model)
+    {
+        isOrganisationUpdate = true;
+        organisationId = model._id;
+        organisationModel = new CreateOrganizationDto()
+            {
+                description = model.description,
+                name = model.name,
+            };
+        StateHasChanged();
+    }
+
+    private async Task ResetOrganisation()
+    {
+        await GetOrganisation();
+        organisationModel = new CreateOrganizationDto();
+        userAction = string.Empty;
+        organisationId = string.Empty;
+        isOrganisationUpdate = false;
+    }
 
 
 }

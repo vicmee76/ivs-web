@@ -50,7 +50,7 @@ namespace ivs_ui.Components.Data.Services.Organisations
                 var response = await _webService.Call(ApiUrl, $"create-organisation", Method.Post, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
-                if (content?.code != ResponseCodes.ResponseCodeOk)
+                if (content?.code != ResponseCodes.ResponseCodeCreated)
                     return res;
 
                 res.result.data = JsonConvert.DeserializeObject<GetOrganisationsDto>(content?.data?.ToString());
