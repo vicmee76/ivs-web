@@ -1,33 +1,33 @@
-﻿using Blazored.LocalStorage;
-using Blazored.SessionStorage;
+﻿using ivs.Domain.Constants;
+using ivs.Domain.Interfaces.General;
+using ivs.Domain.Interfaces.Organisations;
+using ivs.Domain.Models.Dtos.Accounts;
+using ivs.Domain.Models.Dtos.Organisations;
+using ivs.Domain.Models.Dtos.Payment;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
-using ivs.Domain.Constants;
-using ivs.Domain.Interfaces.Events;
-using ivs.Domain.Interfaces.General;
-using ivs.Domain.Models.Dtos.Events;
-using ivs.Domain.Models.Dtos.Organisations;
 using System.Reflection;
 
-namespace ivs_ui.Components.Data.Services.Events
+namespace ivs_ui.Components.Data.Services.Organisations
 {
-    public class EventTypeService(IWebService webService) : IEventTypeService
+    public class OrganizationService(IWebService webService) : IOrganizationService
     {
         private readonly IWebService _webService = webService;
-        private const string ApiUrl = "/api/v1/event-types/";
+        private const string ApiUrl = "/api/v1/organisations/";
 
-
-        public async Task<ResponseObject> GetEventTypes()
+        public async Task<ResponseObject> GetOrganizations()
         {
             try
             {
-                var response = await _webService.Call(ApiUrl, "/", Method.Get, null);
+                var response = await _webService.Call(ApiUrl, "", Method.Get, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
-                    return res!;
+                    return new ResponseObject();
 
-                res.result.data = JsonConvert.DeserializeObject<List<GetEventTypesDto>>(content?.data?.ToString());
+                var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
+                res.result.data = JsonConvert.DeserializeObject<List<GetOrganisationsDto>>(myJsonResponse);
                 return res;
             }
             catch (Exception ex)
@@ -36,24 +36,24 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to get all event types, please try again later",
+                        message = "Error! Something went wrong trying to get organisations, please try again later",
                     }
                 };
             }
         }
 
-
-            
-        public async Task<ResponseObject> CreateEventTypes(CreateEentTypesDto model)
+        public  async Task<ResponseObject> CreateOrganizations(CreateOrganizationDto model)
         {
             try
             {
                 var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"create-event-types", Method.Post, model, headers);
+                var response = await _webService.Call(ApiUrl, $"create-organisation", Method.Post, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeCreated)
                     return res;
+
+                res.result.data = JsonConvert.DeserializeObject<GetOrganisationsDto>(content?.data?.ToString());
                 return res;
             }
             catch (Exception ex)
@@ -62,24 +62,24 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to create event type, please try again later.",
+                        message = "Error! Something went wrong trying to create an organisation, please try again later.",
                     }
                 };
             }
         }
 
-
-
-        public async Task<ResponseObject> UpdateEventTypes(string id, CreateEentTypesDto model)
+        public async Task<ResponseObject> GetOrganizationsById(string id)
         {
             try
             {
                 var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"update-event-type/{id}", Method.Put, model, headers);
+                var response = await _webService.Call(ApiUrl, $"{id}", Method.Get, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
+
+                res.result.data = JsonConvert.DeserializeObject<List<GetOrganisationsDto>>(content?.data?.ToString());
                 return res;
             }
             catch (Exception ex)
@@ -88,24 +88,24 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to update event type, please try again later.",
+                        message = "Error! Something went wrong trying to get a single organisation, please try again later.",
                     }
                 };
             }
         }
 
-
-
-        public async Task<ResponseObject> SwitchEventTypes(string id, SwitchEventTypeDto model)
+        public async Task<ResponseObject> UpdateOrganizations(string id, CreateOrganizationDto model)
         {
             try
             {
                 var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"switch-event-type/{id}", Method.Put, model, headers);
+                var response = await _webService.Call(ApiUrl, $"update-organisation/{id}", Method.Put, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
+
+                res.result.data = JsonConvert.DeserializeObject<GetOrganisationsDto>(content?.data?.ToString());
                 return res;
             }
             catch (Exception ex)
@@ -114,23 +114,24 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to switch event type, please try again later.",
+                        message = "Error! Something went wrong trying to update a single organisation, please try again later.",
                     }
                 };
             }
         }
 
-
-        public async Task<ResponseObject> RemoveEventTypes(string id)
+        public async Task<ResponseObject> RemoveOrganizations(string id)
         {
             try
             {
                 var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"remove-event-type/{id}", Method.Delete, null, headers);
+                var response = await _webService.Call(ApiUrl, $"remove-organisation/{id}", Method.Delete, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
                     return res;
+
+                res.result.data = JsonConvert.DeserializeObject<GetOrganisationsDto>(content?.data?.ToString());
                 return res;
             }
             catch (Exception ex)
@@ -139,7 +140,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to remove event type, please try again later.",
+                        message = "Error! Something went wrong trying to update a single organisation, please try again later.",
                     }
                 };
             }

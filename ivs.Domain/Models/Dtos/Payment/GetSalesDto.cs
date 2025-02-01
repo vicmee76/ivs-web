@@ -13,6 +13,8 @@ namespace ivs.Domain.Models.Dtos.Payment
         public int totalCount { get; set; }
         public int totalTicketQuantity { get; set; }
         public decimal totalAmountSettled { get; set; }
+        public decimal totalTicketServiceFeeSum { get; set; }
+        public EventDetails eventDetails { get; set; }
         public List<GetSalesDataDto>? paginatedResults { get; set; }
         public List<TicketNameGroupingTotalResult>? TicketNameGroupingTotal { get; set; }
     }
@@ -27,7 +29,10 @@ namespace ivs.Domain.Models.Dtos.Payment
         public int ticketQuantity { get; set; }
         public string? code { get; set; }
         public bool isActive { get; set; }
-        public double totalTicketFee { get; set; }
+        public decimal totalTicketFee { get; set; }
+        public decimal ticketServiceFee { get; set; }
+        public decimal totalTicketServiceFee { get; set; }
+        public EventDetails eventDetails { get; set; }
         public Ticketdetail[]? ticketDetails { get; set; }
         public GetSalesPaymentDetails? paymentDetails { get; set; }
     }
@@ -44,5 +49,11 @@ namespace ivs.Domain.Models.Dtos.Payment
         public string _id { get; set; }
         public decimal totalTicketFeeSum { get; set; }
         public int totalTicketQuantity { get; set; }
+    }
+
+    public class EventDetails
+    {
+        public string user_id { get; set; }
+        public string eventName { get; set; }
     }
 }

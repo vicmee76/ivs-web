@@ -95,7 +95,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 return res;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new ResponseObject()
                 {
