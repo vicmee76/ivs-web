@@ -48,6 +48,18 @@
 
 
 
+        <MudMessageBox @ref="paymentOptionActionMessageBox" Title="User Action" CancelText="Cancel" YesText="@userAction" Style="padding:20px;">
+            <MessageContent>
+                Are you sure you want to @userAction this payment option ?
+            </MessageContent>
+            <YesButton>
+                <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Secondary">@userAction</MudButton>
+            </YesButton>
+            <CancelButton>
+                <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Default">Cancel</MudButton>
+            </CancelButton>
+        </MudMessageBox>
+
 
         <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
 
@@ -144,7 +156,7 @@
                                                         <CellTemplate Context="ctx">
                                                             <MudIconButton Icon="@Icons.Material.Filled.Edit" Variant="Variant.Outlined" OnClick="@(async () => await ActionUpdateOrganisation(ctx.Item))" Color="Color.Primary" Size="Size.Small" Ripple="true" />
 
-                                                            <MudIconButton Icon="@Icons.Material.Filled.DeleteSweep" Variant="Variant.Filled" OnClick="@(async () => await ActioRemoveOrganisation(ctx.Item._id))" Color="Color.Error" Size="Size.Small" Ripple="true" />
+                                                            <MudIconButton Icon="@Icons.Material.Filled.DeleteSweep" Variant="Variant.Filled" OnClick="@(async () => await ActionRemoveOrganisation(ctx.Item._id))" Color="Color.Error" Size="Size.Small" Ripple="true" />
                                                         </CellTemplate>
                                                     </TemplateColumn>
 
@@ -163,9 +175,9 @@
 
                                                 <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="70" Class="rounded-lg" />
                                                 <br />
-                                                <div>  <b>No organisation yet!</b></div>
+                                                <div>  <b>No event types yet!</b></div>
                                                 <br>
-                                                <MudText Typo="Typo.caption"> When organisation(s) are created, you will see them here.</MudText>
+                                                <MudText Typo="Typo.caption"> When event type(s) are created, you will see them here.</MudText>
                                             </div>
                                         }
                                     }
@@ -269,7 +281,7 @@
                                                         <CellTemplate Context="ctx">
                                                             <MudIconButton Icon="@Icons.Material.Filled.Edit" Variant="Variant.Outlined" OnClick="@(async () => await ActionUpdateEvenTypes(ctx.Item))" Color="Color.Primary" Size="Size.Small" Ripple="true" />
 
-                                                            <MudIconButton Icon="@Icons.Material.Filled.DeleteSweep" Variant="Variant.Filled" OnClick="@(async () => await ActioRemoveEventTypes(ctx.Item._id))" Color="Color.Error" Size="Size.Small" Ripple="true" />
+                                                            <MudIconButton Icon="@Icons.Material.Filled.DeleteSweep" Variant="Variant.Filled" OnClick="@(async () => await ActionRemoveEventTypes(ctx.Item._id))" Color="Color.Error" Size="Size.Small" Ripple="true" />
                                                         </CellTemplate>
                                                     </TemplateColumn>
 
@@ -305,7 +317,148 @@
 
                         <MudTabPanel Text="Payment Options">
 
+                            <MudGrid Spacing="10">
 
+                                <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
+
+                                    <MudPaper Class="pa-10">
+
+                                        <MudText Typo="Typo.body1" Style="font-weight:bold">Create payment options</MudText>
+                                        <br />
+
+                                        <EditForm Model="@paymentOptionModel" OnValidSubmit="ActionPaymentOptions">
+                                            <DataAnnotationsValidator />
+
+                                            <MudTextField InputType="InputType.Text" Label="Name" Margin="Margin.Dense" HelperText="Enter payment option name" @bind-Value="paymentOptionModel.name" For="@(() => paymentOptionModel.name)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+
+                                            <MudTextField InputType="InputType.Text" Label="Description" Margin="Margin.Dense" HelperText="Enter description" @bind-Value="paymentOptionModel.description" For="@(() => paymentOptionModel.description)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+
+                                            <MudNumericField HideSpinButtons="true" HelperText="Enter amount" Margin="Margin.Dense" @bind-Value="paymentOptionModel.amount" For="@(() => paymentOptionModel.amount)" Required="true" ErrorText="Amount is required" Label="Amount" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Step=".2M" />
+
+                                            <MudNumericField HelperText="Enter percentage" Margin="Margin.Dense" @bind-Value="paymentOptionModel.metaAmountPercentage" For="@(() => paymentOptionModel.metaAmountPercentage)" Label="Percentage" Variant="Variant.Outlined" Min="1" Max="10" HelperTextOnFocus="true" Clearable="true" />
+
+                                            <MudNumericField HelperText="Enter maximum users" Margin="Margin.Dense" @bind-Value="paymentOptionModel.maxUsers" For="@(() => paymentOptionModel.maxUsers)" Label="Max User" Variant="Variant.Outlined" Min="1" Max="@int.MaxValue" HelperTextOnFocus="true" Clearable="true" />
+
+
+                                            <MudNumericField HelperText="Enter cap amount" Margin="Margin.Dense" @bind-Value="paymentOptionModel.capAmount" For="@(() => paymentOptionModel.capAmount)" Label="Cap. Amount" Variant="Variant.Outlined" Min="1" Max="2000" HelperTextOnFocus="true" Clearable="true" />
+
+
+                                            <MudButton ButtonType="ButtonType.Submit" Disabled="@_processing" Style="background:#56375C" Variant="Variant.Filled" Color="Color.Primary" Class="mt-2">
+                                                @if (_processing)
+                                                {
+                                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                                    <MudText Class="ms-2">Processing</MudText>
+                                                }
+                                                else
+                                                {
+                                                    if (isPaymentOptionUpdate)
+                                                    {
+                                                        <MudText>Update</MudText>
+                                                    }
+                                                    else
+                                                    {
+                                                        <MudText>Create</MudText>
+                                                    }
+                                                }
+                                            </MudButton>
+                                        </EditForm>
+
+                                    </MudPaper>
+
+
+                                </MudItem>
+
+                                <MudItem xs="12" sm="12" md="12" lg="9" xl="9" xxl="9">
+
+                                    @if (_processing)
+                                    {
+                                        <MudSkeleton Height="42px;" />
+                                        <MudSkeleton Height="42px;" />
+                                        <MudSkeleton Height="42px;" />
+                                    }
+                                    else
+                                    {
+                                        @if (_paymentOptionDto.Any())
+                                        {
+                                            <MudDataGrid T="GetPaymentOptionsDto" Elevation="1" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_paymentOptionDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_paymentOptionQuickFilter"
+                                            Hideable="false">
+                                                <ToolBarContent>
+                                                    <MudText id="dasboard-count-title" Color="Color.Secondary"><b>@_paymentOptionDto.Count() Payment option(s)</b></MudText>
+                                                    <MudSpacer />
+                                                    <MudTextField @bind-Value="_paymentOptionSearchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                                                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                                </ToolBarContent>
+                                                <Columns>
+                                                    <PropertyColumn Property="x => x.name" Title="Payment Name" Resizable="true" Sortable="true" Filterable="true" />
+
+                                                    <PropertyColumn Property="x => x.description" Title="Description" Resizable="true" Sortable="false" Filterable="false" />
+
+                                                    <TemplateColumn Title="Amount" Sortable="true" Filterable="false">
+                                                        <CellTemplate Context="ctx">
+
+                                                            @{
+                                                                var amt = Convert.ToDecimal(ctx.Item.amount.numberDecimal).ToString("C");
+                                                            }
+                                                            <MudText>@amt</MudText>
+                                                        </CellTemplate>
+                                                    </TemplateColumn>
+
+                                                    <TemplateColumn Title="Percentage" Sortable="true" Filterable="false">
+                                                        <CellTemplate Context="ctx">
+                                                            <MudText>@ctx.Item.metaAmountPercentage.numberDecimal%</MudText>
+                                                        </CellTemplate>
+                                                    </TemplateColumn>
+
+                                                    <PropertyColumn Property="x => x.maxUsers" Title="Max. User" Resizable="true" Sortable="false" Filterable="false" />
+
+                                                    <TemplateColumn Title="Cap Amount" Sortable="true" Filterable="false">
+                                                        <CellTemplate Context="ctx">
+
+                                                            @{
+                                                                var capAmt = Convert.ToDecimal(ctx.Item.capAmount).ToString("C");
+                                                            }
+                                                            <MudText>@capAmt</MudText>
+                                                        </CellTemplate>
+                                                    </TemplateColumn>
+
+                                                    <TemplateColumn Title="CreatedAt" Sortable="false" Filterable="false">
+                                                        <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.createdAt).ToString("MMMM dd, yyyy") </CellTemplate>
+                                                    </TemplateColumn>
+
+                                                    <TemplateColumn Title="Action" Sortable="false" Filterable="false">
+                                                        <CellTemplate Context="ctx">
+                                                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Variant="Variant.Outlined" OnClick="@(async () => await ActionUpdatePaymentOption(ctx.Item))" Color="Color.Primary" Size="Size.Small" Ripple="true" />
+
+                                                            <MudIconButton Icon="@Icons.Material.Filled.DeleteSweep" Variant="Variant.Filled" OnClick="@(async () => await ActionRemovePaymentOption(ctx.Item._id))" Color="Color.Error" Size="Size.Small" Ripple="true" />
+                                                        </CellTemplate>
+                                                    </TemplateColumn>
+
+                                                </Columns>
+                                                <PagerContent>
+                                                    <MudDataGridPager T="GetPaymentOptionsDto" />
+                                                </PagerContent>
+                                            </MudDataGrid>
+                                        }
+                                        else
+                                        {
+                                            <div style="text-align:center;">
+
+                                                <br /><br />
+                                                <br /><br />
+
+                                                <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="70" Class="rounded-lg" />
+                                                <br />
+                                                <div>  <b>No ppayment option yet!</b></div>
+                                                <br>
+                                                <MudText Typo="Typo.caption"> When payment option(s) are created, you will see them here.</MudText>
+                                            </div>
+                                        }
+                                    }
+
+
+                                </MudItem>
+
+                            </MudGrid>
 
                         </MudTabPanel>
 
@@ -334,19 +487,24 @@
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
     [Inject] IOrganizationService _organizationService { get; set; }
     [Inject] IEventTypeService _eventTypeService { get; set; }
+    [Inject] IPaymentOptionService _paymentOptionService { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
+
     [SupplyParameterFromForm] public CreateOrganizationDto? organisationModel { get; set; }
     [SupplyParameterFromForm] public CreateEentTypesDto? eventTypeModel { get; set; }
+    [SupplyParameterFromForm] public CreatePaymentOptionDto? paymentOptionModel { get; set; }
 
 
     AuthUser authUser = new AuthUser();
     IEnumerable<GetOrganisationsDto> _orgsDto = new List<GetOrganisationsDto>();
     IEnumerable<GetEventTypesDto> _eventTypesDto = new List<GetEventTypesDto>();
+    IEnumerable<GetPaymentOptionsDto> _paymentOptionDto = new List<GetPaymentOptionsDto>();
 
 
     private MudMessageBox organisationActionMessageBox { get; set; }
     private MudMessageBox eventTypeActionMessageBox { get; set; }
+    private MudMessageBox paymentOptionActionMessageBox { get; set; }
 
     private string userAction { get; set; }
 
@@ -356,18 +514,22 @@
     private bool _processing { get; set; }
     private bool isOrganisationUpdate { get; set; } = false;
     private bool isEventTypeUpdate { get; set; } = false;
+    private bool isPaymentOptionUpdate { get; set; } = false;
 
     private string organisationId { get; set; } = string.Empty;
     private string eventTypeId { get; set; } = string.Empty;
+    private string paymentOptionId { get; set; } = string.Empty;
 
     private string _organisationSearchString;
     private string _eventTypeSearchString;
+    private string _paymentOptionSearchString;
 
 
     protected async override void OnInitialized()
     {
         organisationModel = new CreateOrganizationDto();
         eventTypeModel = new CreateEentTypesDto();
+        paymentOptionModel = new CreatePaymentOptionDto();
 
         _processing = true;
         var state = await _authStateProvider.GetAuthenticationStateAsync();
@@ -384,6 +546,7 @@
 
             await GetOrganisation();
             await GetEventTypes();
+            await GetPaymentOptions();
         }
         _processing = false;
         StateHasChanged();
@@ -467,7 +630,7 @@
     }
 
 
-    private async Task ActioRemoveOrganisation(string id)
+    private async Task ActionRemoveOrganisation(string id)
     {
         userAction = "Remove";
 
@@ -588,7 +751,7 @@
 
 
 
-    private async Task ActioRemoveEventTypes(string id)
+    private async Task ActionRemoveEventTypes(string id)
     {
         userAction = "Remove";
 
@@ -641,6 +804,113 @@
 
     #region Payment option set up 
 
+    private async Task ResetPaymentOption()
+    {
+        await GetPaymentOptions();
+        paymentOptionModel = new CreatePaymentOptionDto();
+        userAction = string.Empty;
+        paymentOptionId = string.Empty;
+        isPaymentOptionUpdate = false;
+    }
+
+
+    private async Task GetPaymentOptions()
+    {
+        var res = await _paymentOptionService.GetAllPaymentOptions();
+        var data = res.result.data ?? new List<GetPaymentOptionsDto>();
+        _paymentOptionDto = data;
+    }
+
+
+    private Func<GetPaymentOptionsDto, bool> _paymentOptionQuickFilter => x =>
+      {
+          if (string.IsNullOrWhiteSpace(_paymentOptionSearchString))
+              return true;
+
+          return x.name.Contains(_paymentOptionSearchString, StringComparison.OrdinalIgnoreCase);
+      };
+
+
+    private async Task ActionUpdatePaymentOption(GetPaymentOptionsDto model)
+    {
+        isPaymentOptionUpdate = true;
+        paymentOptionId = model._id;
+        paymentOptionModel = new CreatePaymentOptionDto()
+            {
+                name = model.name,
+                description = model.description,
+                maxUsers = model.maxUsers,
+                metaAmountPercentage = Convert.ToDouble(model.metaAmountPercentage.numberDecimal),
+                capAmount = model.capAmount,
+                amount = Convert.ToDecimal(model.amount.numberDecimal)
+            };
+        StateHasChanged();
+    }
+
+
+
+    private async Task ActionPaymentOptions()
+    {
+        if (!isPaymentOptionUpdate)
+        {
+            userAction = "Create";
+
+            bool? result = await paymentOptionActionMessageBox.ShowAsync();
+            if (result == true)
+            {
+                var res = await _paymentOptionService.CreatePaymentOptions(paymentOptionModel);
+                if (res.result != null && res.result.code == ResponseCodes.ResponseCodeCreated)
+                {
+                    await ResetPaymentOption();
+                    _snackbar.Add(res.result.message, Severity.Success);
+                }
+                else
+                {
+                    _snackbar.Add(res.result.message, Severity.Error);
+                }
+            }
+        }
+        else
+        {
+            userAction = "Update";
+            bool? result = await paymentOptionActionMessageBox.ShowAsync();
+            if (result == true)
+            {
+                var res = await _paymentOptionService.UpdatePaymentOptions(paymentOptionId, paymentOptionModel);
+                if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
+                {
+                    await ResetPaymentOption();
+                    _snackbar.Add(res.result.message, Severity.Success);
+                }
+                else
+                {
+                    _snackbar.Add(res.result.message, Severity.Error);
+                }
+            }
+        }
+    }
+
+
+
+    private async Task ActionRemovePaymentOption(string id)
+    {
+        userAction = "Remove";
+
+        bool? result = await paymentOptionActionMessageBox.ShowAsync();
+        if (result == true)
+        {
+            var res = await _paymentOptionService.RemovePaymentOptions(id);
+            if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
+            {
+                await ResetPaymentOption();
+                _snackbar.Add(res.result.message, Severity.Success);
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+    }
 
     #endregion
 
