@@ -84,12 +84,12 @@
                                             @if (ctx.Item.isActive)
                                             {
                                                 <MudChip T="string" Variant="Variant.Text" Color="Color.Success"><b>Activated</b></MudChip>
-                                                <MudIconButton Icon="@Icons.Material.Filled.DoNotDisturbOff" aria-label="Deactivate" Color="Color.Secondary" OnClick="@(async () => await ActionUser(ctx.Item._id, false))" />
+                                                <MudIconButton Icon="@Icons.Material.Filled.ToggleOn" aria-label="Deactivate" Color="Color.Success" OnClick="@(async () => await ActionUser(ctx.Item._id, false))" />
                                             }
                                             else
                                             {
                                                 <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary"><b>Inactive</b></MudChip>
-                                                <MudIconButton Icon="@Icons.Material.Filled.DoneAll" aria-label="Activate" Color="Color.Success" OnClick="@(async () => await ActionUser(ctx.Item._id, true))" />
+                                                <MudIconButton Icon="@Icons.Material.Filled.ToggleOff" aria-label="Activate" Color="Color.Secondary" OnClick="@(async () => await ActionUser(ctx.Item._id, true))" />
                                             }
                                         </CellTemplate>
                                     </TemplateColumn>

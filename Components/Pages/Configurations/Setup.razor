@@ -31,8 +31,22 @@
             <CancelButton>
                 <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Default">Cancel</MudButton>
             </CancelButton>
-
         </MudMessageBox>
+
+
+        <MudMessageBox @ref="eventTypeActionMessageBox" Title="User Action" CancelText="Cancel" YesText="@userAction" Style="padding:20px;">
+            <MessageContent>
+                Are you sure you want to @userAction this event type ?
+            </MessageContent>
+            <YesButton>
+                <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Secondary">@userAction</MudButton>
+            </YesButton>
+            <CancelButton>
+                <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Default">Cancel</MudButton>
+            </CancelButton>
+        </MudMessageBox>
+
+
 
 
         <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
@@ -108,7 +122,7 @@
                                     {
                                         @if (_orgsDto.Any())
                                         {
-                                            <MudDataGrid T="GetOrganisationsDto" Elevation="1" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_orgsDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter"
+                                            <MudDataGrid T="GetOrganisationsDto" Elevation="1" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_orgsDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_organisationQuickFilter"
                                             Hideable="false">
                                                 <ToolBarContent>
                                                     <MudText id="dasboard-count-title" Color="Color.Secondary"><b>@_orgsDto.Count() Organisation(s)</b></MudText>
@@ -129,7 +143,7 @@
                                                     <TemplateColumn Title="Action" Sortable="false" Filterable="false">
                                                         <CellTemplate Context="ctx">
                                                             <MudIconButton Icon="@Icons.Material.Filled.Edit" Variant="Variant.Outlined" OnClick="@(async () => await ActionUpdateOrganisation(ctx.Item))" Color="Color.Primary" Size="Size.Small" Ripple="true" />
-                                                           
+
                                                             <MudIconButton Icon="@Icons.Material.Filled.DeleteSweep" Variant="Variant.Filled" OnClick="@(async () => await ActioRemoveOrganisation(ctx.Item._id))" Color="Color.Error" Size="Size.Small" Ripple="true" />
                                                         </CellTemplate>
                                                     </TemplateColumn>
@@ -163,14 +177,128 @@
 
                             </MudGrid>
 
-
                         </MudTabPanel>
 
 
 
                         <MudTabPanel Text="Event Types">
 
+                            <MudGrid Spacing="10">
 
+                                <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
+
+                                    <MudPaper Class="pa-10">
+
+                                        <MudText Typo="Typo.body1" Style="font-weight:bold">Create Event Type</MudText>
+                                        <br />
+
+                                        <EditForm Model="@eventTypeModel" OnValidSubmit="ActionEventTypes">
+                                            <DataAnnotationsValidator />
+
+                                            <MudTextField InputType="InputType.Text" Label="Name" Margin="Margin.Dense" HelperText="Enter event type name" @bind-Value="eventTypeModel.name" For="@(() => eventTypeModel.name)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+
+                                            <MudButton ButtonType="ButtonType.Submit" Disabled="@_processing" Style="background:#56375C" Variant="Variant.Filled" Color="Color.Primary" Class="mt-2">
+                                                @if (_processing)
+                                                {
+                                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                                    <MudText Class="ms-2">Processing</MudText>
+                                                }
+                                                else
+                                                {
+                                                    if (isEventTypeUpdate)
+                                                    {
+                                                        <MudText>Update</MudText>
+                                                    }
+                                                    else
+                                                    {
+                                                        <MudText>Create</MudText>
+                                                    }
+                                                }
+                                            </MudButton>
+                                        </EditForm>
+
+                                    </MudPaper>
+
+
+                                </MudItem>
+
+                                <MudItem xs="12" sm="12" md="12" lg="9" xl="9" xxl="9">
+
+                                    @if (_processing)
+                                    {
+                                        <MudSkeleton Height="42px;" />
+                                        <MudSkeleton Height="42px;" />
+                                        <MudSkeleton Height="42px;" />
+                                    }
+                                    else
+                                    {
+                                        @if (_eventTypesDto.Any())
+                                        {
+                                            <MudDataGrid T="GetEventTypesDto" Elevation="1" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_eventTypesDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_eventTypesQuickFilter"
+                                            Hideable="false">
+                                                <ToolBarContent>
+                                                    <MudText id="dasboard-count-title" Color="Color.Secondary"><b>@_eventTypesDto.Count() Event type(s)</b></MudText>
+                                                    <MudSpacer />
+                                                    <MudTextField @bind-Value="_organisationSearchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                                                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                                </ToolBarContent>
+                                                <Columns>
+                                                    <PropertyColumn Property="x => x.name" Title="Event type name" Resizable="true" Sortable="true" Filterable="true" />
+
+                                                    <TemplateColumn Title="Active" Sortable="false" Filterable="false">
+                                                        <CellTemplate Context="ctx">
+                                                            @if (ctx.Item.isActive.ToUpper() == "YES")
+                                                            {
+                                                                <MudChip T="string" Variant="Variant.Text" Color="Color.Success"><b>Yes</b></MudChip>
+                                                                <MudIconButton Icon="@Icons.Material.Filled.ToggleOn" aria-label="Deactivate" Color="Color.Success" OnClick="@(async () => await SwitchEvent(ctx.Item._id, "No"))" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary"><b>No</b></MudChip>
+                                                                <MudIconButton Icon="@Icons.Material.Filled.ToggleOff" aria-label="Activate" Color="Color.Secondary" OnClick="@(async () => await SwitchEvent(ctx.Item._id, "Yes"))" />
+                                                            }
+                                                        </CellTemplate>
+                                                    </TemplateColumn>
+
+
+                                                    <TemplateColumn Title="CreatedAt" Sortable="false" Filterable="false">
+                                                        <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.createdAt).ToString("MMMM dd, yyyy") </CellTemplate>
+                                                    </TemplateColumn>
+
+                                                    <TemplateColumn Title="Action" Sortable="false" Filterable="false">
+                                                        <CellTemplate Context="ctx">
+                                                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Variant="Variant.Outlined" OnClick="@(async () => await ActionUpdateEvenTypes(ctx.Item))" Color="Color.Primary" Size="Size.Small" Ripple="true" />
+
+                                                            <MudIconButton Icon="@Icons.Material.Filled.DeleteSweep" Variant="Variant.Filled" OnClick="@(async () => await ActioRemoveEventTypes(ctx.Item._id))" Color="Color.Error" Size="Size.Small" Ripple="true" />
+                                                        </CellTemplate>
+                                                    </TemplateColumn>
+
+                                                </Columns>
+                                                <PagerContent>
+                                                    <MudDataGridPager T="GetEventTypesDto" />
+                                                </PagerContent>
+                                            </MudDataGrid>
+                                        }
+                                        else
+                                        {
+                                            <div style="text-align:center;">
+
+                                                <br /><br />
+                                                <br /><br />
+
+                                                <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="70" Class="rounded-lg" />
+                                                <br />
+                                                <div>  <b>No organisation yet!</b></div>
+                                                <br>
+                                                <MudText Typo="Typo.caption"> When organisation(s) are created, you will see them here.</MudText>
+                                            </div>
+                                        }
+                                    }
+
+
+                                </MudItem>
+
+                            </MudGrid>
 
                         </MudTabPanel>
 
@@ -205,14 +333,21 @@
 
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
     [Inject] IOrganizationService _organizationService { get; set; }
+    [Inject] IEventTypeService _eventTypeService { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
     [SupplyParameterFromForm] public CreateOrganizationDto? organisationModel { get; set; }
+    [SupplyParameterFromForm] public CreateEentTypesDto? eventTypeModel { get; set; }
 
 
     AuthUser authUser = new AuthUser();
     IEnumerable<GetOrganisationsDto> _orgsDto = new List<GetOrganisationsDto>();
+    IEnumerable<GetEventTypesDto> _eventTypesDto = new List<GetEventTypesDto>();
+
+
     private MudMessageBox organisationActionMessageBox { get; set; }
+    private MudMessageBox eventTypeActionMessageBox { get; set; }
+
     private string userAction { get; set; }
 
     private string fullname { get; set; }
@@ -220,14 +355,19 @@
 
     private bool _processing { get; set; }
     private bool isOrganisationUpdate { get; set; } = false;
+    private bool isEventTypeUpdate { get; set; } = false;
+
     private string organisationId { get; set; } = string.Empty;
+    private string eventTypeId { get; set; } = string.Empty;
 
     private string _organisationSearchString;
+    private string _eventTypeSearchString;
 
 
     protected async override void OnInitialized()
     {
         organisationModel = new CreateOrganizationDto();
+        eventTypeModel = new CreateEentTypesDto();
 
         _processing = true;
         var state = await _authStateProvider.GetAuthenticationStateAsync();
@@ -243,15 +383,18 @@
             fullname = auth.SentenceCaseFullName;
 
             await GetOrganisation();
+            await GetEventTypes();
         }
         _processing = false;
         StateHasChanged();
-
     }
+
+
+
 
     #region Organisation Set up
 
-    private Func<GetOrganisationsDto, bool> _quickFilter => x =>
+    private Func<GetOrganisationsDto, bool> _organisationQuickFilter => x =>
        {
            if (string.IsNullOrWhiteSpace(_organisationSearchString))
                return true;
@@ -263,8 +406,8 @@
     private async Task GetOrganisation()
     {
         var res = await _organizationService.GetOrganizations();
-        var orgs = res.result.data ?? new List<GetOrganisationsDto>();
-        _orgsDto = orgs;
+        var data = res.result.data ?? new List<GetOrganisationsDto>();
+        _orgsDto = data;
     }
 
 
@@ -358,6 +501,143 @@
     #endregion
 
 
+
+
+
+    #region Event Types Set up
+
+
+    private async Task ResetEventTypes()
+    {
+        await GetEventTypes();
+        eventTypeModel = new  CreateEentTypesDto();
+        userAction = string.Empty;
+        eventTypeId = string.Empty;
+        isEventTypeUpdate = false;
+    }
+
+
+    private async Task GetEventTypes()
+    {
+        var res = await _eventTypeService.GetEventTypes();
+        var data = res.result.data ?? new List<GetEventTypesDto>();
+        _eventTypesDto = data;
+    }
+
+
+    private Func<GetEventTypesDto, bool> _eventTypesQuickFilter => x =>
+      {
+          if (string.IsNullOrWhiteSpace(_eventTypeSearchString))
+              return true;
+
+          return x.name.Contains(_eventTypeSearchString, StringComparison.OrdinalIgnoreCase);
+      };
+
+
+    private async Task ActionUpdateEvenTypes(GetEventTypesDto model)
+    {
+        isEventTypeUpdate = true;
+        eventTypeId = model._id;
+        eventTypeModel = new CreateEentTypesDto()
+            {
+                name = model.name,
+            };
+        StateHasChanged();
+    }
+
+
+
+    private async Task ActionEventTypes()
+    {
+        if (!isEventTypeUpdate)
+        {
+            userAction = "Create";
+
+            bool? result = await eventTypeActionMessageBox.ShowAsync();
+            if (result == true)
+            {
+                var res = await _eventTypeService.CreateEventTypes(eventTypeModel);
+                if (res.result != null && res.result.code == ResponseCodes.ResponseCodeCreated)
+                {
+                    await ResetEventTypes();
+                    _snackbar.Add(res.result.message, Severity.Success);
+                }
+                else
+                {
+                    _snackbar.Add(res.result.message, Severity.Error);
+                }
+            }
+        }
+        else
+        {
+            userAction = "Update";
+            bool? result = await eventTypeActionMessageBox.ShowAsync();
+            if (result == true)
+            {
+                var res = await _eventTypeService.UpdateEventTypes(eventTypeId, eventTypeModel);
+                if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
+                {
+                    await ResetEventTypes();
+                    _snackbar.Add(res.result.message, Severity.Success);
+                }
+                else
+                {
+                    _snackbar.Add(res.result.message, Severity.Error);
+                }
+            }
+        }
+    }
+
+
+
+    private async Task ActioRemoveEventTypes(string id)
+    {
+        userAction = "Remove";
+
+        bool? result = await eventTypeActionMessageBox.ShowAsync();
+        if (result == true)
+        {
+            var res = await _eventTypeService.RemoveEventTypes(id);
+            if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
+            {
+                await ResetEventTypes();
+                _snackbar.Add(res.result.message, Severity.Success);
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+    }
+
+
+    private async Task SwitchEvent(string id, string switching)
+    {
+        userAction = "Switch";
+
+        bool? result = await eventTypeActionMessageBox.ShowAsync();
+        if (result == true)
+        {
+            var model = new SwitchEventTypeDto()
+                {
+                    isActive = switching
+                };
+
+            var res = await _eventTypeService.SwitchEventTypes(id, model);
+            if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
+            {
+                await ResetEventTypes();
+                _snackbar.Add(res.result.message, Severity.Success);
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+    }
+
+
+    #endregion
 
 
 

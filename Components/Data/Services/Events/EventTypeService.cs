@@ -49,7 +49,7 @@ namespace ivs_ui.Components.Data.Services.Events
             try
             {
                 var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"create-event-type", Method.Post, model, headers);
+                var response = await _webService.Call(ApiUrl, $"create-event-types", Method.Post, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeCreated)
@@ -120,6 +120,7 @@ namespace ivs_ui.Components.Data.Services.Events
             }
         }
 
+
         public async Task<ResponseObject> RemoveEventTypes(string id)
         {
             try
@@ -138,7 +139,7 @@ namespace ivs_ui.Components.Data.Services.Events
                 {
                     result = new ResponseContents()
                     {
-                        message = "Error! Something went wrong trying to switch event type, please try again later.",
+                        message = "Error! Something went wrong trying to remove event type, please try again later.",
                     }
                 };
             }

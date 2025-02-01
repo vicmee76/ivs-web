@@ -8,6 +8,6 @@ namespace ivs.Domain.Models.Dtos.Events
 {
     public class SwitchEventTypeDto
     {
-        public bool IsActive { get; set; }
+        public string isActive { get; set; }
     }
 }
