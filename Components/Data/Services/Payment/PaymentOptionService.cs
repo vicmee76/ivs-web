@@ -6,6 +6,7 @@ using ivs.Domain.Interfaces.Payment;
 using ivs.Domain.Models.Dtos.Payment;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Reflection;
 
 namespace ivs_ui.Components.Data.Services.Payment
 {
@@ -37,6 +38,70 @@ namespace ivs_ui.Components.Data.Services.Payment
                     result = new ResponseContents()
                     {
                         message = "Error! Something went wrong trying to get all payment options, please try again later",
+                    }
+                };
+            }
+        }
+
+        public async Task<ResponseObject> CreatePaymentOptions(CreatePaymentOptionDto model)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUrl, "create-payment-option", Method.Post, model, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to create a payment options, please try again later",
+                    }
+                };
+            }
+        }
+
+        public async Task<ResponseObject> UpdatePaymentOptions(string id, CreatePaymentOptionDto model)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUrl, $"update-payment-options/{id}", Method.Put, model, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to update a payment options, please try again later",
+                    }
+                };
+            }
+        }
+
+
+        public async Task<ResponseObject> RemovePaymentOptions(string id)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUrl, $"remove-payment-options/{id}", Method.Delete, null, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to rremove this payment options, please try again later",
                     }
                 };
             }
