@@ -23,12 +23,12 @@ namespace ivs.Domain.Models.Dtos.Payment
 
         [Required(ErrorMessage = "Amount percentage is required.")]
         [Range(1, 10, ErrorMessage = "percentage must be between 1 and 10 %.")]
-        public double metaAmountPercentage { get; set; }
+        public decimal metaAmountPercentage { get; set; }
 
         [Required(ErrorMessage = "Max user is required.")]
-        public int? maxUsers { get; set; } = 50000;
+        public int maxUsers { get; set; } = 50000;
 
         [Required(ErrorMessage = "Cap amount is required.")]
-        public int? capAmount { get; set; } = 2000;
+        public int capAmount { get; set; } = 2000;
     }
 }
