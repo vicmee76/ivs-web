@@ -335,7 +335,7 @@
 
                                             <MudNumericField HideSpinButtons="true" HelperText="Enter amount" Margin="Margin.Dense" @bind-Value="paymentOptionModel.amount" For="@(() => paymentOptionModel.amount)" Required="true" ErrorText="Amount is required" Label="Amount" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Step=".2M" />
 
-                                            <MudNumericField HelperText="Enter percentage" Margin="Margin.Dense" @bind-Value="paymentOptionModel.metaAmountPercentage" For="@(() => paymentOptionModel.metaAmountPercentage)" Label="Percentage" Variant="Variant.Outlined" Min="1" Max="10" HelperTextOnFocus="true" Clearable="true" />
+                                            <MudNumericField HelperText="Enter percentage" Margin="Margin.Dense" @bind-Value="paymentOptionModel.metaAmountPercentage" For="@(() => paymentOptionModel.metaAmountPercentage)" Label="Percentage" Variant="Variant.Outlined" Min="1" Max="10" HelperTextOnFocus="true" Clearable="true" Step=".1M" />
 
                                             <MudNumericField HelperText="Enter maximum users" Margin="Margin.Dense" @bind-Value="paymentOptionModel.maxUsers" For="@(() => paymentOptionModel.maxUsers)" Label="Max User" Variant="Variant.Outlined" Min="1" Max="@int.MaxValue" HelperTextOnFocus="true" Clearable="true" />
 
@@ -408,12 +408,15 @@
                                                             <MudText>@ctx.Item.metaAmountPercentage.numberDecimal%</MudText>
                                                         </CellTemplate>
                                                     </TemplateColumn>
-
-                                                    <PropertyColumn Property="x => x.maxUsers" Title="Max. User" Resizable="true" Sortable="false" Filterable="false" />
-
+                                                    
+                                                    <TemplateColumn Title="Max Users" Sortable="true" Filterable="false">
+                                                        <CellTemplate Context="ctx">
+                                                            <MudText>@ctx.Item.maxUsers?.ToString("N0")</MudText>
+                                                        </CellTemplate>
+                                                    </TemplateColumn>
+                                                    
                                                     <TemplateColumn Title="Cap Amount" Sortable="true" Filterable="false">
                                                         <CellTemplate Context="ctx">
-
                                                             @{
                                                                 var capAmt = Convert.ToDecimal(ctx.Item.capAmount).ToString("C");
                                                             }
@@ -839,9 +842,9 @@
             {
                 name = model.name,
                 description = model.description,
-                maxUsers = model.maxUsers,
-                metaAmountPercentage = Convert.ToDouble(model.metaAmountPercentage.numberDecimal),
-                capAmount = model.capAmount,
+                maxUsers = (int)model.maxUsers,
+                metaAmountPercentage = Convert.ToDecimal(model.metaAmountPercentage.numberDecimal),
+                capAmount = (int)model.capAmount,
                 amount = Convert.ToDecimal(model.amount.numberDecimal)
             };
         StateHasChanged();
