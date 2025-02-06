@@ -10,6 +10,7 @@ public interface IEventService
     public Task<ResponseObject> CreateEvent(CreateEventVM model);
     public Task<ResponseObject> FetchEvent(Dictionary<string, string>? queryParameter = null);
     public Task<ResponseObject> GetEventByUser(string userid);
+    public Task<ResponseObject> GetAllEvents(Dictionary<string, string>? queryParameter);
     public Task<ResponseObject> GetEventDetails(string id);
     public Task<ResponseObject> GetEventMetaData(string id);
     public Task<ResponseObject> UpdateEvent(string id, CreateEventVM model);

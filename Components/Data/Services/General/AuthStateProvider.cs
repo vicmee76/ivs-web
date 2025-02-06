@@ -13,7 +13,7 @@ namespace ivs_ui.Components.Data.Services.General
         private readonly ILocalStorageService _localStorageService;
         private readonly IAccountService _accountService;
         private readonly HttpClient _http;
-        private ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
+        private ClaimsPrincipal _anonymous = new(new ClaimsIdentity());
 
         public AuthStateProvider(HttpClient http, ILocalStorageService localStorageService, IAccountService accountService)
         {

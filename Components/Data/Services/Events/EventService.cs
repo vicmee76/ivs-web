@@ -139,6 +139,32 @@ namespace ivs_ui.Components.Data.Services.Events
             }
         }
 
+        
+        public async Task<ResponseObject> GetAllEvents(Dictionary<string, string>? queryParameter)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUrl, $"all-events", Method.Get, null, headers, queryParameter);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+                res.result.data = JsonConvert.DeserializeObject<GetAllEventsDto>(content.data.ToString());
+                return res;
+            }
+            catch (Exception e)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to get all events, please try again later",
+                    }
+                };
+            }
+        }
+
 
         public async Task<ResponseObject> GetEventDetails(string id)
         {
