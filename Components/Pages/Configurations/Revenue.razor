@@ -65,7 +65,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <h1>@ivsNetRevenueSum.ToString("C")</h1>
+                                                    <h3>@ivsNetRevenueSum.ToString("C")</h3>
                                                 }
 
                                             </div>
@@ -122,7 +122,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <h1>@ivsVatSum.ToString("C")</h1>
+                                                    <h3>@ivsVatSum.ToString("C")</h3>
                                                 }
 
                                             </div>
@@ -243,11 +243,12 @@
 
                                           @if (context.Item.open)
                                           {
+                                              <br/>
                                               <MudText> <b>@context.Item.paymentGateWayTransactionRef</b></MudText>
                                               
                                               <br/>
                                               
-                                                <MudTable Items="@context.Item.attendees" Context="AttendanceContext" Elevation="0" Dense="false" Hover="false" Bordered="true" Striped="false">
+                                                <MudTable Items="@context.Item.attendees" Context="AttendanceContext" Elevation="0" Dense="false" Hover="false" Bordered="false" Striped="false">
                                                     <HeaderContent>
                                                         <MudTh>First Name</MudTh>
                                                         <MudTh>Last Name</MudTh>
@@ -268,6 +269,7 @@
                                                     
                                               </MudTable>
 
+                                              <br/>
                                           }
                                         </ChildRowContent>
                                         

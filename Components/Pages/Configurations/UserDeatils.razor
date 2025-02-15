@@ -55,7 +55,7 @@
                                             <MudText Typo="Typo.body2" Color="Color.Secondary"><b>Events List</b></MudText>
                                             <MudSpacer />
                                             <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
-                                            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                                         </ToolBarContent>
                                         <Columns>
 
@@ -186,7 +186,7 @@
 
                                                     <MudSpacer />
                                                     <MudTextField T="string" ValueChanged="@(s=>OnSalesSearch(s))" Placeholder="Search with code, name, email, phone" Adornment="Adornment.Start"
-                                                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                                                  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
 
                                                 </ToolBarContent>
                                                 <Columns>
@@ -307,7 +307,7 @@
 
                                     <MudSpacer />
                                     <MudTextField T="string" ValueChanged="@(s=>OnSettlementSearch(s))" Placeholder="Search with status, account name and number" Adornment="Adornment.Start"
-                                    AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                                  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                                 </ToolBarContent>
                                 <Columns>
 
@@ -369,15 +369,11 @@
                                     <MudDataGridPager T="GetSettlementData" />
                                 </PagerContent>
                             </MudDataGrid>
-
-
+                            
                         </MudTabPanel>
 
-
-
                     </MudTabs>
-
-
+                    
                 </MudCardContent>
             </MudCard>
 
