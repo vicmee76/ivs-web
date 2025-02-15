@@ -1,12 +1,12 @@
 @page "/configuration/revenue"
 
 @{
-   var nigeriaCulture = new CultureInfo("en-NG")
+    var nigeriaCulture = new CultureInfo("en-NG")
    {
       NumberFormat ={ CurrencySymbol = "₦"}
    };
-   Thread.CurrentThread.CurrentCulture = nigeriaCulture;
-   Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
+    Thread.CurrentThread.CurrentCulture = nigeriaCulture;
+    Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
 }
 
 <PageTitle>Iv's - Revenue</PageTitle>
@@ -16,311 +16,346 @@
 
 <AuthorizeView Roles="Admin">
 
-   <NotAuthorized>
-      No Access
-   </NotAuthorized>
+    <NotAuthorized>
+        No Access
+    </NotAuthorized>
 
-   <Authorized Context="cntx">
+    <Authorized Context="cntx">
 
-      <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+        <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
 
-         <MudPaper Elevation="0">
-            <MudToolBar>
-               <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
-            </MudToolBar>
-         </MudPaper>
-
-
-         <MudCard Elevation="0" Style="padding:5px">
-            <MudCardHeader>
-               <CardHeaderContent>
-                  <MudText id="discovery-title-mid">Revenue</MudText>
-               </CardHeaderContent>
-            </MudCardHeader>
-            <MudCardContent>
-
-               @if (_processing)
-               {
-                  <MudSkeleton Height="42px" Width="200px" />
-                  <MudSkeleton Height="42px" Width="500px" />
-                  <MudSkeleton Height="42px" Width="800px" />
-               }
-               else
-               {
-
-                  <MudCard Elevation="0">
-
-                     <MudCardContent>
-                        
-                        <MudGrid Spacing="2">
-                           <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
-                              <MudPaper Class="pa-10" Outlined="true" Style="background-color:#fff6ff">
-                                 <div style="line-height:40px">
-
-                                    <div style="font-size:17px;">ivs Revenue</div>
-
-                                    @if (_processing)
-                                    {
-                                       <MudSkeleton Height="22px;"/>
-                                    }
-                                    else
-                                    {
-                                       <h1>@totalRevenue.ToString("C")</h1>
-                                    }
-
-                                 </div>
-                              </MudPaper>
-                           </MudItem>
-
-                           <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
-                              <MudPaper Class="pa-10" Outlined="true" Style="background-color:#e8ffed">
-                                 <div style="line-height:40px">
-
-                                    <div style="font-size:17px;">Total Sales</div>
-
-                                    @if (_processing)
-                                    {
-                                       <MudSkeleton Height="22px;"/>
-                                    }
-                                    else
-                                    {
-                                       <h1>@totalSales.ToString("C")</h1>
-                                    }
-
-                                 </div>
-                              </MudPaper>
-                           </MudItem>
-
-                           <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
-                              <MudPaper Class="pa-10" Outlined="true" Style="background-color:#fbecdc">
-                                 <div style="line-height:40px">
-
-                                    <div style="font-size:17px;">Total Settlement</div>
-
-                                    @if (_processing)
-                                    {
-                                       <MudSkeleton Height="22px;"/>
-                                    }
-                                    else
-                                    {
-                                       <h1>@totalSettlement.ToString("C")</h1>
-                                    }
-
-                                 </div>
-                              </MudPaper>
-                           </MudItem>
-
-                           <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
-                              <MudPaper Class="pa-10" Outlined="true" Style="background-color:#F4F3FF">
-                                 <div style="line-height:40px">
-
-                                    <div style="font-size:17px;">Ticket Purchased</div>
-
-                                    @if (_processing)
-                                    {
-                                       <MudSkeleton Height="22px;"/>
-                                    }
-                                    else
-                                    {
-                                       <h1>@totalSalesTicketQuantity</h1>
-                                    }
-
-                                 </div>
-                              </MudPaper>
-                           </MudItem>
-
-                        </MudGrid>
-
-                        <br/><br/>
-
-                        <div>
-
-                           <MudDataGrid @ref="salesDataGrid" T="GetSalesDataDto" Dense="false" RowsPerPage="10" ServerData="GetSalesServerReload" Filterable="false" Hover="true" Loading="@_processing" LoadingProgressColor="Color.Secondary" Striped="true" Bordered="true">
-                              <ToolBarContent>
-
-                                 <MudSpacer/>
-                                 <MudTextField T="string" ValueChanged="@(s => OnSalesSearch(s))" Placeholder="Search with code, name, email, phone" Adornment="Adornment.Start"
-                                               AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-
-                              </ToolBarContent>
-                              <Columns>
-
-                                 <TemplateColumn Title="Event Name" Sortable="false" Filterable="false">
-                                    <CellTemplate Context="ctx">
-                                       <small>@ctx.Item.eventDetails.eventName</small>
-                                    </CellTemplate>
-                                 </TemplateColumn>
-
-                                 <TemplateColumn Title="Contact" Sortable="false" Filterable="false">
-                                    <CellTemplate Context="ctx">
-                                       <small>@ctx.Item.firstName - @ctx.Item.email - @ctx.Item.phoneNumber</small>
-                                    </CellTemplate>
-                                 </TemplateColumn>
-
-                                 <TemplateColumn Title="TransRef" Sortable="false" Filterable="true">
-                                    <CellTemplate Context="ctx">
-                                       @if (ctx.Item.paymentDetails != null)
-                                       {
-                                          @ctx.Item.paymentDetails.paymentGateWayTransactionRef
-                                       }
-                                    </CellTemplate>
-                                 </TemplateColumn>
-                                 
-                                 <TemplateColumn Title="Status" Sortable="true" Filterable="true">
-                                    <CellTemplate Context="ctx">
-                                       @if (ctx.Item.paymentDetails != null)
-                                       {
-                                          @if (ctx.Item.paymentDetails.paymentGateWayTransactionStatus.Equals("successful", StringComparison.OrdinalIgnoreCase))
-                                          {
-                                             <MudChip T="string" Variant="Variant.Text" Color="Color.Success">@ctx.Item.paymentDetails.paymentGateWayTransactionStatus</MudChip>
-                                          }
-                                          else
-                                          {
-                                             <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary">@ctx.Item.paymentDetails.paymentGateWayTransactionStatus</MudChip>
-                                          }
-                                       }
-                                    </CellTemplate>
-                                 </TemplateColumn>
-
-                                 <TemplateColumn Title="Status" Sortable="false" Filterable="true">
-                                    <CellTemplate Context="ctx">
-                                       @if (ctx.Item.paymentDetails != null)
-                                       {
-                                          @Convert.ToDateTime(ctx.Item.paymentDetails.paymentGateWayTransactionDate).ToString("dd MMM yyyy, HH:mm tt")
-                                       }
-                                    </CellTemplate>
-                                 </TemplateColumn>
-
-                                 <TemplateColumn Title="Ticket" Sortable="false" Filterable="false">
-                                    <CellTemplate Context="ctx">
-                                       <small>@ctx.Item.ticketDetails.FirstOrDefault().ticketKind (@ctx.Item.ticketQuantity)</small>
-                                    </CellTemplate>
-                                 </TemplateColumn>
-
-                                 <TemplateColumn Title="Revenue" Sortable="false" Filterable="false">
-                                    <CellTemplate Context="ctx">
-                                       @{
-                                          var amount = Convert.ToDecimal(ctx.Item.totalTicketServiceFee);
-                                       }
-                                       <b> @amount.ToString("C")</b>
-                                    </CellTemplate>
-                                 </TemplateColumn>
-
-                                 <TemplateColumn Title="Event Date" Sortable="false" Filterable="false">
-                                    <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.ticketDetails.FirstOrDefault().startDateAndTime).ToString("dd MMM yyyy") </CellTemplate>
-                                 </TemplateColumn>
-
-                              </Columns>
-                              <PagerContent>
-                                 <MudDataGridPager T="GetSalesDataDto"/>
-                              </PagerContent>
-                           </MudDataGrid>
-
-                        </div>
-
-                     </MudCardContent>
-                     <MudCardActions>
-                        <MudButton Variant="Variant.Text" Color="Color.Secondary" Style="font-weight:bold"></MudButton>
-                     </MudCardActions>
-                  </MudCard>
-
-               }
-
-            </MudCardContent>
-         </MudCard>
+            <MudPaper Elevation="0">
+                <MudToolBar>
+                    <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+                </MudToolBar>
+            </MudPaper>
 
 
-      </MudContainer>
-      
+            <MudCard Elevation="0" Style="padding:5px">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText id="discovery-title-mid">Revenue</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
 
-   </Authorized>
+                    @if (_processing)
+                    {
+                        <MudSkeleton Height="42px" Width="200px" />
+                        <MudSkeleton Height="42px" Width="500px" />
+                        <MudSkeleton Height="42px" Width="800px" />
+                    }
+                    else
+                    {
+
+                        <MudCard Elevation="0">
+
+                            <MudCardContent>
+
+                                <MudGrid Spacing="6">
+                                    <MudItem xs="12" sm="12" md="12" lg="2" xl="2" xxl="2">
+                                        <MudPaper Class="pa-10" Outlined="true" Style="background-color:#fff6ff">
+                                            <div style="line-height:40px">
+
+                                                <div style="font-size:17px;">ivs Revenue</div>
+
+                                                @if (_processing)
+                                                {
+                                                    <MudSkeleton Height="22px;"/>
+                                                }
+                                                else
+                                                {
+                                                    <h1>@ivsNetRevenueSum.ToString("C")</h1>
+                                                }
+
+                                            </div>
+                                        </MudPaper>
+                                    </MudItem>
+
+                                    <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
+                                        <MudPaper Class="pa-10" Outlined="true" Style="background-color:#e8ffed">
+                                            <div style="line-height:40px">
+
+                                                <div style="font-size:17px;">Total Sales</div>
+
+                                                @if (_processing)
+                                                {
+                                                    <MudSkeleton Height="22px;"/>
+                                                }
+                                                else
+                                                {
+                                                    <h1>@totalTicketFeeSum.ToString("C")</h1>
+                                                }
+
+                                            </div>
+                                        </MudPaper>
+                                    </MudItem>
+
+                                    <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
+                                        <MudPaper Class="pa-10" Outlined="true" Style="background-color:#fbecdc">
+                                            <div style="line-height:40px">
+
+                                                <div style="font-size:17px;">Total Settlement</div>
+
+                                                @if (_processing)
+                                                {
+                                                    <MudSkeleton Height="22px;"/>
+                                                }
+                                                else
+                                                {
+                                                    <h1>@totalServiceFeeAfterDeductionSum.ToString("C")</h1>
+                                                }
+
+                                            </div>
+                                        </MudPaper>
+                                    </MudItem>
+
+                                    <MudItem xs="12" sm="12" md="12" lg="2" xl="2" xxl="2">
+                                        <MudPaper Class="pa-10" Outlined="true" Style="background-color:#F4F3FF">
+                                            <div style="line-height:40px">
+
+                                                <div style="font-size:17px;">Total Vat</div>
+
+                                                @if (_processing)
+                                                {
+                                                    <MudSkeleton Height="22px;" />
+                                                }
+                                                else
+                                                {
+                                                    <h1>@ivsVatSum.ToString("C")</h1>
+                                                }
+
+                                            </div>
+                                        </MudPaper>
+                                    </MudItem>
+
+
+                                    <MudItem xs="12" sm="12" md="12" lg="2" xl="2" xxl="2">
+                                        <MudPaper Class="pa-10" Outlined="true" Style="background-color:#F4F3FF">
+                                            <div style="line-height:40px">
+
+                                                <div style="font-size:17px;">Ticket Purchased</div>
+
+                                                @if (_processing)
+                                                {
+                                                    <MudSkeleton Height="22px;" />
+                                                }
+                                                else
+                                                {
+                                                    <h1>@totalOrderQuantitySum</h1>
+                                                }
+
+                                            </div>
+                                        </MudPaper>
+                                    </MudItem>
+
+                                </MudGrid>
+
+                              
+
+                                <br/><br/><br />
+
+                                <div>
+
+                                    <MudDataGrid @ref="revenueDataGrid" T="Order" Dense="false" RowsPerPage="10" ServerData="GetRevenueServerReload" Filterable="false" Hover="true" Loading="@_processing" LoadingProgressColor="Color.Secondary" Striped="true" Bordered="true">
+                                        <ToolBarContent>
+
+                                            <MudSpacer/>
+                                            <MudTextField T="string" ValueChanged="@(s => OnSalesSearch(s))" Placeholder="Search with code, name, email, phone" Adornment="Adornment.Start"
+                                            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+
+                                        </ToolBarContent>
+                                        <Columns>
+
+                                            <TemplateColumn Title="TransID" Sortable="false" Filterable="false">
+                                                <CellTemplate Context="ctx">
+                                                    <span>@ctx.Item.paymentGateWayTransactionId</span>
+                                                </CellTemplate>
+                                            </TemplateColumn>
+
+                                            <TemplateColumn Title="TransRef" Sortable="false" Filterable="false">
+                                                <CellTemplate Context="ctx">
+                                                    <small>@ctx.Item.paymentGateWayTransactionRef</small>
+                                                </CellTemplate>
+                                            </TemplateColumn>
+
+                                            <TemplateColumn Title="Status" Sortable="true" Filterable="true">
+                                                <CellTemplate Context="ctx">
+                                                        @if (ctx.Item.paymentGateWayTransactionStatus.Equals("successful", StringComparison.OrdinalIgnoreCase))
+                                                        {
+                                                            <MudChip T="string" Variant="Variant.Text" Color="Color.Success">@ctx.Item.paymentGateWayTransactionStatus</MudChip>
+                                                        }
+                                                        else
+                                                        {
+                                                            <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary">@ctx.Item.paymentGateWayTransactionStatus</MudChip>
+                                                        }
+                                                </CellTemplate>
+                                            </TemplateColumn>
+
+                                            <PropertyColumn Resizable="true" Property="x => x.totalOrderQuantity" Title="Qty" Sortable="true" Filterable="true" />
+
+                                            <TemplateColumn Title="TicketFee" Sortable="true" Filterable="false">
+                                                <CellTemplate Context="ctx">
+                                                    @ctx.Item.totalTicketFee.ToString("C")
+                                                </CellTemplate>
+                                            </TemplateColumn>
+                                           
+                                            <TemplateColumn Title="ServiceFee" Sortable="true" Filterable="false">
+                                                <CellTemplate Context="ctx">
+                                                    @ctx.Item.totalServiceFee.ToString("C")
+                                                </CellTemplate>
+                                            </TemplateColumn> 
+                                            
+                                            <TemplateColumn Title="GatewayFee" Sortable="true" Filterable="false">
+                                                <CellTemplate Context="ctx">
+                                                    @ctx.Item.gatewayFee.ToString("C")
+                                                </CellTemplate>
+                                            </TemplateColumn>
+
+                                            <TemplateColumn Title="TotalFee" Sortable="true" Filterable="false">
+                                                <CellTemplate Context="ctx">
+                                                    @ctx.Item.totalFee.ToString("C")
+                                                </CellTemplate>
+                                            </TemplateColumn>
+
+                                            <TemplateColumn Title="GrossRevenue" Sortable="true" Filterable="false">
+                                                <CellTemplate Context="ctx">
+                                                    @ctx.Item.totalServiceFeeAfterDeduction.ToString("C")
+                                                </CellTemplate>
+                                            </TemplateColumn>
+
+
+                                            <TemplateColumn Title="Revenue" Sortable="true" Filterable="false">
+                                                <CellTemplate Context="ctx">
+                                                    @ctx.Item.ivsNetRevenue?.ToString("C")
+                                                </CellTemplate>
+                                            </TemplateColumn>
+
+
+                                            <TemplateColumn Title="Vat" Sortable="true" Filterable="false">
+                                                <CellTemplate Context="ctx">
+                                                    @ctx.Item.ivsVat?.ToString("C")
+                                                </CellTemplate>
+                                            </TemplateColumn>
+                                            
+                                            <TemplateColumn Title="TransDate" Sortable="true" Filterable="true">
+                                                <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.paymentGateWayTransactionDate).ToString("yyyy-MM-dd") </CellTemplate>
+                                            </TemplateColumn>
+
+                                        </Columns>
+                                        <PagerContent>
+                                            <MudDataGridPager T="Order" />
+                                        </PagerContent>
+                                    </MudDataGrid>
+
+                                </div>
+
+                            </MudCardContent>
+                            <MudCardActions>
+                                <MudButton Variant="Variant.Text" Color="Color.Secondary" Style="font-weight:bold"></MudButton>
+                            </MudCardActions>
+                        </MudCard>
+
+                    }
+
+                </MudCardContent>
+            </MudCard>
+
+
+        </MudContainer>
+
+
+    </Authorized>
 </AuthorizeView>
 
 @code {
-   
-   [Inject] IPaymentService _paymentService { get; set; }
-   
-   private readonly List<BreadcrumbItem> _items =
-   [
-      new("Configurations", href: "#", disabled: true),
+
+    [Inject] IPaymentService _paymentService { get; set; }
+
+    private readonly List<BreadcrumbItem> _items =
+    [
+       new("Configurations", href: "#", disabled: true),
       new("Revenue", href: null, disabled: false)
-   ];
-   
-   string salesSearchString = string.Empty;
-   private bool _processing { get; set; } = false;
-   private decimal totalRevenue { get; set; }
-   private decimal totalSales { get; set; }
-   private decimal totalSettlement { get; set; }
-   private int totalSalesTicketQuantity { get; set; }
-   MudDataGrid<GetSalesDataDto> salesDataGrid;
-   
-   
-   private Task OnSalesSearch(string text)
-   {
-      salesSearchString = text;
-      return salesDataGrid.ReloadServerData();
-   }
-   
-    private async Task<GridData<GetSalesDataDto>> GetSalesServerReload(GridState<GetSalesDataDto> state)
+    ];
+
+    string revenueSearchString = string.Empty;
+    private bool _processing { get; set; } = false;
+    private decimal ivsNetRevenueSum { get; set; }
+    private decimal totalServiceFeeSum { get; set; }
+    private decimal totalTicketFeeSum { get; set; }
+    private decimal gatewayFeeSum { get; set; }
+    private decimal ivsVatSum { get; set; }
+    private decimal totalServiceFeeAfterDeductionSum { get; set; }
+    private int totalOrderQuantitySum { get; set; }
+    private int totalItems { get; set; }
+    MudDataGrid<Order> revenueDataGrid;
+
+
+    private Task OnSalesSearch(string text)
     {
-       _processing = true;
+        revenueSearchString = text;
+        return revenueDataGrid.ReloadServerData();
+    }
+
+    private async Task<GridData<Order>> GetRevenueServerReload(GridState<Order> state)
+    {
+        _processing = true;
         var res = new ResponseObject();
 
         Dictionary<string, string> queryParameter = new Dictionary<string, string> { { "page", state.Page.ToString() }, { "limit", state.PageSize.ToString() } };
 
-        if (!string.IsNullOrWhiteSpace(salesSearchString))
-            queryParameter.Add("searchQuery", salesSearchString.ToLower());
+        if (!string.IsNullOrWhiteSpace(revenueSearchString))
+            queryParameter.Add("searchQuery", revenueSearchString.ToLower());
 
-        res = await _paymentService.GetUserSales(queryParameter);
+        res = await _paymentService.GetRevenue(queryParameter);
 
         if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
         {
-            var result = (GetSalesDto)res.result.data;
-            IEnumerable<GetSalesDataDto> data = (List<GetSalesDataDto>)result.paginatedResults;
-           
+            var result = (GetRevenueDataDto)res.result.data;
+            IEnumerable<Order> data = (List<Order>)result.result.FirstOrDefault().orders;
+
             data = data.Where(element =>
             {
-                if (string.IsNullOrWhiteSpace(salesSearchString))
+                if (string.IsNullOrWhiteSpace(revenueSearchString))
                     return true;
-                if (element.firstName.Contains(salesSearchString, StringComparison.OrdinalIgnoreCase))
+                if (element.paymentGateWayTransactionId.Contains(revenueSearchString, StringComparison.OrdinalIgnoreCase))
                     return true;
-                if (element.code.Contains(salesSearchString, StringComparison.OrdinalIgnoreCase))
-                    return true;
-                if (element.lastName.Contains(salesSearchString, StringComparison.OrdinalIgnoreCase))
-                    return true;
-                if ($"{element.firstName} {element.lastName} {element.phoneNumber}".Contains(salesSearchString))
+                if (element.paymentGateWayTransactionStatus.Contains(revenueSearchString, StringComparison.OrdinalIgnoreCase))
                     return true;
                 return false;
             }).ToArray();
 
-            var totalItems = result.totalCount;
-            totalRevenue = result.totalTicketServiceFeeSum;
-            totalSales = result.totalTicketSum;
-            totalSettlement = result.totalAmountSettled;
-            totalSalesTicketQuantity = result.totalTicketQuantity;
-          
+            ivsNetRevenueSum = result.result.FirstOrDefault().ivsNetRevenueSum;
+            totalServiceFeeSum = result.result.FirstOrDefault().totalServiceFeeSum;
+            totalServiceFeeAfterDeductionSum = result.result.FirstOrDefault().totalServiceFeeAfterDeductionSum;
+            totalTicketFeeSum = result.result.FirstOrDefault().totalTicketFeeSum;
+            gatewayFeeSum = result.result.FirstOrDefault().gatewayFeeSum;
+            ivsVatSum = result.result.FirstOrDefault().ivsVatSum;
+            totalOrderQuantitySum = result.result.FirstOrDefault().totalOrderQuantitySum;
+            totalItems = result.totalCount;
+
             var sortDefinition = state.SortDefinitions.FirstOrDefault();
 
             if (sortDefinition != null)
             {
                 switch (sortDefinition.SortBy)
                 {
-                    case nameof(GetSalesDataDto.firstName):
+                    case nameof(Order.paymentGateWayTransactionStatus):
                         data = data.OrderByDirection(
                             sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
-                            o => o.firstName
+                            o => o.paymentGateWayTransactionStatus
                         );
                         break;
-                    case nameof(GetSalesDataDto.lastName):
+                    case nameof(Order.paymentGateWayTransactionDate):
                         data = data.OrderByDirection(
                             sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
-                            o => o.lastName
+                            o => o.paymentGateWayTransactionDate
                         );
                         break;
-                    case nameof(GetSalesDataDto.phoneNumber):
+                    case nameof(Order.totalOrderQuantity):
                         data = data.OrderByDirection(
                             sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
-                            o => o.phoneNumber
+                            o => o.totalOrderQuantity
                         );
                         break;
                 }
@@ -330,7 +365,7 @@
 
             _processing = false;
             StateHasChanged();
-            return new GridData<GetSalesDataDto>
+            return new GridData<Order>
                 {
                     TotalItems = totalItems,
                     Items = pagedData
@@ -339,10 +374,10 @@
 
         _processing = false;
         StateHasChanged();
-        return new GridData<GetSalesDataDto>
+        return new GridData<Order>
         {
            TotalItems = 0,
-           Items = new List<GetSalesDataDto>()
+                Items = new List<Order>()
         };
     }
 
