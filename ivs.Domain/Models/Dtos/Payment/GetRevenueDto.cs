@@ -44,12 +44,14 @@ namespace ivs.Domain.Models.Dtos.Payment
         public decimal? ivsNetRevenue { get; set; }
         public decimal? ivsVat { get; set; }
         public bool isActive { get; set; }
+        public bool open { get; set; } = false;
         public List<Attendee> attendees { get; set; }
     }
 
     public class Attendee
     {
         public string _id { get; set; }
+        public string orderId { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
         public string email { get; set; }
