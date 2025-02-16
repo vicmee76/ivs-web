@@ -34,7 +34,7 @@ namespace ivs.Domain.Models.Dtos.Payment
         public string paymentGateWayTransactionRef { get; set; }
         public string paymentGateWayTransactionId { get; set; }
         public string paymentGateWayTransactionStatus { get; set; }
-        public DateTime paymentGateWayTransactionDate { get; set; }
+        public string paymentGateWayTransactionDate { get; set; }
         public int totalOrderQuantity { get; set; }
         public decimal totalServiceFee { get; set; }
         public decimal totalTicketFee { get; set; }
@@ -45,7 +45,7 @@ namespace ivs.Domain.Models.Dtos.Payment
         public decimal? ivsVat { get; set; }
         public bool isActive { get; set; }
         public bool open { get; set; } = false;
-        public List<Attendee> attendees { get; set; }
+        public List<Attendee>? attendees { get; set; }
     }
 
     public class Attendee
@@ -85,7 +85,7 @@ namespace ivs.Domain.Models.Dtos.Payment
 
     public class TimeDetails
     {
-        public DateTime startDateAndTime { get; set; }
+        public string startDateAndTime { get; set; }
     }
 
 }
