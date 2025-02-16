@@ -157,12 +157,14 @@
 
                                 <div>
 
-                                    <MudDataGrid @ref="revenueDataGrid" T="Order" Dense="false" RowsPerPage="10" ServerData="GetRevenueServerReload" Filterable="false" Hover="true" Loading="@_processing" LoadingProgressColor="Color.Secondary" Striped="true" Bordered="true">
+                                    <MudDataGrid @ref="revenueDataGrid" T="Order" Dense="false" RowsPerPage="10"  ServerData="GetRevenueServerReload" Filterable="false" Hover="true" Loading="@_processing" LoadingProgressColor="Color.Secondary" Striped="true" Bordered="true">
                                         <ToolBarContent>
+                                            
+                                            <MudIconButton Icon="@Icons.Material.Filled.ReplayCircleFilled" Color="Color.Secondary" Size="Size.Large" OnClick="@(() => OnReload())"></MudIconButton>
 
                                             <MudSpacer/>
-                                            <MudTextField T="string" ValueChanged="@(s => OnSalesSearch(s))" Placeholder="Search with code, name, email, phone" Adornment="Adornment.Start"
-                                            AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                            <MudTextField T="string" ValueChanged="@(s => OnSalesSearch(s))" Placeholder="Search with code, name, email, phone, tran id, tran ref " Adornment="Adornment.Start"
+                                                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
 
                                         </ToolBarContent>
                                         <Columns>
@@ -235,7 +237,12 @@
                                             </TemplateColumn>
 
                                             <TemplateColumn Title="TransDate" Sortable="true" Filterable="true">
-                                                <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.paymentGateWayTransactionDate).ToString("yyyy-MM-dd") </CellTemplate>
+                                                <CellTemplate Context="ctx">
+                                                    @if (!string.IsNullOrWhiteSpace(ctx.Item.paymentGateWayTransactionDate))
+                                                    {
+                                                        @Convert.ToDateTime(ctx.Item.paymentGateWayTransactionDate).ToString("yyyy-MM-dd h:mm:ss tt")
+                                                    }
+                                                </CellTemplate>
                                             </TemplateColumn>
 
                                         </Columns>
@@ -250,23 +257,24 @@
                                               
                                                 <MudTable Items="@context.Item.attendees" Context="AttendanceContext" Elevation="0" Dense="false" Hover="false" Bordered="false" Striped="false">
                                                     <HeaderContent>
+                                                        <MudTh>Code</MudTh>
                                                         <MudTh>First Name</MudTh>
                                                         <MudTh>Last Name</MudTh>
                                                         <MudTh>Email</MudTh>
                                                         <MudTh>Phone</MudTh>
                                                         <MudTh>Ticket</MudTh>
                                                         <MudTh>Ticket Amount</MudTh>
-                                                        <MudTh>Gross Revenue + Gateway fee</MudTh>
+
                                                     </HeaderContent>
 
                                                     <RowTemplate>
+                                                        <MudTd DataLabel="First Name"><small>@AttendanceContext.code</small></MudTd>
                                                         <MudTd DataLabel="First Name"><small>@AttendanceContext.firstName</small></MudTd>
                                                         <MudTd DataLabel="Last Name"><small>@AttendanceContext.lastName</small></MudTd>
                                                         <MudTd DataLabel="Email"><small>@AttendanceContext.email</small></MudTd>
                                                         <MudTd DataLabel="Phone"><small>@AttendanceContext.phoneNumber</small></MudTd>
                                                         <MudTd DataLabel="Ticket Kind"><small>@AttendanceContext.ticketDetails.ticketName - @AttendanceContext.ticketQuantity </small></MudTd>
                                                         <MudTd DataLabel="Ticket Fee"><small>@AttendanceContext.totalTicketFee.ToString("C")</small></MudTd>
-                                                        <MudTd DataLabel="Ticket Fee"><small>@AttendanceContext.totalTicketServiceFee.ToString("C")</small></MudTd>
                                                     </RowTemplate>
                                                     
                                               </MudTable>
@@ -331,6 +339,12 @@
         revenueSearchString = text;
         return revenueDataGrid.ReloadServerData();
     }
+    
+    private Task OnReload()
+    {
+        revenueSearchString = string.Empty;
+        return revenueDataGrid.ReloadServerData();
+    }
 
     private async Task<GridData<Order>> GetRevenueServerReload(GridState<Order> state)
     {
@@ -349,17 +363,31 @@
             var result = (GetRevenueDataDto)res.result.data;
             IEnumerable<Order> data = (List<Order>)result.result.FirstOrDefault().orders;
             OrdersData = data;
-
-            
             
             data = data.Where(element =>
             {
                 if (string.IsNullOrWhiteSpace(revenueSearchString))
                     return true;
                 if (element.paymentGateWayTransactionId.Contains(revenueSearchString, StringComparison.OrdinalIgnoreCase))
+                    return true; 
+                if (element.paymentGateWayTransactionRef.Contains(revenueSearchString, StringComparison.OrdinalIgnoreCase))
                     return true;
                 if (element.paymentGateWayTransactionStatus.Contains(revenueSearchString, StringComparison.OrdinalIgnoreCase))
                     return true;
+                
+                if (element.attendees.Any())
+                {
+                    if (element.attendees.FirstOrDefault().firstName.Contains(revenueSearchString, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                    if (element.attendees.FirstOrDefault().lastName.Contains(revenueSearchString, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                    if (element.attendees.FirstOrDefault().code.Contains(revenueSearchString, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                    if (element.attendees.FirstOrDefault().email.Contains(revenueSearchString, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                    if (element.attendees.FirstOrDefault().phoneNumber.Contains(revenueSearchString, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                }
                 return false;
             }).ToArray();
 
@@ -410,7 +438,6 @@
                 };
         }
 
-        
         _processing = false;
         StateHasChanged();
         return new GridData<Order>

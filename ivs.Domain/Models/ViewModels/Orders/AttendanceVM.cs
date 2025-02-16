@@ -42,6 +42,5 @@ namespace ivs.Domain.Models.ViewModels.Orders
         public string? purchaseLink { get; set; }
         public string? qrCode { get; set; }
         public string? code { get; set; }
-        public string? qrImage { get; set; }
     }
 }
