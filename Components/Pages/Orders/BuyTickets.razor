@@ -2,6 +2,8 @@
 
 <PageTitle>Iv's - Buy Your Tickets</PageTitle>
 
+
+
 @{
     CultureInfo nigeriaCulture = new CultureInfo("en-NG");
     nigeriaCulture.NumberFormat.CurrencySymbol = "₦";
@@ -11,7 +13,7 @@
 
 
 <MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="background-color:white">
-    
+
     <MudGrid Spacing="20">
 
         <MudItem xs="12" sm="12" md="6" lg="7" xl="7" xxl="7">
@@ -102,7 +104,7 @@
                                             <MudItem xs="8" sm="8" md="8" lg="9" xl="9" xxl="9">
                                                 <div>
                                                     <div><b>@tic.ticketName</b> &nbsp;
-                                                    
+
                                                         @if(tic.ticketKind == Helpers.GroupTicket)
                                                         {
                                                             <MudChip T="string" Size="Size.Small" Color="Color.Secondary"><b>@tic.ticketKind</b></MudChip>
@@ -112,11 +114,11 @@
                                                     <br/>
                                                     <div><b style="color: #e1901d">@amount</b></div>
                                                     <br/>
-                                                    
-                                                    
+
+
                                                     <div style="">
                                                         <div><small style="text-align: center"><b>Available : @tic.ticketInStock</b></small></div>
-                                                     
+
                                                         <small> @tic.ticketDescription <br/> 
                                                             Admits @tic.groupSize person(s) each</small>
                                                     </div>
@@ -137,7 +139,7 @@
                                                 {
                                                     @if (tic.ticketKind == Helpers.GroupTicket)
                                                     {
-                                                        <MudSelect T="int" Label="Quantity" bind-Value="quantity" Margin="Margin.Dense" SelectedValuesChanged="@(async (value) => await GenerateCost(tic._id, com.EventTimeId, value))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                                                        <MudSelect T="int" Label="Quantity" bind-Value="quantity" Disabled="@_generateCostProcessing" Margin="Margin.Dense" SelectedValuesChanged="@(async (value) => await GenerateCost(tic._id, com.EventTimeId, value))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
                                                             <MudSelectItem T="int" Value="0" />
                                                             <MudSelectItem T="int" Value="1" />
                                                             <MudSelectItem T="int" Value="2" />
@@ -145,7 +147,7 @@
                                                     }
                                                     else
                                                     {
-                                                        <MudSelect T="int" Label="Quantity" bind-Value="quantity" Margin="Margin.Dense" SelectedValuesChanged="@(async (value) => await GenerateCost(tic._id, com.EventTimeId, value))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                                                        <MudSelect T="int" Label="Quantity" bind-Value="quantity" Disabled="@_generateCostProcessing" Margin="Margin.Dense" SelectedValuesChanged="@(async (value) => await GenerateCost(tic._id, com.EventTimeId, value))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
                                                             <MudSelectItem T="int" Value="0" />
                                                             <MudSelectItem T="int" Value="1" />
                                                             <MudSelectItem T="int" Value="2" />
@@ -154,9 +156,9 @@
                                                             <MudSelectItem T="int" Value="5" />
                                                         </MudSelect>
                                                     }
-                                                   
+
                                                     <br/>
-                                                    
+
                                                 }
 
                                             </MudItem>
@@ -197,82 +199,85 @@
 
         <MudItem xs="12" sm="12" md="5" lg="5" xl="5" xxl="5">
 
-            <div>
-                <br/><br/>
-                <span id="discovery-title-mid">Tickets Summary</span>
-                <br/><br/>
+            <div class="sticky-header">
+
+                <MudPaper Elevation="2" Outlined="false" Class="pa-7">
+                    
+                    <span id="discovery-title-mid">Tickets Summary</span>
+                    <br /><br />
 
 
-                @if (_generateCostProcessing)
-                {
-                    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"/>
-                    <MudProgressLinear Color="Color.Secondary" Indeterminate="true" Class="my-7"/>
-                }
-                else
-                {
-                    <div>
-                        @if (generateCost.Any())
-                        {
-                            <b>@generateCost.FirstOrDefault().tickets.Count ticket(s) selected</b>
+                    @if (_generateCostProcessing)
+                    {
+                        <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+                        <MudProgressLinear Color="Color.Secondary" Indeterminate="true" Class="my-7" />
+                    }
+                    else
+                    {
+                        <div>
+                            @if (generateCost.Any())
+                            {
+                                <b>@generateCost.FirstOrDefault().tickets.Count ticket(s) selected</b>
 
-                            <MudDivider></MudDivider>
+                                <MudDivider></MudDivider>
 
-                            <br/>
+                                <br />
 
-                            <MudGrid>
-                                @foreach (var t in generateCost.FirstOrDefault().tickets)
-                                {
-                                    <MudItem xs="7" sm="7" md="7" lg="9" xl="9" xxl="9">
-                                        <div style="line-height: 23px">
-                                            <p>@t.ticketQuantity X @t.ticketName</p>
-                                            <p style="color: #e1901d"><small>Including @t.totalTicketServiceFee.ToString("C") service fee</small></p>
-                                        </div>
+                                <MudGrid>
+                                    @foreach (var t in generateCost.FirstOrDefault().tickets)
+                                    {
+                                        <MudItem xs="7" sm="7" md="7" lg="9" xl="9" xxl="9">
+                                            <div style="line-height: 23px">
+                                                <p>@t.ticketQuantity X @t.ticketName</p>
+                                                <p style="color: #e1901d"><small>Including @t.totalTicketServiceFee.ToString("C") service fee</small></p>
+                                            </div>
+                                        </MudItem>
+                                        <MudItem xs="5" sm="5" md="5" lg="3" xl="3" xxl="3">
+                                            <div style="font-size: small; text-align: end">
+                                                <b>@t.totalTicketFeeAndServiceFee.ToString("C")</b>
+                                            </div>
+                                        </MudItem>
+                                        <br />
+                                        <hr />
+                                    }
+                                </MudGrid>
+
+                                <br />
+                                <br />
+
+                                <MudGrid>
+                                    <MudItem xs="7" sm="7" md="7" lg="8" xl="8" xxl="8">
+                                        <p style="font-size: medium; font-weight: bold">Total Cost</p>
                                     </MudItem>
                                     <MudItem xs="5" sm="5" md="5" lg="3" xl="3" xxl="3">
-                                        <div style="font-size: small; text-align: end">
-                                            <b>@t.totalTicketFeeAndServiceFee.ToString("C")</b>
+                                        <div style="font-size: medium; text-align: end">
+                                            <b>@generateCost.FirstOrDefault().totalAmount.ToString("C")</b>
                                         </div>
                                     </MudItem>
-                                    <br/>
-                                    <hr />
-                                }
-                            </MudGrid>
 
-                            <br/>
-                            <br/>
+                                </MudGrid>
 
-                            <MudGrid>
-                                <MudItem xs="7" sm="7" md="7" lg="9" xl="9" xxl="9">
-                                    <p style="font-size: medium; font-weight: bold">Total Cost</p>
-                                </MudItem>
-                                <MudItem xs="5" sm="5" md="5" lg="3" xl="3" xxl="3">
-                                    <div style="font-size: medium; text-align: end">
-                                        <b>@generateCost.FirstOrDefault().totalAmount.ToString("C")</b>
-                                    </div>
-                                </MudItem>
+                                <br />
 
-                            </MudGrid>
+                                <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_saveOrderProcessing" OnClick="@(async () => await ActionSaveOrder())" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                                    @if (_saveOrderProcessing)
+                                    {
+                                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                        <MudText Class="ms-2">Processing</MudText>
+                                    }
+                                    else
+                                    {
+                                        <MudText><b>Buy Ticket</b></MudText>
+                                    }
+                                </MudButton>
+                            }
 
-                            <br/>
-
-                            <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_saveOrderProcessing" OnClick="@(async () => await ActionSaveOrder())" Style="height:50px; background:#e18501f7" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
-                                @if (_saveOrderProcessing)
-                                {
-                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                                    <MudText Class="ms-2">Processing</MudText>
-                                }
-                                else
-                                {
-                                    <MudText><b>Buy Ticket</b></MudText>
-                                }
-                            </MudButton>
-                        }
-
-                        <br/>
+                            <br />
 
 
-                    </div>
-                }
+                        </div>
+                    }
+                </MudPaper>
 
             </div>
 
@@ -292,10 +297,14 @@
     [Inject] ITicketService? _ticketService { get; set; }
     [Inject] IOrderService? _orderService { get; set; }
     [Inject] IEventService _eventService { get; set; }
+    [Inject] IConfiguration? _config { get; set; }
+    [Inject] IPaymentOptionService _paymentOptionService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
     public AttendanceVm? model { get; set; }
 
     IEnumerable<TimeAndTicketGroupingDto> _ticketList = new List<TimeAndTicketGroupingDto>();
+    IEnumerable<GetPaymentOptionsDto> _paymentOptionDto = new List<GetPaymentOptionsDto>();
+
     List<GenerateCostDto> generateCost = [];
     List<AttendanceVm> _attendanceVms = [];
 
@@ -327,6 +336,8 @@
                         Tickets = group.ToList()
                     }).ToList();
             }
+
+            await GetPaymentOptions();
         }
         else
         {
@@ -337,6 +348,14 @@
         StateHasChanged();
     }
 
+    private async Task GetPaymentOptions()
+    {
+        var res = await _paymentOptionService.GetAllPaymentOptions();
+        var data = res.result.data ?? new List<GetPaymentOptionsDto>();
+        _paymentOptionDto = data;
+    }
+
+
 
     private async Task GenerateCost(string ticketId, string eventTimeId, IEnumerable<int> value)
     {
@@ -346,64 +365,197 @@
         {
             _generateCostProcessing = false;
             TicketWithQuantity.Remove(ticketId);
-            
+
             if (generateCost.Any())
             {
                 var item = generateCost.FirstOrDefault().tickets.Where(x => x.ticketId == ticketId);
-                if(item.Any())
-                    generateCost.FirstOrDefault().tickets.Remove(item.FirstOrDefault());
-            }
-        }
-        else
-        {
-            var generateCostVm = new GenerateCostVM()
-            {
-                eventId = id,
-                eventTimeId = eventTimeId,
-                ticketId = ticketId,
-                quantity = value.FirstOrDefault().ToString()
-            };
-            TicketWithQuantity[ticketId] = generateCostVm;
-        }
 
-        var costVm = TicketWithQuantity.Values.ToList();
-        if (costVm.Any())
-        {
-            var tics = await _orderService.GenerateCost(costVm);
+                var ticketQty = item.FirstOrDefault().ticketQuantity;
+                var totalTicketFee = item.FirstOrDefault().totalTicketFee;
+                var totalServiceFee = item.FirstOrDefault().totalTicketServiceFee;
 
-            if (tics.result.code == ResponseCodes.ResponseCodeOk)
-            {
-                generateCost = (List<GenerateCostDto>)tics.result.data;
-            }
-            else
-            {
-                _snackbar.Add(tics.result.message, Severity.Error);
-                _generateCostProcessing = false;
-                TicketWithQuantity.Remove(ticketId);
-
-                if (generateCost.Any())
+                if (item.Any())
                 {
-                    var item = generateCost.FirstOrDefault().tickets.Where(x => x.ticketId == ticketId);
-                    if (item.Any())
-                    {
-                        generateCost.FirstOrDefault().totalTicketPurchased -= item.FirstOrDefault().ticketQuantity;
-                        generateCost.FirstOrDefault().totalTicketFee -= item.FirstOrDefault().totalTicketFee;
-                        generateCost.FirstOrDefault().totalServiceFee -= item.FirstOrDefault().totalTicketServiceFee;
-                        generateCost.FirstOrDefault().totalAmount -= item.FirstOrDefault().totalTicketFeeAndServiceFee;
-                        generateCost.FirstOrDefault().tickets.Remove(item.FirstOrDefault());
+                    generateCost.FirstOrDefault().tickets.Remove(item.FirstOrDefault());
+                    generateCost.FirstOrDefault().totalTicketPurchased -= ticketQty;
+                    generateCost.FirstOrDefault().totalServiceFee -= totalServiceFee;
+                    generateCost.FirstOrDefault().totalTicketFee -= totalTicketFee;
+                    generateCost.FirstOrDefault().totalAmount -= (totalTicketFee + totalServiceFee);
+
+                    if(generateCost.FirstOrDefault().tickets.Count == 0){
+                        generateCost = [];
                     }
-                        
                 }
             }
         }
         else
         {
-            generateCost = [];
+            var generateCostVm = new GenerateCostVM()
+                {
+                    eventId = id,
+                    eventTimeId = eventTimeId,
+                    ticketId = ticketId,
+                    quantity = value.FirstOrDefault().ToString()
+                };
+            TicketWithQuantity[ticketId] = generateCostVm;
+
+            GenerateTicketCost(ticketId, eventTimeId, value.FirstOrDefault());
+
+
+            // var costVm = TicketWithQuantity.Values.ToList();
+            // if (costVm.Any())
+            // {
+            //     var tics = await _orderService.GenerateCost(costVm);
+
+            //     if (tics.result.code == ResponseCodes.ResponseCodeOk)
+            //     {
+            //         generateCost = (List<GenerateCostDto>)tics.result.data;
+            //     }
+            //     else
+            //     {
+            //         _snackbar.Add(tics.result.message, Severity.Error);
+            //         _generateCostProcessing = false;
+            //         TicketWithQuantity.Remove(ticketId);
+
+            //         if (generateCost.Any())
+            //         {
+            //             var item = generateCost.FirstOrDefault().tickets.Where(x => x.ticketId == ticketId);
+            //             if (item.Any())
+            //             {
+            //                 generateCost.FirstOrDefault().totalTicketPurchased -= item.FirstOrDefault().ticketQuantity;
+            //                 generateCost.FirstOrDefault().totalTicketFee -= item.FirstOrDefault().totalTicketFee;
+            //                 generateCost.FirstOrDefault().totalServiceFee -= item.FirstOrDefault().totalTicketServiceFee;
+            //                 generateCost.FirstOrDefault().totalAmount -= item.FirstOrDefault().totalTicketFeeAndServiceFee;
+            //                 generateCost.FirstOrDefault().tickets.Remove(item.FirstOrDefault());
+            //             }
+
+            //         }
+            //     }
+            // }
+            // else
+            // {
+            //     generateCost = [];
+            // }
         }
 
         _generateCostProcessing = false;
         StateHasChanged();
 
+    }
+
+
+
+
+    private List<GenerateCostDto> GenerateTicketCost(string ticketId, string eventTimeId, int qty)
+    {
+
+        // get tickets
+        var eventTimes = _ticketList.Where(x => x.EventTimeId == eventTimeId);
+        var tickets = eventTimes.FirstOrDefault().Tickets.FirstOrDefault(x => x._id == ticketId && x.eventTimeId == eventTimeId);
+        var paymentOptionId = tickets.paymentOptionId;
+        var paymentOption = _paymentOptionDto.FirstOrDefault(x => x._id == paymentOptionId);
+
+        if (paymentOption != null)
+        {
+            var percentage = Convert.ToDecimal(paymentOption.metaAmountPercentage.numberDecimal) / 100;
+
+            var ticketAmt = Convert.ToDecimal(tickets.ticketAmount.numberDecimal);
+            var charge = Math.Round(ticketAmt * percentage, 2);
+
+            var vatPercentage =  _config.GetValue<decimal>("Fees:Vat") / 100;
+            var StampDuty = 0.00M;
+            var capAmount = 0.00M;
+            var cummulativeTotal = (ticketAmt * qty) + (charge * qty);
+            if (cummulativeTotal >= _config.GetValue<int>("Fees:StampDutyAmount")) StampDuty = _config.GetValue<int>("Fees:StampDutyFee");
+            var flwFee = cummulativeTotal * (_config.GetValue<decimal>("Fees:FlwPercentage") / 100);
+            if (flwFee >= _config.GetValue<int>("Fees:FlwFeeCapAmount")) flwFee = _config.GetValue<int>("Fees:FlwFeeCapAmount");
+
+            var flwVatAndStampDuty = flwFee * vatPercentage;
+            flwVatAndStampDuty += StampDuty;
+            
+            cummulativeTotal += flwVatAndStampDuty;
+            var serviceFeeSum = (qty * charge) + flwVatAndStampDuty ;
+            var ticketFeeSum = (ticketAmt * qty);
+            
+            // var vatFee = Math.Round(newTicketFee * vatPercentage , 2);
+            // var feePerTicket = vatFee + newTicketFee;
+            //
+            // var StampDuty = 0.00M;
+            // if (((feePerTicket + ticketAmt) * qty) >= 10000) StampDuty = 50M;
+            //
+            // var serviceFee = (qty * feePerTicket) + StampDuty;
+            // var totalQty = qty;
+            // var ticketFee = Math.Round(qty * Convert.ToDecimal(tickets.ticketAmount.numberDecimal), 2);
+            
+            
+
+            var tics = new TicketsObjects()
+            {
+                ticketId = ticketId,
+                eventTimeId = eventTimeId,
+                ticketKind = tickets.ticketKind,
+                ticketName = tickets.ticketName,
+                ticketQuantity = qty,
+                ticketPrice = ticketAmt,
+                ticketServiceFee = charge,
+                totalTicketServiceFee = serviceFeeSum,
+                totalTicketFee = ticketFeeSum,
+                totalTicketFeeAndServiceFee = cummulativeTotal
+            };
+            
+            if (generateCost.Any())
+            {
+                var item = generateCost.FirstOrDefault().tickets.Where(x => x.ticketId == ticketId);
+
+                if (item.Any())
+                {
+                    var ticketQty = item.FirstOrDefault().ticketQuantity;
+                    var totalTicketFee = item.FirstOrDefault().totalTicketFee;
+                    var totalServiceFee = item.FirstOrDefault().totalTicketServiceFee;
+
+                    generateCost.FirstOrDefault().tickets.Add(tics);
+                    generateCost.FirstOrDefault().totalTicketPurchased += qty;
+                    generateCost.FirstOrDefault().totalServiceFee += serviceFeeSum;
+                    generateCost.FirstOrDefault().totalTicketFee += ticketFeeSum;
+                    generateCost.FirstOrDefault().totalAmount += cummulativeTotal;
+
+                    generateCost.FirstOrDefault().tickets.Remove(item.FirstOrDefault());
+                    generateCost.FirstOrDefault().totalTicketPurchased -= ticketQty;
+                    generateCost.FirstOrDefault().totalServiceFee -= totalServiceFee;
+                    generateCost.FirstOrDefault().totalTicketFee -= totalTicketFee;
+                    generateCost.FirstOrDefault().totalAmount -= (totalTicketFee + totalServiceFee);
+
+                    if (generateCost.FirstOrDefault().tickets.Count == 0)
+                        generateCost = [];
+                }
+                else{
+                    generateCost.FirstOrDefault().tickets.Add(tics);
+                    generateCost.FirstOrDefault().totalTicketPurchased += qty;
+                    generateCost.FirstOrDefault().totalServiceFee += serviceFeeSum;
+                    generateCost.FirstOrDefault().totalTicketFee += ticketFeeSum;
+                    generateCost.FirstOrDefault().totalAmount += (cummulativeTotal);
+                }
+            }
+            else
+            {
+                generateCost = new List<GenerateCostDto>(){
+
+                   new GenerateCostDto(){
+                       totalTicketPurchased = qty,
+                       totalAmount = (cummulativeTotal),
+                       totalServiceFee = serviceFeeSum,
+                       totalTicketFee = ticketFeeSum,
+                       tickets = new List<TicketsObjects>{tics}
+                   }
+                };
+            }
+
+            return generateCost;
+        }
+        else
+        {
+            return [];
+        }
     }
 
 
@@ -429,7 +581,7 @@
                     var attendance = new AttendanceVm()
                         {
                             ivsEventId = id,
-                            eventTimeId = dic.eventTimeId,
+                            eventTimeId = c.eventTimeId,
                             ticketId = c.ticketId,
                             ticketQuantity = c.ticketQuantity.ToString(),
                             firstName = model.firstName,

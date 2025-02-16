@@ -21,8 +21,7 @@ namespace ivs_ui.Components.Data.Services.Payment
         {
             try
             {
-                var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, "get-all-payment-options", Method.Get, null, headers);
+                var response = await _webService.Call(ApiUrl, "get-all-payment-options", Method.Get, null, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)

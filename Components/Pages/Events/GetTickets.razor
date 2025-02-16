@@ -40,7 +40,7 @@
                         <MudText Typo="Typo.h6"><b>About this event</b></MudText>
                         <br/>
                         <div style="line-height:35px; font-size:14px">
-                            <span>@_events.eventDescription</span>
+                            <div>@_events.eventDescription</div>
                         </div>
 
                         <br /><br/>
@@ -177,21 +177,19 @@
                 </MudItem>
 
                 <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
-                    <MudPaper Elevation="0">
-                        <center>
+                    <div class="sticky-header">
+                        <MudPaper Elevation="0" Style="text-align: center">
+
                             <div>
                                 <MudImage Fluid="true" Src="@_events.eventImagePath" Height="400" Width="400" />
                             </div>
-
-                            <br/><br/>
-
-                            <MudButton Variant="Variant.Filled" FullWidth="true" Color="Color.Warning" Href="@buyLink" Size="Size.Large">
+                            <br/>
+                            <MudButton Variant="Variant.Filled" FullWidth="true" Style="background-color: #e18501f7; height: 60px; color: white" Href="@buyLink" Size="Size.Large">
                                 <MudText><b>Buy Tickets</b></MudText>
                             </MudButton>
 
-                            <br/><br/>
-                        </center>
-                    </MudPaper>
+                        </MudPaper>
+                    </div>
                 </MudItem>
             </MudGrid>
 

@@ -193,8 +193,8 @@
                               <TemplateColumn Resizable="true" Title="Published" Sortable="false" Filterable="false">
                                  <CellTemplate Context="ctx">
                                     @{
-                                        var activateUrl = $"/events/activate-event/{ctx.Item._id}";
-                                        var eventPanelUrl = $"/events/event-panel/{ctx.Item._id}";
+                                       var activateUrl = $"/events/activate-event/{ctx.Item._id}";
+                                       var eventPanelUrl = $"/events/event-panel/{ctx.Item._id}";
                                     }
                                     @if (ctx.Item.status == Helpers.Pending)
                                     {
@@ -202,7 +202,7 @@
                                     }
                                     else
                                     {
-                                      <MudIconButton Href="@eventPanelUrl" Icon="@Icons.Material.Filled.ArrowCircleRight" Title="View event" Size="Size.Medium" Color="Color.Secondary" />
+                                       <MudIconButton Href="@eventPanelUrl" Icon="@Icons.Material.Filled.ArrowCircleRight" Title="View event" Size="Size.Medium" Color="Color.Secondary" />
                                     }
                                  </CellTemplate>
                               </TemplateColumn>

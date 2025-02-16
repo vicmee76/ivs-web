@@ -39,6 +39,8 @@ namespace ivs.Domain.Models.ViewModels.Orders
         public string? totalTicketServiceFee { get; set; }
         public string? totalTicketFee { get; set; }
         public string? totalTicketFeeAndServiceFee { get; set; }
-
+        public string? purchaseLink { get; set; }
+        public string? qrCode { get; set; }
+        public string? code { get; set; }
     }
 }

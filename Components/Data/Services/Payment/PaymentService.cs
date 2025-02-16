@@ -67,6 +67,27 @@ namespace ivs_ui.Components.Data.Services.Payment
         }
 
 
+        public async Task<ResponseObject> GetRevenue(Dictionary<string, string> queryParam)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(ApiUrl, $"get-revenue/", Method.Get, null, headers, queryParam);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                res.result.data = JsonConvert.DeserializeObject<GetRevenueDataDto>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject() { result = new ResponseContents() { message = "Error! Something went wrong trying to get revenue record, please try again later" } };
+            }
+        }
+
+
 
         public async Task<ResponseObject> GetSales(Dictionary<string, string> queryParam)
         {

@@ -1,0 +1,188 @@
+@page "/configuration/all-events"
+
+<PageTitle>Iv's All Events</PageTitle>
+
+
+<AuthorizeView Roles="Admin">
+
+   <NotAuthorized>
+      No Access
+   </NotAuthorized>
+
+   <Authorized Context="cntx">
+
+
+      <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+         <MudPaper Elevation="0">
+            <MudToolBar>
+               <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+            </MudToolBar>
+         </MudPaper>
+
+         <MudCard Elevation="0" Style="padding:5px">
+            <MudCardHeader>
+               <CardHeaderContent>
+                  <MudText id="discovery-title-mid">All Events</MudText>
+               </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+
+               @if (_processing)
+               {
+                  <MudSkeleton Height="42px;" />
+                  <MudSkeleton Height="42px;" />
+                  <MudSkeleton Height="42px;" />
+               }
+               else
+               {
+                   <MudDataGrid @ref="eventsDataGrid" T="GetAllEventsDataDtos" RowsPerPage="20" ServerData="EventServerReload" Filterable="false" Hover="true" Loading="@_processing" LoadingProgressColor="Color.Primary" Striped="true" Bordered="true">
+                      <ToolBarContent>
+
+                         <MudText Typo="Typo.h6" Color="Color.Secondary"> </MudText>
+
+                         <MudSpacer />
+                         <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search with event name" Adornment="Adornment.Start"
+                                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+
+                      </ToolBarContent>
+
+                      <Columns>
+
+                         <PropertyColumn Resizable="true" Property="x => x.eventName" Title="Event Name" Sortable="true" Filterable="true" />
+                         <PropertyColumn Resizable="true" Property="x => x.eventOption" Title="Privacy" Sortable="true" Filterable="false" />
+                         <PropertyColumn Resizable="true" Property="x => x.eventAddress" Title="Event Address" Sortable="false" Filterable="false" />
+                         <TemplateColumn Resizable="true" Title="Status" Sortable="true" Filterable="false">
+                            <CellTemplate Context="ctx">
+                               @if (ctx.Item.status == Helpers.Pending)
+                               {
+                                  <MudChip Variant="Variant.Text" Color="Color.Warning"><b>Not published</b></MudChip>
+                               }
+                               else
+                               {
+                                  <MudChip Variant="Variant.Text" Color="Color.Success"><b>Published</b></MudChip>
+                               }
+                            </CellTemplate>
+                         </TemplateColumn>
+                         <TemplateColumn Resizable="true" Title="Created Date" Sortable="true" Filterable="true">
+                            <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.createdAt).ToString("F") </CellTemplate>
+                         </TemplateColumn>
+
+                         <TemplateColumn Resizable="true" Title="View" Sortable="false" Filterable="false">
+                            <CellTemplate Context="ctx">
+                               @{
+                                  var eventPanelUrl = $"/configuration/user-event-panel/{ctx.Item._id}";
+                               }
+                               <MudIconButton Href="@eventPanelUrl" Target="_blank" Icon="@Icons.Material.Filled.ArrowCircleRight" Title="View event" Size="Size.Medium" Color="Color.Secondary" />
+
+                            </CellTemplate>
+                         </TemplateColumn>
+                      </Columns>
+
+                      <PagerContent>
+                         <MudDataGridPager T="GetAllEventsDataDtos" />
+                      </PagerContent>
+                   </MudDataGrid>
+
+               }
+
+            </MudCardContent>
+         </MudCard>
+
+      </MudContainer>
+
+
+   </Authorized>
+
+</AuthorizeView>
+
+@code {
+   
+   [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+   [Inject] NavigationManager? _navigate { get; set; }
+   [Inject] ISnackbar? _snackbar { get; set; }
+   [Inject] IEventService _eventService { get; set; }
+   
+   MudDataGrid<GetAllEventsDataDtos> eventsDataGrid;
+   
+   AuthUser authUser = new AuthUser();
+   private bool _processing { get; set; } = false;
+   private string fullname { get; set; }
+   private string userId { get; set; }
+   private string eventSearchQuery { get; set; }
+   
+   
+   private List<BreadcrumbItem> _items =
+   [
+       new("Configurations", href: "#"),
+       new("Events", href: null, disabled: true)
+   ];
+   
+   
+   private Task OnSearch(string text)
+   {
+       eventSearchQuery = text;
+       return eventsDataGrid.ReloadServerData();
+   }
+   
+    private async Task<GridData<GetAllEventsDataDtos>> EventServerReload(GridState<GetAllEventsDataDtos> state)
+    {
+        _processing = true;
+        var res = new ResponseObject();
+
+        Dictionary<string, string> queryParameter = new Dictionary<string, string> { { "page", state.Page.ToString() }, { "limit", state.PageSize.ToString() } };
+
+        if (!string.IsNullOrWhiteSpace(eventSearchQuery))
+            queryParameter.Add("searchQuery", eventSearchQuery.ToLower());
+
+        res = await _eventService.GetAllEvents(queryParameter);
+            
+      
+        if (res.result.code == ResponseCodes.ResponseCodeOk)
+        {
+            var result = (GetAllEventsDto)res.result.data;
+            IEnumerable<GetAllEventsDataDtos> data = (List<GetAllEventsDataDtos>)result.events;
+
+            data = data.Where(element =>
+            {
+                if (string.IsNullOrWhiteSpace(eventSearchQuery))
+                    return true;
+                return element.eventName.Contains(eventSearchQuery, StringComparison.OrdinalIgnoreCase) || $"{element.eventName}".Contains(eventSearchQuery);
+            }).ToArray();
+
+            var totalItems = result.totalItems;
+            
+            var sortDefinition = state.SortDefinitions.FirstOrDefault();
+
+            if (sortDefinition != null)
+            {
+               data = sortDefinition.SortBy switch
+               {
+                  nameof(GetAllEventsDataDtos.eventName) => data.OrderByDirection(sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending, o => o.eventName),
+                  nameof(GetAllEventsDataDtos.status) => data.OrderByDirection(sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending, o => o.status),
+                  _ => data
+               };
+            }
+
+            var pagedData = data.ToArray();
+
+            _processing = false;
+            StateHasChanged();
+            return new GridData<GetAllEventsDataDtos>
+                {
+                    TotalItems = totalItems,
+                    Items = pagedData
+                };
+        }
+
+        _processing = false;
+        StateHasChanged();
+        return new GridData<GetAllEventsDataDtos>
+        {
+           TotalItems = 0,
+           Items = new List<GetAllEventsDataDtos>()
+        };
+    }
+
+
+   
+}
