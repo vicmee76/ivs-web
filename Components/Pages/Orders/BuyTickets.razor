@@ -2,15 +2,7 @@
 
 <PageTitle>Iv's - Buy Your Tickets</PageTitle>
 
-<style>
-    .sticky-header {
-    position: sticky;
-    top: 0; /* Stick to the top */
-    background: white; /* Ensure it's visible */
-    padding: 10px;
-    z-index: 1000; /* Ensure it stays above other elements */
-    }
-</style>
+
 
 @{
     CultureInfo nigeriaCulture = new CultureInfo("en-NG");
@@ -210,7 +202,7 @@
             <div class="sticky-header">
 
                 <MudPaper Elevation="2" Outlined="false" Class="pa-7">
-                    <br /><br />
+                    
                     <span id="discovery-title-mid">Tickets Summary</span>
                     <br /><br />
 
@@ -342,8 +334,6 @@
                         StartDateAndTime = group.Key.startDateAndTime,
                         Tickets = group.ToList()
                     }).ToList();
-
-
             }
 
             await GetPaymentOptions();
@@ -461,44 +451,60 @@
         // get tickets
         var eventTimes = _ticketList.Where(x => x.EventTimeId == eventTimeId);
         var tickets = eventTimes.FirstOrDefault().Tickets.FirstOrDefault(x => x._id == ticketId && x.eventTimeId == eventTimeId);
-
         var paymentOptionId = tickets.paymentOptionId;
-
         var paymentOption = _paymentOptionDto.FirstOrDefault(x => x._id == paymentOptionId);
 
         if (paymentOption != null)
         {
-
             var percentage = Convert.ToDecimal(paymentOption.metaAmountPercentage.numberDecimal) / 100;
 
             var ticketAmt = Convert.ToDecimal(tickets.ticketAmount.numberDecimal);
-            var newTicketFee = Math.Round(ticketAmt * percentage, 2);
+            var charge = Math.Round(ticketAmt * percentage, 2);
+
             var vatPercentage = 7.5M / 100;
-            var vatFee = Math.Round(newTicketFee * vatPercentage , 2);
-            var feePerTicket = vatFee + newTicketFee;
+            var StampDuty = 0.00M;
+            var capAmount = 0.00M;
+            
+            var cummulativeTotal = (ticketAmt * qty) + (charge * qty);
+            
+            if (cummulativeTotal >= 10000) StampDuty = 50M;
 
-            if (feePerTicket >= 10000) feePerTicket += 50;
+            var flwFee = cummulativeTotal * (1.41M / 100);
+            if (flwFee >= 2000) flwFee = 2000;
 
-
-            var serviceFee = qty * feePerTicket;
-            var totalQty = qty;
-            var ticketFee = Math.Round(qty * Convert.ToDecimal(tickets.ticketAmount.numberDecimal), 2);
+            var flwVatAndStampDuty = flwFee * vatPercentage;
+            flwVatAndStampDuty += StampDuty;
+            
+            cummulativeTotal += flwVatAndStampDuty;
+            var serviceFeeSum = (qty * charge) + flwVatAndStampDuty ;
+            var ticketFeeSum = (ticketAmt * qty);
+            
+            // var vatFee = Math.Round(newTicketFee * vatPercentage , 2);
+            // var feePerTicket = vatFee + newTicketFee;
+            //
+            // var StampDuty = 0.00M;
+            // if (((feePerTicket + ticketAmt) * qty) >= 10000) StampDuty = 50M;
+            //
+            // var serviceFee = (qty * feePerTicket) + StampDuty;
+            // var totalQty = qty;
+            // var ticketFee = Math.Round(qty * Convert.ToDecimal(tickets.ticketAmount.numberDecimal), 2);
+            
+            
 
             var tics = new TicketsObjects()
-                {
-                    ticketId = ticketId,
-                    ticketKind = tickets.ticketKind,
-                    ticketName = tickets.ticketName,
-                    ticketQuantity = qty,
-                    ticketPrice = Math.Round(Convert.ToDecimal(tickets.ticketAmount.numberDecimal), 2),
-                    ticketServiceFee = feePerTicket,
-                    totalTicketServiceFee = serviceFee,
-                    totalTicketFee = ticketFee,
-                    totalTicketFeeAndServiceFee = ticketFee + serviceFee
-                };
-
-
-
+            {
+                ticketId = ticketId,
+                eventTimeId = eventTimeId,
+                ticketKind = tickets.ticketKind,
+                ticketName = tickets.ticketName,
+                ticketQuantity = qty,
+                ticketPrice = ticketAmt,
+                ticketServiceFee = charge,
+                totalTicketServiceFee = serviceFeeSum,
+                totalTicketFee = ticketFeeSum,
+                totalTicketFeeAndServiceFee = cummulativeTotal
+            };
+            
             if (generateCost.Any())
             {
                 var item = generateCost.FirstOrDefault().tickets.Where(x => x.ticketId == ticketId);
@@ -510,11 +516,10 @@
                     var totalServiceFee = item.FirstOrDefault().totalTicketServiceFee;
 
                     generateCost.FirstOrDefault().tickets.Add(tics);
-                    generateCost.FirstOrDefault().totalTicketPurchased += totalQty;
-                    generateCost.FirstOrDefault().totalServiceFee += serviceFee;
-                    generateCost.FirstOrDefault().totalTicketFee += ticketFee;
-                    generateCost.FirstOrDefault().totalAmount += (ticketFee + serviceFee);
-
+                    generateCost.FirstOrDefault().totalTicketPurchased += qty;
+                    generateCost.FirstOrDefault().totalServiceFee += serviceFeeSum;
+                    generateCost.FirstOrDefault().totalTicketFee += ticketFeeSum;
+                    generateCost.FirstOrDefault().totalAmount += cummulativeTotal;
 
                     generateCost.FirstOrDefault().tickets.Remove(item.FirstOrDefault());
                     generateCost.FirstOrDefault().totalTicketPurchased -= ticketQty;
@@ -529,10 +534,10 @@
                 }
                 else{
                     generateCost.FirstOrDefault().tickets.Add(tics);
-                    generateCost.FirstOrDefault().totalTicketPurchased += totalQty;
-                    generateCost.FirstOrDefault().totalServiceFee += serviceFee;
-                    generateCost.FirstOrDefault().totalTicketFee += ticketFee;
-                    generateCost.FirstOrDefault().totalAmount += (ticketFee + serviceFee);
+                    generateCost.FirstOrDefault().totalTicketPurchased += qty;
+                    generateCost.FirstOrDefault().totalServiceFee += serviceFeeSum;
+                    generateCost.FirstOrDefault().totalTicketFee += ticketFeeSum;
+                    generateCost.FirstOrDefault().totalAmount += (cummulativeTotal);
                 }
 
             }
@@ -541,24 +546,21 @@
                 generateCost = new List<GenerateCostDto>(){
 
                    new GenerateCostDto(){
-                       totalTicketPurchased = totalQty,
-                       totalAmount = (ticketFee + serviceFee),
-                       totalServiceFee = serviceFee,
-                       totalTicketFee = ticketFee,
+                       totalTicketPurchased = qty,
+                       totalAmount = (cummulativeTotal),
+                       totalServiceFee = serviceFeeSum,
+                       totalTicketFee = ticketFeeSum,
                        tickets = new List<TicketsObjects>{tics}
                    }
                 };
             }
 
             return generateCost;
-
         }
         else
         {
-            return new List<GenerateCostDto>();
+            return [];
         }
-
-
     }
 
 
@@ -584,7 +586,7 @@
                     var attendance = new AttendanceVm()
                         {
                             ivsEventId = id,
-                            eventTimeId = dic.eventTimeId,
+                            eventTimeId = c.eventTimeId,
                             ticketId = c.ticketId,
                             ticketQuantity = c.ticketQuantity.ToString(),
                             firstName = model.firstName,

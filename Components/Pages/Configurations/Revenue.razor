@@ -65,7 +65,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <h3>@ivsNetRevenueSum.ToString("C")</h3>
+                                                    <h3>@totalServiceFeeAfterDeductionSum.ToString("C")</h3>
                                                 }
 
                                             </div>
@@ -103,7 +103,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <h1>@totalServiceFeeAfterDeductionSum.ToString("C")</h1>
+                                                    <h1></h1>
                                                 }
 
                                             </div>
@@ -205,11 +205,11 @@
                                                 <CellTemplate Context="ctx">
                                                     @if (ctx.Item.paymentGateWayTransactionStatus.Equals("successful", StringComparison.OrdinalIgnoreCase))
                                                     {
-                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Success">@ctx.Item.paymentGateWayTransactionStatus</MudChip>
+                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Success"><b>@ctx.Item.paymentGateWayTransactionStatus</b></MudChip>
                                                     }
                                                     else
                                                     {
-                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary">@ctx.Item.paymentGateWayTransactionStatus</MudChip>
+                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary"><b>@ctx.Item.paymentGateWayTransactionStatus</b></MudChip>
                                                     }
                                                 </CellTemplate>
                                             </TemplateColumn>
@@ -255,7 +255,8 @@
                                                         <MudTh>Email</MudTh>
                                                         <MudTh>Phone</MudTh>
                                                         <MudTh>Ticket</MudTh>
-                                                        <MudTh>Amount</MudTh>
+                                                        <MudTh>Ticket Amount</MudTh>
+                                                        <MudTh>Gross Revenue + Gateway fee</MudTh>
                                                     </HeaderContent>
 
                                                     <RowTemplate>
@@ -265,6 +266,7 @@
                                                         <MudTd DataLabel="Phone"><small>@AttendanceContext.phoneNumber</small></MudTd>
                                                         <MudTd DataLabel="Ticket Kind"><small>@AttendanceContext.ticketDetails.ticketName - @AttendanceContext.ticketQuantity </small></MudTd>
                                                         <MudTd DataLabel="Ticket Fee"><small>@AttendanceContext.totalTicketFee.ToString("C")</small></MudTd>
+                                                        <MudTd DataLabel="Ticket Fee"><small>@AttendanceContext.totalTicketServiceFee.ToString("C")</small></MudTd>
                                                     </RowTemplate>
                                                     
                                               </MudTable>
@@ -348,6 +350,8 @@
             IEnumerable<Order> data = (List<Order>)result.result.FirstOrDefault().orders;
             OrdersData = data;
 
+            
+            
             data = data.Where(element =>
             {
                 if (string.IsNullOrWhiteSpace(revenueSearchString))
@@ -406,6 +410,7 @@
                 };
         }
 
+        
         _processing = false;
         StateHasChanged();
         return new GridData<Order>

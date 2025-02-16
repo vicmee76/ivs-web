@@ -183,6 +183,13 @@
     display: none;
 }
 
+.sticky-header {
+    position: sticky;
+    top: 70px; /* Stick to the top */
+    background: white; /* Ensure it's visible */
+    padding: 10px;
+    z-index: 1000; /* Ensure it stays above other elements */
+}
 
 #discovery-text{
     font-size: 15px;
