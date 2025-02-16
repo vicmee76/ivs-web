@@ -791,7 +791,19 @@
                                             <PropertyColumn Property="x => x.email" Title="Email" />
                                             <PropertyColumn Property="x => x.phoneNumber" Title="PhoneNo" />
                                             <PropertyColumn Property="x => x.paymentDetails.paymentGateWayTransactionRef" Title="TransRef" />
-                                            <PropertyColumn Property="x => x.paymentDetails.paymentGateWayTransactionStatus" Title="Status" />
+                                            
+                                            <TemplateColumn Title="Status" Sortable="true" Filterable="true">
+                                                <CellTemplate Context="ctx">
+                                                    @if (ctx.Item.paymentDetails.paymentGateWayTransactionStatus.Equals("successful", StringComparison.OrdinalIgnoreCase))
+                                                    {
+                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Success">@ctx.Item.paymentDetails.paymentGateWayTransactionStatus</MudChip>
+                                                    }
+                                                    else
+                                                    {
+                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary">@ctx.Item.paymentDetails.paymentGateWayTransactionStatus</MudChip>
+                                                    }
+                                                </CellTemplate>
+                                            </TemplateColumn>
 
                                             <TemplateColumn Title="TransDate" Sortable="false" Filterable="false">
                                                 <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.paymentDetails.paymentGateWayTransactionDate).ToString("dd MMM yyyy, HH:mm tt") </CellTemplate>

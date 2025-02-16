@@ -12,6 +12,7 @@ public class GenerateCostDto
 public class TicketsObjects
 {
     public string? ticketId { get; set; }
+    public string? eventTimeId { get; set; }
     public string? ticketKind { get; set; }
     public string? ticketName { get; set; }
     public int ticketQuantity { get; set; }
