@@ -13,5 +13,6 @@ public class OrderRequest
     public string? totalOrderQuantity { get; set; }
     public string? totalServiceFee { get; set; }
     public string? totalTicketFee { get; set; }
+    public string? percentageCharge { get; set; }
     public string? totalFee { get; set; }
 }
