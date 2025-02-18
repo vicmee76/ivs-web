@@ -2,27 +2,36 @@
 @page "/home"
 
 <PageTitle>Iv's - Home</PageTitle>
-<MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="background-color:white">
-    <br /><br />
+
+
+<div id="StartScreen" style="background-image: url('~/images/backgrounds/background3.jpg');">
+    <MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
+       
         <MudGrid>
             <MudItem xs="12">
                 <div id="HomeTitle">
-                <span id="titleOne">Create,
-                </span> <span id="titleTwo">Share</span>  <br />
+                    <span id="titleOne">
+                        Create,
+                    </span> <span id="titleTwo">Share</span>  <br />
                     <span id="titleThree">Unforgettable </span>  <span id="titleFour">Moments.</span>
                     <br />
                     <div id="homeSubTitle">
                         <span> Effortlessly create and share your events.<br /> Bring your vision to life and invite others to join in the excitement.</span>
                     </div>
+
+
+                        <MudButton Variant="Variant.Outlined" FullWidth="false" Size="Size.Large" Href="/events/discovery" id="btn-home-find-event">Find an event</MudButton>
+                    
                 </div>
 
-                <div id="homeButtons">
-                    <MudButton Variant="Variant.Outlined" Size="Size.Large" Href="/events/discovery" id="btn-home-find-event">Find an event</MudButton>
-                </div>
+              
             </MudItem>
         </MudGrid>
-    
-    
+
+    </MudContainer>
+
+
+</div>
     
     
     <div Style="text-align: center;">
@@ -176,7 +185,7 @@
 
     </div>
     
-</MudContainer>
+
 
 <br /><br /><br /><br /><br /><br />
 

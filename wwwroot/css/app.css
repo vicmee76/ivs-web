@@ -20,12 +20,24 @@
 }
 
 
+#StartScreen {
+    display: flex;
+    align-items: center; /* Vertically center */
+    justify-content: center; /* Horizontally center */
+    height: 100vh;
+    /* Background Image */
+    /* Replace with your image path */
+    background-size: cover; /* Ensures the image covers the entire div */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents repeating */
+}
+
 
 #HomeTitle {
     font-size: 5.7rem;
     line-height: 1.4;
     font-weight: 600;
-    text-align: left;
+    text-align: center;
     height: 400px;
     align-content: center;
     font-family: "Akaya Telivigala", system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
