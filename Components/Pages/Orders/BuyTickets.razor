@@ -90,7 +90,7 @@
                         {
                             var title = $"{Convert.ToDateTime(com.StartDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")}";
 
-                            <div style="font-size: 15px; color: rgb(79 79 80); background-color: #fdf6fdfc; font-weight: bolder; padding: 20px">@title</div>
+                            <div style="font-size: 15px; color: #1e0a3c; background-color: #fdf6fdfc; font-weight: bolder; padding: 20px">@title</div>
 
                             <div style="padding: 20px">
 
@@ -448,7 +448,6 @@
 
     private List<GenerateCostDto> GenerateTicketCost(string ticketId, string eventTimeId, int qty)
     {
-
         // get tickets
         var eventTimes = _ticketList.Where(x => x.EventTimeId == eventTimeId);
         var tickets = eventTimes.FirstOrDefault().Tickets.FirstOrDefault(x => x._id == ticketId && x.eventTimeId == eventTimeId);
@@ -457,15 +456,18 @@
 
         if (paymentOption != null)
         {
-            var percentage = Convert.ToDecimal(paymentOption.metaAmountPercentage.numberDecimal) / 100;
-
-            var ticketAmt = Convert.ToDecimal(tickets.ticketAmount.numberDecimal);
-            var charge = Math.Round(ticketAmt * percentage, 2);
-
+            var percentage = Math.Round(Convert.ToDecimal(paymentOption.metaAmountPercentage.numberDecimal) / 100, 2);
             var vatPercentage =  _config.GetValue<decimal>("Fees:Vat") / 100;
             var StampDuty = 0.00M;
             var capAmount = 0.00M;
-            var cummulativeTotal = (ticketAmt * qty) + (charge * qty);
+            
+            var ticketAmt = Convert.ToDecimal(tickets.ticketAmount.numberDecimal);
+            var charge = Math.Round(ticketAmt * percentage, 2);
+            var ivsVat = Math.Round(charge * vatPercentage, 2);
+            var chargeAmount = charge + ivsVat;
+            
+            var cummulativeTotal = (ticketAmt * qty) + (chargeAmount * qty);
+            
             if (cummulativeTotal >= _config.GetValue<int>("Fees:StampDutyAmount")) StampDuty = _config.GetValue<int>("Fees:StampDutyFee");
             var flwFee = cummulativeTotal * (_config.GetValue<decimal>("Fees:FlwPercentage") / 100);
             if (flwFee >= _config.GetValue<int>("Fees:FlwFeeCapAmount")) flwFee = _config.GetValue<int>("Fees:FlwFeeCapAmount");
@@ -474,7 +476,7 @@
             flwVatAndStampDuty += StampDuty;
             
             cummulativeTotal += flwVatAndStampDuty;
-            var serviceFeeSum = (qty * charge) + flwVatAndStampDuty ;
+            var serviceFeeSum = (qty * chargeAmount) + flwVatAndStampDuty ;
             var ticketFeeSum = (ticketAmt * qty);
             
             // var vatFee = Math.Round(newTicketFee * vatPercentage , 2);
@@ -497,7 +499,7 @@
                 ticketName = tickets.ticketName,
                 ticketQuantity = qty,
                 ticketPrice = ticketAmt,
-                ticketServiceFee = charge,
+                ticketServiceFee = chargeAmount,
                 totalTicketServiceFee = serviceFeeSum,
                 totalTicketFee = ticketFeeSum,
                 totalTicketFeeAndServiceFee = cummulativeTotal
@@ -518,6 +520,7 @@
                     generateCost.FirstOrDefault().totalServiceFee += serviceFeeSum;
                     generateCost.FirstOrDefault().totalTicketFee += ticketFeeSum;
                     generateCost.FirstOrDefault().totalAmount += cummulativeTotal;
+                    generateCost.FirstOrDefault().percentageCharge = percentage;
 
                     generateCost.FirstOrDefault().tickets.Remove(item.FirstOrDefault());
                     generateCost.FirstOrDefault().totalTicketPurchased -= ticketQty;
@@ -534,6 +537,7 @@
                     generateCost.FirstOrDefault().totalServiceFee += serviceFeeSum;
                     generateCost.FirstOrDefault().totalTicketFee += ticketFeeSum;
                     generateCost.FirstOrDefault().totalAmount += (cummulativeTotal);
+                    generateCost.FirstOrDefault().percentageCharge = percentage;
                 }
             }
             else
@@ -545,6 +549,7 @@
                        totalAmount = (cummulativeTotal),
                        totalServiceFee = serviceFeeSum,
                        totalTicketFee = ticketFeeSum,
+                       percentageCharge = percentage,
                        tickets = new List<TicketsObjects>{tics}
                    }
                 };
@@ -607,6 +612,7 @@
                         totalServiceFee = generateCost?.FirstOrDefault()?.totalServiceFee.ToString(),
                         totalTicketFee = generateCost?.FirstOrDefault()?.totalTicketFee.ToString(),
                         totalFee = generateCost?.FirstOrDefault()?.totalAmount.ToString(),
+                        percentageCharge = generateCost?.FirstOrDefault()?.percentageCharge.ToString()
                     },
                     AttendeesRequest = _attendanceVms
                 };

@@ -17,7 +17,7 @@
                         id == Helpers.DiscoverEventPaid ? "Paid events" : "";
 }
 
-<MudContainer Fixed="true" MaxWidth="MaxWidth.Medium" Style="background-color:white">
+<MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="background-color:white">
     <br /><br />
     <div style="padding:10px">
 
@@ -54,7 +54,7 @@
 
     <MudCard Elevation="0">
         <MudCardContent>
-            <MudGrid Spacing="3">
+            <MudGrid Spacing="7">
                 @if (_processing)
                 {
                     <MudItem xs="12" sm="12" md="12" lg="12">
@@ -76,9 +76,9 @@
                             <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
                                 <div class="event-lisiting-web">
                                 <MudCard>
-                                    <MudCardMedia Image="@e.eventImagePath" Height="150"/>
+                                    <MudCardMedia Image="@e.eventImagePath" Height="200"/>
                                     <MudCardContent>
-                                        <div style="line-height: 30px">
+                                        <div style="line-height: 40px">
                                             <div style="font-size: medium"><b>@eventName</b></div>
                                             <span>@address</span>
                                             <br/>
@@ -113,7 +113,7 @@
                                             <br/>
                                         </div>
                                     </MudCardContent>
-                                    <MudCardActions>
+                                    <MudCardActions Class="pa-5">
                                         @if (e.paymentOptions.Count > 1)
                                         {
                                             var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;

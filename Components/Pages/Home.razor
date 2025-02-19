@@ -2,126 +2,255 @@
 @page "/home"
 
 <PageTitle>Iv's - Home</PageTitle>
-<MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="background-color:white">
-    <br /><br />
-    <MudGrid>
-        <MudItem xs="12">
-            <div id="HomeTitle">
-                <span id="titleOne">Create,
-                </span> <span id="titleTwo">Share</span>  <br />
-                <span id="titleThree">Unforgettable </span>  <span id="titleFour">Moments.</span>
-                <br />
-                <div id="homeSubTitle">
-                    <span> Effortlessly create and share your events.<br /> Bring your vision to life and invite others to join in the excitement.</span>
+
+
+<div id="StartScreen">
+    <MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
+       
+                <div id="HomeTitle">
+                    <span id="titleOne">Create, </span> <span id="titleTwo">Share</span>  <br />
+                    <span id="titleThree">Unforgettable </span>  <span id="titleFour">Moments.</span>
+                    <br />
+                    <div id="homeSubTitle">
+                        <span> Effortlessly create and share your events.<br /> Bring your vision to life and invite others to join in the excitement.</span>
+                    </div>
+                        <MudButton Variant="Variant.Outlined" FullWidth="false" Size="Size.Large" Href="/events/discovery" id="btn-home-find-event">Find an event</MudButton>
                 </div>
-            </div>
-        
-            <div id="homeButtons">
-                <MudButton Variant="Variant.Outlined" Size="Size.Small" Href="/events/discovery" id="btn-home-find-event">Find an event</MudButton>
-            </div>
-        </MudItem>
-    </MudGrid>
+    </MudContainer>
+</div>
+
     
+<div class="header-div">
+
+    <MudPaper Elevation="0" Style="padding: 20px">
+        <div id="home-title-header-one"> Create & Manage Your Events; Buy and Sell Tickets.</div>
+
+        <br/>
+
+        <div id="home-title-header-description-one" style="text-align: center">
+            Whether you're organizing a conference, concert, workshop, or any gathering, our tools are designed to streamline every step of the process with adequate customisations.
+        </div>
+    </MudPaper>
     
-    
-    <div Style="text-align: center;">
+    <MudContainer MaxWidth="MaxWidth.Large">
+        <MudPaper Elevation="0" Style="padding: 20px">
+            <MudGrid Spacing="7" Class="home-div">
+                <MudItem xs="12" sm="12" md="12" lg="7" xl="7" xxl="7">
+                    <MudImage Src="images/backgrounds/buy-tickets.png" Fluid="true" Alt="Create event" Elevation="25" Class="rounded-lg"/>
+                </MudItem>
+                <MudItem xs="12" sm="12" md="12" lg="5" xl="5" xxl="5" Style="align-items: center; justify-content: center; display: flex">
+                    <div id="home-title-sub-header"> Create events with ease, set up ticket sales, and give your attendees a smooth and secure purchasing experience. </div>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudContainer>
 
-        <MudGrid Spacing="15" Class="home-div">
-
-            <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12" Style="text-align: center">
-                <div id="home-title-header-one"> Create & Manage Your Events; Buy and Sell Tickets.</div>
-
-                <br/><br/>
-
-                <div id="home-title-header-description-one" style="text-align: center">
-                    Whether you're organizing a conference, concert, workshop, or any gathering, our tools are designed to streamline every step of the process with adequate customisations.
-                </div>
-                
-                <br/>
-
-            </MudItem>
-
-            <MudItem xs="12" sm="12" md="12" lg="7" xl="7" xxl="7">
-                <MudImage Src="images/backgrounds/buy-tickets.png" Fluid="true" Alt="Create event" Elevation="25" Class="rounded-lg"/>
-            </MudItem>
+</div>
 
 
-            <MudItem xs="12" sm="12" md="12" lg="5" xl="5" xxl="5" Style="align-items: center; justify-content: center; display: flex">
-                <div id="home-title-sub-header"> Create events with ease, set up ticket sales, and give your attendees a smooth and secure purchasing experience. </div>
-            </MudItem>
-            
-        </MudGrid>
+<div class="header-div" style="text-align: left">
 
+    <div id="home-title-header-one">Latest Events</div>
+
+    <br/>
+
+    <div id="home-title-header-description-one" style="text-align: center">
+      See all upcoming and amazing events.
     </div>
 
-    <br/><br/><br/> <br/><br/><br/>
+    <br/><br/><br/>
 
-    <div Style="margin-top: 50px; margin-bottom: 50px">
+    <MudContainer MaxWidth="MaxWidth.Large">
+        <MudGrid Spacing="7">
+            @if (_events.Any())
+            {
+                foreach (var e in _events)
+                {
+                    var ticketLink = $"/events/get-tickets/{e._id}";
+                    var eventName = e.eventName.Length > 15 ? e.eventName[..15] + " ..." : e.eventName;
+                    var address = e.eventAddress.Length > 35 ? e.eventAddress[..35] + " ..." : e.eventAddress;
 
-        <MudGrid Spacing="15">
+                    <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
+                        <div class="event-lisiting-web">
+                            <MudCard>
+                                <MudCardMedia Image="@e.eventImagePath" Height="200"/>
+                                <MudCardContent>
+                                    <div style="line-height: 40px">
+                                        <div style="font-size: medium"><b>@eventName</b></div>
+                                        <span>@address</span>
+                                        <br/>
 
+                                        <span>
+                                            @if (e.eventTimes.Any())
+                                            {
+                                                @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
+                                            }
+                                        </span>
+                                        <br/>
+
+                                        <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@e.eventOption</b></MudChip>
+
+                                        @if (e.eventTimes.Any() && e.eventTimes.Count > 1)
+                                        {
+                                            <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Times</MudChip>
+                                        }
+                                        else
+                                        {
+                                            <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Time</MudChip>
+                                        }
+
+                                        @if (e.eventTickets.Any() && e.eventTickets.Count > 1)
+                                        {
+                                            <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Tickets</MudChip>
+                                        }
+                                        else
+                                        {
+                                            <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Ticket</MudChip>
+                                        }
+                                        <br/>
+                                    </div>
+                                </MudCardContent>
+                                <MudCardActions Class="pa-5">
+                                    @if (e.paymentOptions.Count > 1)
+                                    {
+                                        var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                        <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C") +</b></MudText>
+                                    }
+                                    else
+                                    {
+                                        var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                        <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
+                                    }
+                                    <MudSpacer></MudSpacer>
+                                    <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Dark" Target="_blank" Href="@ticketLink"><b>Get Tickets</b></MudButton>
+                                </MudCardActions>
+                            </MudCard>
+                        </div>
+
+                        <div class="event-lisiting-mobile">
+                            <MudGrid>
+                                <MudItem sm="5" xs="5">
+                                    <MudCard>
+                                        <MudCardMedia Image="@e.eventImagePath" Height="150"/>
+                                    </MudCard>
+                                </MudItem>
+                                <MudItem sm="7" xs="7">
+                                    <div style="line-height: 30px">
+
+                                        <div style="font-size: small"><b>@eventName</b></div>
+                                        <span>@address</span>
+                                        <br/>
+                                        <span>
+                                            @if (e.eventTimes.Any())
+                                            {
+                                                @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
+                                            }
+                                        </span>
+<br/><br/>
+                                        <MudButton Variant="Variant.Text" Size="Size.Small" Href="@ticketLink" Target="_blank" Color="Color.Secondary"><b>Get Tickets</b></MudButton>
+                                    </div>
+                                </MudItem>
+                            </MudGrid>
+                        </div>
+                    </MudItem>
+
+                }
+            }
+            else
+            {
+                <MudItem xs="12" sm="12" md="12" lg="12">
+                    <div style="text-align:center;">
+                        <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="80" Class="rounded-lg" />
+                        <br />
+                        <MudText Typo="Typo.h6"> <b>No new event yet!</b></MudText>
+                        <br>
+                        <MudText> Once a new event is created, you will see them here.</MudText>
+                    </div>
+                </MudItem>
+            }
+        </MudGrid>
+        
+        
+        <br/><br/><br/>
+
+        <div id="div-continue-account" style="text-align: center">
+            <MudButton FullWidth="false" Href="/events/discover-events/latest-event" Variant="Variant.Filled" Style="height: 55px; text-decoration: none" Size="Size.Large" Color="Color.Secondary"> <b>Explore events</b> </MudButton>
+        </div>
+        
+    </MudContainer>
+
+</div>
+
+
+
+
+<div style="background-color: #fff8f8">
+    
+   
+    <MudContainer MaxWidth="MaxWidth.Large">
+
+        <br/><br/> <br/><br/>
+        <br/><br/> 
+       
+        <MudGrid Spacing="7">
             <MudItem xs="12" sm="12" md="6" lg="6" xl="6" xxl="6" Style="text-align: center">
                 <MudImage Src="images/backgrounds/Dash.png" Fluid="true" Alt="Ivs Dashboard" Elevation="25" Class="rounded-lg"/>
             </MudItem>
             <MudItem xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
-
                 <div id="home-title-one">Navigate Success at a Glance.</div>
-                
                 <br/>
-                
                 <div id="home-title-purple-description">
-
                     Gain a clear perspective of your event performance with real-time metrics. Track total events, upcoming schedules, revenue milestones, and settlement summaries—all in one place.
-                    
                 </div>
-                
-                <br/><br/>
-                
-                <MudButton FullWidth="true" Href="/accounts/signup" Variant="Variant.Filled" Style="height: 55px; text-decoration: none" Size="Size.Large" Color="Color.Warning" > <b>Start for free</b> </MudButton>
-
-
-            </MudItem>
+               </MudItem>
         </MudGrid>
+
+
+        <br/><br/> <br/><br/><br/>
         
-    </div>
+        
+        <MudGrid Spacing="7">
 
-    <div Style="margin-top: 50px; margin-bottom: 50px">
-
-        <MudGrid Spacing="15">
-            
             <MudItem xs="12" sm="12" md="6" lg="6" xl="6" xxl="6">
 
                 <div id="home-title-two">Insights for Future Growth</div>
-
                 <br/>
-
                 <div id="home-title-purple-description">
-
-                    A holistic breakdown of financial activities, offering clarity on patterns, trends, and opportunities. 
-                    
+                    A holistic breakdown of financial activities, offering clarity on patterns, trends, and opportunities.
                     Empower yourself to make data-driven decisions, refine strategies, and stay ahead by anticipating potential outcomes.
-
                 </div>
-
+                
                 <br/><br/>
-
-                <MudButton FullWidth="true" Href="/accounts/login" Variant="Variant.Filled" Style="height: 55px; text-decoration: none" Size="Size.Large" Color="Color.Secondary"> <b>Continue With Account</b> </MudButton>
-
-
+                
+                <div id="div-continue-account">
+                    <MudButton FullWidth="false" Href="/accounts/login" Variant="Variant.Outlined" Style="height: 55px; text-decoration: none" Size="Size.Large" Color="Color.Primary"> <b>Continue With Account</b> </MudButton>
+                </div>
+                
+                <br/><br/>
+                
             </MudItem>
 
             <MudItem xs="12" sm="12" md="6" lg="6" xl="6" xxl="6" Style="text-align: center">
                 <MudImage Src="images/backgrounds/Transactions.png" Fluid="true" Alt="Ivs Dashboard" Elevation="25" Class="rounded-lg"/>
             </MudItem>
-            
+
         </MudGrid>
 
-    </div>
+        <br/><br/> <br/><br/>
+        
+    </MudContainer>
+    
+</div>
 
-    <br/><br/><br/> <br/><br/><br/>
 
-    <div Style="text-align: center">
 
+<br/><br/><br/> <br/><br/><br/>
+
+<div Style="text-align: center">
+
+    <MudContainer MaxWidth="MaxWidth.Large">
         <MudGrid Spacing="15">
 
             <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12" Style="text-align: center">
@@ -129,7 +258,7 @@
                 <br/>
                 <div id="home-title-header-description-one" style="text-align: center">
                     Discover how events are transforming with ivs. Hear their stories, insights, and successes that inspire growth and innovation.
-                    </div>
+                </div>
             </MudItem>
 
             <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
@@ -156,7 +285,7 @@
                 <br/>
                 <div id="testimonies-description">
                     Managing multiple events used to be a headache, but IVS changed everything. From tracking ticket sales to real-time analytics, we’ve gained total control and confidence in our event planning.
-                    </div>
+                </div>
             </MudItem>
 
             <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
@@ -169,89 +298,155 @@
                 <br/>
                 <div id="testimonies-description">
                     Buying tickets through IVS was quick and easy. The platform is user-friendly, and I loved that I could pay securely in seconds.
-                    </div>
+                </div>
             </MudItem>
         </MudGrid>
+    </MudContainer>
 
-    </div>
+</div>
     
-</MudContainer>
 
 <br /><br /><br /><br /><br /><br />
 
 <MudPaper Elevation="0" Style="background-color: #fef8ff; padding: 30px">
     
-    <MudGrid>
+    <MudContainer MaxWidth="MaxWidth.Large">
+        <MudGrid>
 
-        <MudItem xs="12" sm="12" md="12" lg="12">
-            <div class="d-none d-md-flex align-center" style="width:100%">
-                <MudImage Src="/images/logos/ivs3.png"  Alt="Ivs Logo" Elevation="0" Height="44"/>
-                <div id="logo-title-footer" class="ml-1"><a href="/home">ivs</a></div>
-            </div>
-            <hr/>
-        </MudItem>
+            <MudItem xs="12" sm="12" md="12" lg="12">
+                <div class="d-none d-md-flex align-center" style="width:100%">
+                    <MudImage Src="/images/logos/ivs3.png"  Alt="Ivs Logo" Elevation="0" Height="44"/>
+                    <div id="logo-title-footer" class="ml-1"><a href="/home">ivs</a></div>
+                </div>
+                <hr/>
+            </MudItem>
 
-        <MudItem xs="12" sm="12" md="12" lg="12">
-            <MudText Typo="Typo.body1"> <b>ivs</b> is an event and ticketing platform for event creators. </MudText>
-            <br/>
-        </MudItem>
+            <MudItem xs="12" sm="12" md="12" lg="12">
+                <MudText Typo="Typo.body1"> <b>ivs</b> is an event and ticketing platform for event creators. </MudText>
+                <br/>
+            </MudItem>
 
-        <MudItem xs="12" sm="12" md="12" lg="6">
-            <MudText Typo="Typo.subtitle1" Style="font-weight: bold">Solution</MudText>
-            <br/>
-            
-            <MudGrid>
-                <MudItem xs="12" sm="12" md="12" lg="6">
-                    <MudLink Href="/users-and-account" Color="Color.Dark" Typo="Typo.body2"> Users & Accounts </MudLink>
-                </MudItem>
-                <MudItem xs="12" sm="12" md="12" lg="6">
-                    <MudLink Href="/organise-events"  Color="Color.Dark" Typo="Typo.body2"> Create/Organise Events </MudLink>
-                </MudItem>
-                <MudItem xs="12" sm="12" md="12" lg="6">
-                     <MudLink Href="/analytics-and-insights" Color="Color.Dark" Typo="Typo.body2"> Analytics & Insights </MudLink>
-                </MudItem>
-                <MudItem xs="12" sm="12" md="12" lg="6">
-                     <MudLink Href="/payment-processing" Color="Color.Dark" Typo="Typo.body2"> Payment Processing </MudLink>
-                </MudItem>
-                <MudItem xs="12" sm="12" md="12" lg="6">
-                     <MudLink Href="/discount-and-coupons" Color="Color.Dark" Typo="Typo.body2"> Discount & Coupons</MudLink>
-                </MudItem>
-                <MudItem xs="12" sm="12" md="12" lg="6">
-                     <MudLink Href="/sales-and-settlements" Color="Color.Dark" Typo="Typo.body2"> Sales & Settlements </MudLink>
-                </MudItem>
-            </MudGrid>
-        </MudItem>
-       
-        <MudItem xs="12" sm="12" md="12" lg="2">
-            <MudText Typo="Typo.subtitle1" Style="font-weight: bold">Learn</MudText>
-            <br/>
-            <ul id="footer-listing">
-                <li> <MudLink Href="/about-us" Color="Color.Dark" Typo="Typo.body2"> About us </MudLink> </li>
-                <li> <MudLink Href="/how-it-works"  Color="Color.Dark" Typo="Typo.body2"> How it works </MudLink> </li>
-            </ul>
-        </MudItem>
-        
-        <MudItem xs="12" sm="12" md="12" lg="2">
-            <MudText Typo="Typo.subtitle1" Style="font-weight: bold">Company</MudText>
-            <br/>
-            <ul id="footer-listing">
-                <li> <MudLink Href="/privacy-policy" Color="Color.Dark" Typo="Typo.body2"> Privacy Policy </MudLink> </li>
-                <li> <MudLink Href="/terms-and-conditions" Color="Color.Dark" Typo="Typo.body2"> Terms & Conditions </MudLink> </li>
-            </ul>
-            
-        </MudItem>
-        
-        <MudItem xs="12" sm="12" md="12" lg="2">
-            <MudText Typo="Typo.subtitle1" Style="font-weight: bold">Contact us</MudText>
-        </MudItem>
-    </MudGrid>
-    
-    <br/>
+            <MudItem xs="12" sm="12" md="12" lg="6">
+                <MudText Typo="Typo.subtitle1" Style="font-weight: bold">Solution</MudText>
+                <br/>
+
+                <MudGrid>
+                    <MudItem xs="12" sm="12" md="12" lg="6">
+                        <MudLink Href="/users-and-account" Color="Color.Dark" Typo="Typo.body2"> Users & Accounts </MudLink>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="12" lg="6">
+                        <MudLink Href="/organise-events"  Color="Color.Dark" Typo="Typo.body2"> Create/Organise Events </MudLink>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="12" lg="6">
+                        <MudLink Href="/analytics-and-insights" Color="Color.Dark" Typo="Typo.body2"> Analytics & Insights </MudLink>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="12" lg="6">
+                        <MudLink Href="/payment-processing" Color="Color.Dark" Typo="Typo.body2"> Payment Processing </MudLink>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="12" lg="6">
+                        <MudLink Href="/discount-and-coupons" Color="Color.Dark" Typo="Typo.body2"> Discount & Coupons</MudLink>
+                    </MudItem>
+                    <MudItem xs="12" sm="12" md="12" lg="6">
+                        <MudLink Href="/sales-and-settlements" Color="Color.Dark" Typo="Typo.body2"> Sales & Settlements </MudLink>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="12" lg="2">
+                <MudText Typo="Typo.subtitle1" Style="font-weight: bold">Learn</MudText>
+                <br/>
+                <ul id="footer-listing">
+                    <li> <MudLink Href="/about-us" Color="Color.Dark" Typo="Typo.body2"> About us </MudLink> </li>
+                    <li> <MudLink Href="/how-it-works"  Color="Color.Dark" Typo="Typo.body2"> How it works </MudLink> </li>
+                </ul>
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="12" lg="2">
+                <MudText Typo="Typo.subtitle1" Style="font-weight: bold">Company</MudText>
+                <br/>
+                <ul id="footer-listing">
+                    <li> <MudLink Href="/privacy-policy" Color="Color.Dark" Typo="Typo.body2"> Privacy Policy </MudLink> </li>
+                    <li> <MudLink Href="/terms-and-conditions" Color="Color.Dark" Typo="Typo.body2"> Terms & Conditions </MudLink> </li>
+                </ul>
+
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="12" lg="2">
+                <MudText Typo="Typo.subtitle1" Style="font-weight: bold">Contact us</MudText>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
 
 </MudPaper>
 
 
+@code{
 
+    [Inject] IEventService _eventService { get; set; }
+    [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] ISnackbar? _snackbar { get; set; }
+    [Inject] IConfiguration? _config { get; set; }
+    
+    List<FetchEventDto> _events = new List<FetchEventDto>();
+    Dictionary<string, string> queryParameter = new Dictionary<string, string> { { "page", "0" }, { "limit", "0" } };
+    private bool _processing { get; set; }
+    private bool _getProcessing { get; set; }
+    
+     protected async override void OnInitialized()
+    {
+        _processing = true;
+        
+        var limit = _config.GetValue<string>("Pagination:DiscoveryEventsLoadMoreLimit") ?? "8";
+        var page = _config.GetValue<string>("Pagination:DiscoveryEventsLoadMorePage") ?? "0";
+
+        queryParameter["limit"] = limit;
+        queryParameter["page"] = page;
+        
+        _events = await GetFetchData(string.Empty, queryParameter);
+
+        _processing = false;
+        StateHasChanged();
+    }
+    
+    
+    private async Task<List<FetchEventDto>> GetFetchData(string getOptions, Dictionary<string, string> queryParameter)
+    {
+        HashSet<string> seenKeys = new HashSet<string>();
+        List<FetchEventDto> _event = new List<FetchEventDto>();
+
+        var res = await _eventService.FetchEvent(queryParameter);
+        if (res.result.code != ResponseCodes.ResponseCodeOk)
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+            return new List<FetchEventDto>();
+        }
+
+        var data = (List<FetchEventDto>)res.result.data;
+        _event.AddRange(data.Where(e => seenKeys.Add(e._id)));
+
+        if (!_event.Any()) return _event;
+
+        if (getOptions == Helpers.GetOptionsLatest) return _event;
+
+        if (queryParameter.ContainsKey("paymentOptionName") && !string.IsNullOrEmpty(queryParameter["paymentOptionName"]))
+        {
+            foreach (var x in _event)
+            {
+                var freePaymentOptionIds = x.paymentOptions
+                    .Where(po => po.name == queryParameter["paymentOptionName"])
+                    .Select(po => po.paymentOptionId)
+                    .ToList();
+
+                // Remove free tickets from the eventTickets list
+                x.eventTickets = x.eventTickets.Where(et => freePaymentOptionIds.Contains(et.paymentOptionId)).ToList();
+                x.paymentOptions = x.paymentOptions.Where(c => freePaymentOptionIds.Contains(c.paymentOptionId)).ToList();
+            }
+        }
+
+        return _event;
+    }
+
+}
 
 
 

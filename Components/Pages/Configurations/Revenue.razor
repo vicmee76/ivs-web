@@ -2,9 +2,9 @@
 
 @{
     var nigeriaCulture = new CultureInfo("en-NG")
-   {
-      NumberFormat ={ CurrencySymbol = "₦"}
-   };
+    {
+        NumberFormat = { CurrencySymbol = "₦" }
+    };
     Thread.CurrentThread.CurrentCulture = nigeriaCulture;
     Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
 }
@@ -47,7 +47,6 @@
                     }
                     else
                     {
-
                         <MudCard Elevation="0">
 
                             <MudCardContent>
@@ -65,7 +64,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <h3>@totalServiceFeeAfterDeductionSum.ToString("C")</h3>
+                                                    <h3>@ivsNetRevenueSum.ToString("C")</h3>
                                                 }
 
                                             </div>

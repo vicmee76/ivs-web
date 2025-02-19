@@ -233,7 +233,7 @@
             </CardHeaderActions>
         </MudCardHeader>
         <MudCardContent>
-            <MudGrid Spacing="3">
+            <MudGrid Spacing="7">
                 @if (_LatestEventProcessing)
                 {
                     <MudItem xs="12" sm="12" md="12" lg="12">
@@ -293,7 +293,7 @@
                                             }
                                         </div>
                                     </MudCardContent>
-                                    <MudCardActions Style="padding: 20px">
+                                    <MudCardActions Class="pa-5">
                                         @if (e.paymentOptions.Count > 1)
                                         {
                                             var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
@@ -373,7 +373,7 @@
             </CardHeaderActions>
         </MudCardHeader>
         <MudCardContent>
-            <MudGrid Spacing="3">
+            <MudGrid Spacing="7">
                 @if (_freeEventProcessing)
                 {
                     <MudItem xs="12" sm="12" md="12" lg="12">
@@ -433,7 +433,7 @@
                                                 }
                                             </div>
                                         </MudCardContent>
-                                        <MudCardActions Style="padding: 20px">
+                                        <MudCardActions Class="pa-5">
                                             @if (e.paymentOptions.Count > 1)
                                             {
                                                 var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
@@ -512,7 +512,7 @@
             </CardHeaderActions>
         </MudCardHeader>
         <MudCardContent>
-            <MudGrid Spacing="3">
+            <MudGrid Spacing="7">
                 @if (_paidEventProcessing)
                 {
                     <MudItem xs="12" sm="12" md="12" lg="12">
@@ -573,7 +573,7 @@
                                                 }
                                             </div>
                                         </MudCardContent>
-                                        <MudCardActions Style="padding: 20px">
+                                        <MudCardActions Class="pa-5">
                                             @if (e.paymentOptions.Count > 1)
                                             {
                                                 var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;

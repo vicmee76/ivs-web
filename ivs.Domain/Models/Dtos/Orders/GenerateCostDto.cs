@@ -3,6 +3,8 @@ namespace ivs.Domain.Models.Dtos.Orders;
 public class GenerateCostDto
 {
     public int totalTicketPurchased { get; set; }
+    
+    public decimal percentageCharge { get; set; }
     public decimal totalServiceFee { get; set; }
     public decimal totalTicketFee { get; set; }
     public decimal totalAmount { get; set; }

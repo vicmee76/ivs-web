@@ -173,7 +173,7 @@
             }
             <br /><br />
 
-            <MudButton OnClick="@(async () => await ActionCreateTime())" Disabled="@(!model.Any())" Style="background-color:#56375C; color:white" Variant="Variant.Filled">  
+            <MudButton OnClick="@(async () => await ActionCreateTime())" Disabled="@(!model.Any())" Color="Color.Secondary" Variant="Variant.Filled">  
 
                 @if (_processing)
                 {
