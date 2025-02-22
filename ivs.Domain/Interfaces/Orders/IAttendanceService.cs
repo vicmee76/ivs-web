@@ -11,7 +11,7 @@ namespace ivs.Domain.Interfaces.Orders
     {
         public Task<ResponseObject> AdmitAttendees(string attendanceId);
         public Task<ResponseObject> GetAttendanceByOrderId(string orderId);
-        public Task<ResponseObject> GetAttendanceByUserCode(string code);
+        public Task<ResponseObject> GetAttendanceByUserCode(string eventId, string code);
         public Task<ResponseObject> GetAttendanceByEventId(string eventId, Dictionary<string, string> queryParam);
         public Task<ResponseObject> GetAttendanceByEventTimeId(string timeId, Dictionary<string, string> queryParam);
         public Task<ResponseObject> GetAttendanceByTicketId(string ticketId, Dictionary<string, string> queryParam);
