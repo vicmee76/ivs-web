@@ -307,12 +307,12 @@
                                                         @foreach (var tic in com.Tickets)
                                                         {
                                                             var amount = Convert.ToDecimal(tic.ticketAmount.numberDecimal).ToString("C");
-                                                            <MudItem xs="12" sm="12" md="4" lg="3" xl="3" xxl="3">
+                                                            <MudItem xs="12" sm="12" md="4" lg="4" xl="4" xxl="4">
 
                                                                 <MudCard Elevation="0" Style="border: 1px dashed">
                                                                     <MudCardHeader>
                                                                         <CardHeaderContent>
-                                                                            <MudText Style="font-size:medium" Color="Color.Primary"><b>@tic.ticketName</b></MudText>
+                                                                            <MudText Style="font-size:medium" Color="Color.Dark"><b>@tic.ticketName</b></MudText>
                                                                         </CardHeaderContent>
                                                                         <CardHeaderActions>
 
@@ -329,9 +329,7 @@
 
                                                                         <div style="line-height:30px;">
 
-                                                                            <p> <b>Description : </b> @tic.ticketDescription </p>
-                                                                            <p> <b>Ticket Kind : </b> @tic.ticketKind </p>
-                                                                            <p> <b>Admits : </b> @tic.groupSize </p>
+                                                                            <p> <b>Ticket Kind : </b> @tic.ticketKind  - Admits @tic.groupSize</p>
                                                                             <p> <b>Stock : </b>
                                                                                 @if (tic.ticketInStock >= Int32.MaxValue)
                                                                                 {
@@ -343,12 +341,16 @@
                                                                                 }
                                                                             
                                                                                 </p>
-                                                                            <p><b>Sales Start Date : </b> @tic.ticketSalesStartDateAndTime?.ToString("ddd, d-M-yyyy HH tt")</p>
-                                                                            <p> <b>Sales End Date : </b>  @tic.ticketSalesEndDateAndTime?.ToString("ddd, d-M-yyyy HH tt")</p>
+                                                                            <p><b>Sales Date : </b> @tic.ticketSalesStartDateAndTime?.ToString("dd-MMM-yyyy") to @tic.ticketSalesEndDateAndTime?.ToString("dd-MMM-yyyy")</p>
+                                                                            
+                                                                            <MudDivider DividerType="DividerType.FullWidth" Class="my-4"></MudDivider>
+                                                                            
+                                                                            <p> <b>Description : </b> @tic.ticketDescription </p>
+                                                                            
                                                                         </div>
                                                                     </MudCardContent>
                                                                     <MudCardActions>
-                                                                        <MudButton Variant="Variant.Text" Color="Color.Primary" Style="font-weight:bold; font-size:medium">@amount</MudButton>
+                                                                        <MudButton Variant="Variant.Text" Color="Color.Error" Style="font-weight:bold; font-size:medium">@amount</MudButton>
                                                                     </MudCardActions>
                                                                 </MudCard>
 
