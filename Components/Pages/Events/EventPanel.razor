@@ -17,7 +17,6 @@
     </NotAuthorized>
     <Authorized>
 
-
         <MudMessageBox @ref="admituserMessageBox" Title="Admit user to event" CancelText="Cancel" YesText="Admit" Style="padding:20px;">
             <MessageContent>
                 Are you sure you want to admit this user to this event?
@@ -29,7 +28,6 @@
                 <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Default">Cancel</MudButton>
             </CancelButton>
         </MudMessageBox>
-
 
         <MudMessageBox @ref="postSettlementMessageBox" Title="Request for settlement" CancelText="Cancel" YesText="Confirm" Style="padding:20px;">
             <MessageContent>
@@ -309,7 +307,7 @@
                                                             var amount = Convert.ToDecimal(tic.ticketAmount.numberDecimal).ToString("C");
                                                             <MudItem xs="12" sm="12" md="4" lg="4" xl="4" xxl="4">
 
-                                                                <MudCard Elevation="0" Style="border: 1px dashed">
+                                                                <MudCard Elevation="0" Style="border: 3px dashed darkgray">
                                                                     <MudCardHeader>
                                                                         <CardHeaderContent>
                                                                             <MudText Style="font-size:medium" Color="Color.Dark"><b>@tic.ticketName</b></MudText>
@@ -319,8 +317,6 @@
                                                                             <MudMenu Icon="@Icons.Material.Filled.Settings" Size="Size.Small" Color="Color.Default">
                                                                                 <MudMenuItem Href="">Add Coupon</MudMenuItem>
                                                                                 <MudMenuItem Href="">View Coupon</MudMenuItem>
-                                                                                <MudMenuItem Href="">View Sales</MudMenuItem>
-                                                                                <MudMenuItem Href="">View Attendance</MudMenuItem>
                                                                             </MudMenu>
 
                                                                         </CardHeaderActions>
