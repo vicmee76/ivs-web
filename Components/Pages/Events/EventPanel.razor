@@ -230,7 +230,7 @@
                                                     <br />
                                                     <MudImage Src="@_events.qrCodeLink"></MudImage>
                                                     <br /><br/>
-                                                    <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="@((e) => ActionShareEvent(_events.eventShortLink))" StartIcon="@Icons.Material.Filled.Share" Color="Color.Secondary" Style="text-transform:none">
+                                                    <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="@((e) => ActionShareEvent(_events.eventShortLink, _events.eventName))" StartIcon="@Icons.Material.Filled.Share" Color="Color.Secondary" Style="text-transform:none">
                                                         Share
                                                     </MudButton>
                                                 </div>
@@ -1583,7 +1583,7 @@
     }
 
     
-    private async Task ActionShareEvent(string link)
+    private async Task ActionShareEvent(string link, string eventName)
     {
         DialogOptions opts = new DialogOptions()
         {
