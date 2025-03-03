@@ -107,26 +107,38 @@
 
                                     </MudRadioGroup>
 
+                                    <br /><br />
+
+                                    <MudText><b>Event Deatils</b></MudText>
                                     <br />
+
+                                    <MudChip T="string" Color="Color.Secondary">https://www.ivs.social/ivs/</MudChip> 
+                                    
+                                    <MudTextField Label="Event Name*" HelperText="Enter event name" @bind-Value="model.eventName" For="@(() => model.eventName)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
 
                                     <MudTextField Label="Event Name*" HelperText="Enter event name" @bind-Value="model.eventName" For="@(() => model.eventName)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
 
                                     <MudTextField T="string" Label="Event Description*" @bind-Value="model.eventDescription" For="@(() => model.eventDescription)" HelperText="Enter event description" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Placeholder="Enter description here" Lines="5" />
 
+                                    <MudGrid Spacing="5">
+                                        <MudItem sm="6" md="6" lg="6">
+                                            <MudTextField Label="Event Address*" HelperText="Enter event address" @bind-Value="model.eventAddress" For="@(() => model.eventAddress)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                        </MudItem>
 
-                                    <MudTextField Label="Event Address*" HelperText="Enter event address" @bind-Value="model.eventAddress" For="@(() => model.eventAddress)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                        <MudItem sm="6" md="6" lg="6">
+                                            <MudSelect T="string" Label="Event State*" HelperText="Select state" Variant="Variant.Outlined" @bind-Value="model.eventState" For="@(() => model.eventState)" HelperTextOnFocus="true" Clearable="true">
+                                                @if (allState != null)
+                                                {
+                                                    foreach (var com in allState)
+                                                    {
+                                                        <MudSelectItem Value="@(com)">@(com)</MudSelectItem>
+                                                    }
+                                                }
+                                            </MudSelect>
+                                        </MudItem>
+                                    </MudGrid>
 
                                     <MudTextField Label="Event Google pin link" HelperText="Search for the event address on Google map, copy the link and paste it here" @bind-Value="model.adressPin" For="@(() => model.adressPin)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-
-                                    <MudSelect T="string" Label="Event State*" HelperText="Select state" Variant="Variant.Outlined" @bind-Value="model.eventState" For="@(() => model.eventState)" HelperTextOnFocus="true" Clearable="true">
-                                        @if (allState != null)
-                                        {
-                                            foreach (var com in allState)
-                                            {
-                                                <MudSelectItem Value="@(com)">@(com)</MudSelectItem>
-                                            }
-                                        }
-                                    </MudSelect>
 
                                     <br />
 
@@ -158,17 +170,29 @@
                                         </MudRadioGroup>
                                     }
 
-                                    <br /><br />
+                                    <br /><br /><br />
 
+                                    <MudText><b>Social Links</b></MudText>
+                                    <br />
 
-                                    <MudTextField Label="Web link" HelperText="Enter you social web link here" @bind-Value="model.webLink" For="@(() => model.webLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                    <MudGrid Spacing="5">
 
-                                    <MudTextField Label="Facbook link" HelperText="Enter facebook event link if you have any" @bind-Value="model.facebookLink" For="@(() => model.facebookLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                        <MudItem sm="6" md="6" lg="3" xl="3" xxl="3">
+                                            <MudTextField Label="Web link" HelperText="Enter you social web link here" @bind-Value="model.webLink" For="@(() => model.webLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                        </MudItem>
 
-                                    <MudTextField Label="Instagram Link" HelperText="Enter instagram event link if you have any" @bind-Value="model.instagramLink" For="@(() => model.instagramLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                        <MudItem sm="6" md="6" lg="3" xl="3" xxl="3">
+                                            <MudTextField Label="Facbook link" HelperText="Enter facebook event link if you have any" @bind-Value="model.facebookLink" For="@(() => model.facebookLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                        </MudItem>
 
-                                    <MudTextField Label="Twitter link" HelperText="Enter twitter event link if you have any" @bind-Value="model.twitterLink" For="@(() => model.twitterLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                         <MudItem sm="6" md="6" lg="3" xl="3" xxl="3">
+                                            <MudTextField Label="Instagram Link" HelperText="Enter instagram event link if you have any" @bind-Value="model.instagramLink" For="@(() => model.instagramLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                        </MudItem>
 
+                                        <MudItem sm="6" md="6" lg="3" xl="3" xxl="3">
+                                            <MudTextField Label="Twitter link" HelperText="Enter twitter event link if you have any" @bind-Value="model.twitterLink" For="@(() => model.twitterLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                        </MudItem>
+                                    </MudGrid>
 
                                 </MudItem>
 
