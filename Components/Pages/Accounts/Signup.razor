@@ -22,13 +22,13 @@
                     <DataAnnotationsValidator />
                     
                     <MudTextField Label="Fullname" HelperText="Enter your fullname" Margin="Margin.Dense" @bind-Value="model.fullname" For="@(() => model.fullname)" Variant="Variant.Outlined"  HelperTextOnFocus="true" Clearable="true" />
-                    <div class="sign-up-form-div-space"></div>
+                    
                     <MudTextField InputType="InputType.Email" Label="Email" Margin="Margin.Dense" HelperText="Enter your email" @bind-Value="model.email" For="@(() => model.email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-                    <div class="sign-up-form-div-space"></div>
+                   
                     <MudTextField InputType="@PasswordInput" Label="Password" Margin="Margin.Dense" HelperText="Enter your password" @bind-Value="model.password" For="@(() => model.password)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
-                    <div class="sign-up-form-div-space"></div>
+                   
                     <MudTextField InputType="@PasswordInput" Label="Confirm Password" Margin="Margin.Dense" HelperText="Confirm your password" @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
-                    <div class="sign-up-form-div-space"></div>
+                    
                     <MudSelect T="string" Label="Organisation Type" Margin="Margin.Dense" Variant="Variant.Outlined" @bind-Value="model.organisation_id" For="@(() => model.organisation_id)">
                         @if (_orgs != null)
                         {
