@@ -110,7 +110,7 @@
                                     </MudCardContent>
 
                                     <MudCardActions>
-                                       <MudIconButton Icon="@Icons.Material.Filled.Share" Size="Size.Medium" Title="Share" Color="Color.Warning"/>
+                                       <MudIconButton Icon="@Icons.Material.Filled.Share" OnClick="@((e) => ActionShareEvent(item.eventShortLink, item.eventName))" Size="Size.Medium" Title="Share" Color="Color.Warning"/>
 
                                        @if (item.status == Helpers.Pending)
                                        {
@@ -187,7 +187,7 @@
                               </TemplateColumn>
                               <TemplateColumn Resizable="true" Title="Share" Sortable="false" Filterable="false">
                                  <CellTemplate Context="ctx">
-                                    <MudIconButton Icon="@Icons.Material.Filled.Share" Size="Size.Small" Title="Click to copy" Color="Color.Warning"/>
+                                    <MudIconButton Icon="@Icons.Material.Filled.Share" OnClick="@((e) => ActionShareEvent(ctx.Item.eventShortLink, ctx.Item.eventName))" Size="Size.Small" Title="Click to copy" Color="Color.Warning"/>
                                  </CellTemplate>
                               </TemplateColumn>
                               <TemplateColumn Resizable="true" Title="Published" Sortable="false" Filterable="false">
@@ -239,6 +239,8 @@
    [Inject] IEventService _eventService { get; set; }
    [Inject] NavigationManager? _navigate { get; set; }
    [Inject] ISnackbar? _snackbar { get; set; }
+   [Inject] IDialogService DialogService { get; set; }
+   
    private MudMessageBox deleteEventMessageBox { get; set; }
    IEnumerable<GetEventByUserDto> _eventsDto = new List<GetEventByUserDto>();
    AuthUser authUser = new AuthUser();
@@ -319,5 +321,25 @@
       StateHasChanged();
    }
 
+   
+   private async Task ActionShareEvent(string link, string eventName)
+   {
+      DialogOptions opts = new DialogOptions()
+      {
+         MaxWidth = MaxWidth.Large,
+         FullWidth = true,
+         CloseButton = true,
+         CloseOnEscapeKey = true
+      };
+
+      var parameters = new DialogParameters<ShareEventDialog> { { x => x.eventLink, link }, { x => x.eventName, eventName } };
+      var dialog = await DialogService.ShowAsync<ShareEventDialog>("Share event", parameters, opts);
+
+      var result = await dialog.Result;
+      if (!result.Canceled)
+      {
+         StateHasChanged();
+      }
+   }
 
 }

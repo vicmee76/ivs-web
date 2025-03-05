@@ -17,5 +17,7 @@ public class GetEventByUserDto
     public string? eventOption { get; set; }
     public string? createdAt { get; set; }
     public string? eventImagePath { get; set; }
+    
+    public string? eventShortLink { get; set; }
     public string? status { get; set; }
 }

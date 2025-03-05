@@ -1,0 +1,120 @@
+﻿@page "/sales-and-settlements"
+
+<title>IV's Sales & Settlement</title>
+
+<div id="site-intro">
+    <br />
+    <MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
+
+        <span id="site-intro-header"> Manage Your Sales & Settlements Seamlessly </span>
+        <br /><br />
+        <div>
+            <div id="site-intro-sub-header">
+                Keep track of all transactions, ensure timely payouts, and maximize your event revenue effortlessly.
+            </div>
+        </div>
+        <br /><br />
+        <MudButton Variant="Variant.Filled" FullWidth="false" Size="Size.Large" Color="Color.Error" Href="/accounts/signup"><b>Get Started</b></MudButton>
+
+    </MudContainer>
+</div>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
+
+    <MudGrid Spacing="5" Style="text-align:center">
+
+        <MudItem xs="6" sm="6" lg="3">
+            <MudPaper Style="padding: 20px; border: 1px whitesmoke solid;" Elevation="0">
+                <MudIcon Icon="@Icons.Material.TwoTone.CheckCircle" Color="Color.Success" Size="Size.Large"></MudIcon>
+                <MudText Typo="Typo.h6" Style="font-family: 'Akaya Telivigala'; font-weight: 200; color: #55385c">Sales Monitoring</MudText>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="6" sm="6" lg="3">
+            <MudPaper Style="padding: 20px; border: 1px whitesmoke solid;" Elevation="0">
+                <MudIcon Icon="@Icons.Material.TwoTone.CheckCircle" Color="Color.Success" Size="Size.Large"></MudIcon>
+                <MudText Typo="Typo.h6" Style="font-family: 'Akaya Telivigala'; font-weight: 200; color: #55385c">Automated Settlements</MudText>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="6" sm="6" lg="3">
+            <MudPaper Style="padding: 20px; border: 1px whitesmoke solid;" Elevation="0">
+                <MudIcon Icon="@Icons.Material.TwoTone.CheckCircle" Color="Color.Success" Size="Size.Large"></MudIcon>
+                <MudText Typo="Typo.h6" Style="font-family: 'Akaya Telivigala'; font-weight: 200; color: #55385c">Secure Transactions </MudText>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="6" sm="6" lg="3">
+            <MudPaper Style="padding: 20px; border: 1px whitesmoke solid;" Elevation="0">
+                <MudIcon Icon="@Icons.Material.TwoTone.CheckCircle" Color="Color.Success" Size="Size.Large"></MudIcon>
+                <MudText Typo="Typo.h6" Style="font-family: 'Akaya Telivigala'; font-weight: 200; color: #55385c"> Detailed Reports </MudText>
+            </MudPaper>
+        </MudItem>
+
+    </MudGrid>
+
+
+    <br /><br /><br />
+    <br /><br />
+
+
+
+    <MudGrid Spacing="5">
+
+        <MudItem sm="12" lg="6">
+            <MudPaper Style="padding: 20px; border: 1px darkgray solid;" Elevation="0">
+                <MudIcon Icon="@Icons.Material.TwoTone.TrackChanges" Color="Color.Dark" Size="Size.Large"></MudIcon>
+                <MudText Typo="Typo.h5" Style="font-family: 'Akaya Telivigala'; font-weight: 300; color: #55385c">Sales Tracking</MudText>
+                <div style="text-align: left; font-size: 1rem; font-family: 'General Sans'; line-height: 35px;">
+                    <ol style="list-style-type:decimal; padding:20px">
+                        <li>View real-time sales, including ticket types, prices, and quantities sold.</li>
+                        <li>Filter sales by event, date, or payment status.</li>
+                        <li>Track total revenue, service fees, and net earnings.</li>
+                    </ol>
+                </div>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem sm="12" lg="6">
+            <MudPaper Style="padding: 20px; border: 1px darkgray solid;" Elevation="0">
+                <MudIcon Icon="@Icons.Material.TwoTone.WorkHistory" Color="Color.Dark" Size="Size.Large"></MudIcon>
+                <MudText Typo="Typo.h5" Style="font-family: 'Akaya Telivigala'; font-weight: 300; color: #55385c">Settlements & Payouts</MudText>
+                <div style="text-align: left; font-size: 1rem; font-family: 'General Sans'; line-height: 35px;">
+                    <ol style="list-style-type:decimal; padding:20px">
+                        <li>Monitor settlement status for each transaction.</li>
+                        <li>View amounts settled, pending payouts, & transaction breakdowns.</li>
+                        <li>Configure payout settings and linked settlement accounts.</li>
+                    </ol>
+                </div>
+            </MudPaper>
+        </MudItem>
+
+    </MudGrid>
+
+</MudContainer>
+
+
+
+
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+<Footer />
+
+
+
+@code {
+
+}

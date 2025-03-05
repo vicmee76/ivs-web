@@ -59,7 +59,28 @@
     color: whitesmoke;
 }
 
-#home-title-one{
+#site-intro {
+    background-color: #fef8ff;
+    text-align: center;
+    align-content: center;
+    position: relative;
+    height: 400px;
+}
+
+#site-intro-header {
+    font-size: 4.0rem;
+    color: #57375c;
+    font-family: "Akaya Telivigala", system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+#site-intro-sub-header {
+    font-size: 1.2rem;
+    color: #474747;
+    font-weight: normal;
+    font-family: 'General Sans' system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+#home-title-one {
     font-size: 1.8rem;
     font-weight: 600;
     text-align: left;
