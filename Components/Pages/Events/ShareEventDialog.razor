@@ -1,21 +1,21 @@
 <MudDialog Style="width: 380px">
    <TitleContent>
-         <h4>Share event</h4>
+      <h4>Share - <small>@eventName</small></h4>
    </TitleContent>
    <DialogContent>
 
-      <div style="text-align:center; margin:5px;">
+      <div style="margin:5px;">
 
          <div style="line-height: 30px">
             <h4>Copy</h4>
-            <MudButton EndIcon="@Icons.Material.Filled.ContentCopy" OnClick="CopyTextAction" Style="text-transform:none" Color="Color.Primary" Variant="Variant.Outlined" Size="Size.Small">@eventLink</MudButton>
+            <MudButton EndIcon="@Icons.Material.Filled.ContentCopy" OnClick="CopyTextAction" Style="text-transform:none" Color="Color.Dark" Variant="Variant.Outlined" Size="Size.Small">@eventLink</MudButton>
          </div>
          
          <MudDivider DividerType="DividerType.FullWidth" Class="my-4"/>
 
          <div style="line-height: 30px">
             <h4>Share event</h4>
-            <MudButton EndIcon="@Icons.Material.Filled.Share" OnClick="ShareViaWebApiAction" Style="text-transform:none" Color="Color.Secondary" Variant="Variant.Outlined" Size="Size.Small">@eventLink</MudButton>
+            <MudButton EndIcon="@Icons.Material.Filled.Share" OnClick="ShareViaWebApiAction" Style="text-transform:none" Color="Color.Dark" Variant="Variant.Outlined" Size="Size.Small">@eventLink</MudButton>
          </div>
          
          <MudDivider DividerType="DividerType.FullWidth" Class="my-4"/>

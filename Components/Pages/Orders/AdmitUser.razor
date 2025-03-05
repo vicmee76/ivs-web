@@ -1,4 +1,4 @@
-@page "/ivs/attendance/{code}"
+@page "/ivs/attendance/{eventId}/{code}"
 
 
 <PageTitle>Iv's - Admit User</PageTitle>
@@ -98,6 +98,7 @@
 
 @code {
    [Parameter] public string? code { get; set; }
+   [Parameter] public string? eventId { get; set; }
    [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
    [Inject] IAttendanceService _attendanceService { get; set; }
    [Inject] IEventService _eventService { get; set; }
@@ -122,25 +123,33 @@
       }
       else
       {
-         var admit = await _attendanceService.GetAttendanceByUserCode(code);
-         if (admit.result.code == ResponseCodes.ResponseCodeOk)
+         if (string.IsNullOrEmpty(eventId) || string.IsNullOrEmpty(code))
          {
-            _userAttendance = admit.result.data;
-            var res = await _eventService.GetEventDetails(_userAttendance.paginatedResults.FirstOrDefault()?.ivsEventId);
-            if (res.result.code == ResponseCodes.ResponseCodeOk)
-            {
-               _events = res.result.data;
-            }
-            else
-            {
-               _snackbar.Add(res.result.message, Severity.Error);
-            }
+            _snackbar.Add(GeneralMessages.WrongQrCodePassed, Severity.Error);
          }
          else
          {
-            _snackbar.Add(admit.result.message, Severity.Error);
+            var admit = await _attendanceService.GetAttendanceByUserCode(eventId, code);
+            if (admit.result.code == ResponseCodes.ResponseCodeOk)
+            {
+               _userAttendance = admit.result.data;
+               var res = await _eventService.GetEventDetails(_userAttendance.paginatedResults.FirstOrDefault()?.ivsEventId);
+               if (res.result.code == ResponseCodes.ResponseCodeOk)
+               {
+                  _events = res.result.data;
+               }
+               else
+               {
+                  _snackbar.Add(res.result.message, Severity.Error);
+               }
+            }
+            else
+            {
+               _snackbar.Add(admit.result.message, Severity.Error);
+            }
          }
       }
+
       _admitProcessing = false;
       StateHasChanged();
    }

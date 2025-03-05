@@ -9,5 +9,6 @@ namespace ivs.Domain.Constants
     public class GeneralMessages
     {
         public static readonly string MinimumWithdrawalAmountMessage = $"Minimum settlement amount is {Helpers.MinimumWithdrawalAmount}";
+        public static readonly string WrongQrCodePassed = $"Wrong qr code passed.";
     }
 }

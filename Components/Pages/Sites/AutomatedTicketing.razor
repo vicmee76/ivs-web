@@ -1,0 +1,138 @@
+@page "/automated-ticketing"
+
+<title>IV's Automated Ticketing</title>
+
+<div id="site-intro">
+    <br />
+    <MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
+
+        <span id="site-intro-header">Ticket Generation, Distribution, & Validation </span>
+        <br /><br />
+        <div>
+            <div id="site-intro-sub-header"> Providing a seamless experience for both event organizers and attendees; eliminates manual inefficiencies, reduces errors, and enhances overall event management. </div>
+        </div>
+        <br /><br />
+        <MudButton Variant="Variant.Filled" FullWidth="false" Size="Size.Large" Color="Color.Error" Href="/accounts/signup"><b>Get Started</b></MudButton>
+
+    </MudContainer>
+</div>
+
+
+<br/><br/><br/><br/><br/>
+
+<MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
+
+    <MudPaper Elevation="0" Style="padding: 20px">
+        <MudGrid Spacing="10">
+            <MudItem xs="12" sm="12" md="12" lg="8" xl="8" xxl="8" Style="align-items: center; justify-content: center; display: flex">
+                
+                <div id="home-title-sub-header">
+                    <div id="home-title-one" style="font-weight: 300">Real-time ticket issuance & secure QR codes.</div>
+                   
+                    <div style="text-align: left; font-size: 1rem; font-family: 'General Sans'; line-height: 35px;">
+                        Our Ticketing module streamlines the entire ticketing process, providing a seamless experience for both event organizers and attendees. 
+                        Here, we eliminates manual inefficiencies, reduces errors, and enhances overall event management, ensuring a smooth registration process, minimize fraud, and provide attendees with a hassle-free ticketing experience.
+                    </div>
+                </div>
+                
+            </MudItem>
+            <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
+                <MudImage Src="images/backgrounds/ticket-sample.png" Fluid="true" Alt="Ticket Sample" Elevation="25" Class="rounded-lg"/>
+            </MudItem>
+
+        </MudGrid>
+    </MudPaper>
+
+
+    <br/><br/><br/><br/><br/>
+    
+    
+    <MudGrid Spacing="15">
+        
+        <MudItem sm="12" lg="6">
+            <MudPaper Style="padding: 20px; background-color: #fef8ff; border: 1px darkgray solid;" Elevation="0">
+                <MudIcon Icon="@Icons.Material.TwoTone.MarkEmailRead" Color="Color.Error" Size="Size.Large"></MudIcon>
+                <MudText Typo="Typo.h5" Style="font-family: 'Akaya Telivigala'; font-weight: 300; color: #55385c">Instant Ticket Generation & Delivery</MudText>
+                <div style="text-align: left; font-size: 1rem; font-family: 'General Sans'; line-height: 35px;">
+                    Automatically generate and assign unique digital tickets upon purchase, which delivers instantly via email enabling printable and mobile-friendly ticket formats for convenience.
+                </div>
+            </MudPaper>
+        </MudItem>
+
+
+        <MudItem sm="12" lg="6">
+            <MudPaper Style="padding: 20px; border: 1px darkgray solid;" Elevation="0">
+                <MudIcon Icon="@Icons.Material.TwoTone.QrCode" Color="Color.Error" Size="Size.Large"></MudIcon>
+                <MudText Typo="Typo.h5" Style="font-family: 'Akaya Telivigala'; font-weight: 300; color: #55385c">Secure QR Code Integration</MudText>
+                <div style="text-align: left; font-size: 1rem; font-family: 'General Sans'; line-height: 35px;">
+                    Embed QR codes for easy check-in and validation which
+                    prevents fraud with unique ticket identifiers that cannot be duplicated.Enable contactless scanning for fast and secure entry management.
+                    </div>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem sm="12" lg="6">
+            <MudPaper Style="padding: 20px; border: 1px darkgray solid;" Elevation="0">
+                <MudIcon Icon="@Icons.Material.TwoTone.LockOpen" Color="Color.Error" Size="Size.Large"></MudIcon>
+                <MudText Typo="Typo.h5" Style="font-family: 'Akaya Telivigala'; font-weight: 300; color: #55385c">Smart Check-In & Access Control</MudText>
+                <div style="text-align: left; font-size: 1rem; font-family: 'General Sans'; line-height: 35px;">
+                    Allow automated check-ins using QR code scanning at event entry points. Monitor real-time attendee check-in status to track attendance efficiently.
+                    Restrict access to specific areas with tiered ticket access levels.
+                </div>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem sm="12" lg="6">
+            <MudPaper Style="padding: 20px; background-color: #fef8ff; border: 1px darkgray solid;" Elevation="0">
+                <MudIcon Icon="@Icons.Material.TwoTone.AutoAwesomeMotion" Color="Color.Error" Size="Size.Large"></MudIcon>
+                <MudText Typo="Typo.h5" Style="font-family: 'Akaya Telivigala'; font-weight: 300; color: #55385c">Flexible Ticket Types & Pricing</MudText>
+                <div style="text-align: left; font-size: 1rem; font-family: 'General Sans'; line-height: 35px;">
+                    Offer multiple ticket categories such as VIP, Early Bird, and Group Tickets.
+                    Set dynamic pricing based on demand, event dates, or audience segments.
+                    Enable ticket bundling and add-ons for premium experiences.
+                </div>
+            </MudPaper>
+        </MudItem>
+        
+        
+        <MudItem sm="12" lg="12">
+            <MudPaper Style="padding: 20px; background-color: #fef8ff; border: 1px darkgray solid;" Elevation="0">
+                <MudIcon Icon="@Icons.Material.TwoTone.SsidChart" Color="Color.Error" Size="Size.Large"></MudIcon>
+                <MudText Typo="Typo.h5" Style="font-family: 'Akaya Telivigala'; font-weight: 300; color: #55385c">Ticket Resending, Real-Time Ticket Sales & Analytics</MudText>
+                <div style="text-align: left; font-size: 1rem; font-family: 'General Sans'; line-height: 35px;">
+                    Allow attendees to resend lost tickets directly from their accounts.
+                    Monitor ticket sales in real time to track demand and adjust marketing strategies.
+                    Generate reports on revenue, attendee demographics, and sales trends. Analyze conversion rates to measure ticketing campaign effectiveness.
+                </div>
+            </MudPaper>
+        </MudItem>
+        
+    </MudGrid>
+    
+</MudContainer>
+    
+
+
+
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+<Footer />
+
+
+
+@code {
+
+}
