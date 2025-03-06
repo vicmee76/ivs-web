@@ -112,20 +112,30 @@
                                     <MudText><b>Event Deatils</b></MudText>
                                     <br />
 
-                                    <MudChip T="string" Color="Color.Secondary">https://www.ivs.social/ivs/</MudChip> 
+                                   
                                     
-                                    <MudTextField Label="Event Name*" HelperText="Enter event name" @bind-Value="model.eventName" For="@(() => model.eventName)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-
-                                    <MudTextField Label="Event Name*" HelperText="Enter event name" @bind-Value="model.eventName" For="@(() => model.eventName)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-
+                                    <br/>
+                                    
+                                    <MudGrid>
+                                        <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+                                            <br/><br/>
+                                            <MudTextField Label="Event Name*" HelperText="Enter event name" @bind-Value="model.eventName" For="@(() => model.eventName)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
+                                        </MudItem>
+                                        
+                                        <MudItem  xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+                                            <MudChip T="string" Color="Color.Error">@urlTag</MudChip>
+                                            <MudTextField Label="Custom url tag" TextChanged="@(async () => await MakeCustomUrl())" HelperText="Custom url tag" @bind-Value="model.eventCode" For="@(() => model.eventCode)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
+                                        </MudItem>
+                                    </MudGrid>
+                                    
                                     <MudTextField T="string" Label="Event Description*" @bind-Value="model.eventDescription" For="@(() => model.eventDescription)" HelperText="Enter event description" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Placeholder="Enter description here" Lines="5" />
 
                                     <MudGrid Spacing="5">
-                                        <MudItem sm="6" md="6" lg="6">
+                                        <MudItem  xs="12" sm="6" md="6" lg="6">
                                             <MudTextField Label="Event Address*" HelperText="Enter event address" @bind-Value="model.eventAddress" For="@(() => model.eventAddress)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
                                         </MudItem>
 
-                                        <MudItem sm="6" md="6" lg="6">
+                                        <MudItem  xs="12" sm="6" md="6" lg="6">
                                             <MudSelect T="string" Label="Event State*" HelperText="Select state" Variant="Variant.Outlined" @bind-Value="model.eventState" For="@(() => model.eventState)" HelperTextOnFocus="true" Clearable="true">
                                                 @if (allState != null)
                                                 {
@@ -177,19 +187,19 @@
 
                                     <MudGrid Spacing="5">
 
-                                        <MudItem sm="6" md="6" lg="3" xl="3" xxl="3">
+                                        <MudItem  xs="12" sm="6" md="6" lg="3" xl="3" xxl="3">
                                             <MudTextField Label="Web link" HelperText="Enter you social web link here" @bind-Value="model.webLink" For="@(() => model.webLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
                                         </MudItem>
 
-                                        <MudItem sm="6" md="6" lg="3" xl="3" xxl="3">
+                                        <MudItem  xs="12" sm="6" md="6" lg="3" xl="3" xxl="3">
                                             <MudTextField Label="Facbook link" HelperText="Enter facebook event link if you have any" @bind-Value="model.facebookLink" For="@(() => model.facebookLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
                                         </MudItem>
 
-                                         <MudItem sm="6" md="6" lg="3" xl="3" xxl="3">
+                                         <MudItem  xs="12" sm="6" md="6" lg="3" xl="3" xxl="3">
                                             <MudTextField Label="Instagram Link" HelperText="Enter instagram event link if you have any" @bind-Value="model.instagramLink" For="@(() => model.instagramLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
                                         </MudItem>
 
-                                        <MudItem sm="6" md="6" lg="3" xl="3" xxl="3">
+                                        <MudItem  xs="12" sm="6" md="6" lg="3" xl="3" xxl="3">
                                             <MudTextField Label="Twitter link" HelperText="Enter twitter event link if you have any" @bind-Value="model.twitterLink" For="@(() => model.twitterLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
                                         </MudItem>
                                     </MudGrid>
@@ -253,6 +263,7 @@
     IEnumerable<GetEventTypesDto> _eventTypes = new List<GetEventTypesDto>();
 
     private string userId { get; set; }
+    private string urlTag { get; set; } = "https://www.ivs.social/ivs/";
     private bool isUpdate { get; set; } = false;
     private bool _processing { get; set; }
     private List<string> allState { get; set; }
@@ -320,6 +331,13 @@
 
         StateHasChanged();
 
+    }
+
+    private async Task MakeCustomUrl()
+    {
+        string url = "https://www.ivs.social/ivs/";
+        urlTag = $"{url}{model.eventCode}";
+        StateHasChanged();
     }
 
 
