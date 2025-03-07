@@ -255,61 +255,61 @@
 
                             <MudItem xs="12" sm="12" md="6" lg="3" xl="3" xxl="2">
                                 <div class="event-lisiting-web">
-                                <MudCard>
-                                    <MudCardMedia Image="@e.eventImagePath" Height="200"/>
-                                    <MudCardContent>
+                                    <MudCard>
+                                        <MudCardMedia Image="@e.eventImagePath" Height="200"/>
+                                        <MudCardContent>
 
-                                        <div style="line-height: 40px">
-                                            <div style="color: #54385b; font-size: 20px; font-family:'Akaya Telivigala'"><b>@eventName</b></div>
+                                            <div style="line-height: 40px">
+                                                <div style="color: #54385b; font-size: 20px; font-family:'Akaya Telivigala'"><b>@eventName</b></div>
 
-                                            <span>@address</span>
-                                            <br/>
-                                            <span>
-                                                @if (e.eventTimes.Any())
+                                                <span>@address</span>
+                                                <br/>
+                                                <span>
+                                                    @if (e.eventTimes.Any())
+                                                    {
+                                                        @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
+                                                    }
+                                                </span>
+                                                <br/>
+
+                                                <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@e.eventOption</b></MudChip>
+
+                                                @if (e.eventTimes.Any() && e.eventTimes.Count > 1)
                                                 {
-                                                    @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
+                                                    <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Times</MudChip>
                                                 }
-                                            </span>
-                                            <br/>
+                                                else
+                                                {
+                                                    <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Time</MudChip>
+                                                }
 
-                                            <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@e.eventOption</b></MudChip>
-
-                                            @if (e.eventTimes.Any() && e.eventTimes.Count > 1)
+                                                @if (e.eventTickets.Any() && e.eventTickets.Count > 1)
+                                                {
+                                                    <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Tickets</MudChip>
+                                                }
+                                                else
+                                                {
+                                                    <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Ticket</MudChip>
+                                                }
+                                            </div>
+                                        </MudCardContent>
+                                        <MudCardActions Class="pa-5">
+                                            @if (e.paymentOptions.Count > 1)
                                             {
-                                                <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Times</MudChip>
+                                                var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                                <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C") +</b></MudText>
                                             }
                                             else
                                             {
-                                                <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Time</MudChip>
-                                            }
+                                                var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
 
-                                            @if (e.eventTickets.Any() && e.eventTickets.Count > 1)
-                                            {
-                                                <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Tickets</MudChip>
+                                                <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
                                             }
-                                            else
-                                            {
-                                                <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Ticket</MudChip>
-                                            }
-                                        </div>
-                                    </MudCardContent>
-                                    <MudCardActions Class="pa-5">
-                                        @if (e.paymentOptions.Count > 1)
-                                        {
-                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
-
-                                            <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C") +</b></MudText>
-                                        }
-                                        else
-                                        {
-                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
-
-                                            <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
-                                        }
-                                        <MudSpacer></MudSpacer>
-                                        <MudButton Variant="Variant.Filled" Size="Size.Small" Href="@ticketLink" Target="_blank" Color="Color.Dark"><b>Get Tickets</b></MudButton>
-                                    </MudCardActions>
-                                </MudCard>
+                                            <MudSpacer></MudSpacer>
+                                            <MudButton Variant="Variant.Filled" OnClick="@(async () => await OpenDrawerWithEvent(Anchor.End, e._id))" Size="Size.Small" Color="Color.Dark"><b>Get Tickets</b></MudButton>
+                                        </MudCardActions>
+                                    </MudCard>
                                 </div>
 
                                 <div class="event-lisiting-mobile">
@@ -405,11 +405,11 @@
                                                 <span>@address</span>
                                                 <br/>
                                                 <span>
-                                                @if (e.eventTimes.Any())
+                                                    @if (e.eventTimes.Any())
                                                     {
                                                         @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
                                                     }
-                                            </span>
+                                                </span>
                                                 <br/>
 
                                                 <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@e.eventOption</b></MudChip>
@@ -447,7 +447,7 @@
                                                 <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
                                             }
                                             <MudSpacer></MudSpacer>
-                                            <MudButton Variant="Variant.Filled" Size="Size.Small" Href="@ticketLink" Target="_blank" Color="Color.Dark"><b>Get Tickets</b></MudButton>
+                                            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="@(async () => await OpenDrawerWithEvent(Anchor.End, e._id))" Color="Color.Dark"><b>Get Tickets</b></MudButton>
                                         </MudCardActions>
                                     </MudCard>
                                 </div>
@@ -545,11 +545,11 @@
                                                 <span>@address</span>
                                                 <br/>
                                                 <span>
-                                                @if (e.eventTimes.Any())
+                                                    @if (e.eventTimes.Any())
                                                     {
                                                         @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
                                                     }
-                                            </span>
+                                                </span>
                                                 <br/>
 
                                                 <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@e.eventOption</b></MudChip>
@@ -587,7 +587,7 @@
                                                 <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
                                             }
                                             <MudSpacer></MudSpacer>
-                                            <MudButton Variant="Variant.Filled" Size="Size.Small" Href="@ticketLink" Target="_blank" Color="Color.Dark"><b>Get Tickets</b></MudButton>
+                                            <MudButton Variant="Variant.Filled" Size="Size.Small" OnClick="@(async () => await OpenDrawerWithEvent(Anchor.End, e._id))" Color="Color.Dark"><b>Get Tickets</b></MudButton>
                                         </MudCardActions>
                                     </MudCard>
                                 </div>
@@ -652,13 +652,272 @@
 </MudContainer>
 
 
+
+<MudDrawer @bind-Open="@_open" Width="@_width" Height="@_height" Anchor="@_anchor" Elevation="1" Variant="@DrawerVariant.Temporary">
+
+    @if (_getProcessing)
+    {
+        <MudDrawerHeader>
+            <MudSkeleton Animation="Animation.Wave" Width="10%" />
+            <MudSpacer></MudSpacer>
+            <MudSkeleton Animation="Animation.Wave" Width="30%" />
+            &nbsp;
+            &nbsp;
+            &nbsp;
+            <MudSkeleton Animation="Animation.Wave" Width="30%" />
+        </MudDrawerHeader>
+
+        <MudDrawerContainer>
+
+            <MudDivider DividerType="DividerType.FullWidth"></MudDivider>
+
+            <MudContainer>
+                <MudPaper Elevation="0">
+                    <br/>
+                    <div style="">
+
+                        <div style="text-align: center">
+                            <center>
+                                <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="50%" Animation="Animation.Wave" Height="350px" />
+                            </center>
+                        </div>
+
+                        <br/>
+
+                        <MudSkeleton Animation="Animation.Wave" Width="70%" />
+
+                        <br/>
+
+                        <MudGrid>
+
+                            <MudItem sm="6" md="6" lg="6" xl="6" xxl="6">
+                                <MudSkeleton Animation="Animation.Wave" Width="100%" />
+                                <MudSkeleton Animation="Animation.Wave" Width="100%" />
+                            </MudItem>
+
+                            <MudItem sm="6" md="6" lg="6" xl="6" xxl="6">
+                                <div>
+                                    <MudSkeleton Animation="Animation.Wave" Width="100%" />
+                                    <MudSkeleton Animation="Animation.Wave" Width="100%" />
+                                </div>
+                            </MudItem>
+
+                        </MudGrid>
+
+                        <br/><br/>
+
+                        <MudSkeleton Animation="Animation.Wave" Width="100%" Height="70px"/>
+                        <br/><br/><br/>
+
+                        <MudSkeleton Animation="Animation.Wave" Width="20%" Height="50px"/>
+                        <MudDivider Class="pa-2" DividerType="DividerType.FullWidth"></MudDivider>
+
+                        <MudSkeleton Animation="Animation.Wave" Width="100%" />
+                        <MudSkeleton Animation="Animation.Wave" Width="100%" />
+                        <MudSkeleton Animation="Animation.Wave" Width="100%" />
+                        <MudSkeleton Animation="Animation.Wave" Width="100%" />
+
+                        <br/>
+
+                        <MudSkeleton Animation="Animation.Wave" Width="20%" />
+                        <MudDivider Class="pa-2" DividerType="DividerType.FullWidth"></MudDivider>
+
+                    </div>
+
+                </MudPaper>
+            </MudContainer>
+        </MudDrawerContainer>
+    }
+    else
+    {
+        if (_event != null)
+        {
+            var buyLink = $"/orders/buy-tickets/{_event._id}";
+            var ticketLink = $"/events/get-tickets/{_event._id}";
+
+            <MudDrawerHeader>
+                <MudIconButton Icon="@Icons.Material.TwoTone.Close" OnClick="@(() => CloseDrawer())"></MudIconButton>
+                <MudSpacer></MudSpacer>
+                <MudButton Variant="Variant.Text" Color="Color.Dark" OnClick="@((e) => ActionShareEvent(_event.eventShortLink, _event.eventName))" Size="Size.Small" EndIcon="@Icons.Material.TwoTone.IosShare">
+                    <MudText Typo="Typo.caption"><b>Share</b></MudText>
+                </MudButton>
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                <MudButton Variant="Variant.Text" Color="Color.Dark" Href="@ticketLink" Target="_blank" Size="Size.Small" EndIcon="@Icons.Material.TwoTone.ArrowOutward">
+                    <MudText Typo="Typo.caption"><b>Event Page</b></MudText>
+                </MudButton>
+            </MudDrawerHeader>
+
+            <MudDrawerContainer>
+
+                <MudDivider DividerType="DividerType.FullWidth"></MudDivider>
+
+                <MudContainer>
+                    <MudPaper Elevation="0">
+
+                        <br/>
+
+                        <div style="">
+
+                            <div style="text-align: center">
+                                <MudImage Elevation="2" ObjectPosition="ObjectPosition.Center" Alt="@_event.eventImageName" Height="350" Width="350" Src="@_event.eventImagePath"></MudImage>
+
+                                <br/><br/>
+
+                                <MudChip T="string" Size="Size.Small" Color="Color.Default"><b>@_event.eventOption.ToUpper()</b></MudChip>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Default"><b>@_event.EventType.FirstOrDefault().name</b></MudChip>
+
+                            </div>
+
+                            <br/>
+
+                            <div style="color: black; font-size: 30px; font-weight: 200; text-align: center; font-family:'Akaya Telivigala'">@_event.eventName</div>
+
+                            <br/>
+
+                            <MudGrid>
+
+                                <MudItem sm="6" md="6" lg="6" xl="6" xxl="6">
+
+                                    @if (_event.EventTime.Any() && _event.EventTime.Count > 1)
+                                    {
+                                        <MudNavLink Icon="@Icons.Material.TwoTone.DateRange" IconColor="Color.Dark">
+                                            <span> @Convert.ToDateTime(_event.EventTime.FirstOrDefault()?.startDateAndTime).ToString("dd, MMMM yyyy")</span>;
+                                            <span> @Convert.ToDateTime(_event.EventTime.FirstOrDefault()?.startDateAndTime).ToString("h:mm tt") and @_event.EventTime.Count() times</span>
+                                        </MudNavLink>
+                                    }
+                                    else
+                                    {
+                                        <MudNavLink Icon="@Icons.Material.TwoTone.DateRange" IconColor="Color.Dark">
+                                            <span> @Convert.ToDateTime(_event.EventTime.FirstOrDefault()?.startDateAndTime).ToString("dd, MMMM yyyy")</span>;
+                                            <span> @Convert.ToDateTime(_event.EventTime.FirstOrDefault()?.startDateAndTime).ToString("h:mm tt")</span>
+                                        </MudNavLink>
+                                    }
+                                </MudItem>
+
+                                <MudItem sm="6" md="6" lg="6" xl="6" xxl="6">
+                                    <div>
+                                        <MudNavLink Icon="@Icons.Material.Filled.ReceiptLong" IconColor="Color.Dark">
+
+                                            @foreach (var t in _event.Tickets)
+                                            {
+                                                <span> @t.ticketName, &nbsp;</span>;
+                                            }
+                                        </MudNavLink>
+                                    </div>
+                                </MudItem>
+
+                            </MudGrid>
+
+                            <br/><br/>
+
+                            <MudButton FullWidth="true" Href="@buyLink" Style="background-color: #55385c; color: white; height: 50px" Variant="Variant.Filled"> <b>Buy Tickets</b> </MudButton>
+
+                            <br/><br/><br/>
+
+                            <MudText Typo="Typo.body1"><b>About Event</b></MudText>
+                            <MudDivider Class="pa-2" DividerType="DividerType.FullWidth"></MudDivider>
+
+                            <div style="line-height:35px; font-size:14px">
+                                <div>@_event.eventDescription</div>
+                            </div>
+
+                            <br/>
+
+                            <MudText Typo="Typo.body1"><b>Social Links</b></MudText>
+                            <MudDivider Class="pa-2" DividerType="DividerType.FullWidth"></MudDivider>
+
+                            <MudGrid>
+
+                                @if (!string.IsNullOrWhiteSpace(_event.instagramLink))
+                                {
+                                    <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                        <div>
+                                            Visit us on
+                                            <MudElement HtmlTag="a" Class="ms-1" Style="color:hotpink;font-weight:bold;" href="@_event.instagramLink" target="blank" rel="noopener noreferrer">
+                                                Instagram
+                                            </MudElement>
+                                        </div>
+                                    </MudItem>
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(_event.facebookLink))
+                                {
+                                    <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                        <div>
+                                            Visit us on
+                                            <MudElement HtmlTag="a" Class="ms-1" Style="color:blue;font-weight:bold;" href="@_event.facebookLink" target="blank" rel="noopener noreferrer">
+                                                FacebookLink
+                                            </MudElement>
+                                        </div>
+                                        <br />
+                                    </MudItem>
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(_event.twitterLink))
+                                {
+                                    <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                        <div>
+                                            Visit us on
+                                            <MudElement HtmlTag="a" Class="ms-1" Style="color:black;font-weight:bold;" href="@_event.twitterLink" target="blank" rel="noopener noreferrer">
+                                                Twitter
+                                            </MudElement>
+                                        </div>
+                                        <br />
+                                    </MudItem>
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(_event.webLink))
+                                {
+                                    <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                        <div>
+                                            Visit us on
+                                            <MudElement HtmlTag="a" Class="ms-1" Style="color:lightsalmon;font-weight:bold;" href="@_event.webLink" target="blank" rel="noopener noreferrer">
+                                                Web
+                                            </MudElement>
+                                        </div>
+                                        <br />
+                                    </MudItem>
+                                }
+
+                            </MudGrid>
+
+                            <br/><br/><br/>
+
+                            <MudSpacer></MudSpacer>
+
+                            <MudButton Size="Size.Small" Style="font-weight: 500"> Contact the host</MudButton>
+                            &nbsp;&nbsp;
+                            <MudButton Size="Size.Small" Style="font-weight: 500"> Report Event</MudButton>
+
+                            <br/><br/><br/>
+                        </div>
+
+                    </MudPaper>
+                </MudContainer>
+            </MudDrawerContainer>
+        }
+    }
+
+
+
+
+
+</MudDrawer>
+
+
+
 @code {
     [Inject] IEventService _eventService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
     [Inject] IConfiguration? _config { get; set; }
     [Inject] IEventTypeService _eventTypeService { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
+    [Inject] IDialogService DialogService { get; set; }
+    
     IEnumerable<GetEventTypesDto> _eventTypes = new List<GetEventTypesDto>();
+    
     
     private bool _LatestEventProcessing { get; set; }
     private bool _freeEventProcessing { get; set; }
@@ -682,9 +941,70 @@
     Dictionary<string, string> freeQueryParameter = new Dictionary<string, string> { { "page", "0" }, { "limit", "0" } };
     Dictionary<string, string> paidQueryParameter = new Dictionary<string, string> { { "page", "0" }, { "limit", "0" } };
     Dictionary<string, string> latestQueryParameter = new Dictionary<string, string> { { "page", "0" }, { "limit", "0" } };
+    
+    private bool _open;
+    private Anchor _anchor;
+    private string _width, _height;
+    
+    GetEventDetailsDto _event = new();
+
+    private async Task OpenDrawerWithEvent(Anchor anchor, string eventId)
+    {
+        _open = true;
+        _anchor = anchor;
+        switch (anchor)
+        {
+            case Anchor.End:
+                _width = "35%";
+                _height = "100%";
+                break;
+        }
+
+        _getProcessing = true;
+        var res = await _eventService.GetEventDetails(eventId);
+        if (res.result.code == ResponseCodes.ResponseCodeOk)
+        {
+            _event = res.result.data;
+        }
+        else
+        {
+            _snackbar.Add(res.result.message, Severity.Error);
+        }
+
+        _getProcessing = false;
+        StateHasChanged();
+    }
+    
+
+    private void CloseDrawer()
+    {
+        _open = false;
+    }
+    
+    private async Task ActionShareEvent(string link, string eventName)
+    {
+        DialogOptions opts = new DialogOptions()
+        {
+            MaxWidth = MaxWidth.Large,
+            FullWidth = true,
+            CloseButton = true,
+            CloseOnEscapeKey = true
+        };
+
+        var parameters = new DialogParameters<ShareEventDialog> { { x => x.eventLink, link }, { x => x.eventName, eventName } };
+        var dialog = await DialogService.ShowAsync<ShareEventDialog>("Share event", parameters, opts);
+
+        var result = await dialog.Result;
+        if (!result.Canceled)
+        {
+            StateHasChanged();
+        }
+    }
+
 
     protected async override void OnInitialized()
     {
+        _event = null;
         var limit = _config.GetValue<string>("Pagination:DiscoveryLoadMoreLimit") ?? "4";
         var page = _config.GetValue<string>("Pagination:DiscoveryLoadMorePage") ?? "0";
 

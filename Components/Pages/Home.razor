@@ -149,7 +149,7 @@
                                                 @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
                                             }
                                         </span>
-<br/><br/>
+                                        <br/><br/>
                                         <MudButton Variant="Variant.Text" Size="Size.Small" Href="@ticketLink" Target="_blank" Color="Color.Dark"><b>Get Tickets</b></MudButton>
                                     </div>
                                 </MudItem>
@@ -264,43 +264,45 @@
 
             <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
                 <MudAvatar Style="height:150px; width:150px;">
-                    <MudImage Src="images/mony.jpg" Alt="An image of the best dog ever!"></MudImage>
+                    <MudImage Fluid="true" Src="images/backgrounds/users/pope.JPG" Alt="popeexperience"></MudImage>
                 </MudAvatar>
                 <br/><br/>
-                <MudText Typo="Typo.h6"><b>Victor Nwogu.</b></MudText>
+                <MudText Typo="Typo.h6"><b>@@popeexperience.</b></MudText>
                 <MudText Typo="Typo.body2"><b>Event Organizer.</b></MudText>
                 <br/>
                 <div id="testimonies-description">
-                    IVS has completely streamlined how we create and manage our events. In just a few clicks, we had everything set up and ready to go. The platform is intuitive, and our attendees loved the seamless ticketing experience!
+                    As an event creator, organizing a successful show can be a challenge—but with IVS, everything became effortless! From seamless ticketing to real-time attendee management, the platform made the entire process stress-free. I could focus on what I do best—making people laugh—while the system handled the logistics.
+                </div>
+            </MudItem>
+
+            <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
+                <MudAvatar Style="height:150px; width:150px;">
+                    <MudImage Fluid="true" Src="images/backgrounds/users/Akin.jpeg" Alt="Jovita"></MudImage>
+                </MudAvatar>
+                <br/><br/>
+                <MudText Typo="Typo.h6"><b>Akinniyi</b></MudText>
+                <MudText Typo="Typo.body2"><b>Attendee.</b></MudText>
+                <br/>
+                <div id="testimonies-description">
+                    Attending an event managed by IVS was an unforgettable experience! The organization was top-notch, the atmosphere was electric, and everything from the ticketing process to the event itself was seamless.
                 </div>
             </MudItem>
 
 
             <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
                 <MudAvatar Style="height:150px; width:150px;">
-                    <MudImage Src="images/mony.jpg" Alt="An image of the best dog ever!"></MudImage>
+                    <MudImage Fluid="true" Src="images/backgrounds/users/jovita.jpeg" Alt="Jovita"></MudImage>
                 </MudAvatar>
                 <br/><br/>
-                <MudText Typo="Typo.h6"><b>Victor Nwogu.</b></MudText>
-                <MudText Typo="Typo.body2"><b>Event Organizer.</b></MudText>
+                <MudText Typo="Typo.h6"><b>Jovita</b></MudText>
+                <MudText Typo="Typo.body2"><b>Attendee.</b></MudText>
                 <br/>
                 <div id="testimonies-description">
-                    Managing multiple events used to be a headache, but IVS changed everything. From tracking ticket sales to real-time analytics, we’ve gained total control and confidence in our event planning.
-                </div>
+
+                    Any event managed by IVS is such an amazing experience from start to finish! The ticketing process is seamless—quick, easy, and hassle-free. You'll receive your ticket instantly, and checking in at the event are smooth with no delays. </div>
             </MudItem>
 
-            <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
-                <MudAvatar Style="height:150px; width:150px;">
-                    <MudImage Src="images/mony.jpg" Alt="An image of the best dog ever!"></MudImage>
-                </MudAvatar>
-                <br/><br/>
-                <MudText Typo="Typo.h6"><b>Victor Nwogu.</b></MudText>
-                <MudText Typo="Typo.body2"><b>Event Organizer.</b></MudText>
-                <br/>
-                <div id="testimonies-description">
-                    Buying tickets through IVS was quick and easy. The platform is user-friendly, and I loved that I could pay securely in seconds.
-                </div>
-            </MudItem>
+            
         </MudGrid>
     </MudContainer>
 
@@ -421,8 +423,14 @@
 
                             <div style="text-align: center">
                                 <MudImage Elevation="2" ObjectPosition="ObjectPosition.Center" Alt="@_event.eventImageName" Height="350" Width="350" Src="@_event.eventImagePath"></MudImage>
-                            </div>
 
+                                <br/><br/>
+
+                                <MudChip T="string" Size="Size.Small" Color="Color.Default"><b>@_event.eventOption.ToUpper()</b></MudChip>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Default"><b>@_event.EventType.FirstOrDefault().name</b></MudChip>
+                                
+                            </div>
+                            
                             <br/>
 
                             <div style="color: black; font-size: 30px; font-weight: 200; text-align: center; font-family:'Akaya Telivigala'">@_event.eventName</div>
@@ -481,6 +489,70 @@
                             <MudText Typo="Typo.body1"><b>Social Links</b></MudText>
                             <MudDivider Class="pa-2" DividerType="DividerType.FullWidth"></MudDivider>
 
+                            <MudGrid>
+
+                                @if (!string.IsNullOrWhiteSpace(_event.instagramLink))
+                                {
+                                    <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                        <div>
+                                            Visit us on
+                                            <MudElement HtmlTag="a" Class="ms-1" Style="color:hotpink;font-weight:bold;" href="@_event.instagramLink" target="blank" rel="noopener noreferrer">
+                                                Instagram
+                                            </MudElement>
+                                        </div>
+                                    </MudItem>
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(_event.facebookLink))
+                                {
+                                    <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                        <div>
+                                            Visit us on
+                                            <MudElement HtmlTag="a" Class="ms-1" Style="color:blue;font-weight:bold;" href="@_event.facebookLink" target="blank" rel="noopener noreferrer">
+                                                FacebookLink
+                                            </MudElement>
+                                        </div>
+                                        <br />
+                                    </MudItem>
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(_event.twitterLink))
+                                {
+                                    <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                        <div>
+                                            Visit us on
+                                            <MudElement HtmlTag="a" Class="ms-1" Style="color:black;font-weight:bold;" href="@_event.twitterLink" target="blank" rel="noopener noreferrer">
+                                                Twitter
+                                            </MudElement>
+                                        </div>
+                                        <br />
+                                    </MudItem>
+                                }
+
+                                @if (!string.IsNullOrWhiteSpace(_event.webLink))
+                                {
+                                    <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                        <div>
+                                            Visit us on
+                                            <MudElement HtmlTag="a" Class="ms-1" Style="color:lightsalmon;font-weight:bold;" href="@_event.webLink" target="blank" rel="noopener noreferrer">
+                                                Web
+                                            </MudElement>
+                                        </div>
+                                        <br />
+                                    </MudItem>
+                                }
+
+                            </MudGrid>
+                            
+                            <br/><br/><br/>
+                            
+                            <MudSpacer></MudSpacer>
+                            
+                            <MudButton Size="Size.Small" Style="font-weight: 500"> Contact the host</MudButton>
+                            &nbsp;&nbsp;
+                            <MudButton Size="Size.Small" Style="font-weight: 500"> Report Event</MudButton>
+
+                            <br/><br/><br/> 
                         </div>
 
                     </MudPaper>
