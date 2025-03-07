@@ -32,6 +32,9 @@
                                 <MudChip T="string" Size="Size.Small" Color="Color.Secondary"><b>@_events.eventOption.ToUpper()</b></MudChip>
                                 <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@_events.EventType.FirstOrDefault().name</b></MudChip>
 
+                                <MudChip T="string" Size="Size.Small" Color="Color.Dark" OnClick="@((e) => ActionShareEvent(_events.eventShortLink))" Icon="@Icons.Material.Filled.Share">
+                                    <b> Share</b>
+                                </MudChip>
                             </div>
                         </div>
 
@@ -53,8 +56,7 @@
 
                             <div> @_events.eventAddress</div>
                             <div> @_events.eventState</div>
-                            <br />
-
+                          
                             @if (!string.IsNullOrEmpty(_events.adressPin))
                             {
                             <MudButton Href="@_events.adressPin"
@@ -71,14 +73,14 @@
                         </div>
 
                         <br/><br/>
-                        <MudText Typo="Typo.h6"><b>Date and time</b></MudText>
+                        <MudText Typo="Typo.h6"> <b>Date and time</b></MudText>
 
                         <br />
 
                         <div>
                             @foreach (var t in _events.EventTime)
                             {
-                                <MudText Typo="Typo.body2"> <MudIcon Color="Color.Secondary" Icon="@Icons.Material.Filled.AccessTimeFilled"></MudIcon> <b>@Convert.ToDateTime(t.startDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</b> </MudText>
+                                <MudText Typo="Typo.body2">  <b>@Convert.ToDateTime(t.startDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</b> </MudText>
                                 <br />
                             }
                         </div>
@@ -86,12 +88,7 @@
                         <br/>
 
                         <div style="">
-                            <MudText Typo="Typo.h6"><b>QR Code</b> &nbsp;
-                                <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="@((e) => ActionShareEvent(_events.eventShortLink))" EndIcon="@Icons.Material.Filled.Share" Color="Color.Secondary" Style="text-transform:none">
-                                    Share
-                                </MudButton>
-                            
-                                </MudText>
+                            <MudText Typo="Typo.h6"><b>QR Code</b> &nbsp; </MudText>
 
                             <br />
                             <MudImage Src="@_events.qrCodeLink"></MudImage>
