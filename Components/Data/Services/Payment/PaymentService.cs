@@ -110,7 +110,25 @@ namespace ivs_ui.Components.Data.Services.Payment
         }
 
 
+        public async Task<ResponseObject> GetTotalSettlement()
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(SettlementUrl, $"get-total-settlement", Method.Get, null, headers);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
 
+                res.result.data = JsonConvert.DeserializeObject<GetTotalSettlementModel>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject() { result = new ResponseContents() { message = "Error! Something went wrong trying to get total settlement, please try again later" } };
+            }
+        }
 
         public async Task<ResponseObject> GetSettlementByEventId(string eventId, Dictionary<string, string> queryParam)
         {

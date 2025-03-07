@@ -52,11 +52,11 @@
                             <MudCardContent>
 
                                 <MudGrid Spacing="6">
-                                    <MudItem xs="12" sm="12" md="12" lg="2" xl="2" xxl="2">
+                                    <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
                                         <MudPaper Class="pa-10" Outlined="true" Style="background-color:#fff6ff">
                                             <div style="line-height:40px">
 
-                                                <div style="font-size:17px;">ivs Revenue</div>
+                                                <div style="font-size:17px;">Revenue</div>
 
                                                 @if (_processing)
                                                 {
@@ -64,7 +64,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <h3>@ivsNetRevenueSum.ToString("C")</h3>
+                                                    <h1>@ivsNetRevenueSum.ToString("C")</h1>
                                                 }
 
                                             </div>
@@ -90,7 +90,7 @@
                                         </MudPaper>
                                     </MudItem>
 
-                                    <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
+                                    <MudItem xs="12" sm="12" md="12" lg="2" xl="2" xxl="2">
                                         <MudPaper Class="pa-10" Outlined="true" Style="background-color:#fbecdc">
                                             <div style="line-height:40px">
 
@@ -102,7 +102,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <h1></h1>
+                                                    <h3>@totalSettlement.ToString("C")</h3>
                                                 }
 
                                             </div>
@@ -325,6 +325,7 @@
     private decimal totalTicketFeeSum { get; set; }
     private decimal gatewayFeeSum { get; set; }
     private decimal ivsVatSum { get; set; }
+    private decimal totalSettlement { get; set; }
     private decimal totalServiceFeeAfterDeductionSum { get; set; }
     private int totalOrderQuantitySum { get; set; }
     private int totalItems { get; set; }
@@ -349,6 +350,7 @@
     {
         _processing = true;
         var res = new ResponseObject();
+        var res2 = new ResponseObject();
 
         Dictionary<string, string> queryParameter = new Dictionary<string, string> { { "page", state.Page.ToString() }, { "limit", state.PageSize.ToString() } };
 
@@ -356,10 +358,13 @@
             queryParameter.Add("searchQuery", revenueSearchString.ToLower());
 
         res = await _paymentService.GetRevenue(queryParameter);
+        res2 = await _paymentService.GetTotalSettlement();
+        
 
         if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
         {
             var result = (GetRevenueDataDto)res.result.data;
+            var settlement = (GetTotalSettlementModel)res2.result.data;
             IEnumerable<Order> data = (List<Order>)result.result.FirstOrDefault().orders;
             OrdersData = data;
             
@@ -398,6 +403,7 @@
             ivsVatSum = result.result.FirstOrDefault().ivsVatSum;
             totalOrderQuantitySum = result.result.FirstOrDefault().totalOrderQuantitySum;
             totalItems = result.totalCount;
+            totalSettlement = settlement.totalAmountSettled;
 
             var sortDefinition = state.SortDefinitions.FirstOrDefault();
 
