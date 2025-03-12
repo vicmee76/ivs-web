@@ -182,7 +182,7 @@
                                         <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
                                     }
                                     <MudSpacer></MudSpacer>
-                                    <MudButton Variant="Variant.Filled" Style="background-color: #55385c; color: white; font-size: small" OnClick="@(async () => await OpenDrawerWithEvent(Anchor.End, e._id))" Size="Size.Small" ><b>Get Tickets</b></MudButton>
+                                    <MudButton Variant="Variant.Filled" Href="@ticketLink" Style="background-color: #55385c; color: white; font-size: small"  Size="Size.Small" ><b>Get Tickets</b></MudButton>
                                 </MudCardActions>
                             </MudCard>
                         </div>
