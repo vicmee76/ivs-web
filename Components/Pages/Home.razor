@@ -125,35 +125,66 @@
                                         <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
                                     }
                                     <MudSpacer></MudSpacer>
-                                    <MudButton Variant="Variant.Filled" OnClick="@(async () => await OpenDrawerWithEvent(Anchor.End, e._id))" Size="Size.Small" Color="Color.Dark"><b>Get Tickets</b></MudButton>
+                                    <MudButton Variant="Variant.Filled" Style="background-color: #55385c; color: white; font-size: small" OnClick="@(async () => await OpenDrawerWithEvent(Anchor.End, e._id))" Size="Size.Small" ><b>Get Tickets</b></MudButton>
                                 </MudCardActions>
                             </MudCard>
                         </div>
 
                         <div class="event-lisiting-mobile">
-                            <MudGrid>
-                                <MudItem sm="5" xs="5">
-                                    <MudCard>
-                                        <MudCardMedia Image="@e.eventImagePath" Height="150"/>
-                                    </MudCard>
-                                </MudItem>
-                                <MudItem sm="7" xs="7">
-                                    <div style="line-height: 30px">
-
-                                        <div style="font-size: small"><b>@eventName</b></div>
-                                        <span>@address</span>
+                            <MudCard>
+                                <MudCardMedia Image="@e.eventImagePath" Height="200"/>
+                                <MudCardContent>
+                                    <div style="line-height: 40px">
+                                        <div style="font-size: medium"><b>@e.eventName</b></div>
+                                        <span>@e.eventAddress</span>
                                         <br/>
+
                                         <span>
                                             @if (e.eventTimes.Any())
                                             {
                                                 @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
                                             }
                                         </span>
-                                        <br/><br/>
-                                        <MudButton Variant="Variant.Text" Size="Size.Small" Href="@ticketLink" Target="_blank" Color="Color.Dark"><b>Get Tickets</b></MudButton>
+                                        <br/>
+
+                                        <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@e.eventOption</b></MudChip>
+
+                                        @if (e.eventTimes.Any() && e.eventTimes.Count > 1)
+                                        {
+                                            <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Times</MudChip>
+                                        }
+                                        else
+                                        {
+                                            <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTimes.Count Time</MudChip>
+                                        }
+
+                                        @if (e.eventTickets.Any() && e.eventTickets.Count > 1)
+                                        {
+                                            <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Tickets</MudChip>
+                                        }
+                                        else
+                                        {
+                                            <MudChip T="string" Size="Size.Small" Color="Color.Default">@e.eventTickets.Count Ticket</MudChip>
+                                        }
+                                        <br/>
                                     </div>
-                                </MudItem>
-                            </MudGrid>
+                                </MudCardContent>
+                                <MudCardActions Class="pa-5">
+                                    @if (e.paymentOptions.Count > 1)
+                                    {
+                                        var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+
+                                        <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C") +</b></MudText>
+                                    }
+                                    else
+                                    {
+                                        var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+                                        <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
+                                    }
+                                    <MudSpacer></MudSpacer>
+                                    <MudButton Variant="Variant.Filled" Style="background-color: #55385c; color: white; font-size: small" OnClick="@(async () => await OpenDrawerWithEvent(Anchor.End, e._id))" Size="Size.Small" ><b>Get Tickets</b></MudButton>
+                                </MudCardActions>
+                            </MudCard>
                         </div>
                     </MudItem>
 

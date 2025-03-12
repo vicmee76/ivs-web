@@ -92,7 +92,7 @@
             await _localStorageService.SetItemAsync(Tokens.TokenName, res.result.token);
             await _localStorageService.SetItemAsync(Tokens.RefreshTokenName, res.result.refreshToken);
             await _authStateProvider.GetAuthenticationStateAsync();
-            _navigate.NavigateTo("/events/dashboard", true);
+            _navigate.NavigateTo("/user/profile", true);
         }
         else
         {
