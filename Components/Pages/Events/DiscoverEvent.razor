@@ -127,7 +127,7 @@
                                             <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
                                         }
                                         <MudSpacer></MudSpacer>
-                                        <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Dark" Target="_blank" Href="@ticketLink"><b>Get Tickets</b></MudButton>
+                                        <MudButton Variant="Variant.Filled" Size="Size.Small" Style="background-color: #55385c; color: white; font-size: small" Target="_blank" Href="@ticketLink"><b>Get Tickets</b></MudButton>
                                     </MudCardActions>
                                 </MudCard>
                                 </div>
@@ -136,23 +136,26 @@
                                     <MudGrid>
                                         <MudItem sm="5" xs="5">
                                             <MudCard>
-                                                <MudCardMedia Image="@e.eventImagePath" Height="100"/>
+                                                <MudCardMedia Image="@e.eventImagePath" Height="120"/>
                                             </MudCard>
                                         </MudItem>
                                         <MudItem sm="7" xs="7">
-                                            <div style="line-height: 24px">
+                                            <div style="line-height: 27px; padding: 5px">
 
-                                                <div style="font-size: small"><b>@eventName</b></div>
-                                                <span>@address</span>
-                                                <br/>
-                                                <span>
+                                                <div style="color: #54385b; font-family:'Akaya Telivigala'"><b>@eventName</b></div>
+                                                <div >@address</div>
+
+                                                <div style="font-size: small">
                                                     @if (e.eventTimes.Any())
                                                     {
-                                                    @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
+                                                        @Convert.ToDateTime(e.eventTimes[0].startDateAndTime).ToString("ddd, dd MMM, yyyy, hhtt")
                                                     }
-                                                </span>
+                                                </div>
 
-                                                <MudButton Variant="Variant.Text" Size="Size.Small" Href="@ticketLink" Target="_blank" Color="Color.Primary"><b>Get Tickets</b></MudButton>
+                                                <div style="margin-top: 10px">
+                                                    <MudButton  Variant="Variant.Filled" Size="Size.Small" Href="@ticketLink" Style="font-size: small; background-color: #55385c; color: white" Target="_blank">Get Tickets</MudButton>
+                                                </div>
+
                                             </div>
                                         </MudItem>
                                     </MudGrid>

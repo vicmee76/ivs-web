@@ -123,7 +123,7 @@
                                         </MudItem>
                                         
                                         <MudItem  xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
-                                            <MudChip T="string" Color="Color.Error">@urlTag</MudChip>
+                                            <MudChip T="string" Color="Color.Primary">@urlTag</MudChip>
                                             <MudTextField Label="Custom url tag" TextChanged="@(async () => await MakeCustomUrl())" HelperText="Custom url tag" @bind-Value="model.eventCode" For="@(() => model.eventCode)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
                                         </MudItem>
                                     </MudGrid>
