@@ -39,6 +39,25 @@
         color: #56375C
     }
 
+    .sticky-button {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 400px;
+        padding: 15px;
+        background-color: #007bff;
+        color: white;
+        text-align: center;
+        border-radius: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        text-decoration: none;
+        display: block;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
     .event-lisiting-web{
         display: none;
     }
@@ -52,9 +71,17 @@
     }
 
     .event-lisiting-mobile{
-        display: block;
+        display: inline;
         padding: 10px;
         box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    }
+
+    .image-lisiting-mobile{
+        display: inline;
+    }
+    
+    .image-lisiting-web{
+        display: none;
     }
 
     #discovery-title-mid {
