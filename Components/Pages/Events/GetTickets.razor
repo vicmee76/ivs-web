@@ -29,16 +29,29 @@
                             <span id="event-title">@_events.eventName</span>
                             <br /><br />
                             <div>
-                                <MudChip T="string" Size="Size.Small" Color="Color.Secondary"><b>@_events.eventOption.ToUpper()</b></MudChip>
-                                <MudChip T="string" Size="Size.Small" Color="Color.Warning"><b>@_events.EventType.FirstOrDefault().name</b></MudChip>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Error"><b>@_events.eventOption.ToUpper()</b></MudChip>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Error"><b>@_events.EventType.FirstOrDefault().name</b></MudChip>
 
-                                <MudChip T="string" Size="Size.Small" Color="Color.Dark" OnClick="@((e) => ActionShareEvent(_events.eventShortLink))" Icon="@Icons.Material.Filled.Share">
+                                <MudChip T="string" Size="Size.Small" Color="Color.Default" OnClick="@((e) => ActionShareEvent(_events.eventShortLink))" Icon="@Icons.Material.Filled.Share">
                                     <b> Share</b>
+                                </MudChip>
+
+                                <MudChip T="string" Size="Size.Small" Color="Color.Default" OnClick="@((e) => ViewQrCodeAction(_events.qrCodeLink))" Icon="@Icons.Material.Filled.QrCodeScanner">
+                                    <b> Scan </b>
                                 </MudChip>
                             </div>
                         </div>
 
-                        <br /> <br/>
+                        <br />
+
+                        <div class="image-lisiting-mobile">
+                            <br/>
+                            <MudImage Fluid="true" Src="@_events.eventImagePath" Height="400" Width="400"/>
+                            <br/>
+                            <br/>
+                        </div>
+                        
+                        <br/>
 
                         <MudText Typo="Typo.h6"><b>About this event</b></MudText>
                         <br/>
@@ -54,65 +67,58 @@
 
                             <br />
 
-                            <div> @_events.eventAddress</div>
-                            <div> @_events.eventState</div>
-                          
+                            <MudNavLink Icon="@Icons.Material.TwoTone.LocationOn" IconColor="Color.Error">
+                                @_events.eventAddress | @_events.eventState
+                            </MudNavLink>
+
                             @if (!string.IsNullOrEmpty(_events.adressPin))
                             {
-                            <MudButton Href="@_events.adressPin"
-                                       Target="_blank"
-                                       Variant="Variant.Outlined"
-                                       EndIcon="@Icons.Material.Filled.LocationOn"
-                                       Color="Color.Secondary"
-                                       Style="text-transform:none">
-                                Google address pin link
-                            </MudButton>
-                            <br />
-                            }
-                           
-                        </div>
-
-                        <br/><br/>
-                        <MudText Typo="Typo.h6"> <b>Date and time</b></MudText>
-
-                        <br />
-
-                        <div>
-                            @foreach (var t in _events.EventTime)
-                            {
-                                <MudText Typo="Typo.body2">  <b>@Convert.ToDateTime(t.startDateAndTime).ToString("dddd, dd MMMM yyyy, HH:mm tt")</b> </MudText>
+                                <br />
+                                <MudButton Href="@_events.adressPin"
+                                           Target="_blank"
+                                           Variant="Variant.Outlined"
+                                           EndIcon="@Icons.Material.Filled.LocationOn"
+                                           Color="Color.Secondary"
+                                           Style="text-transform:none">
+                                    Google address pin link
+                                </MudButton>
                                 <br />
                             }
-                        </div>
-                        
-                        <br/>
-
-                        <div style="">
-                            <MudText Typo="Typo.h6"><b>QR Code</b> &nbsp; </MudText>
-
-                            <br />
-                            <MudImage Src="@_events.qrCodeLink"></MudImage>
-                            <br />
                            
                         </div>
 
                         <br />
-                          
-
                         <br />
+                        
+                        <MudGrid>
+                            
+                            <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
 
-                        <div>
-                            <MudText Typo="Typo.h6"><b>Social Links</b></MudText>
+                                <MudText Typo="Typo.h6"> <b>Date and time</b></MudText>
+                                <br />
 
-                            <br />
-
-                            <div>
+                                <div>
+                                    @foreach (var t in _events.EventTime)
+                                    {
+                                        <MudNavLink Icon="@Icons.Material.TwoTone.DateRange" IconColor="Color.Default">
+                                            @Convert.ToDateTime(t.startDateAndTime).ToString("ddd, dd MMM yyyy, HH:mm tt")
+                                        </MudNavLink>
+                                       
+                                    }
+                                </div>
+                                
+                            </MudItem>
+                            
+                            <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+                                
+                                <MudText Typo="Typo.h6"><b>Socials</b></MudText>
+                                <br/>
 
                                 <MudGrid>
 
                                     @if (!string.IsNullOrWhiteSpace(_events.instagramLink))
                                     {
-                                        <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                        <MudItem xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
                                             <div>
                                                 Visit us on
                                                 <MudElement HtmlTag="a" Class="ms-1" Style="color:hotpink;font-weight:bold;" href="@_events.instagramLink" target="blank" rel="noopener noreferrer">
@@ -124,7 +130,7 @@
 
                                     @if (!string.IsNullOrWhiteSpace(_events.facebookLink))
                                     {
-                                        <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                        <MudItem xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
                                             <div>
                                                 Visit us on
                                                 <MudElement HtmlTag="a" Class="ms-1" Style="color:blue;font-weight:bold;" href="@_events.facebookLink" target="blank" rel="noopener noreferrer">
@@ -137,7 +143,7 @@
 
                                     @if (!string.IsNullOrWhiteSpace(_events.twitterLink))
                                     {
-                                        <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                        <MudItem xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
                                             <div>
                                                 Visit us on
                                                 <MudElement HtmlTag="a" Class="ms-1" Style="color:black;font-weight:bold;" href="@_events.twitterLink" target="blank" rel="noopener noreferrer">
@@ -150,7 +156,7 @@
 
                                     @if (!string.IsNullOrWhiteSpace(_events.webLink))
                                     {
-                                        <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
+                                        <MudItem xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
                                             <div>
                                                 Visit us on
                                                 <MudElement HtmlTag="a" Class="ms-1" Style="color:lightsalmon;font-weight:bold;" href="@_events.webLink" target="blank" rel="noopener noreferrer">
@@ -162,13 +168,14 @@
                                     }
 
                                 </MudGrid>
-
-
-                            </div>
-
-                        </div>
-
-
+                                
+                            </MudItem>
+                            
+                        </MudGrid>
+                        
+                        <br />
+                        <br />
+                       
                     </MudPaper>
                     
                 </MudItem>
@@ -177,11 +184,11 @@
                     <div class="sticky-header">
                         <MudPaper Elevation="0" Style="text-align: center">
 
-                            <div>
+                            <div class="image-lisiting-web">
                                 <MudImage Fluid="true" Src="@_events.eventImagePath" Height="400" Width="400" />
                             </div>
                             <br/>
-                            <MudButton Variant="Variant.Filled" FullWidth="true" Style="background-color: #56375C; height: 60px; color: white" Href="@buyLink" Size="Size.Large">
+                            <MudButton Variant="Variant.Filled" Class="sticky-button" FullWidth="true" Style="background-color: #56375C; height: 60px; color: white" Href="@buyLink" Size="Size.Large">
                                 <MudText><b>Buy Tickets</b></MudText>
                             </MudButton>
 
@@ -205,7 +212,6 @@
     [Inject] IDialogService DialogService { get; set; }
 
     GetEventDetailsDto _events = new();
-    
     private string eventName { get; set; }
 
     private bool _getEventprocessing { get; set; }
@@ -227,6 +233,26 @@
 
         _getEventprocessing = false;
         StateHasChanged();
+    }
+    
+    
+    private async Task ViewQrCodeAction(string qrCode)
+    {
+        DialogOptions opts = new DialogOptions()
+        {
+            MaxWidth = MaxWidth.Small,
+            FullWidth = true,
+            CloseButton = true,
+        };
+
+        var parameters = new DialogParameters<QrCodeDialog> { { x => x.qrCodeData, qrCode }};
+        var dialog = await DialogService.ShowAsync<QrCodeDialog>("QR Code", parameters, opts);
+
+        var result = await dialog.Result;
+        if (!result.Canceled)
+        {
+            StateHasChanged();
+        }
     }
 
 

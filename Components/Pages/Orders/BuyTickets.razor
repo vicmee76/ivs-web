@@ -30,13 +30,13 @@
             {
                 if (_ticketList.Any())
                 {
-
                     <br/>
-                    <span id="discovery-title-mid">Contact Information</span>
+                    <span id="event-title">@eventName</span>
                     <br/>
-
+                    <br/>
+                   
                     <div style="font-size:13px; line-height:25px">
-                        We will send all the tickets you selected to the email details provided below after a successful purchase.
+                        Enter your contact info; We will send all the tickets you selected to the email details provided below after a successful purchase.
                     </div>
 
                     <br/>
@@ -307,6 +307,9 @@
 
     List<GenerateCostDto> generateCost = [];
     List<AttendanceVm> _attendanceVms = [];
+    
+    GetEventDetailsDto _events = new();
+    private string eventName { get; set; }
 
     Dictionary<string, GenerateCostVM> TicketWithQuantity = new();
 
@@ -322,28 +325,40 @@
 
         _processing = true;
         var res = await _ticketService.GetTicketByEventId(id);
-
+        
+        var res2 = await _eventService.GetEventDetails(id);
         if (res.result.code == ResponseCodes.ResponseCodeOk)
         {
-            if (res.result.data is List<TicketDto> result)
+            _events = res2.result.data;
+            eventName = _events.eventName;
+            
+            if (res.result.code == ResponseCodes.ResponseCodeOk)
             {
-                _ticketList = result
-                    .GroupBy(ticket => new { ticket.eventTimeDetails._id, ticket.eventTimeDetails.startDateAndTime })
-                    .Select(group => new TimeAndTicketGroupingDto
-                    {
-                        EventTimeId = group.Key._id,
-                        StartDateAndTime = group.Key.startDateAndTime,
-                        Tickets = group.ToList()
-                    }).ToList();
-            }
+                if (res.result.data is List<TicketDto> result)
+                {
+                    _ticketList = result
+                        .GroupBy(ticket => new { ticket.eventTimeDetails._id, ticket.eventTimeDetails.startDateAndTime })
+                        .Select(group => new TimeAndTicketGroupingDto
+                        {
+                            EventTimeId = group.Key._id,
+                            StartDateAndTime = group.Key.startDateAndTime,
+                            Tickets = group.ToList()
+                        }).ToList();
+                }
 
-            await GetPaymentOptions();
+                await GetPaymentOptions();
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
         }
         else
         {
             _snackbar.Add(res.result.message, Severity.Error);
         }
 
+        
         _processing = false;
         StateHasChanged();
     }
@@ -401,41 +416,6 @@
 
             GenerateTicketCost(ticketId, eventTimeId, value.FirstOrDefault());
 
-
-            // var costVm = TicketWithQuantity.Values.ToList();
-            // if (costVm.Any())
-            // {
-            //     var tics = await _orderService.GenerateCost(costVm);
-
-            //     if (tics.result.code == ResponseCodes.ResponseCodeOk)
-            //     {
-            //         generateCost = (List<GenerateCostDto>)tics.result.data;
-            //     }
-            //     else
-            //     {
-            //         _snackbar.Add(tics.result.message, Severity.Error);
-            //         _generateCostProcessing = false;
-            //         TicketWithQuantity.Remove(ticketId);
-
-            //         if (generateCost.Any())
-            //         {
-            //             var item = generateCost.FirstOrDefault().tickets.Where(x => x.ticketId == ticketId);
-            //             if (item.Any())
-            //             {
-            //                 generateCost.FirstOrDefault().totalTicketPurchased -= item.FirstOrDefault().ticketQuantity;
-            //                 generateCost.FirstOrDefault().totalTicketFee -= item.FirstOrDefault().totalTicketFee;
-            //                 generateCost.FirstOrDefault().totalServiceFee -= item.FirstOrDefault().totalTicketServiceFee;
-            //                 generateCost.FirstOrDefault().totalAmount -= item.FirstOrDefault().totalTicketFeeAndServiceFee;
-            //                 generateCost.FirstOrDefault().tickets.Remove(item.FirstOrDefault());
-            //             }
-
-            //         }
-            //     }
-            // }
-            // else
-            // {
-            //     generateCost = [];
-            // }
         }
 
         _generateCostProcessing = false;
@@ -479,18 +459,6 @@
             var serviceFeeSum = (qty * chargeAmount) + flwVatAndStampDuty ;
             var ticketFeeSum = (ticketAmt * qty);
             
-            // var vatFee = Math.Round(newTicketFee * vatPercentage , 2);
-            // var feePerTicket = vatFee + newTicketFee;
-            //
-            // var StampDuty = 0.00M;
-            // if (((feePerTicket + ticketAmt) * qty) >= 10000) StampDuty = 50M;
-            //
-            // var serviceFee = (qty * feePerTicket) + StampDuty;
-            // var totalQty = qty;
-            // var ticketFee = Math.Round(qty * Convert.ToDecimal(tickets.ticketAmount.numberDecimal), 2);
-            
-            
-
             var tics = new TicketsObjects()
             {
                 ticketId = ticketId,
