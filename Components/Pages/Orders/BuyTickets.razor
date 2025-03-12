@@ -259,7 +259,7 @@
 
                                 <br />
 
-                                <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_saveOrderProcessing" OnClick="@(async () => await ActionSaveOrder())" Style="height:50px; background:#56375C" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                                <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_saveOrderProcessing" OnClick="@(async () => await ActionSaveOrder())" Style="height:50px; background:#56375C" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5 sticky-button">
                                     @if (_saveOrderProcessing)
                                     {
                                         <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
@@ -267,7 +267,7 @@
                                     }
                                     else
                                     {
-                                        <MudText><b>Buy Ticket</b></MudText>
+                                        <MudText><b>Pay @generateCost.FirstOrDefault().totalAmount.ToString("C")</b></MudText>
                                     }
                                 </MudButton>
                             }
