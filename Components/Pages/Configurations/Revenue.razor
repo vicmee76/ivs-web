@@ -52,114 +52,189 @@
                             <MudCardContent>
 
                                 <MudGrid Spacing="6">
-                                    <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
-                                        <MudPaper Class="pa-10" Outlined="true" Style="background-color:#fff6ff">
-                                            <div style="line-height:40px">
+                                    <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
 
-                                                <div style="font-size:17px;">Revenue</div>
+                                        <h3><b>Total Results</b></h3>
+                                        <br/>
+                                        <MudGrid Spacing="4">
+                                            <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+                                                <MudPaper Class="pa-5" Outlined="true" Style="background-color:#fff6ff">
+                                                    <div style="line-height:40px">
 
-                                                @if (_processing)
-                                                {
-                                                    <MudSkeleton Height="22px;"/>
-                                                }
-                                                else
-                                                {
-                                                    <h1>@ivsNetRevenueSum.ToString("C")</h1>
-                                                }
+                                                        <div id="dasboard-count-title">Total Revenue</div>
 
-                                            </div>
-                                        </MudPaper>
+                                                        @if (_processing)
+                                                        {
+                                                            <MudSkeleton Height="22px;"/>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="dasboard-count">@ivsNetRevenueSum.ToString("C")</div>
+                                                        }
+
+                                                    </div>
+                                                </MudPaper>
+                                            </MudItem>
+
+                                            <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+                                                <MudPaper Class="pa-5" Outlined="true" Style="background-color:#e8ffed">
+                                                    <div style="line-height:40px">
+
+                                                        <div id="dasboard-count-title">Total Sales</div>
+
+                                                        @if (_processing)
+                                                        {
+                                                            <MudSkeleton Height="22px;"/>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="dasboard-count">@totalTicketFeeSum.ToString("C")</div>
+                                                        }
+
+                                                    </div>
+                                                </MudPaper>
+                                            </MudItem>
+
+                                            <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
+                                                <MudPaper Class="pa-5" Outlined="true" Style="background-color:#fbecdc">
+                                                    <div style="line-height:40px">
+
+                                                        <div id="dasboard-count-title">Total Settlement</div>
+
+                                                        @if (_processing)
+                                                        {
+                                                            <MudSkeleton Height="22px;"/>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="dasboard-count">@totalSettlement.ToString("C")</div>
+                                                        }
+
+                                                    </div>
+                                                </MudPaper>
+                                            </MudItem>
+
+                                            <MudItem xs="6" sm="6" md="6" lg="4" xl="4" xxl="4">
+                                                <MudPaper Class="pa-5" Outlined="true" Style="background-color:#F4F3FF">
+                                                    <div style="line-height:40px">
+
+                                                        <div id="dasboard-count-title">Total Vat</div>
+
+                                                        @if (_processing)
+                                                        {
+                                                            <MudSkeleton Height="22px;" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="dasboard-count">@ivsVatSum.ToString("C")</div>
+                                                        }
+
+                                                    </div>
+                                                </MudPaper>
+                                            </MudItem>
+
+
+                                            <MudItem xs="6" sm="6" md="6" lg="4" xl="4" xxl="4">
+                                                <MudPaper Class="pa-5" Outlined="true" Style="background-color:#F4F3FF">
+                                                    <div style="line-height:40px">
+
+                                                        <div id="dasboard-count-title">Total Ticket</div>
+
+                                                        @if (_processing)
+                                                        {
+                                                            <MudSkeleton Height="22px;" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="dasboard-count">@totalOrderQuantitySum</div>
+                                                        }
+
+                                                    </div>
+                                                </MudPaper>
+                                            </MudItem>
+
+                                        </MudGrid>
+                                        
                                     </MudItem>
+                                    <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
 
-                                    <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
-                                        <MudPaper Class="pa-10" Outlined="true" Style="background-color:#e8ffed">
-                                            <div style="line-height:40px">
+                                        <h3><b>Filtered Results</b></h3>
+                                        <br/>
+                                        <MudGrid Spacing="4">
+                                            <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
+                                                <MudPaper Class="pa-5" Outlined="true" Style="background-color:#fff6ff">
+                                                    <div style="line-height:40px">
 
-                                                <div style="font-size:17px;">Total Sales</div>
+                                                        <div id="dasboard-count-title">Filtered Revenue</div>
 
-                                                @if (_processing)
-                                                {
-                                                    <MudSkeleton Height="22px;"/>
-                                                }
-                                                else
-                                                {
-                                                    <h1>@totalTicketFeeSum.ToString("C")</h1>
-                                                }
+                                                        @if (_processing)
+                                                        {
+                                                            <MudSkeleton Height="22px;"/>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="dasboard-count">@filteredIvsNetRevenueSum.ToString("C")</div>
+                                                        }
 
-                                            </div>
-                                        </MudPaper>
+                                                    </div>
+                                                </MudPaper>
+                                            </MudItem>
+
+                                            <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
+                                                <MudPaper Class="pa-5" Outlined="true" Style="background-color:#fff6ff">
+                                                    <div style="line-height:40px">
+
+                                                        <div id="dasboard-count-title">Filtered Sales</div>
+
+                                                        @if (_processing)
+                                                        {
+                                                            <MudSkeleton Height="22px;"/>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="dasboard-count">@filteredTotalTicketFeeSum.ToString("C")</div>
+                                                        }
+
+                                                    </div>
+                                                </MudPaper>
+                                            </MudItem>
+
+
+                                            <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
+                                                <MudPaper Class="pa-5" Outlined="true" Style="background-color:#fff6ff">
+                                                    <div style="line-height:40px">
+
+                                                        <div id="dasboard-count-title">Filtered Ticket</div>
+
+                                                        @if (_processing)
+                                                        {
+                                                            <MudSkeleton Height="22px;" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <div id="dasboard-count">@filteredTotalOrderQuantitySum</div>
+                                                        }
+
+                                                    </div>
+                                                </MudPaper>
+                                            </MudItem>
+
+                                        </MudGrid>
+                                        
                                     </MudItem>
-
-                                    <MudItem xs="12" sm="12" md="12" lg="2" xl="2" xxl="2">
-                                        <MudPaper Class="pa-10" Outlined="true" Style="background-color:#fbecdc">
-                                            <div style="line-height:40px">
-
-                                                <div style="font-size:17px;">Total Settlement</div>
-
-                                                @if (_processing)
-                                                {
-                                                    <MudSkeleton Height="22px;"/>
-                                                }
-                                                else
-                                                {
-                                                    <h3>@totalSettlement.ToString("C")</h3>
-                                                }
-
-                                            </div>
-                                        </MudPaper>
-                                    </MudItem>
-
-                                    <MudItem xs="12" sm="12" md="12" lg="2" xl="2" xxl="2">
-                                        <MudPaper Class="pa-10" Outlined="true" Style="background-color:#F4F3FF">
-                                            <div style="line-height:40px">
-
-                                                <div style="font-size:17px;">Total Vat</div>
-
-                                                @if (_processing)
-                                                {
-                                                    <MudSkeleton Height="22px;" />
-                                                }
-                                                else
-                                                {
-                                                    <h3>@ivsVatSum.ToString("C")</h3>
-                                                }
-
-                                            </div>
-                                        </MudPaper>
-                                    </MudItem>
-
-
-                                    <MudItem xs="12" sm="12" md="12" lg="2" xl="2" xxl="2">
-                                        <MudPaper Class="pa-10" Outlined="true" Style="background-color:#F4F3FF">
-                                            <div style="line-height:40px">
-
-                                                <div style="font-size:17px;">Ticket Purchased</div>
-
-                                                @if (_processing)
-                                                {
-                                                    <MudSkeleton Height="22px;" />
-                                                }
-                                                else
-                                                {
-                                                    <h1>@totalOrderQuantitySum</h1>
-                                                }
-
-                                            </div>
-                                        </MudPaper>
-                                    </MudItem>
-
                                 </MudGrid>
 
                               
 
                                 <br/><br/><br />
+                                <br/>
 
                                 <div>
 
                                     <MudDataGrid @ref="revenueDataGrid" T="Order" Dense="false" RowsPerPage="10"  ServerData="GetRevenueServerReload" Filterable="false" Hover="true" Loading="@_processing" LoadingProgressColor="Color.Secondary" Striped="true" Bordered="true">
                                         <ToolBarContent>
                                             
-                                            <MudIconButton Icon="@Icons.Material.Filled.ReplayCircleFilled" Color="Color.Secondary" Size="Size.Large" OnClick="@(() => OnReload())"></MudIconButton>
+                                            <MudIconButton Icon="@Icons.Material.Filled.ReplayCircleFilled" Color="Color.Dark" Size="Size.Large" OnClick="@(() => OnReload())"></MudIconButton>
 
                                             <MudSpacer/>
                                             <MudTextField T="string" ValueChanged="@(s => OnSalesSearch(s))" Placeholder="Search with code, name, email, phone, tran id, tran ref " Adornment="Adornment.Start"
@@ -170,7 +245,7 @@
 
                                             <TemplateColumn Title="" Sortable="false" Filterable="false">
                                                 <CellTemplate Context="ctx">
-                                                    <MudIconButton Icon="@Icons.Material.Filled.ArrowDropDownCircle" OnClick="@(() => ShowDetails(ctx.Item.orderId))" Title="View event" Size="Size.Medium" Color="Color.Secondary" />
+                                                    <MudIconButton Icon="@Icons.Material.Filled.ArrowDropDownCircle" OnClick="@(() => ShowDetails(ctx.Item.orderId))" Title="View event" Size="Size.Medium" Color="Color.Dark" />
                                                 </CellTemplate>
                                             </TemplateColumn>
 
@@ -321,13 +396,16 @@
     string revenueSearchString = string.Empty;
     private bool _processing { get; set; } = false;
     private decimal ivsNetRevenueSum { get; set; }
+    private decimal filteredIvsNetRevenueSum { get; set; }
     private decimal totalServiceFeeSum { get; set; }
     private decimal totalTicketFeeSum { get; set; }
+    private decimal filteredTotalTicketFeeSum { get; set; }
     private decimal gatewayFeeSum { get; set; }
     private decimal ivsVatSum { get; set; }
     private decimal totalSettlement { get; set; }
     private decimal totalServiceFeeAfterDeductionSum { get; set; }
     private int totalOrderQuantitySum { get; set; }
+    private int filteredTotalOrderQuantitySum { get; set; }
     private int totalItems { get; set; }
     MudDataGrid<Order> revenueDataGrid;
 
@@ -365,7 +443,7 @@
         {
             var result = (GetRevenueDataDto)res.result.data;
             var settlement = (GetTotalSettlementModel)res2.result.data;
-            IEnumerable<Order> data = (List<Order>)result.result.FirstOrDefault().orders;
+            IEnumerable<Order> data = (List<Order>)result.filteredResult.FirstOrDefault().orders;
             OrdersData = data;
             
             data = data.Where(element =>
@@ -395,13 +473,18 @@
                 return false;
             }).ToArray();
 
-            ivsNetRevenueSum = result.result.FirstOrDefault().ivsNetRevenueSum;
-            totalServiceFeeSum = result.result.FirstOrDefault().totalServiceFeeSum;
-            totalServiceFeeAfterDeductionSum = result.result.FirstOrDefault().totalServiceFeeAfterDeductionSum;
-            totalTicketFeeSum = result.result.FirstOrDefault().totalTicketFeeSum;
-            gatewayFeeSum = result.result.FirstOrDefault().gatewayFeeSum;
-            ivsVatSum = result.result.FirstOrDefault().ivsVatSum;
-            totalOrderQuantitySum = result.result.FirstOrDefault().totalOrderQuantitySum;
+            ivsNetRevenueSum = result.revenueSums.ivsNetRevenueSum;
+            filteredIvsNetRevenueSum = result.filteredResult.FirstOrDefault().ivsNetRevenueSum;
+            
+            totalServiceFeeSum = result.revenueSums.totalServiceFeeSum;
+            totalServiceFeeAfterDeductionSum = result.revenueSums.totalServiceFeeAfterDeductionSum;
+            totalTicketFeeSum = result.revenueSums.totalTicketFeeSum;
+            filteredTotalTicketFeeSum = result.filteredResult.FirstOrDefault().totalTicketFeeSum;
+            
+            gatewayFeeSum = result.revenueSums.gatewayFeeSum;
+            ivsVatSum = result.revenueSums.ivsVatSum;
+            totalOrderQuantitySum = result.revenueSums.totalOrderQuantitySum;
+            filteredTotalOrderQuantitySum = result.filteredResult.FirstOrDefault().totalOrderQuantitySum;
             totalItems = result.totalCount;
             totalSettlement = settlement.totalAmountSettled;
 
