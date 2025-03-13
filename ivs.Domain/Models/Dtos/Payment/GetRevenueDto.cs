@@ -11,7 +11,23 @@ namespace ivs.Domain.Models.Dtos.Payment
     public class GetRevenueDataDto
     {
         public int totalCount { get; set; }
-        public List<GetRevenueDto> result { get; set; }
+        
+        public RevenueSums revenueSums { get; set; }
+        public List<GetRevenueDto> filteredResult { get; set; }
+    }
+
+
+    public class RevenueSums
+    {
+        public string _id { get; set; }
+        public int totalOrderQuantitySum { get; set; }
+        public decimal totalServiceFeeSum { get; set; }
+        public decimal totalTicketFeeSum { get; set; }
+        public decimal totalFeeSum { get; set; }
+        public decimal gatewayFeeSum { get; set; }
+        public decimal totalServiceFeeAfterDeductionSum { get; set; }
+        public decimal ivsNetRevenueSum { get; set; }
+        public decimal ivsVatSum { get; set; }
     }
 
 
