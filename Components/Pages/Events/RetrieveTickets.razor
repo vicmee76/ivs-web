@@ -71,15 +71,15 @@
                      <div><MudText Typo="Typo.caption"> <b>Code :</b> @row.code </MudText></div>
                   </MudCardContent>
                   <MudCardActions>
-                     <MudButton FullWidth="true" Disabled="@_processing" OnClick="@(async () => await ActionResendTicket(row.paymentGateWayTransactionStatuses, row.orderId, row.paymentGateWayTransactionIds))" Style="background:#54385b; color: white" Variant="Variant.Filled" Size="Size.Small">
+                     <MudButton Disabled="@_processing" OnClick="@(async () => await ActionResendTicket(row.paymentGateWayTransactionStatuses, row.orderId, row.paymentGateWayTransactionIds))" Style="background:#54385b; color: white" Variant="Variant.Filled" Size="Size.Small">
                         @if (_processing)
                         {
                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                           <MudText Class="ms-2">Processing</MudText>
+                           <MudText Class="ms-2"><small>Processing</small></MudText>
                         }
                         else
                         {
-                           <MudText Style="font-weight: bold">Resend</MudText>
+                           <MudText><small>Resend</small></MudText>
                         }
                      </MudButton>
                     
