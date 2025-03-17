@@ -12,19 +12,15 @@ namespace ivs_ui.Components.Data.Services.Events
 {
     public class EventService(IWebService webService ) : IEventService
     {
-        private readonly IWebService _webService = webService;
         private const string ApiUrl = "/api/v1/ivs-events/";
 
         public async Task<ResponseObject> ActivateEvent(string id)
         {
             try
             {
-                var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"activate-event/{id}", Method.Put, null, headers, null, null);
+                var headers = await webService.GetAuthorizationHeaders();
+                var response = await webService.Call(ApiUrl, $"activate-event/{id}", Method.Put, null, headers, null, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
-                var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCodeOk)
-                    return res;
                 return res;
             }
             catch (Exception ex)
@@ -44,8 +40,8 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"delete-ivs-event/{id}", Method.Delete, null, headers);
+                var headers = await webService.GetAuthorizationHeaders();
+                var response = await webService.Call(ApiUrl, $"delete-ivs-event/{id}", Method.Delete, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 return res;
             }
@@ -65,8 +61,8 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, "create-event", Method.Post, model, headers);
+                var headers = await webService.GetAuthorizationHeaders();
+                var response = await webService.Call(ApiUrl, "create-event", Method.Post, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCodeCreated)
@@ -92,7 +88,7 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var response = await _webService.Call(ApiUrl, $"fetch-event", Method.Get, null, null, queryParameter);
+                var response = await webService.Call(ApiUrl, $"fetch-event", Method.Get, null, null, queryParameter);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -117,8 +113,8 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"get-ivs-event-by-userid/{userid}", Method.Get, null, headers);
+                var headers = await webService.GetAuthorizationHeaders();
+                var response = await webService.Call(ApiUrl, $"get-ivs-event-by-userid/{userid}", Method.Get, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -144,8 +140,8 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"all-events", Method.Get, null, headers, queryParameter);
+                var headers = await webService.GetAuthorizationHeaders();
+                var response = await webService.Call(ApiUrl, $"all-events", Method.Get, null, headers, queryParameter);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -170,7 +166,7 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var response = await _webService.Call(ApiUrl, $"get-ivs-event-by-id/{id}", Method.Get, null);
+                var response = await webService.Call(ApiUrl, $"get-ivs-event-by-id/{id}", Method.Get, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -196,8 +192,8 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"get-ivs-event-meta-data-by-id/{id}", Method.Get, null, headers);
+                var headers = await webService.GetAuthorizationHeaders();
+                var response = await webService.Call(ApiUrl, $"get-ivs-event-meta-data-by-id/{id}", Method.Get, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -224,8 +220,8 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"update-event/{id}", Method.Put, model, headers);
+                var headers = await webService.GetAuthorizationHeaders();
+                var response = await webService.Call(ApiUrl, $"update-event/{id}", Method.Put, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -252,8 +248,8 @@ namespace ivs_ui.Components.Data.Services.Events
         {
             try
             {
-                var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"upload-event-photo/{model.ivsEventId}", Method.Put, model, headers, null, file);
+                var headers = await webService.GetAuthorizationHeaders();
+                var response = await webService.Call(ApiUrl, $"upload-event-photo/{model.ivsEventId}", Method.Put, model, headers, null, file);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
