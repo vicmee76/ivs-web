@@ -22,5 +22,14 @@ namespace ivs_ui.Components.Data.Helpers
             var visiblePart = number.Substring(lengthToMask);
             return maskedPart + visiblePart;
         }
+        
+        public static bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            return Regex.IsMatch(email, emailPattern);
+        }
     }
 }

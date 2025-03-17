@@ -1,0 +1,177 @@
+@page "/events/retrieve-tickets"
+
+@{
+   CultureInfo nigeriaCulture = new CultureInfo("en-NG");
+   nigeriaCulture.NumberFormat.CurrencySymbol = "₦";
+   Thread.CurrentThread.CurrentCulture = nigeriaCulture;
+   Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
+}
+
+<title>IV's Retrieve your tickets</title>
+
+
+<MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
+   
+   <br/>
+   
+   <div style="margin-top: 20px; align-content: center; padding: 30px; background-color: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); border-radius: 10px;">
+     
+      <MudText Typo="Typo.h6" Style="font-weight: 700"> Retrieve Your Ticket Instantly. </MudText>
+      <br/>
+      <MudText Typo="Typo.body1">Have you purchased a ticket? Enter your registered email to quickly retrieve your ticket details.</MudText>
+      <br/><br/>
+
+      <MudGrid>
+         <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+            <MudTextField @bind-Value="email" OnClearButtonClick="() => ActionClearRetrieveTicket()" Clearable="true" Label="Enter your email address" Variant="Variant.Outlined"></MudTextField>
+         </MudItem>
+         
+         <MudItem xs="12" sm="12" md="12" lg="2" xl="2" xxl="2" Style="align-content: center">
+            <MudButton FullWidth="true" Disabled="@_processing" OnClick="@(async () => await ActionRetrieveTicket())" Style="background:#54385b; color: white" Variant="Variant.Filled" Size="Size.Large">
+               @if (_processing)
+               {
+                  <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                  <MudText Class="ms-2">Processing</MudText>
+               }
+               else
+               {
+                  <MudText Style="font-weight: bold">Retrieve Tickets</MudText>
+               }
+            </MudButton>
+         </MudItem>
+      </MudGrid>
+   </div>
+   
+   <br/>
+      
+   @if (_tickets.Any())
+      {
+         <div style="margin-top: 20px; align-content: center; padding: 30px; background-color: white; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); border-radius: 10px;">
+
+         <MudText Typo="Typo.h6" Style="font-weight: 700"> Your Tickets. </MudText>
+         <br/>
+         
+         <MudSimpleTable Elevation="0" Hover="true" Outlined="true" Striped="true" FixedHeader="true" Style="overflow-x: auto; font-size: small">
+
+            <thead>
+            <tr>
+               <th>Event</th>
+               <th>Name</th>
+               <th>Code</th>
+               <th>Ticket</th>
+               <th>Price</th>
+               <th>Status</th>
+               <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var row in _tickets)
+            {
+               <tr>
+                  <td>@row.eventName</td>
+                  <td>@row.firstName @row.lastName</td>
+                  <td>@row.code</td>
+                  <td>@row.ticketName X @row.ticketQuantity</td>
+                  <td>@Convert.ToDecimal(row.ticketPrice).ToString("C")</td>
+                  <td><MudChip T="string" Size="Size.Small" Style="background-color: #f3dff6; color: #57375c"><b>@row.paymentGateWayTransactionStatuses</b></MudChip></td>
+                  <td>
+                     <MudButton FullWidth="true" Disabled="@_processing" OnClick="@(async () => await ActionResendTicket(row.paymentGateWayTransactionStatuses, row.orderId, row.paymentGateWayTransactionIds))" Style="background:#54385b; color: white" Variant="Variant.Filled" Size="Size.Small">
+                        @if (_processing)
+                        {
+                           <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                           <MudText Class="ms-2">Processing</MudText>
+                        }
+                        else
+                        {
+                           <MudText Style="font-weight: bold">Resend</MudText>
+                        }
+                     </MudButton>
+                  </td>
+               </tr>
+            }
+            </tbody>
+         </MudSimpleTable>
+         </div>
+      }
+      
+  
+
+</MudContainer>
+
+@code {
+   
+   [Inject] NavigationManager? _navigate { get; set; }
+   [Inject] ISnackbar? _snackbar { get; set; }
+   [Inject] IPaymentService _paymentService { get; set; }
+   [Inject] IAttendanceService _attendanceService { get; set; }
+
+   List<RetrieveTicketDto> _tickets = new();
+   
+   public string email { get; set; }
+   private bool _processing { get; set; } = false;
+
+   private async Task ActionClearRetrieveTicket()
+   {
+      _tickets.Clear();
+   }
+
+   private async Task ActionResendTicket(string status, string orderId, string transactionId)
+   {
+      _processing = true;
+      if (string.IsNullOrEmpty(transactionId) || string.IsNullOrEmpty(orderId) || string.IsNullOrEmpty(status))
+      {
+         _snackbar.Add("Some parameters are missing, please try again later", Severity.Error);
+      }
+      else
+      {
+         var queryParams = new Dictionary<string, string?>
+         {
+            { "status", status },
+            { "tx_ref", orderId },
+            { "transaction_id", transactionId }
+         };
+
+         var res = await _paymentService.VerifyPayment(queryParams);
+
+         if (res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true)
+         {
+            _snackbar.Add("Ticket resent successfully", Severity.Success);
+         }
+         else
+         {
+            _snackbar.Add(res.result.message, Severity.Info);
+         }
+      }
+      _processing = false;
+   }
+
+   
+   private async Task ActionRetrieveTicket()
+   {
+      _processing = true;
+      if (!GeneralClass.IsValidEmail(email))
+      {
+         _snackbar.Add("Please enter a valid email address", Severity.Error);
+      }
+      else
+      {
+         var res = await _attendanceService.RetrieveTicketsByUserEmail(email);
+
+         if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
+         {
+            _tickets = (List<RetrieveTicketDto>)res.result.data;
+         }
+         else
+         {
+            _snackbar.Add(res.result.message, Severity.Error);
+            _processing = false;
+            StateHasChanged();
+         }
+      }
+         
+      StateHasChanged();
+      _processing = false;
+      
+   }
+   
+}

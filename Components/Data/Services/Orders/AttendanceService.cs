@@ -9,13 +9,9 @@ using RestSharp;
 
 namespace ivs_ui.Components.Data.Services.Orders
 {
-    public class AttendanceService(IWebService _webService, ILocalStorageService sessionStorageService) : IAttendanceService
+    public class AttendanceService(IWebService _webService) : IAttendanceService
     {
         private const string ApiUrl = "/api/v1/orders/attendance/";
-
-        private readonly ILocalStorageService _sessionStorageService = sessionStorageService;
-
-
         public async Task<ResponseObject> GetAttendanceByOrderId(string orderId)
         {
             try
@@ -24,7 +20,7 @@ namespace ivs_ui.Components.Data.Services.Orders
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
-                    return new ResponseObject();
+                    return res;
 
                 res.result.data = JsonConvert.DeserializeObject<GetAttendanceDto>(content?.data?.ToString());
                 return res;
@@ -41,6 +37,33 @@ namespace ivs_ui.Components.Data.Services.Orders
             }
         }
 
+        
+        public async Task<ResponseObject> RetrieveTicketsByUserEmail(string email)
+        {
+            try
+            {
+                var response = await _webService.Call(ApiUrl, $"get-user-tickets/{email}", Method.Get, null);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                res.result.data = JsonConvert.DeserializeObject<List<RetrieveTicketDto>>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject()
+                {
+                    result = new ResponseContents()
+                    {
+                        message = "Error! Something went wrong trying to retrieve users tickets, please try again later",
+                    }
+                };
+            }
+        }
+
+        
         public async Task<ResponseObject> GetAttendanceByUserCode(string eventId, string code)
         {
             try
@@ -76,7 +99,7 @@ namespace ivs_ui.Components.Data.Services.Orders
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
-                    return new ResponseObject();
+                    return res;
 
                 res.result.data = JsonConvert.DeserializeObject<GetAttendanceDto>(content?.data?.ToString());
                 return res;
@@ -104,7 +127,7 @@ namespace ivs_ui.Components.Data.Services.Orders
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
-                    return new ResponseObject();
+                    return res;
 
                 res.result.data = JsonConvert.DeserializeObject<GetAttendanceDto>(content?.data?.ToString());
                 return res;
