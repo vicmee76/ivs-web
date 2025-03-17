@@ -46,14 +46,16 @@
             <MudSpacer  />
             <MudButton Color="Color.Inherit" Href="/home" Class="ma-5" Style="font-weight:bold;">Home</MudButton>
             <MudButton Color="Color.Inherit" Href="/events/discovery" Class="ma-5" Style="font-weight:bold;">Events</MudButton>
-            <MudButton Color="Color.Inherit" Href="/events/discovery" Class="ma-5" Style="font-weight:bold;">About us</MudButton>
+            <MudButton Color="Color.Inherit" Href="/events/about" Class="ma-5" Style="font-weight:bold;">About</MudButton>
+            <MudButton Color="Color.Inherit" Href="/events/retrieve-tickets" Class="ma-5" Style="font-weight:bold;">Retrieve ticket</MudButton>
+            
           
 
         <MudSpacer />
             <AuthorizeView>
                 <NotAuthorized>
-                    <MudButton Variant="Variant.Text" Href="/accounts/login" Style="font-weight:700; color:#D2654C" Class="ma-5">Login</MudButton>
-                    <MudButton Variant="Variant.Text" Href="/accounts/signup" Style="font-weight:700;" Class="ma-3">Sign up</MudButton>
+                    <MudButton Variant="Variant.Text" Href="/accounts/login" Style="font-weight:700;" Class="ma-5">Login</MudButton>
+                    <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Href="/accounts/signup" Style="font-weight:700;" Class="ma-3">Sign up</MudButton>
                 </NotAuthorized>
                 <Authorized>
                     <MudButton Variant="Variant.Text" OnClick="ActionLogOut" Style="font-weight:700; color:#D2654C" Class="ma-3">Log out</MudButton>
