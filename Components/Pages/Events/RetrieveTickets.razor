@@ -67,7 +67,7 @@
                   <MudCardContent>
                      <div><MudText Typo="Typo.caption"> <b>Name :</b> @row.firstName @row.lastName</MudText></div>
                      <div><MudText Typo="Typo.caption"> <b>Ticket :</b> @row.ticketName X @row.ticketQuantity</MudText></div>
-                     <div> <MudText Typo="Typo.caption"> <b>Price :</b> @row.ticketPrice </MudText></div>
+                     <div> <MudText Typo="Typo.caption"> <b>Price :</b> @Convert.ToDecimal(row.ticketPrice).ToString("C") </MudText></div>
                      <div><MudText Typo="Typo.caption"> <b>Code :</b> @row.code </MudText></div>
                   </MudCardContent>
                   <MudCardActions>
