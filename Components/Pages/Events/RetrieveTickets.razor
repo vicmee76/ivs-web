@@ -50,31 +50,27 @@
 
          <MudText Typo="Typo.h6" Style="font-weight: 700"> Your Tickets. </MudText>
          <br/>
-         
-         <MudSimpleTable Elevation="0" Hover="true" Outlined="true" Striped="true" FixedHeader="true" Style="overflow-x: auto; font-size: small">
 
-            <thead>
-            <tr>
-               <th>Event</th>
-               <th>Name</th>
-               <th>Code</th>
-               <th>Ticket</th>
-               <th>Price</th>
-               <th>Status</th>
-               <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
+         <div class="image-lisiting-mobile">
+            
             @foreach (var row in _tickets)
             {
-               <tr>
-                  <td>@row.eventName</td>
-                  <td>@row.firstName @row.lastName</td>
-                  <td>@row.code</td>
-                  <td>@row.ticketName X @row.ticketQuantity</td>
-                  <td>@Convert.ToDecimal(row.ticketPrice).ToString("C")</td>
-                  <td><MudChip T="string" Size="Size.Small" Style="background-color: #f3dff6; color: #57375c"><b>@row.paymentGateWayTransactionStatuses</b></MudChip></td>
-                  <td>
+               <MudCard>
+                  <MudCardHeader>
+                     <CardHeaderContent>
+                        <MudText Typo="Typo.caption">@row.eventName</MudText>
+                     </CardHeaderContent>
+                     <CardHeaderActions>
+                        <MudChip T="string" Size="Size.Small" Style="background-color: #f3dff6; color: #57375c"><b>@row.paymentGateWayTransactionStatuses</b></MudChip>
+                     </CardHeaderActions>
+                  </MudCardHeader>
+                  <MudCardContent>
+                     <div><MudText Typo="Typo.caption"> <b>Name :</b> @row.firstName @row.lastName</MudText></div>
+                     <div><MudText Typo="Typo.caption"> <b>Ticket :</b> @row.ticketName X @row.ticketQuantity</MudText></div>
+                     <div> <MudText Typo="Typo.caption"> <b>Price :</b> @row.ticketPrice </MudText></div>
+                     <div><MudText Typo="Typo.caption"> <b>Code :</b> @row.code </MudText></div>
+                  </MudCardContent>
+                  <MudCardActions>
                      <MudButton FullWidth="true" Disabled="@_processing" OnClick="@(async () => await ActionResendTicket(row.paymentGateWayTransactionStatuses, row.orderId, row.paymentGateWayTransactionIds))" Style="background:#54385b; color: white" Variant="Variant.Filled" Size="Size.Small">
                         @if (_processing)
                         {
@@ -86,11 +82,58 @@
                            <MudText Style="font-weight: bold">Resend</MudText>
                         }
                      </MudButton>
-                  </td>
-               </tr>
+                    
+                  </MudCardActions>
+               </MudCard>
+               
+               <br/><br/>
             }
-            </tbody>
-         </MudSimpleTable>
+
+         </div>
+
+         <div class="image-lisiting-web">
+            <MudSimpleTable Elevation="0" Hover="true" Outlined="true" Striped="true" FixedHeader="true" Style="overflow-x: auto; font-size: small">
+
+               <thead>
+               <tr>
+                  <th>Event</th>
+                  <th>Name</th>
+                  <th>Code</th>
+                  <th>Ticket</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Action</th>
+               </tr>
+               </thead>
+               <tbody>
+               @foreach (var row in _tickets)
+               {
+                  <tr>
+                     <td>@row.eventName</td>
+                     <td>@row.firstName @row.lastName</td>
+                     <td>@row.code</td>
+                     <td>@row.ticketName X @row.ticketQuantity</td>
+                     <td>@Convert.ToDecimal(row.ticketPrice).ToString("C")</td>
+                     <td><MudChip T="string" Size="Size.Small" Style="background-color: #f3dff6; color: #57375c"><b>@row.paymentGateWayTransactionStatuses</b></MudChip></td>
+                     <td>
+                        <MudButton FullWidth="true" Disabled="@_processing" OnClick="@(async () => await ActionResendTicket(row.paymentGateWayTransactionStatuses, row.orderId, row.paymentGateWayTransactionIds))" Style="background:#54385b; color: white" Variant="Variant.Filled" Size="Size.Small">
+                           @if (_processing)
+                           {
+                              <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                              <MudText Class="ms-2">Processing</MudText>
+                           }
+                           else
+                           {
+                              <MudText Style="font-weight: bold">Resend</MudText>
+                           }
+                        </MudButton>
+                     </td>
+                  </tr>
+               }
+               </tbody>
+            </MudSimpleTable>
+         </div>
+         
          </div>
       }
       
@@ -155,7 +198,7 @@
       }
       else
       {
-         var res = await _attendanceService.RetrieveTicketsByUserEmail(email);
+         var res = await _attendanceService.RetrieveTicketsByUserEmail(email.ToLower());
 
          if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
          {
