@@ -604,7 +604,7 @@
                                         <MudPaper Class="pa-10" Outlined="true" Style="background-color:#fff6ff">
                                             <div style="line-height:40px">
 
-                                                <div style="font-size:17px;">Total Revenue</div>
+                                                <div style="font-size:17px;">Total Sales</div>
 
                                                 @if (_salesProcessing)
                                                 {
@@ -691,7 +691,7 @@
                                                 <MudPaper Class="pa-3" Outlined="true" Style="background-color: #fffcf7">
                                                     <div style="line-height:25px">
 
-                                                        <div>Average Revenue</div>
+                                                        <div>Average Sales</div>
 
                                                         @if (_salesProcessing)
                                                         {
@@ -792,19 +792,31 @@
                                             
                                             <TemplateColumn Title="Status" Sortable="true" Filterable="true">
                                                 <CellTemplate Context="ctx">
-                                                    @if (ctx.Item.paymentDetails.paymentGateWayTransactionStatus.Equals("successful", StringComparison.OrdinalIgnoreCase))
+                                                    @if (ctx.Item.paymentDetails != null)
                                                     {
-                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Success">@ctx.Item.paymentDetails.paymentGateWayTransactionStatus</MudChip>
+                                                        if (ctx.Item.paymentDetails.paymentGateWayTransactionStatus.Equals("successful", StringComparison.OrdinalIgnoreCase))
+                                                        {
+                                                            <MudChip T="string" Variant="Variant.Text" Color="Color.Success">@ctx.Item.paymentDetails.paymentGateWayTransactionStatus</MudChip>
+                                                        }
+                                                        else
+                                                        {
+                                                            <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary">@ctx.Item.paymentDetails.paymentGateWayTransactionStatus</MudChip>
+                                                        }
                                                     }
                                                     else
                                                     {
-                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary">@ctx.Item.paymentDetails.paymentGateWayTransactionStatus</MudChip>
+                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary">Pending</MudChip>
                                                     }
                                                 </CellTemplate>
                                             </TemplateColumn>
 
                                             <TemplateColumn Title="TransDate" Sortable="false" Filterable="false">
-                                                <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.paymentDetails.paymentGateWayTransactionDate).ToString("dd MMM yyyy, HH:mm tt") </CellTemplate>
+                                                <CellTemplate Context="ctx">
+                                                    @if (ctx.Item.paymentDetails != null)
+                                                    {
+                                                        @Convert.ToDateTime(ctx.Item.paymentDetails.paymentGateWayTransactionDate).ToString("dd MMM yyyy, HH:mm tt")
+                                                    }
+                                                </CellTemplate>
                                             </TemplateColumn>
 
                                             <TemplateColumn Title="Ticket" Sortable="false" Filterable="false">
@@ -876,7 +888,7 @@
 
                                                 <MudDivider Class="my-4" />
 
-                                                <div style="font-size:small">Request for a portion or all of your revenue. After the first successful request, your next request will be in 7 days time. Minimum withdrawal amount is NGN 5,000 </div>
+                                                <div style="font-size:small">Request for a portion or all of your sales. After the first successful request, your next request will be in 7 days time. Minimum withdrawal amount is NGN 5,000 </div>
                                             </div>
 
                                             <br />
