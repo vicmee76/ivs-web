@@ -30,7 +30,17 @@
          </MudPaper>
 
          <MudCard Elevation="0" Style="padding:10px">
-            
+
+            <MudCardHeader>
+               <CardHeaderContent>
+                  <MudText id="discovery-title-mid">My Events</MudText>
+               </CardHeaderContent>
+
+               <CardHeaderActions>
+                  <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.AddCircle" Size="Size.Small" Href="/events/create-event" Color="Color.Secondary">Create Event</MudButton>
+               </CardHeaderActions>
+            </MudCardHeader>
+
             <MudCardContent>
 
                <MudToggleIconButton @bind-Toggled="isGridView"
@@ -40,7 +50,7 @@
                                     ToggledIcon="@Icons.Material.Filled.GridView"
                                     ToggledColor="@Color.Dark"
                                     ToggledSize="Size.Large"
-                                    title="@(isGridView ? "Showing grid view" : "Showing list view")" />
+                                    title="@(isGridView ? "Showing grid view" : "Showing list view")"/>
 
                <span>@(isGridView ? "Showing grid view" : "Showing list view")</span>
 
@@ -82,10 +92,10 @@
                                        </CardHeaderContent>
                                        <CardHeaderActions>
                                           <MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Default">
-                                            <MudMenuItem Href="@eventPanelUrl">View event</MudMenuItem>
+                                             <MudMenuItem Href="@eventPanelUrl">View event</MudMenuItem>
                                              @if (item.status == Helpers.Pending)
                                              {
-                                                <MudMenuItem Href="@updateUrl" >Edit event</MudMenuItem>
+                                                <MudMenuItem Href="@updateUrl">Edit event</MudMenuItem>
                                                 <MudMenuItem OnClick="@(async (e) => await DeleteEventAction(item._id))"> Delete event</MudMenuItem>
                                              }
                                              else
@@ -114,11 +124,11 @@
 
                                        @if (item.status == Helpers.Pending)
                                        {
-                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Warning"><b>Not published</b></MudChip>
+                                          <MudChip T="string" Variant="Variant.Text" Color="Color.Warning"><b>Not published</b></MudChip>
                                        }
                                        else
                                        {
-                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Success"><b>Published</b></MudChip>
+                                          <MudChip T="string" Variant="Variant.Text" Color="Color.Success"><b>Published</b></MudChip>
                                        }
 
                                        <MudSpacer></MudSpacer>
@@ -129,7 +139,7 @@
                                        }
                                        else
                                        {
-                                          <MudIconButton Href="@eventPanelUrl" Icon="@Icons.Material.Filled.ArrowCircleRight" Title="View event" Size="Size.Medium" Color="Color.Secondary" />
+                                          <MudIconButton Href="@eventPanelUrl" Icon="@Icons.Material.Filled.ArrowCircleRight" Title="View event" Size="Size.Medium" Color="Color.Secondary"/>
                                        }
 
                                     </MudCardActions>
@@ -143,12 +153,12 @@
                         <MudDataGrid T="GetEventByUserDto" Elevation="1" Bordered="true" Striped="true" Hover="true" MultiSelection="false" Items="@_eventsDto" SortMode="SortMode.Multiple" Filterable="true" QuickFilter="@_quickFilter" Hideable="false">
                            <ToolBarContent>
                               <MudText Typo="Typo.body2" Color="Color.Secondary"><b>My Events</b></MudText>
-                              <MudSpacer />
+                              <MudSpacer/>
                               <MudTextField @bind-Value="_searchString" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
                                             AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                            </ToolBarContent>
                            <Columns >
-                              <TemplateColumn  Title="Actions" Sortable="false" Filterable="false">
+                              <TemplateColumn Title="Actions" Sortable="false" Filterable="false">
                                  <CellTemplate Context="ctx">
                                     @{
                                        var updateUrl = $"/events/update-event/{ctx.Item._id}";
@@ -202,13 +212,13 @@
                                     }
                                     else
                                     {
-                                       <MudIconButton Href="@eventPanelUrl" Icon="@Icons.Material.Filled.ArrowCircleRight" Title="View event" Size="Size.Medium" Color="Color.Secondary" />
+                                       <MudIconButton Href="@eventPanelUrl" Icon="@Icons.Material.Filled.ArrowCircleRight" Title="View event" Size="Size.Medium" Color="Color.Secondary"/>
                                     }
                                  </CellTemplate>
                               </TemplateColumn>
                            </Columns>
                            <PagerContent>
-                              <MudDataGridPager T="GetEventByUserDto" />
+                              <MudDataGridPager T="GetEventByUserDto"/>
                            </PagerContent>
                         </MudDataGrid>
                      }

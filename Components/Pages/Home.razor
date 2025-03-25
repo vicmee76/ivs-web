@@ -491,11 +491,7 @@
                                 <MudItem sm="6" md="6" lg="6" xl="6" xxl="6">
                                     <div>
                                         <MudNavLink Icon="@Icons.Material.Filled.ReceiptLong" IconColor="Color.Dark">
-                                            
-                                            @foreach (var t in _event.Tickets)
-                                            {
-                                                <span> @t.ticketName, &nbsp;</span>;
-                                            }
+                                           @_event.Tickets.Count Tickets
                                         </MudNavLink>
                                     </div>
                                 </MudItem>
