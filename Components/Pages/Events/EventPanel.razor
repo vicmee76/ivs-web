@@ -1,5 +1,6 @@
 ﻿@page "/events/event-panel/{id}"
 
+
 @{
     CultureInfo nigeriaCulture = new CultureInfo("en-NG");
     nigeriaCulture.NumberFormat.CurrencySymbol = "₦";
@@ -488,14 +489,16 @@
 
                                             <MudMenu Icon="@Icons.Material.Filled.Settings" Dense="true" Size="Size.Small" Color="Color.Default">
 
-                                                <MudMenuItem OnAction="@(async () => await ActionResetAttendance())">View All </MudMenuItem>
+                                                <MudMenuItem OnClick="@(async () => await ActionResetAttendance())">View All </MudMenuItem>
 
                                                 @foreach (var com in _ticketList)
                                                 {
                                                     var title = $"{Convert.ToDateTime(com.StartDateAndTime).ToString("dddd, dd MMMM yyyy")}";
 
-                                                    <MudMenuItem OnAction="@(async () => await ActionGetAttendanceByEventTime(com.EventTimeId, title))">View for @title</MudMenuItem>
+                                                    <MudMenuItem OnClick="@(async () => await ActionGetAttendanceByEventTime(com.EventTimeId, title))">View for @title</MudMenuItem>
                                                 }
+
+                                                <MudMenuItem OnClick="@(async () => await DownloadAttendanceCsv())">Download Attendance </MudMenuItem>
                                             </MudMenu>
                                         </ToolBarContent>
                                         <Columns>
@@ -768,14 +771,15 @@
 
                                             <MudMenu Icon="@Icons.Material.Filled.Settings" Dense="true" Size="Size.Small" Color="Color.Default">
 
-                                                <MudMenuItem OnAction="@(async () => await ActionResetSales())">View All </MudMenuItem>
+                                                <MudMenuItem OnClick="@(async () => await ActionResetSales())">View All </MudMenuItem>
 
                                                 @foreach (var com in _ticketList)
                                                 {
                                                     var title = $"{Convert.ToDateTime(com.StartDateAndTime).ToString("dddd, dd MMMM yyyy")}";
 
-                                                    <MudMenuItem OnAction="@(async () => await ActionGetSalesByEventTime(com.EventTimeId, title))">View for @title</MudMenuItem>
+                                                    <MudMenuItem OnClick="@(async () => await ActionGetSalesByEventTime(com.EventTimeId, title))">View for @title</MudMenuItem>
                                                 }
+                                                <MudMenuItem OnClick="@(async () => await DownloadTransactionCsv())">Download Transactions </MudMenuItem>
                                             </MudMenu>
                                         </ToolBarContent>
                                         <Columns>
@@ -1035,6 +1039,7 @@
     [Inject] ISnackbar? _snackbar { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] IDialogService DialogService { get; set; }
+    [Inject] IJSRuntime _jsRuntime { get; set; }
     
     [Parameter] public string? id { get; set; }
 
@@ -1614,6 +1619,140 @@
             StateHasChanged();
         }
     }
+    
+    
+    
+    private async Task DownloadAttendanceCsv()
+    {
+        try
+        {
+            var queryParameter = new Dictionary<string, string> { { "page", "0" }, { "limit", int.MaxValue.ToString() } };
+            var res = await _attendanceService.GetAttendanceByEventId(id, queryParameter);
 
+            if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
+            {
+                var result = (GetAttendanceDto)res.result.data;
+                IEnumerable<AttendanceDto> data = result.paginatedResults;
+
+                if (data.Any())
+                {
+                    // Build CSV
+                    var csvBuilder = new StringBuilder();
+                    csvBuilder.AppendLine("Event,Code;Fullname;Email;Phone;Gender;Ticket;Qty;Price;CheckedIn;Date");
+
+                    foreach (var x in data)
+                    {
+                        var fullname = $"{x.firstName} {x.lastName}";
+                        var ticket = $"{x.ticketDetails.FirstOrDefault().ticketName} - {x.ticketDetails.FirstOrDefault().ticketKind}";
+                        var price = Convert.ToDecimal(x.ticketPrice).ToString("C");
+                        var checkedIn = x.isActive ? "Success" : "Pending";
+                        var date = x.createdAt.ToString("G");
+
+                        csvBuilder.AppendLine($"{eventName};" +
+                                              $"{x.code};" +
+                                              $"{fullname};" +
+                                              $"{x.email};" +
+                                              $"{x.phoneNumber};" +
+                                              $"{x.gender};" +
+                                              $"{ticket};" +
+                                              $"{x.ticketQuantity};" +
+                                              $"{price};" +
+                                              $"{checkedIn};" +
+                                              $"{date}");
+                    }
+
+                    // Convert CSV string to byte array and trigger download
+                    var csvBytes = Encoding.UTF8.GetBytes(csvBuilder.ToString());
+                    var streamRef = new DotNetStreamReference(new MemoryStream(csvBytes));
+                    var filename = $"{eventName}-Attendance.csv";
+                    await _jsRuntime.InvokeVoidAsync("downloadFileFromStream", filename, streamRef);
+                }
+                else
+                {
+                    _snackbar.Add("No data to export.", Severity.Error);
+                }
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+        catch (Exception e)
+        {
+            _snackbar.Add("Something went wrong trying to download attendance data, please try again later", Severity.Error);
+        }
+    }
+
+    
+    private async Task DownloadTransactionCsv()
+    {
+        try
+        {
+            var queryParameter = new Dictionary<string, string>
+            {
+                { "page", "0" },
+                { "limit", int.MaxValue.ToString() },
+                { "type", "event" },
+                { "id", id }
+            };
+
+            var res = await _paymentService.GetSales(queryParameter);
+
+            if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
+            {
+                var result = (GetSalesDto)res.result.data;
+                IEnumerable<GetSalesDataDto> data = (List<GetSalesDataDto>)result.paginatedResults;
+
+                if (data.Any())
+                {
+                    // Build CSV
+                    var csvBuilder = new StringBuilder();
+                    csvBuilder.AppendLine("Event;Code;Fullname;Email;Phone;Ticket;Qty;Amount;Status;TransactionReference;TransactionDate;EventDate");
+
+                    foreach (var x in data)
+                    {
+                        var fullname = $"{x.firstName} {x.lastName}";
+                        var ticket = $"{x.ticketDetails.FirstOrDefault().ticketName} - {x.ticketDetails.FirstOrDefault().ticketKind}";
+                        var amount = Convert.ToDecimal(x.totalTicketFee).ToString("C");
+                        var eventDate = Convert.ToDateTime(x.ticketDetails.FirstOrDefault().startDateAndTime).ToString("G");
+                        var TransactionDate = x.paymentDetails != null ? Convert.ToDateTime(x.paymentDetails.paymentGateWayTransactionDate).ToString("G") : "";
+                        var TransactionStatus = x.paymentDetails != null ? x.paymentDetails.paymentGateWayTransactionStatus : "Pending";
+                        var TransactionReference = x.paymentDetails != null ? x.paymentDetails.paymentGateWayTransactionRef : "";
+
+                        csvBuilder.AppendLine($"{eventName};" +
+                                              $"{x.code};" +
+                                              $"{fullname};" +
+                                              $"{x.email};" +
+                                              $"{x.phoneNumber};" +
+                                              $"{ticket};" +
+                                              $"{x.ticketQuantity};" +
+                                              $"{amount};" +
+                                              $"{TransactionStatus.ToUpper()};" +
+                                              $"{TransactionReference};" +
+                                              $"{TransactionDate};" +
+                                              $"{eventDate};");
+                    }
+
+                    // Convert CSV string to byte array and trigger download
+                    var csvBytes = Encoding.UTF8.GetBytes(csvBuilder.ToString());
+                    var streamRef = new DotNetStreamReference(new MemoryStream(csvBytes));
+                    var filename = $"{eventName}-Transactions.csv";
+                    await _jsRuntime.InvokeVoidAsync("downloadFileFromStream", filename, streamRef);
+                }
+                else
+                {
+                    _snackbar.Add("No data to export.", Severity.Error);
+                }
+            }
+            else
+            {
+                _snackbar.Add(res.result.message, Severity.Error);
+            }
+        }
+        catch (Exception e)
+        {
+            _snackbar.Add("Something went wrong trying to download transactions data, please try again later", Severity.Error);
+        }
+    }
 
 }

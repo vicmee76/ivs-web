@@ -1,25 +1,19 @@
 ﻿<MudPaper Width="" Elevation="0" Style="font-size:12px; font-weight:bold" Class="py-2">
     <MudNavMenu Color="Color.Secondary" Margin="Margin.Normal"  Bordered="true">
-
         <MudNavLink Href="/home" Style="font-weight:bold">Home</MudNavLink>
-
         <MudNavLink Href="/events/discovery">Events</MudNavLink>
-        <MudNavLink Href="/events/retrieve-tickets">Retrieve Ticket</MudNavLink>
-
+        
         <AuthorizeView Roles="User,Admin">
             <Authorized>
                 <MudNavLink Href="/events/dashboard">Dashboard</MudNavLink>
-
-                <MudNavGroup Title="Events" Icon="" Expanded="false" Class="">
-                    <MudNavLink Href="/events/create-event">Create Event</MudNavLink>
+                <MudNavLink Href="/events/create-event">Create Events</MudNavLink>
+                <MudNavGroup Title="My Profile" Icon="" Expanded="false" Class="">
+                    <MudNavLink Href="/user/profile">Account</MudNavLink>
                     <MudNavLink Href="/events/my-events">My Event</MudNavLink>
                 </MudNavGroup>
-
-                <MudNavLink Href="/user/profile">My Profile</MudNavLink>
             </Authorized>
             <NotAuthorized>
                 <MudNavLink Href="/accounts/login">Login</MudNavLink>
-
                 <MudNavLink Href="/accounts/signup">Sign up</MudNavLink>
             </NotAuthorized>
         </AuthorizeView>
@@ -28,14 +22,14 @@
             <Authorized>
                 <MudNavGroup Title="Configurations" Icon="" Expanded="false" Class="">
                     <MudNavLink Href="/configuration/set-up">Set up</MudNavLink>
-                    <MudNavLink Href="/configuration/users">Users</MudNavLink>
-                    <MudNavLink Href="/configuration/all-events">Events</MudNavLink>
+                    <MudNavLink Href="/configuration/users">All Users</MudNavLink>
+                    <MudNavLink Href="/configuration/all-events">All Events</MudNavLink>
                     <MudNavLink Href="/configuration/revenue">My Revenues</MudNavLink>
                 </MudNavGroup>
             </Authorized>
         </AuthorizeView>
 
-        <MudNavLink Href="/events/discovery">About us</MudNavLink>
+        @* <MudNavLink Href="/events/discovery">About us</MudNavLink> *@
 
         <AuthorizeView>
             <Authorized>
