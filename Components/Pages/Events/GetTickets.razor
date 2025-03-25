@@ -13,12 +13,11 @@
     }
     else
     {
-        var buyLink = $"/orders/buy-tickets/{id}";
-
             <br /><br />
 
             @if (_events != null)
             {
+                var buyLink = $"/orders/buy-tickets/{_events._id}";
             <MudGrid Spacing="8">
 
                 <MudItem xs="12" sm="12" md="12" lg="8" xl="8" xxl="8">
@@ -224,6 +223,7 @@
         if (res.result.code == ResponseCodes.ResponseCodeOk)
         {
             _events = res.result.data;
+            
             eventName = _events.eventName;
         }
         else
