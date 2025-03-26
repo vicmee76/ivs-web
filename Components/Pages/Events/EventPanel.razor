@@ -1494,6 +1494,7 @@
         }
         else
         {
+            _snackbar.Add($"Minimum deposit amount is {Helpers.MinimumWithdrawalAmount}", Severity.Error);
             _settlementRequestAction = true;
         }
     }
