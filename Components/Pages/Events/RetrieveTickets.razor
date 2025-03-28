@@ -106,7 +106,7 @@
                </tr>
                </thead>
                <tbody>
-               @foreach (var row in _tickets)
+               @foreach (var row in _tickets.OrderBy(x => Convert.ToDateTime( x?.paymentGateWayTransactionDates)))
                {
                   <tr>
                      <td>@row.eventName</td>
@@ -116,17 +116,20 @@
                      <td>@Convert.ToDecimal(row.ticketPrice).ToString("C")</td>
                      <td><MudChip T="string" Size="Size.Small" Style="background-color: #f3dff6; color: #57375c"><b>@row.paymentGateWayTransactionStatuses</b></MudChip></td>
                      <td>
-                        <MudButton FullWidth="true" Disabled="@_processing" OnClick="@(async () => await ActionResendTicket(row.paymentGateWayTransactionStatuses, row.orderId, row.paymentGateWayTransactionIds))" Style="background:#54385b; color: white" Variant="Variant.Filled" Size="Size.Small">
-                           @if (_processing)
-                           {
-                              <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                              <MudText Class="ms-2">Processing</MudText>
-                           }
-                           else
-                           {
-                              <MudText Style="font-weight: bold">Resend</MudText>
-                           }
-                        </MudButton>
+                       @if (row?.paymentGateWayTransactionStatuses?.ToUpper() == Helpers.SuccessStatus)
+                       {
+                          <MudButton FullWidth="true" Disabled="@_processing" OnClick="@(async () => await ActionResendTicket(row.paymentGateWayTransactionStatuses, row.orderId, row.paymentGateWayTransactionIds))" Style="background:#54385b; color: white" Variant="Variant.Filled" Size="Size.Small">
+                             @if (_processing)
+                             {
+                                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                                <MudText Class="ms-2">Processing</MudText>
+                             }
+                             else
+                             {
+                                <MudText Style="font-weight: bold">Resend</MudText>
+                             }
+                          </MudButton>
+                       }
                      </td>
                   </tr>
                }
