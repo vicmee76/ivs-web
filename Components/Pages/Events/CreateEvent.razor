@@ -24,8 +24,6 @@
                     {
                         <MudText><b style="color:#56375C">Create New Event</b></MudText>
                     }
-
-                  
                 </MudToolBar>
             </MudPaper>
 
@@ -336,7 +334,7 @@
     private async Task MakeCustomUrl()
     {
         string url = "https://www.ivs.social/ivs/";
-        urlTag = $"{url}{model.eventCode}";
+        urlTag = $"{url}{model.eventCode}".ToLower();
         StateHasChanged();
     }
 
