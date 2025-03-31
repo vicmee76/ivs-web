@@ -27,7 +27,7 @@ namespace ivs_ui.Components.Data.Services.Payment
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
-                    return new ResponseObject();
+                    return res;
 
                 res.result.data = JsonConvert.DeserializeObject<List<PaymentDto>>(content?.data?.ToString());
                 return res;

@@ -40,19 +40,33 @@
                             <br />
 
                             <MudGrid>
-                                @foreach (var t in tickets)
+
+                                @{
+                                    var groupedCost = tickets
+                                        .GroupBy(x => x.ticketId)
+                                        .Select(g => new
+                                        {
+                                            TicketId = g.Key,
+                                            TicketName = g.First().ticketDetails.FirstOrDefault().ticketName,
+                                            TicketQuantity = g.Sum(x => int.Parse( x.ticketQuantity)),
+                                            TotalTicketServiceFee = g.Sum(x => decimal.Parse( x.ticketServiceFee)),
+                                            TotalTicketFeeAndServiceFee = g.Sum(x => decimal.Parse(x.totalTicketFeeAndServiceFee))
+                                        }).ToList();
+                                }
+                                
+                                @foreach (var t in groupedCost)
                                 {
                                     <MudItem xs="7" sm="7" md="7" lg="9" xl="9" xxl="9">
-                                        <div style="line-height: 23px; font-size: small">
-                                            <p>@t.ticketQuantity X @t.ticketDetails.FirstOrDefault().ticketName</p>
+                                        <div style="line-height: 23px;">
+                                            <p>@t.TicketQuantity X @t.TicketName</p>
                                         </div>
                                     </MudItem>
                                     <MudItem xs="5" sm="5" md="5" lg="3" xl="3" xxl="3">
-                                        <div style="font-size: small; text-align: end">
-                                            <b>@Convert.ToDecimal(t.totalTicketFeeAndServiceFee).ToString("C")</b>
+                                        <div style="text-align: end">
+                                            <b>@Convert.ToDecimal(t.TotalTicketFeeAndServiceFee).ToString("C")</b>
                                         </div>
                                     </MudItem>
-                                    <br />
+                                    <br/>
                                     <MudDivider></MudDivider>
                                 }
                             </MudGrid>
@@ -202,7 +216,7 @@
             {
                 if (res.result.data is List<PaymentDto> result)
                 {
-                    _navigate.NavigateTo(result.FirstOrDefault().link.ToString());
+                    _navigate.NavigateTo(result.FirstOrDefault().link);
                 }
                 else
                 {
