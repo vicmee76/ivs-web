@@ -31,7 +31,7 @@
                 if (_ticketList.Any())
                 {
                     <br/>
-                    <span id="event-title">@eventName</span>
+                    <span id="discovery-title-mid">@eventName</span>
                     <br/>
                     <br/>
                    
@@ -217,28 +217,41 @@
                         <div>
                             @if (generateCost.Any())
                             {
-                                <b>@generateCost.FirstOrDefault().tickets.Count ticket(s) selected</b>
+                                <b>Purchasing @generateCost.FirstOrDefault().tickets.Count ticket(s)</b>
 
                                 <MudDivider></MudDivider>
 
                                 <br />
 
                                 <MudGrid>
-                                    @foreach (var t in generateCost.FirstOrDefault().tickets)
+                                    
+                                    @{
+                                        var groupedCost = generateCost.FirstOrDefault().tickets
+                                            .GroupBy(x => x.ticketId)
+                                            .Select(g => new
+                                            {
+                                                TicketId = g.Key,
+                                                TicketName = g.First().ticketName, 
+                                                TicketQuantity = g.Sum(x => x.ticketQuantity), 
+                                                TotalTicketServiceFee = g.Sum(x => x.ticketServiceFee), 
+                                                TotalTicketFeeAndServiceFee = g.Sum(x => x.totalTicketFeeAndServiceFee) 
+                                            }).ToList();
+                                    }
+                                    @foreach (var t in groupedCost)
                                     {
                                         <MudItem xs="7" sm="7" md="7" lg="9" xl="9" xxl="9">
                                             <div style="line-height: 23px">
-                                                <p>@t.ticketQuantity X @t.ticketName</p>
-                                                <p style="color: #e1901d"><small>Including @t.totalTicketServiceFee.ToString("C") service fee</small></p>
+                                                <p>@t.TicketQuantity X @t.TicketName</p>
+                                                <p style="color: #e1901d"><small>Including @t.TotalTicketServiceFee.ToString("C") service fee</small></p>
                                             </div>
                                         </MudItem>
                                         <MudItem xs="5" sm="5" md="5" lg="3" xl="3" xxl="3">
-                                            <div style="font-size: small; text-align: end">
-                                                <b>@t.totalTicketFeeAndServiceFee.ToString("C")</b>
+                                            <div style="text-align: end">
+                                                <b>@t.TotalTicketFeeAndServiceFee.ToString("C")</b>
                                             </div>
                                         </MudItem>
-                                        <br />
-                                        <hr />
+                                        <br/>
+                                        <hr/>
                                     }
                                 </MudGrid>
 
@@ -249,7 +262,7 @@
                                     <MudItem xs="7" sm="7" md="7" lg="8" xl="8" xxl="8">
                                         <p style="font-size: medium; font-weight: bold">Total Cost</p>
                                     </MudItem>
-                                    <MudItem xs="5" sm="5" md="5" lg="3" xl="3" xxl="3">
+                                    <MudItem xs="5" sm="5" md="5" lg="4" xl="4" xxl="4">
                                         <div style="font-size: medium; text-align: end">
                                             <b>@generateCost.FirstOrDefault().totalAmount.ToString("C")</b>
                                         </div>
@@ -384,22 +397,21 @@
             if (generateCost.Any())
             {
                 var item = generateCost.FirstOrDefault().tickets.Where(x => x.ticketId == ticketId);
-
-                var ticketQty = item.FirstOrDefault().ticketQuantity;
-                var totalTicketFee = item.FirstOrDefault().totalTicketFee;
-                var totalServiceFee = item.FirstOrDefault().totalTicketServiceFee;
-
                 if (item.Any())
                 {
-                    generateCost.FirstOrDefault().tickets.Remove(item.FirstOrDefault());
+                    var ticketQty = item.Sum(x =>x.ticketQuantity);
+                    var totalTicketFee = Math.Round(item.Sum(x => x.totalTicketFee), 2);
+                    var totalServiceFee = Math.Round(item.Sum(x =>x.totalTicketServiceFee), 2);
+                    
                     generateCost.FirstOrDefault().totalTicketPurchased -= ticketQty;
-                    generateCost.FirstOrDefault().totalServiceFee -= totalServiceFee;
-                    generateCost.FirstOrDefault().totalTicketFee -= totalTicketFee;
-                    generateCost.FirstOrDefault().totalAmount -= (totalTicketFee + totalServiceFee);
-
-                    if(generateCost.FirstOrDefault().tickets.Count == 0){
+                    generateCost.FirstOrDefault().totalServiceFee -= Math.Round(totalServiceFee, 2);
+                    generateCost.FirstOrDefault().totalTicketFee -= Math.Round(totalTicketFee, 2);
+                    generateCost.FirstOrDefault().totalAmount -= Math.Round((totalTicketFee + totalServiceFee), 2);
+                    
+                    generateCost.FirstOrDefault().tickets.RemoveAll(x => x.ticketId == ticketId);
+                    
+                    if (generateCost.FirstOrDefault().tickets.Count == 0)
                         generateCost = [];
-                    }
                 }
             }
         }
@@ -436,95 +448,91 @@
 
         if (paymentOption != null)
         {
-            // ivs percentage
-            var percentage = Math.Round(Convert.ToDecimal(paymentOption.metaAmountPercentage.numberDecimal) / 100, 2);
-            var vatPercentage = _config.GetValue<decimal>("Fees:Vat") / 100;
-            var StampDuty = 0.00M;
-            var capAmount = 0.00M;
-
-            var ticketAmt = Math.Round(Convert.ToDecimal(tickets.ticketAmount.numberDecimal), 2);
-            var charge = Math.Round(ticketAmt * percentage, 2);
-            var ivsVat = Math.Round(charge * vatPercentage, 2);
-            var chargeAmount = Math.Round((charge + ivsVat), 2);
-
-            var cummulativeTotal = Math.Round((ticketAmt * qty) + (chargeAmount * qty), 2);
-
-            if (cummulativeTotal >= _config.GetValue<int>("Fees:StampDutyAmount")) StampDuty = _config.GetValue<int>("Fees:StampDutyFee");
-            var flwFee = Math.Round( (cummulativeTotal * (_config.GetValue<decimal>("Fees:FlwPercentage") / 100)), 2);
-            if (flwFee >= _config.GetValue<int>("Fees:FlwFeeCapAmount")) flwFee = _config.GetValue<int>("Fees:FlwFeeCapAmount");
-
-            var flwVatAndStampDuty = Math.Round((flwFee * vatPercentage), 2);
-            flwVatAndStampDuty += StampDuty;
-
-            cummulativeTotal += flwVatAndStampDuty;
-            var serviceFeeSum = Math.Round(((qty * chargeAmount) + flwVatAndStampDuty), 2);
-            var ticketFeeSum = Math.Round((ticketAmt * qty), 2);
-
-            var tics = new TicketsObjects()
-            {
-                ticketId = ticketId,
-                eventTimeId = eventTimeId,
-                ticketKind = tickets.ticketKind,
-                ticketName = tickets.ticketName,
-                ticketQuantity = qty,
-                ticketPrice = Math.Round(ticketAmt, 2),
-                ticketServiceFee = Math.Round(chargeAmount, 2),
-                totalTicketServiceFee = Math.Round(serviceFeeSum, 2),
-                totalTicketFee = Math.Round(ticketFeeSum, 2),
-                totalTicketFeeAndServiceFee = Math.Round(cummulativeTotal, 2)
-            };
-
             if (generateCost.Any())
             {
                 var item = generateCost.FirstOrDefault().tickets.Where(x => x.ticketId == ticketId);
-
                 if (item.Any())
                 {
-                    var ticketQty = item.FirstOrDefault().ticketQuantity;
-                    var totalTicketFee = Math.Round(item.FirstOrDefault().totalTicketFee, 2);
-                    var totalServiceFee = Math.Round(item.FirstOrDefault().totalTicketServiceFee, 2);
-
-                    generateCost.FirstOrDefault().tickets.Add(tics);
-                    generateCost.FirstOrDefault().totalTicketPurchased += qty;
-                    generateCost.FirstOrDefault().totalServiceFee += Math.Round(serviceFeeSum, 2);
-                    generateCost.FirstOrDefault().totalTicketFee += Math.Round(ticketFeeSum, 2);
-                    generateCost.FirstOrDefault().totalAmount += Math.Round(cummulativeTotal, 2);
-                    generateCost.FirstOrDefault().percentageCharge = percentage;
-
-                    generateCost.FirstOrDefault().tickets.Remove(item.FirstOrDefault());
+                    var ticketQty = item.Sum(x =>x.ticketQuantity);
+                    var totalTicketFee = Math.Round(item.Sum(x => x.totalTicketFee), 2);
+                    var totalServiceFee = Math.Round(item.Sum(x =>x.totalTicketServiceFee), 2);
+                    
                     generateCost.FirstOrDefault().totalTicketPurchased -= ticketQty;
                     generateCost.FirstOrDefault().totalServiceFee -= Math.Round(totalServiceFee, 2);
                     generateCost.FirstOrDefault().totalTicketFee -= Math.Round(totalTicketFee, 2);
                     generateCost.FirstOrDefault().totalAmount -= Math.Round((totalTicketFee + totalServiceFee), 2);
-
+                    
+                    generateCost.FirstOrDefault().tickets.RemoveAll(x => x.ticketId == ticketId);
+                    
                     if (generateCost.FirstOrDefault().tickets.Count == 0)
                         generateCost = [];
                 }
-                else
+            }
+
+            for (int i = 0; i < qty; i++)
+            {
+                // ivs percentage
+                var percentage = Math.Round(Convert.ToDecimal(paymentOption.metaAmountPercentage.numberDecimal) / 100, 2);
+                var vatPercentage = _config.GetValue<decimal>("Fees:Vat") / 100;
+                var StampDuty = 0.00M;
+                var capAmount = 0.00M;
+
+                var ticketAmt = Math.Round(Convert.ToDecimal(tickets.ticketAmount.numberDecimal), 2);
+                var charge = Math.Round(ticketAmt * percentage, 2);
+                var ivsVat = Math.Round(charge * vatPercentage, 2);
+                var chargeAmount = Math.Round((charge + ivsVat), 2);
+
+                var cummulativeTotal = Math.Round((ticketAmt * 1) + (chargeAmount * 1), 2);
+
+                if (cummulativeTotal >= _config.GetValue<int>("Fees:StampDutyAmount")) StampDuty = _config.GetValue<int>("Fees:StampDutyFee");
+                var flwFee = Math.Round((cummulativeTotal * (_config.GetValue<decimal>("Fees:FlwPercentage") / 100)), 2);
+                if (flwFee >= _config.GetValue<int>("Fees:FlwFeeCapAmount")) flwFee = _config.GetValue<int>("Fees:FlwFeeCapAmount");
+
+                var flwVatAndStampDuty = Math.Round((flwFee * vatPercentage), 2);
+                flwVatAndStampDuty += StampDuty;
+
+                cummulativeTotal += flwVatAndStampDuty;
+                var serviceFeeSum = Math.Round(((1 * chargeAmount) + flwVatAndStampDuty), 2);
+                var ticketFeeSum = Math.Round((ticketAmt * 1), 2);
+
+                var tics = new TicketsObjects()
+                {
+                    ticketId = ticketId,
+                    eventTimeId = eventTimeId,
+                    ticketKind = tickets.ticketKind,
+                    ticketName = tickets.ticketName,
+                    ticketQuantity = 1,
+                    ticketPrice = Math.Round(ticketAmt, 2),
+                    ticketServiceFee = Math.Round(chargeAmount, 2),
+                    totalTicketServiceFee = Math.Round(serviceFeeSum, 2),
+                    totalTicketFee = Math.Round(ticketFeeSum, 2),
+                    totalTicketFeeAndServiceFee = Math.Round(cummulativeTotal, 2)
+                };
+
+                if (generateCost.Any())
                 {
                     generateCost.FirstOrDefault().tickets.Add(tics);
-                    generateCost.FirstOrDefault().totalTicketPurchased += qty;
+                    generateCost.FirstOrDefault().totalTicketPurchased += 1;
                     generateCost.FirstOrDefault().totalServiceFee += Math.Round(serviceFeeSum, 2);
                     generateCost.FirstOrDefault().totalTicketFee += Math.Round(ticketFeeSum, 2);
                     generateCost.FirstOrDefault().totalAmount += Math.Round((cummulativeTotal), 2);
                     generateCost.FirstOrDefault().percentageCharge = percentage;
                 }
-            }
-            else
-            {
-                generateCost = new List<GenerateCostDto>()
+                else
                 {
-
-                    new GenerateCostDto()
+                    generateCost = new List<GenerateCostDto>()
                     {
-                        totalTicketPurchased = qty,
-                        totalAmount = Math.Round((cummulativeTotal), 2),
-                        totalServiceFee = Math.Round(serviceFeeSum, 2),
-                        totalTicketFee = Math.Round(ticketFeeSum, 2),
-                        percentageCharge = percentage,
-                        tickets = new List<TicketsObjects> { tics }
-                    }
-                };
+                        new()
+                        {
+                            totalTicketPurchased = 1,
+                            totalAmount = Math.Round((cummulativeTotal), 2),
+                            totalServiceFee = Math.Round(serviceFeeSum, 2),
+                            totalTicketFee = Math.Round(ticketFeeSum, 2),
+                            percentageCharge = percentage,
+                            tickets = new List<TicketsObjects> { tics }
+                        }
+                    };
+                }
             }
 
             return generateCost;
