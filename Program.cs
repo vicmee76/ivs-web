@@ -91,12 +91,23 @@ if (localizationOptions != null)
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    
+    app.Use(async (context, next) =>
+    {
+        if (!context.Request.IsHttps)
+        {
+            var newUrl = "https://" + context.Request.Host + context.Request.Path + context.Request.QueryString;
+            context.Response.Redirect(newUrl, permanent: true);
+            return;
+        }
+        await next();
+    });
 }
 
 
 app.UseStaticFiles();
 app.UseAntiforgery();
-
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
