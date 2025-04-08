@@ -1,0 +1,262 @@
+@page "/refund-policy"
+
+<title>IV's Refund Policy</title>
+
+
+<style>
+    #legal-link {
+        text-decoration: none;
+        text-decoration-color: dimgray;
+        cursor: pointer;
+        font-size: small;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+    
+</style>
+
+<div id="legal-site-intro">
+    
+    <br />
+    <br />
+    <br />
+
+    <MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
+
+        <div id="site-intro-header" style="text-align:left; background-color: white">Refund Policy</div>
+        <br />
+        <div style="color: dimgray; font-size: small">Last update @newDate.ToString("D")</div>
+<br/>
+        <MudDivider></MudDivider>
+    </MudContainer>
+</div>
+
+<br />
+<br />
+<br />
+<br />
+
+<MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
+
+   <MudGrid Spacing="10">
+
+       <MudItem sm="12" md="12" lg="4" xl="4" xxl="4">
+           <div class="sticky-header">
+               <MudTreeView T="string" ReadOnly Style="font-size: small">
+
+                   <MudTreeViewItem Text="Refund Policy" Expanded="true">
+
+                       <MudLink id="legal-link" Href="/refund-policy/#introduction"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="1. Introduction"/> </MudLink>
+
+                       <MudLink id="legal-link" Href="/refund-policy/#general-agreement"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="2. General Agreement"></MudTreeViewItem></MudLink>
+                       
+                       <MudLink id="legal-link" Href="/refund-policy/#roles"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="3. Role of IVS Socials"></MudTreeViewItem></MudLink>
+                       
+                       <MudLink id="legal-link" Href="/refund-policy/#refunds-and-cancellations"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="4. Refund and Cancellation Responsibility"></MudTreeViewItem></MudLink>
+                       
+                       <MudLink id="legal-link" Href="/refund-policy/#processing-fee"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="5. Non-Refundable Processing Fee"></MudTreeViewItem></MudLink>
+                       
+                       <MudLink id="legal-link" Href="/refund-policy/#event-cancellation"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="6. Event Cancellations and Refunds"></MudTreeViewItem></MudLink>
+                       
+                       <MudLink id="legal-link" Href="/refund-policy/#quality-of-event"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="7. Disputes Regarding Quality of Events"></MudTreeViewItem></MudLink>
+                       
+                       <MudLink id="legal-link" Href="/refund-policy/#limitation-liability"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="8. Limitation of Liability"></MudTreeViewItem></MudLink>
+                       
+                   </MudTreeViewItem>
+               </MudTreeView>
+           </div>
+           
+
+       </MudItem>
+
+
+
+       <MudItem sm="12" md="12" lg="8" xl="8" xxl="8">
+           
+            <div style="font-family:'General Sans'; line-height:40px">
+
+                <div id="introduction">
+
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">1. Introduction</MudText>
+                    <br />
+
+                    <div style="font-family:'General Sans'; font-size:1.2rem">
+
+                        This Refund Policy <strong>(the “Policy”)</strong> outlines the terms under which you, the “Event Attendee,” may be entitled to a refund for tickets purchased via the IVS Socials platform <storng>(the “Platform”)</storng>. 
+                        This Policy is in compliance with applicable Nigerian consumer protection laws, including the Federal Competition and Consumer Protection Act (FCCPA), 2018. By accepting this Policy, you confirm that you have thoroughly reviewed and understood your rights as detailed below.
+
+                    </div>
+                </div>
+                
+                
+                <br /><br />
+                
+                
+
+                <div id="general-agreement">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        2. General Agreement
+                    </MudText>
+                    <br />
+
+                    <div style="font-family:'General Sans'; font-size:1.2rem">
+                        
+                        <ol id="legal-listing">
+                            <li>IVS Socials operates as a self-service platform, enabling Event Organizers to sell tickets directly to their intended audience.</li>
+                            <li>IVS Socials is solely responsible for facilitating the sale of tickets through the Platform and is not involved in the organization, content, or quality of the events.</li>
+                            <li>Event Organizers bear full responsibility for their terms of sale and for any inquiries you may have about the events. Consequently, IVS Socials is not liable for any loss or damage resulting from event cancellations or issues experienced during an event.</li>
+                        </ol>
+                        
+                    </div>
+                </div>
+                
+
+                <br /><br />
+                
+
+                <div id="roles">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        3. Role of IVS Socials
+                    </MudText>
+                    <br />
+
+                    <div style="font-family:'General Sans'; font-size:1.2rem">
+                        <ol id="legal-listing">
+                            <li>IVS Socials does not organize events. We only provide a platform for Event Organizers to sell tickets.</li>
+                            <li>The Platform also allows users to purchase tickets but is not involved in managing or ensuring the quality of events.</li>
+                        </ol>
+                        
+                    </div>
+
+                </div>
+
+
+
+                <br /><br />
+
+                <div id="refunds-and-cancellations">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        4. Refund and Cancellation Responsibility
+                    </MudText>
+                    <br />
+
+                    <div style="font-family:'General Sans'; font-size:1.2rem">
+
+                        <ol id="legal-listing">
+                            <li>If you are dissatisfied with the cancellation or quality of an event, IVS Socials is not liable for any direct or indirect damages related to your experience at the event.</li>
+                            <li>In the case of event cancellation, you are entitled to request a refund directly from the Event Organizer. IVS Socials' processing fee (referred to as the “IVS Socials Fee”) is non-refundable and will not be included in the refund amount.</li>
+                            <li>Refunds for ticket purchases are the responsibility of the Event Organizer. IVS Socials will only assist in facilitating the refund process but will not be held liable for the outcome.</li>
+                        </ol>
+                    </div>
+
+                </div>
+
+
+                <br /><br />
+                
+               
+                <div id="processing-fee">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        5. Non-Refundable Processing Fee
+                    </MudText>
+                    <br />
+
+                    <div style="font-family:'General Sans'; font-size:1.2rem">
+                        <ol id="legal-listing">
+                            <li>IVS Socials charges a non-refundable processing fee for every ticket purchased through the Platform. This fee covers administrative costs associated with your ticket transaction.</li>
+                            <li>The IVS Socials Fee is non-refundable under any circumstances, even if the event is canceled or you are unable to attend.</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                
+                <br /><br />
+
+                
+                <div id="event-cancellation">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        6. Event Cancellations and Refunds
+                    </MudText>
+                    <br />
+
+                    <div style="font-family:'General Sans'; font-size:1.2rem">
+                        
+                        <ol id="legal-listing">
+                            <li>In the event that an event is canceled after payment has been made, or if you are unable to attend for reasons beyond your control (e.g., severe weather, force majeure, fire, terrorist acts, or other extraordinary events), IVS Socials will assist you in obtaining a refund from the Event Organizer, provided that such a refund is available.</li>
+                            <li>IVS Socials will not be held responsible for the refund, as the final decision rests with the Event Organizer. Our role is to facilitate communication between you and the Event Organizer for refund requests.</li>
+                        </ol>
+                        
+                    </div>
+                </div>
+
+                
+                <br /><br />
+                
+
+                <div id="quality-of-event">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        7. Disputes Regarding Quality of Events
+                    </MudText>
+                    <br />
+
+                    <div style="font-family:'General Sans'; font-size:1.2rem">
+
+                        <ol id="legal-listing">
+                            <li>IVS Socials will not refund ticket costs for dissatisfaction with the quality of an event. If you are dissatisfied with the event, you should contact the Event Organizer directly to address your concerns.</li>
+                            <li>The IVS Socials Fee remains non-refundable in these situations.</li>
+                        </ol>
+                        
+                    </div>
+                </div>
+
+
+                <br /><br />
+
+               
+                
+                <div id="limitation-liability">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        8. Limitation of Liability
+                    </MudText>
+                    <br />
+
+                    <div style="font-family:'General Sans'; font-size:1.2rem">
+                        <ol id="legal-listing">
+                            <li>IVS Socials is not liable for any damages (direct, indirect, incidental, or consequential) arising from the cancellation, delay, or quality issues of an event. Our involvement is limited to facilitating ticket sales and assisting with communication between Event Organizers and Event Attendees.</li>
+                            <li>You agree that your sole remedy for dissatisfaction with the platform is to cease using the platform.</li>
+                        </ol>
+                    </div>
+                </div>
+                
+            </div>
+       </MudItem>
+   </MudGrid>
+
+</MudContainer>
+
+
+
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+<Footer />
+
+
+
+@code {
+
+    DateTime newDate = new DateTime(2025, 4, 8);
+}

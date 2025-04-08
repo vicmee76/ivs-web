@@ -75,6 +75,16 @@
 
                         </MudGrid>
 
+                        <br />
+
+                        <MudCheckBox T="bool" @bind-Value="hasAgreed" Size="Size.Small" Required="true">
+                            Agree to
+                            <MudLink Target="_blank" Href="/terms-and-conditions"> Terms & Conditions </MudLink>,
+                            <MudLink Target="_blank" Href="/privacy-policy" Typo="Typo.body2"> Privacy Policy </MudLink>,
+                            <MudLink Target="_blank" Href="/service-agreement" Typo="Typo.body2"> Service Agreement </MudLink> and
+                            <MudLink Target="_blank" Href="/refund-policy" Typo="Typo.body2"> Refund Policy </MudLink>
+                        </MudCheckBox>
+
                     </div>
                     
                     
@@ -278,15 +288,6 @@
                                     </MudItem>
 
                                 </MudGrid>
-
-                                <br /><br />
-                                
-                                <MudCheckBox T="bool" @bind-Value="hasAgreed" Size="Size.Small" Required="true">
-                                    <small>Agree to</small>
-                                    <MudLink Target="_blank" Href="/terms-and-conditions"> <small>Terms & Conditions</small></MudLink>,
-                                     <MudLink Target="_blank" Href="/privacy-policy" Typo="Typo.body2"> Privacy Policy </MudLink> 
-                                    @* <MudLink Href="/terms-and-conditions"> <small>Refund Policy</small></MudLink> *@
-                                </MudCheckBox>
                                 
                                 <br/>
                                 
