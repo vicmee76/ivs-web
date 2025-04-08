@@ -67,6 +67,23 @@
     height: 400px;
 }
 
+
+#legal-site-intro {
+    background-color: white;
+    text-align: left;
+}
+
+#legal-listing {
+    list-style-type: disc; /* Use bullet points */
+    padding-left: 50px; /* Indent the list */
+}
+
+
+    #legal-listing li {
+        text-indent: 10px; /* Additional text indentation */
+        margin-bottom: 5px; /* Space between items */
+    }
+
 #site-intro-header {
     font-size: 4.0rem;
     color: #57375c;
