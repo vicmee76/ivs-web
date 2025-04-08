@@ -2,6 +2,21 @@
 
 <title>IV's Terms & Conditions</title>
 
+
+<style>
+    #legal-link {
+        text-decoration: none;
+        text-decoration-color: dimgray;
+        cursor: pointer;
+        font-size: small;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+    
+</style>
+
 <div id="legal-site-intro">
 
 
@@ -9,11 +24,13 @@
     <br />
     <br />
 
-    <MudContainer Fixed="false" MaxWidth="MaxWidth.ExtraLarge">
+    <MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
 
         <div id="site-intro-header" style="text-align:left; background-color: white">Terms & Conditions </div>
         <br />
-       <MudDivider></MudDivider>
+        <div style="color: dimgray; font-size: small">Last update @newDate.ToString("D")</div>
+<br/>
+        <MudDivider></MudDivider>
     </MudContainer>
 </div>
 
@@ -22,797 +39,801 @@
 <br />
 <br />
 
-<MudContainer Fixed="false" MaxWidth="MaxWidth.ExtraLarge">
+<MudContainer Fixed="false" MaxWidth="MaxWidth.Large">
 
    <MudGrid Spacing="10">
 
-       <MudItem sm="12" md="12" lg="3" xl="3" xxl="3">
+       <MudItem sm="12" md="12" lg="4" xl="4" xxl="4">
+           <div class="sticky-header">
+               <MudTreeView T="string" ReadOnly Style="font-size: small">
 
-            <MudPaper Width="300px" Elevation="0">
-                <MudTreeView T="string" ReadOnly="false" Hover="true" ExpandOnClick="true" ExpandOnDoubleClick="true">
-                    <MudTreeViewItem Text="Applications" Expanded>
-                        <MudTreeViewItem Text="Terminal" />
-                    </MudTreeViewItem>
-                    <MudTreeViewItem Text="Documents" Expanded>
-                        <MudTreeViewItem Text="MudBlazor" Expanded>
-                            <MudTreeViewItem Text="API" />
-                            <MudTreeViewItem Text="Components" />
-                            <MudTreeViewItem Text="Features" />
-                        </MudTreeViewItem>
-                    </MudTreeViewItem>
-                </MudTreeView>
-            </MudPaper>
+                   <MudTreeViewItem Text="Terms and Conditions" Expanded="true">
+
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#introduction"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="1. Introduction"/> </MudLink>
+
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#about-us"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="2. About Us"/> </MudLink>
+
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#purpose-acceptance-use">
+                           <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="3. Purpose, Acceptance, & Use" Expanded="false">
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#purpose"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="3.1 Purpose"/> </MudLink>
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#acceptance"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="3.2 Acceptance"/> </MudLink>
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#platform"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="3.3 Use of the IVS Socials Platform"/> </MudLink>
+                           </MudTreeViewItem>
+                       </MudLink>
+                       
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#platform-access">
+                           <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="4. Access to the IVS Socials Platform" Expanded="false">
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#service-registration"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="4.1 Provision of Services & Registration Requirements"/> </MudLink>
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#registration-information"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="4.2 Registration Information"/> </MudLink>
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#account-security"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="4.3 Account Security"/> </MudLink>
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#information-request"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="4.4 Additional Information Requests"/> </MudLink>
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#discretion"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="4.5 Discretion to Approve or Terminate Access"/> </MudLink>
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#service-delivery"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="4.6 Service Delivery"/> </MudLink>
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#profile-status"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="4.7 User Profile Status"/> </MudLink>
+                           </MudTreeViewItem>
+                       </MudLink>
+
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#prohibited-use">
+                           <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="5. Prohibited Uses" Expanded="false">
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#not-to"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="5.1 You agree not to:"/> </MudLink>
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#enforcement-liability"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="5.2 Enforcement and Liability"/> </MudLink>
+                           </MudTreeViewItem>
+                       </MudLink>
+
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#communication"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="6. Communication"/> </MudLink>
+
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#personal-information">
+                           <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="7. Transmission of Personal Information" Expanded="false">
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#transmission-consent"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="7.1 Consent to Transmission"/> </MudLink>
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#data-processing"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="7.2 Data Processing"/> </MudLink>
+                           </MudTreeViewItem>
+                       </MudLink>
+
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#usage-monitoring"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="8. Usage Monitoring"/> </MudLink>
+                       
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#intellectual-property"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="9. Copyright, Trademark, and Other Intellectual Property Rights"/> </MudLink>
+                       
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#connectivity"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="10. Connectivity"/> </MudLink>
+                       
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#indemnification"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="11. Indemnification"/> </MudLink>
+                       
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#platform-service"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="12. Availability of the Platform and Services"/> </MudLink>
+
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#termination-and-withdrawal">
+                           <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="13. Termination and Withdrawal" Expanded="false">
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#termination"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="13.1. Termination"/> </MudLink>
+                               <MudLink id="legal-link" Href="/terms-and-conditions/#withdrawal"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="13.2. Withdrawal"/> </MudLink>
+                           </MudTreeViewItem>
+                       </MudLink>
+
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#representation-warranties"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="14. Representation and Warranties"/> </MudLink>
+
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#limitation-liability"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="15. Limitation of Liability"/> </MudLink>
+                       
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#disclaimer-warranties"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="16. Disclaimer of Warranties"/> </MudLink>
+                       
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#thrid-party"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="17. Third Party Service Provider(s)"/> </MudLink>
+                       
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#thrid-party-disclaimer"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="18. Third Party Service Provider(s) Disclaimer"/> </MudLink>
+                       
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#dispute-resolution"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="19. Governing Law and Dispute Resolution"/> </MudLink>
+                       
+                       <MudLink id="legal-link" Href="/terms-and-conditions/#severability"> <MudTreeViewItem Style="color: dimgray; cursor: pointer" Text="20. Severability and Miscellaneous Provisions"/> </MudLink>
+
+
+                   </MudTreeViewItem>
+               </MudTreeView>
+           </div>
+           
 
        </MudItem>
 
 
 
-       <MudItem sm="12" md="12" lg="9" xl="9" xxl="9">
+       <MudItem sm="12" md="12" lg="8" xl="8" xxl="8">
+           
             <div style="font-family:'Calibri'; line-height:40px">
 
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">1. Introduction</MudText>
-                <br />
+                <div id="introduction">
 
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-                        <b>1.1</b> Before registering on the IVS Socials website, you must carefully read, understand, and accept these Terms of Use (“T&C”), as they govern your access to and use of our Services (as defined below).
-                        By accessing or using the Services, you agree to be bound by these T&C. If you do not agree to all the terms, you are not permitted to use or access the Services.
-                    </div>
-
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">1. Introduction</MudText>
                     <br />
 
-                    <div>
-                        <b>1.2</b> These T&C constitute a binding agreement between:<br />
-                        You (the user); and <br />
-                        <b> IVS SOCIALS LIMITED (RC: 8052851)</b> a limited liability company duly incorporated under the laws of the Federal Republic of Nigeria, with its registered office at No. 7, Hilary Chimezie Street, Zina Estate, Ado, Ajah, Lagos State
-                        <b>(hereinafter referred to as “IVS Socials,” “We,” or “Us”)</b>. This term shall include its legal representatives, successors, and assigns where the context permits.
+                    <div style="font-family:Calibri; font-size:1.2rem">
 
-                    </div>
-                    <br />
-                    <div>
-                        <b> 1.3</b> This T&C governs your access to and use of the IVS Socials website, as well as all affiliated websites owned and operated by us (collectively referred to as the <b> “Platform” </b>), along with our Services.
-                        In these T&C, <b>“You”</b> or <b>“Your”</b> refers to any individual who accesses or uses the Services.
+                        <div>
+                            <b>1.1</b> Before registering on the IVS Socials website, you must carefully read, understand, and accept these Terms of Use (“T&C”), as they govern your access to and use of our Services (as defined below).
+                            By accessing or using the Services, you agree to be bound by these T&C. If you do not agree to all the terms, you are not permitted to use or access the Services.
+                        </div>
 
-                    </div>
-                </div>
-
-                <br /><br />
-
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">2. About us</MudText>
-                <br />
-
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-
-                        <b> 2.1</b> The Platform is operated by<b> IVS Socials Limited</b>, a limited liability company registered in the Federal Republic of Nigeria, with company registration number RC 8052851 and its registered office at 7 Hillary Chimezie Street, Zina Estate, Ado, Ajah, Lagos State.
-                        IVS Socials provides event organization and ticketing services through the Platform. We reserve the right to revise these Terms of Use at any time by updating this document. You are responsible for reviewing the latest version of the T&C on the Platform periodically, as they remain binding on you.
                         <br />
-                        Unless the context requires otherwise, in these T&C:
 
+                        <div>
+                            <b>1.2</b> These T&C constitute a binding agreement between:<br />
+                            You (the user); and <br />
+                            <b> IVS SOCIALS LIMITED (RC: 8052851)</b> a limited liability company duly incorporated under the laws of the Federal Republic of Nigeria, with its registered office at No. 7, Hilary Chimezie Street, Zina Estate, Ado, Ajah, Lagos State
+                            <b>(hereinafter referred to as “IVS Socials,” “We,” or “Us”)</b>. This term shall include its legal representatives, successors, and assigns where the context permits.
 
-                        <ol id="legal-listing">
-                            <li>References to an individual include their personal representatives;</li>
-                            <li>The singular includes the plural, and vice versa;</li>
-                            <li>Any gender includes all other genders.</li>
-                        </ol>
-
-                    </div>
-
-                    <br />
-
-                    <div>
-                        <b> 2.2</b> The following terms, when used in these T&C (unless the context indicates otherwise), shall have the meanings assigned below:
+                        </div>
                         <br />
-                        <ol id="legal-listing">
-                            <li><b>“Event Organizer”</b> – The venue operator(s) and/or promoter(s) of a particular event.</li>
-                            <li><b>“Services”</b> – All products and services collectively offered by IVS Socials.</li>
-                            <li><b>“T&C”</b> – These Terms of Use.</li>
-                            <li><b>“User”</b> – Any person who accesses or uses the Platform provided by IVS Socials.</li>
-                            <li><b>“User Profile”</b> – The account created by a User on the Platform.</li>
-                            <li><b>“TPF”</b> – Transaction Processing Fees.</li>
-                        </ol>
-                    </div>
+                        <div>
+                            <b> 1.3</b> This T&C governs your access to and use of the IVS Socials website, as well as all affiliated websites owned and operated by us (collectively referred to as the <b> “Platform” </b>), along with our Services.
+                            In these T&C, <b>“You”</b> or <b>“Your”</b> refers to any individual who accesses or uses the Services.
 
+                        </div>
+                    </div>
                 </div>
-
-
+                
+                
                 <br /><br />
-
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    3.  Purpose, Acceptance, & Use
-                </MudText>
-                <br />
-
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-                        <div><b> 3.1 Purpose</b></div>
-
-                        <ol id="legal-listing">
-                            <li>
-                                These T&C, together with any other agreements between you and IVS Socials, constitute a binding contract governing your use of the Platform.
-                                The T&C and any amendments or modifications shall become effective on their date of publication or on any other date expressly communicated to you, whichever occurs first.
-                            </li>
-                            <li>
-                                The Platform is intended solely for individuals aged 18 years or older. Access or use of the Platform by anyone under the age of 18 is strictly prohibited.
-                                By accessing or using the Platform, you represent and warrant that you are at least 18 years old.
-                            </li>
-                        </ol>
-                       
-                    </div>
-
+                
+                
+                <div id="about-us">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">2. About us</MudText>
                     <br />
 
-                    <div>
+                    <div style="font-family:Calibri; font-size:1.2rem">
+
                         <div>
-                            <b>
-                                3.2 Acceptance
-                            </b>
+
+                            <b> 2.1</b> The Platform is operated by<b> IVS Socials Limited</b>, a limited liability company registered in the Federal Republic of Nigeria, with company registration number RC 8052851 and its registered office at 7 Hillary Chimezie Street, Zina Estate, Ado, Ajah, Lagos State.
+                            IVS Socials provides event organization and ticketing services through the Platform. We reserve the right to revise these Terms of Use at any time by updating this document. You are responsible for reviewing the latest version of the T&C on the Platform periodically, as they remain binding on you.
+                            <br />
+                            Unless the context requires otherwise, in these T&C:
+
+
+                            <ol id="legal-listing">
+                                <li>References to an individual include their personal representatives;</li>
+                                <li>The singular includes the plural, and vice versa;</li>
+                                <li>Any gender includes all other genders.</li>
+                            </ol>
+
                         </div>
 
-                        <ol id="legal-listing">
-                            <li>
-                                These T&C govern your use of all products, services, content, and information provided by IVS Socials on the Platform. By downloading, registering, accessing, or using the Platform, you confirm that you have read, understood, and agree to be legally bound by these T&C.
-                                If you do not agree with these T&C and/or our Privacy Policy, you must not access or use the Platform.
-                                Your acceptance of these T&C is confirmed when you tick the “AGREE” box provided during registration, and such acceptance will govern your continued access and use of the Platform.
-                            </li>
-                            <li>
-                                By signing up for the Platform, you agree to comply with and be bound by these Terms of Use as they apply to the operations of the Platform.
-                            </li>
-                        </ol>
+                        <br />
 
+                        <div>
+                            <b> 2.2</b> The following terms, when used in these T&C (unless the context indicates otherwise), shall have the meanings assigned below:
+                            <br />
+                            <ol id="legal-listing">
+                                <li><b>“Event Organizer”</b> – The venue operator(s) and/or promoter(s) of a particular event.</li>
+                                <li><b>“Services”</b> – All products and services collectively offered by IVS Socials.</li>
+                                <li><b>“T&C”</b> – These Terms of Use.</li>
+                                <li><b>“User”</b> – Any person who accesses or uses the Platform provided by IVS Socials.</li>
+                                <li><b>“User Profile”</b> – The account created by a User on the Platform.</li>
+                                <li><b>“TPF”</b> – Transaction Processing Fees.</li>
+                            </ol>
+                        </div>
 
                     </div>
+                </div>
 
+                
+                <br /><br />
+                
+
+                <div id="purpose-acceptance-use">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        3.  Purpose, Acceptance, & Use
+                    </MudText>
                     <br />
 
-                    <div>
-                        <div>
-                            <b>
-                                3.3 Use of the IVS Socials Platform
-                            </b>
+                    <div style="font-family:Calibri; font-size:1.2rem">
+
+                        <div id="purpose">
+                            <div><b> 3.1 Purpose</b></div>
+
+                            <ol id="legal-listing">
+                                <li>
+                                    These T&C, together with any other agreements between you and IVS Socials, constitute a binding contract governing your use of the Platform.
+                                    The T&C and any amendments or modifications shall become effective on their date of publication or on any other date expressly communicated to you, whichever occurs first.
+                                </li>
+                                <li>
+                                    The Platform is intended solely for individuals aged 18 years or older. Access or use of the Platform by anyone under the age of 18 is strictly prohibited.
+                                    By accessing or using the Platform, you represent and warrant that you are at least 18 years old.
+                                </li>
+                            </ol>
+
                         </div>
 
-                        <ol id="legal-listing">
-                            <li>
-                                Your use of the Platform is subject to the version of the T&C in effect at the time you access or use the Platform.
-                                IVS Socials reserves the right to amend, modify, or update these T&C at any time, with or without notice.
-                                If you access or use the Platform after such changes have been published, you will be deemed to have accepted the updated T&C.
-                            </li>
-                            <li>
-                                You acknowledge that the Platform is provided solely in electronic form.
-                                Any inquiries or complaints regarding the Platform must be directed to IVS Socials via the designated customer service email.
-                            </li>
-                        </ol>
+                        <br />
+
+                        <div id="acceptance">
+                            <div>
+                                <b>
+                                    3.2 Acceptance
+                                </b>
+                            </div>
+
+                            <ol id="legal-listing">
+                                <li>
+                                    These T&C govern your use of all products, services, content, and information provided by IVS Socials on the Platform. By downloading, registering, accessing, or using the Platform, you confirm that you have read, understood, and agree to be legally bound by these T&C.
+                                    If you do not agree with these T&C and/or our Privacy Policy, you must not access or use the Platform.
+                                    Your acceptance of these T&C is confirmed when you tick the “AGREE” box provided during registration, and such acceptance will govern your continued access and use of the Platform.
+                                </li>
+                                <li>
+                                    By signing up for the Platform, you agree to comply with and be bound by these Terms of Use as they apply to the operations of the Platform.
+                                </li>
+                            </ol>
+                        </div>
+
+                        <br />
+
+                        <div id="platform">
+                            <div>
+                                <b>
+                                    3.3 Use of the IVS Socials Platform
+                                </b>
+                            </div>
+
+                            <ol id="legal-listing">
+                                <li>
+                                    Your use of the Platform is subject to the version of the T&C in effect at the time you access or use the Platform.
+                                    IVS Socials reserves the right to amend, modify, or update these T&C at any time, with or without notice.
+                                    If you access or use the Platform after such changes have been published, you will be deemed to have accepted the updated T&C.
+                                </li>
+                                <li>
+                                    You acknowledge that the Platform is provided solely in electronic form.
+                                    Any inquiries or complaints regarding the Platform must be directed to IVS Socials via the designated customer service email.
+                                </li>
+                            </ol>
+
+                        </div>
 
                     </div>
-
                 </div>
-
-
-
+                
 
                 <br /><br />
+                
 
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    4. Access to the IVS Socials Platform
-                </MudText>
-                <br />
-
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-                        <div>
-                            <b>
-                                4.1 Provision of Services and Registration Requirements
-                            </b>
-                        </div>
-                       
-                        <ol id="legal-listing">
-                            <li>
-                                <b> Electronic Services:</b> We provide our Services electronically via the Platform, which facilitates the selling and management of event tickets and related products.
-                            </li>
-                            <li>
-                                <b>User Eligibility:</b> You may register for a User Profile only if you are an event organizer or an authorized ticket seller who has obtained explicit written permission from the event organizer (“Event Organiser”) to sell tickets on their behalf.
-                            </li>
-                            <li>
-                                <b>Relationship with Event Attendees:</b> IVS Socials provides Services exclusively to the Event Organiser and does not establish a contractual relationship with Event Attendees. Tickets sold through the Platform do not create a contract between IVS Socials and the Event Attendee; it is the sole responsibility of the Event Organiser to define and enforce the terms of sale.
-                            </li>
-                            <li>
-                                <b>Obligations:</b> You agree to:
-
-                                <br />
-
-                                <ol id="legal-listing">
-                                    <li>
-                                        Handle all communications with Event Attendees and refrain from directing them to IVS Socials for customer support.
-                                    </li>
-                                    <li>
-                                        Respond to any queries from Event Attendees within three (3) days.
-                                    </li>
-                                    <li>
-                                        Assume all liability arising from the contractual relationship between you and the Event Attendee.
-                                    </li>
-                                    <li>
-                                        Immediately notify Event Attendees and update your IVS Socials event page if the event is cancelled, postponed, or materially changed from the original details.
-                                    </li>
-                                </ol>
-                            </li>
-                            <li>
-                                <b>Enforcement:</b> We reserve the right to suspend or terminate your access to the Services if you fail to meet these requirements.
-                            </li>
-                        </ol>
-                    </div>
-
+                <div id="platform-access">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        4. Access to the IVS Socials Platform
+                    </MudText>
                     <br />
 
-                    <div>
-                        <div>
-                            <b>
-                                4.2 Registration Information
-                            </b>
+                    <div style="font-family:Calibri; font-size:1.2rem">
+
+                        <div id="service-registration">
+                            <div>
+                                <b>
+                                    4.1 Provision of Services and Registration Requirements
+                                </b>
+                            </div>
+
+                            <ol id="legal-listing">
+                                <li>
+                                    <b> Electronic Services:</b> We provide our Services electronically via the Platform, which facilitates the selling and management of event tickets and related products.
+                                </li>
+                                <li>
+                                    <b>User Eligibility:</b> You may register for a User Profile only if you are an event organizer or an authorized ticket seller who has obtained explicit written permission from the event organizer (“Event Organiser”) to sell tickets on their behalf.
+                                </li>
+                                <li>
+                                    <b>Relationship with Event Attendees:</b> IVS Socials provides Services exclusively to the Event Organiser and does not establish a contractual relationship with Event Attendees. Tickets sold through the Platform do not create a contract between IVS Socials and the Event Attendee; it is the sole responsibility of the Event Organiser to define and enforce the terms of sale.
+                                </li>
+                                <li>
+                                    <b>Obligations:</b> You agree to:
+
+                                    <br />
+
+                                    <ol id="legal-listing">
+                                        <li>
+                                            Handle all communications with Event Attendees and refrain from directing them to IVS Socials for customer support.
+                                        </li>
+                                        <li>
+                                            Respond to any queries from Event Attendees within three (3) days.
+                                        </li>
+                                        <li>
+                                            Assume all liability arising from the contractual relationship between you and the Event Attendee.
+                                        </li>
+                                        <li>
+                                            Immediately notify Event Attendees and update your IVS Socials event page if the event is cancelled, postponed, or materially changed from the original details.
+                                        </li>
+                                    </ol>
+                                </li>
+                                <li>
+                                    <b>Enforcement:</b> We reserve the right to suspend or terminate your access to the Services if you fail to meet these requirements.
+                                </li>
+                            </ol>
                         </div>
 
-                        <ol id="legal-listing">
-                            <li>
-                                <b> Required Details:</b> To create a User Profile, you must provide your name (or the registered business name for corporate entities), phone number, and email address (“Personal Information”).
-                            </li>
-                            <li>
-                                <b> Accuracy and Verification:</b> You agree to supply accurate, current, and complete information and authorize us to verify your Personal Information from independent sources. Should your Personal Information change, you must promptly update it via the Platform.
-                            </li>
-                        </ol>   
-                       
+                        <br />
+
+                        <div id="registration-information">
+                            <div>
+                                <b>
+                                    4.2 Registration Information
+                                </b>
+                            </div>
+
+                            <ol id="legal-listing">
+                                <li>
+                                    <b> Required Details:</b> To create a User Profile, you must provide your name (or the registered business name for corporate entities), phone number, and email address (“Personal Information”).
+                                </li>
+                                <li>
+                                    <b> Accuracy and Verification:</b> You agree to supply accurate, current, and complete information and authorize us to verify your Personal Information from independent sources. Should your Personal Information change, you must promptly update it via the Platform.
+                                </li>
+                            </ol>
+
+                        </div>
+
+                        <br />
+
+                        <div id="account-security">
+                            <div>
+                                <b>
+                                    4.3 Account Security
+                                </b>
+                            </div>
+
+                            <ol id="legal-listing">
+                                <li>
+                                    <b>Login Credentials:</b> Registration requires creating a User Profile, where your email address will serve as your username. You must also establish a password to access your account.
+                                </li>
+                                <li>
+                                    <b>Safeguards:</b> IVS Socials implements physical, electronic, and procedural safeguards in compliance with applicable regulatory standards to protect your non-public Personal Information.
+                                </li>
+                                <li>
+                                    <b>Your Responsibility:</b> You are solely responsible for maintaining the confidentiality of your User Profile and password. While we take reasonable steps to protect your Personal Information, you accept responsibility for any breach, unauthorized access, or misuse of your data resulting from your actions, inaction, or negligence. You must immediately notify us of any disclosure, loss, theft, or unauthorized use of your Personal Information.
+                                </li>
+                            </ol>
+
+                        </div>
+
+                        <br />
+
+                        <div id="information-request">
+                            <div>
+                                <b>
+                                    4.4 Additional Information Requests
+                                </b>
+                            </div>
+
+                            <ol id="legal-listing">
+                                <li>
+                                    We reserve the right to request additional information related to your use of the Platform at any time. Failure to provide such information within the timeframe we specify may result in the denial or termination of your access to the Platform.
+                                </li>
+                            </ol>
+
+                        </div>
+
+                        <br />
+
+                        <div id="discretion">
+                            <div>
+                                <b>
+                                    4.5 Discretion to Approve or Terminate Access
+                                </b>
+                            </div>
+
+                            <ol id="legal-listing">
+                                <li>
+                                    IVS Socials reserves the right, at our sole discretion and without any obligation to provide reasons or prior notice (or as required by applicable law), to decline your application for access or to revoke your access to the Platform at any time.
+                                </li>
+                            </ol>
+
+                        </div>
+
+
+                        <br />
+
+                        <div id="service-delivery">
+                            <div>
+                                <b>
+                                    4.6 Service Delivery
+                                </b>
+                            </div>
+
+                            <ol id="legal-listing">
+                                <li>
+                                    The Services are offered electronically exclusively via our website at ivs.social. You acknowledge that, unless otherwise advised by us at our discretion, you are not entitled to receive or request the Services at the physical offices of IVS Socials.
+                                </li>
+                            </ol>
+
+                        </div>
+
+
+                        <br />
+
+                        <div id="profile-status">
+                            <div>
+                                <b>
+                                    4.7 User Profile Status
+                                </b>
+                            </div>
+
+                            <ol id="legal-listing">
+                                <li>
+                                    Upon successful completion of the registration process, you will be deemed to hold an active User Profile on the Platform.
+                                </li>
+                            </ol>
+
+                        </div>
+
+
                     </div>
 
+                </div>
+
+
+
+                <br /><br />
+
+                <div id="prohibited-use">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        5. Prohibited Uses
+                    </MudText>
                     <br />
 
-                    <div>
-                        <div>
-                            <b>
-                                4.3 Account Security
-                            </b>
+                    <div style="font-family:Calibri; font-size:1.2rem">
+
+                        <div id="not-to">
+                            <div>
+                                <b>
+                                    5.1 You agree not to:
+                                </b>
+                            </div>
+
+
+                            <ol id="legal-listing">
+                                <li>
+                                    Use the Platform in any way that could damage, impair, or overburden IVS Socials' servers or any network connected to them, or that might interfere with another party’s use of the Platform.
+                                </li>
+                                <li>
+                                    Engage in any illegal, unlawful, or malicious activity on the Platform, including but not limited to money laundering, terrorism financing, fraud, racketeering, or any conduct deemed improper under Nigerian law.
+                                </li>
+                                <li>
+                                    Impersonate any person or entity, misrepresent your affiliation with any person or entity, or provide fraudulent, misleading, or inaccurate information.
+                                </li>
+                                <li>
+                                    Post or transmit any material on the Platform without obtaining all necessary licenses and/or approvals prior to such posting or transmission.
+                                </li>
+                                <li>
+                                    Use the Platform in any manner that would constitute or encourage criminal activity, cause civil liability, or otherwise violate any applicable law worldwide.
+                                </li>
+                                <li>
+                                    Access or attempt to access another user’s profile without permission, or solicit another user’s login information.
+                                </li>
+                            </ol>
+
                         </div>
 
-                        <ol id="legal-listing">
-                            <li>
-                                <b>Login Credentials:</b> Registration requires creating a User Profile, where your email address will serve as your username. You must also establish a password to access your account.
-                            </li>
-                            <li>
-                                <b>Safeguards:</b> IVS Socials implements physical, electronic, and procedural safeguards in compliance with applicable regulatory standards to protect your non-public Personal Information.
-                            </li>
-                            <li>
-                                <b>Your Responsibility:</b> You are solely responsible for maintaining the confidentiality of your User Profile and password. While we take reasonable steps to protect your Personal Information, you accept responsibility for any breach, unauthorized access, or misuse of your data resulting from your actions, inaction, or negligence. You must immediately notify us of any disclosure, loss, theft, or unauthorized use of your Personal Information.
-                            </li>
-                        </ol>
+                        <br />
+
+                        <div id="enforcement-liability">
+                            <div>
+                                <b>
+                                    5.2 Enforcement and Liability
+                                </b>
+                            </div>
+
+                            <ol id="legal-listing">
+                                <li>
+                                    We reserve the right to suspend your access to the Platform or cancel your account at our sole discretion if we suspect you are engaging in any prohibited activities as described above.
+                                </li>
+                                <li>
+                                    Should we have reasonable grounds to believe that you have violated these prohibitions, IVS Socials may pursue civil or criminal actions against you. In such cases, we shall not be liable for any loss or damage resulting from your misuse of the Platform.
+                                </li>
+                            </ol>
+
+                        </div>
 
                     </div>
 
+                </div>
+
+
+                <br /><br />
+
+               
+                <div id="communication">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        6. Communication
+                    </MudText>
+                    <br />
+                    <div style="font-family:Calibri; font-size:1.2rem">
+
+                        <div>
+                            By using the Platform, you consent to receive all notifications, notices, records, statements, communications, updates, and other information regarding the Platform electronically (collectively, “Correspondence and Communication”). You acknowledge that any charges, costs, or expenses incurred for receiving such Correspondence and Communication are your responsibility.
+                        </div>
+
+                    </div>
+
+                </div>
+                
+
+                <br /><br />
+
+               
+                <div id="personal-information">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        7. Transmission of Personal Information
+                    </MudText>
                     <br />
 
-                    <div>
-                        <div>
-                            <b>
-                                4.4 Additional Information Requests
-                            </b>
+                    <div style="font-family:Calibri; font-size:1.2rem">
+
+                        <div id="transmission-consent">
+                            <div>
+                                <b>
+                                    7.1 Consent to Transmission
+                                </b>
+                            </div>
+
+                            <div>
+                                Your use of the Platform may involve the transmission of your Personal Information to third-party service providers. By using the Platform, you hereby consent to such transmissions, and this consent will apply each time you use the Platform. Additionally, you acknowledge and agree that IVS Socials may request further information from you regarding your access to or use of the Platform.
+                            </div>
                         </div>
 
-                        <ol id="legal-listing">
-                            <li>
-                                We reserve the right to request additional information related to your use of the Platform at any time. Failure to provide such information within the timeframe we specify may result in the denial or termination of your access to the Platform.
-                            </li>
-                        </ol>
+                        <br />
+
+                        <div id="data-processing">
+                            <div>
+                                <b>
+                                    7.2 Data Processing
+                                </b>
+                            </div>
+
+                            <div>
+                                The transmission, use, and analysis of your Personal Information will be processed by us in compliance with the Nigeria Data Protection Regulations 2019 and any other applicable data protection laws.
+                            </div>
+                        </div>
 
                     </div>
+                </div>
 
+
+                
+                <br /><br />
+
+                
+                <div id="usage-monitoring">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        8. Usage Monitoring
+                    </MudText>
                     <br />
 
-                    <div>
+                    <div style="font-family:Calibri; font-size:1.2rem">
+
                         <div>
-                            <b>
-                                4.5 Discretion to Approve or Terminate Access
-                            </b>
+                            We reserve the right to access, archive, and monitor your use of the Platform in compliance with the applicable laws of the Federal Republic of Nigeria. By using the Platform, you acknowledge and accept that such monitoring may be conducted to ensure service quality, evaluate Platform performance and security, verify compliance with these T&C, or for any other legitimate purpose. You agree that our monitoring activities do not create any cause of action or confer any rights against IVS Socials, regardless of how we enforce—or choose not to enforce—these T&C. Furthermore, you agree that IVS Socials shall not be liable for any damages or losses incurred by you as a result of our usage monitoring.
+
                         </div>
 
-                        <ol id="legal-listing">
-                            <li>
-                                IVS Socials reserves the right, at our sole discretion and without any obligation to provide reasons or prior notice (or as required by applicable law), to decline your application for access or to revoke your access to the Platform at any time.
-                            </li>
-                        </ol>
-
                     </div>
+                </div>
 
+                
+                <br /><br />
+                
 
+                <div id="intellectual-property">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        9. Copyright, Trademark, and Other Intellectual Property Rights
+                    </MudText>
                     <br />
 
-                    <div>
+                    <div style="font-family:Calibri; font-size:1.2rem">
+
                         <div>
-                            <b>
-                                4.6 Service Delivery
-                            </b>
+                            You acknowledge that the Platform is protected by applicable copyrights, trademarks, trade secrets, patents, proprietary rights, and other intellectual property laws. These rights are valid and enforceable across all forms, media, and technologies currently in existence or developed in the future. Accordingly, you may not copy, distribute, or modify any portion of the Platform—including but not limited to text, graphics, user interface designs, or logos—unless expressly authorized in writing by IVS Socials.
+
+                            <br /><br />
+                            Furthermore, you are prohibited from using any content from the Platform for commercial purposes without first obtaining the appropriate license from IVS Socials. Where such authorization or a license is granted, you must always acknowledge IVS Socials as the source and author of the content.
+
                         </div>
 
-                        <ol id="legal-listing">
-                            <li>
-                                The Services are offered electronically exclusively via our website at ivs.social. You acknowledge that, unless otherwise advised by us at our discretion, you are not entitled to receive or request the Services at the physical offices of IVS Socials.
-                            </li>
-                        </ol>
-
                     </div>
+                </div>
 
 
+                <br /><br />
+
+               
+                
+                <div id="connectivity">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        10. Connectivity
+                    </MudText>
                     <br />
 
-                    <div>
+                    <div style="font-family:Calibri; font-size:1.2rem">
+
                         <div>
-                            <b>
-                                4.7 User Profile Status
-                            </b>
+                            You acknowledge and agree that you are solely responsible for the means by which you access the Platform. This includes your hardware, software, internet connection, telecommunications service provider, and any other third parties involved in establishing your connection to the Platform. As such, you understand that these components may not always perform as intended or desired.
+
+                            <br /><br />
+                            IVS Socials shall not be liable for any loss, damage, or disruption caused by viruses, malware, or other technologically harmful material that may infect your hardware, computer programs, or any other proprietary material as a result of your use of the Platform or from downloading any content from the Platform.
+
                         </div>
 
-                        <ol id="legal-listing">
-                            <li>
-                                Upon successful completion of the registration process, you will be deemed to hold an active User Profile on the Platform.
-                            </li>
-                        </ol>
-
                     </div>
-
-
                 </div>
-
-
-
-
+                
+                
                 <br /><br />
+                
+                
 
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    5. Prohibited Uses
-                </MudText>
-                <br />
-
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-                        <div>
-                            <b>
-                                5.1 You agree not to:
-                            </b>
-                        </div>
-
-
-                        <ol id="legal-listing">
-                            <li>
-                                Use the Platform in any way that could damage, impair, or overburden IVS Socials' servers or any network connected to them, or that might interfere with another party’s use of the Platform.
-                            </li>
-                            <li>
-                                Engage in any illegal, unlawful, or malicious activity on the Platform, including but not limited to money laundering, terrorism financing, fraud, racketeering, or any conduct deemed improper under Nigerian law.
-                            </li>
-                            <li>
-                                Impersonate any person or entity, misrepresent your affiliation with any person or entity, or provide fraudulent, misleading, or inaccurate information.
-                            </li>
-                            <li>
-                                Post or transmit any material on the Platform without obtaining all necessary licenses and/or approvals prior to such posting or transmission.
-                            </li>
-                            <li>
-                                Use the Platform in any manner that would constitute or encourage criminal activity, cause civil liability, or otherwise violate any applicable law worldwide.
-                            </li>
-                            <li>
-                                Access or attempt to access another user’s profile without permission, or solicit another user’s login information.
-                            </li>
-                        </ol>
-
-                    </div>
-
+                <div id="indemnification">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        11. Indemnification
+                    </MudText>
                     <br />
 
-                    <div>
+                    <div style="font-family:Calibri; font-size:1.2rem">
+
                         <div>
-                            <b>
-                                5.2 Enforcement and Liability
-                            </b>
+                            You acknowledge that the Platform is not a secure method of transmitting information and that any loss or interception of data by third parties is at your own risk. IVS Socials shall not be liable for any damages or injuries arising from the use—or failure to use—the Platform, including but not limited to non-availability, performance failures, loss or corruption of data, loss of property, profit, goodwill, work stoppage, business interruption, errors, omissions, delays, communication failures, or any other failures in operation or transmission.
+
+                            <br /><br />
+                            You agree to indemnify, defend, and hold harmless IVS Socials, its directors, partners, officers, employees, successors, and assigns from and against any claims, actions, proceedings, damages, losses, costs, charges, and expenses (including reasonable legal fees) arising out of or in connection with your use of the Platform or your breach of these T&C.
+
                         </div>
 
-                        <ol id="legal-listing">
-                            <li>
-                                We reserve the right to suspend your access to the Platform or cancel your account at our sole discretion if we suspect you are engaging in any prohibited activities as described above.
-                            </li>
-                            <li>
-                                Should we have reasonable grounds to believe that you have violated these prohibitions, IVS Socials may pursue civil or criminal actions against you. In such cases, we shall not be liable for any loss or damage resulting from your misuse of the Platform.
-                            </li>
-                        </ol>
-
                     </div>
-
-                </div>
-
-
-
-                <br /><br />
-
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    6. Communication
-                </MudText>
-                <br />
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-                        By using the Platform, you consent to receive all notifications, notices, records, statements, communications, updates, and other information regarding the Platform electronically (collectively, “Correspondence and Communication”). You acknowledge that any charges, costs, or expenses incurred for receiving such Correspondence and Communication are your responsibility.
-                    </div>
-
                 </div>
 
 
                 <br /><br />
 
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    7. Transmission of Personal Information
-                </MudText>
-                <br />
+               
+                <div id="platform-service">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        12. Availability of the Platform and Services
 
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-                        <div>
-                            <b>
-                                7.1 Consent to Transmission
-                            </b>
-                        </div>
-
-                        <div>
-                            Your use of the Platform may involve the transmission of your Personal Information to third-party service providers. By using the Platform, you hereby consent to such transmissions, and this consent will apply each time you use the Platform. Additionally, you acknowledge and agree that IVS Socials may request further information from you regarding your access to or use of the Platform.
-                        </div>
-                    </div>
-
+                    </MudText>
                     <br />
 
-                    <div>
-                        <div>
-                            <b>
-                                7.2 Data Processing
-                            </b>
-                        </div>
+                    <div style="font-family:Calibri; font-size:1.2rem">
 
                         <div>
-                            The transmission, use, and analysis of your Personal Information will be processed by us in compliance with the Nigeria Data Protection Regulations 2019 and any other applicable data protection laws.
-                        </div>
-                    </div>
+                            While we have invested significant resources into building and testing the Platform, occasional glitches, slowdowns, and crashes may still occur. Additionally, we may need to temporarily restrict access to certain parts of the Platform for routine maintenance. We will strive to schedule such maintenance during off-peak hours, typically at night. Although we aim to keep the Platform available seven days a week, with exceptions for scheduled maintenance (usually on weekends or as necessary in emergency situations), you understand that we cannot guarantee continuous access. Any inability to access the Platform due to routine maintenance will not be considered a breach by IVS Socials, nor will it give rise to a cause of action against us.
 
-                   
+                            <br /><br />
+                            We are continually enhancing the Services provided on the Platform and reserve the right to modify, suspend, or discontinue any of our Services, either temporarily or permanently, with or without prior notice to you.
 
-                </div>
-
-
-
-
-
-                <br /><br />
-
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    8. Usage Monitoring
-                </MudText>
-                <br />
-
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-                        We reserve the right to access, archive, and monitor your use of the Platform in compliance with the applicable laws of the Federal Republic of Nigeria. By using the Platform, you acknowledge and accept that such monitoring may be conducted to ensure service quality, evaluate Platform performance and security, verify compliance with these T&C, or for any other legitimate purpose. You agree that our monitoring activities do not create any cause of action or confer any rights against IVS Socials, regardless of how we enforce—or choose not to enforce—these T&C. Furthermore, you agree that IVS Socials shall not be liable for any damages or losses incurred by you as a result of our usage monitoring.
-
-                    </div>
-
-                </div>
-
-
-
-                <br /><br />
-
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    9. Copyright, Trademark, and Other Intellectual Property Rights
-                </MudText>
-                <br />
-
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-                        You acknowledge that the Platform is protected by applicable copyrights, trademarks, trade secrets, patents, proprietary rights, and other intellectual property laws. These rights are valid and enforceable across all forms, media, and technologies currently in existence or developed in the future. Accordingly, you may not copy, distribute, or modify any portion of the Platform—including but not limited to text, graphics, user interface designs, or logos—unless expressly authorized in writing by IVS Socials.
-                        
-                        <br /><br />
-                        Furthermore, you are prohibited from using any content from the Platform for commercial purposes without first obtaining the appropriate license from IVS Socials. Where such authorization or a license is granted, you must always acknowledge IVS Socials as the source and author of the content.
-
-                    </div>
-
-                </div>
-
-
-
-                <br /><br />
-
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    10. Connectivity
-                </MudText>
-                <br />
-
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-                        You acknowledge and agree that you are solely responsible for the means by which you access the Platform. This includes your hardware, software, internet connection, telecommunications service provider, and any other third parties involved in establishing your connection to the Platform. As such, you understand that these components may not always perform as intended or desired.
-
-                        <br /><br />
-                        IVS Socials shall not be liable for any loss, damage, or disruption caused by viruses, malware, or other technologically harmful material that may infect your hardware, computer programs, or any other proprietary material as a result of your use of the Platform or from downloading any content from the Platform.
-
-                    </div>
-
-                </div>
-
-
-                <br /><br />
-
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    11. Indemnification
-                </MudText>
-                <br />
-
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-                        You acknowledge that the Platform is not a secure method of transmitting information and that any loss or interception of data by third parties is at your own risk. IVS Socials shall not be liable for any damages or injuries arising from the use—or failure to use—the Platform, including but not limited to non-availability, performance failures, loss or corruption of data, loss of property, profit, goodwill, work stoppage, business interruption, errors, omissions, delays, communication failures, or any other failures in operation or transmission.
-
-                        <br /><br />
-                        You agree to indemnify, defend, and hold harmless IVS Socials, its directors, partners, officers, employees, successors, and assigns from and against any claims, actions, proceedings, damages, losses, costs, charges, and expenses (including reasonable legal fees) arising out of or in connection with your use of the Platform or your breach of these T&C.
-
-                    </div>
-
-                </div>
-
-
-                <br /><br />
-
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    12. Availability of the Platform and Services
-
-                </MudText>
-                <br />
-
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-                        While we have invested significant resources into building and testing the Platform, occasional glitches, slowdowns, and crashes may still occur. Additionally, we may need to temporarily restrict access to certain parts of the Platform for routine maintenance. We will strive to schedule such maintenance during off-peak hours, typically at night. Although we aim to keep the Platform available seven days a week, with exceptions for scheduled maintenance (usually on weekends or as necessary in emergency situations), you understand that we cannot guarantee continuous access. Any inability to access the Platform due to routine maintenance will not be considered a breach by IVS Socials, nor will it give rise to a cause of action against us.
-
-                        <br /><br />
-                        We are continually enhancing the Services provided on the Platform and reserve the right to modify, suspend, or discontinue any of our Services, either temporarily or permanently, with or without prior notice to you.
-
-                    </div>
-
-                </div>
-
-
-                <br /><br />
-
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    13. Termination and Withdrawal
-                </MudText>
-                <br />
-
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-                        <div>
-                            <b>
-                                13.1. Termination
-                            </b>
                         </div>
 
-                        <ol id="legal-listing">
-                            <li>
-                                You acknowledge and agree that we may restrict, suspend, or terminate the T&C or your access to, and use of, all or any part of the Platform, at any time, with or without cause, including but not limited to any breach of the T&C, without prior notice to you.
-                            </li>
-                            <li>
-                                We will fully cooperate with any law enforcement authorities or court order requesting or directing us to disclose the identity of anyone posting, publishing, or otherwise making available any User information, emails, or other materials that are believed to violate the T&C.
-                            </li>
-                            <li>
-                                Any suspension, termination, or cancellation of the Platform shall not affect your obligations to us under these T&C (including but not limited to ownership, indemnification, and limitation of liability), which by their sense and context are intended to survive such suspension, termination, or cancellation.
-                            </li>
-                        </ol>
-
                     </div>
+                </div>
 
+
+                <br /><br />
+                
+                
+                <div id="termination-and-withdrawal">
+
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        13. Termination and Withdrawal
+                    </MudText>
                     <br />
 
-                    <div>
-                        <div>
-                            <b>
-                                13.2. Withdrawal
-                            </b>
+                    <div style="font-family:Calibri; font-size:1.2rem">
+
+                        <div id="termination">
+                            <div>
+                                <b>
+                                    13.1. Termination
+                                </b>
+                            </div>
+
+                            <ol id="legal-listing">
+                                <li>
+                                    You acknowledge and agree that we may restrict, suspend, or terminate the T&C or your access to, and use of, all or any part of the Platform, at any time, with or without cause, including but not limited to any breach of the T&C, without prior notice to you.
+                                </li>
+                                <li>
+                                    We will fully cooperate with any law enforcement authorities or court order requesting or directing us to disclose the identity of anyone posting, publishing, or otherwise making available any User information, emails, or other materials that are believed to violate the T&C.
+                                </li>
+                                <li>
+                                    Any suspension, termination, or cancellation of the Platform shall not affect your obligations to us under these T&C (including but not limited to ownership, indemnification, and limitation of liability), which by their sense and context are intended to survive such suspension, termination, or cancellation.
+                                </li>
+                            </ol>
+
                         </div>
 
-                        <ol id="legal-listing">
-                            <li>
-                                You have the right to withdraw from the Platform at any time.
-                            </li>
-                            <li>
-                                You agree to give IVS Socials a notice of 7 days regarding your intended withdrawal from the Platform.
-                            </li>
-                        </ol>
+                        <br />
 
-                    </div>
+                        <div id="withdrawal">
+                            <div>
+                                <b>
+                                    13.2. Withdrawal
+                                </b>
+                            </div>
 
-                </div>
+                            <ol id="legal-listing">
+                                <li>
+                                    You have the right to withdraw from the Platform at any time.
+                                </li>
+                                <li>
+                                    You agree to give IVS Socials a notice of 7 days regarding your intended withdrawal from the Platform.
+                                </li>
+                            </ol>
 
-
-                <br /><br />
-
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    14. Representation and Warranties
-                </MudText>
-                <br />
-
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-                        <div>
-                            You represent and warrant that:
                         </div>
 
-                        <ol id="legal-listing">
-                            <li>
-                                You have read, understood, and accepted the T&C;
-                            </li>
-                            <li>
-                                You are at least 18 (eighteen) years of age;
-                            </li>
-                            <li>
-                                You grant us the right to use your Personal Information in accordance with these T&C;
-                            </li>
-                            <li>
-                                You agree to comply with and be bound by the T&C governing your use of the Platform and acknowledge that the T&C are in addition to, and without prejudice to, any other rights that we may have with respect to your use of the Platform, either under the laws of the Federal Republic of Nigeria or otherwise;
-                            </li>
-                            <li>All Personal Information and any other information provided to us is true, accurate, authentic, current, and complete;</li>
-                            <li>You shall not assign or transfer your rights under the T&C to anyone else without obtaining our prior written approval;</li>
-                            <li>
-                                Your acceptance and use of the Platform does not violate any applicable law in Nigeria or any contract or obligation to which you are a party or otherwise bound;
-                            </li>
-                            <li>If you are accepting the T&C on behalf of a company, organization, or other legal entity, you confirm that you have their consent or authorization to do so.</li>
-                        </ol>
-
                     </div>
-
                 </div>
-
-
 
 
                 <br /><br />
 
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    15. Limitation of Liability
-                </MudText>
-                <br />
+                
+                <div id="representation-warranties">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        14. Representation and Warranties
+                    </MudText>
+                    <br />
 
-                <div style="font-family:Calibri; font-size:1.2rem">
+                    <div style="font-family:Calibri; font-size:1.2rem">
 
-                    <div>
+                        <div>
+                            <div>
+                                You represent and warrant that:
+                            </div>
 
-                        <ol id="legal-listing">
-                            <li>
-                                You acknowledge and agree that IVS Socials is not a party to any transactions, relationships, or disputes between you and event attendees. We do not pre-screen event attendees and are not responsible for any fraudulent transactions or actions by event attendees.
-                            </li>
-                            <li>
-                                We exclude any and all liability arising from any actions we take in response to breaches of our services.
-                            </li>
-                            <li>
-                                Your sole remedy for dissatisfaction with the Platform is to stop using it.
-                            </li>
-                            <li>
-                                You agree that, under no circumstances, will IVS Socials be liable for any damages, whether direct, indirect, incidental, consequential, special, punitive, 
-                                or exemplary, arising out of or in connection with your use or inability to use the Platform, including but not limited to: loss of anticipated profits, sales, business opportunities, savings, revenue, goodwill, reputation, or data; any failure of performance, denial of service, attack, interruption, defect, operator errors, inconvenience, or delay in operation; business interruption; failure of electronic or mechanical equipment or communications lines (including telephone and internet); severe weather events (including flood, earthquake, or acts of God); fire, war, insurrection, terrorism, riot, labor disputes, accidents, emergencies, or government actions; or any third-party theft, destruction, unauthorized access, alteration, or use of your information, equipment, or property.
-                            </li>
-                           
-                        </ol>
+                            <ol id="legal-listing">
+                                <li>
+                                    You have read, understood, and accepted the T and C
+                                </li>
+                                <li>
+                                    You are at least 18 (eighteen) years of age;
+                                </li>
+                                <li>
+                                    You grant us the right to use your Personal Information in accordance with these Tand C;
+                                </li>
+                                <li>
+                                    You agree to comply with and be bound by the T&C governing your use of the Platform and acknowledge that the T&C are in addition to, and without prejudice to, any other rights that we may have with respect to your use of the Platform, either under the laws of the Federal Republic of Nigeria or otherwise;
+                                </li>
+                                <li>All Personal Information and any other information provided to us is true, accurate, authentic, current, and complete;</li>
+                                <li>You shall not assign or transfer your rights under the T&C to anyone else without obtaining our prior written approval;</li>
+                                <li>
+                                    Your acceptance and use of the Platform does not violate any applicable law in Nigeria or any contract or obligation to which you are a party or otherwise bound;
+                                </li>
+                                <li>If you are accepting the T&C on behalf of a company, organization, or other legal entity, you confirm that you have their consent or authorization to do so.</li>
+                            </ol>
 
-                    </div>
-
-                </div>
-
-
-
-                <br /><br />
-
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    16. Disclaimer of Warranties
-
-                </MudText>
-                <br />
-
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-
-                        <ol id="legal-listing">
-                            <li>
-                                You acknowledge and agree that the Platform is provided on an "as is" and "as available" basis.
-                            </li>
-                            <li>
-                                IVS Socials does not guarantee the accuracy, reliability, completeness, or usefulness of any information on the Platform.
-                            </li>
-                            <li>
-                                We do not warrant that the Platform will meet your needs or expectations or that it will be uninterrupted, secure, or error-free.
-                            </li>
-                            <li>
-                                We have no responsibility for any damage that may result from your use of the Platform.
-                            </li>
-
-                        </ol>
+                        </div>
 
                     </div>
 
                 </div>
-
-
-
-                <br /><br />
-
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    17. Third Party Service Provider(s)
-
-                </MudText>
-                <br />
-
-                <div style="font-family:Calibri; font-size:1.2rem">
-
-                    <div>
-
-                        <ol id="legal-listing">
-                            <li>
-                                To enhance your use of the Platform, we may utilize third-party service providers. However, IVS Socials is not responsible for the services provided by these third-party service providers nor for their privacy policies or practices.
-                            </li>
-                            <li>
-                                If you do not accept the terms of use of a third-party service provider, you should refrain from accepting the T&C.
-                            </li>
-                            <li>
-                                We will ensure that any amendments to the terms of use of third-party service providers are promptly communicated to you.
-                            </li>
-
-                        </ol>
-
-                    </div>
-
-                </div>
-
-
+                
 
                 <br /><br />
+                
+                
 
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    18. Third Party Service Provider(s) Disclaimer
+                <div id="limitation-liability">
 
-                </MudText>
-                <br />
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        15. Limitation of Liability
+                    </MudText>
+                    <br />
 
-                <div style="font-family:Calibri; font-size:1.2rem">
+                    <div style="font-family:Calibri; font-size:1.2rem">
 
-                    <div>
+                        <div>
 
-                        <ol id="legal-listing">
-                            <li>
-                                You agree that the T&C only govern the Platform provided by IVS Socials, and not the services offered by third-party service providers.
-                            </li>
-                            <li>
-                                IVS Socials’ decision to use third-party services is not an endorsement of their content or services.
-                            </li>
-                            <li>
-                                By using the Platform, you agree to use third-party services at your own risk.
-                            </li>
-                            <li>IVS Socials does not control third-party services and there is no agency relationship between us and the third-party providers.</li>
-                            <li>
-                                We expressly disclaim any responsibility for any service or information provided by third-party service providers.
-                            </li>
-                            <li>
-                                We do not guarantee that third-party services will be secure, uninterrupted, or free from errors.
-                            </li>
-                            <li>Any claim or dispute arising from third-party services shall be resolved in accordance with the terms of use of such third-party providers.</li>
+                            <ol id="legal-listing">
+                                <li>
+                                    You acknowledge and agree that IVS Socials is not a party to any transactions, relationships, or disputes between you and event attendees. We do not pre-screen event attendees and are not responsible for any fraudulent transactions or actions by event attendees.
+                                </li>
+                                <li>
+                                    We exclude any and all liability arising from any actions we take in response to breaches of our services.
+                                </li>
+                                <li>
+                                    Your sole remedy for dissatisfaction with the Platform is to stop using it.
+                                </li>
+                                <li>
+                                    You agree that, under no circumstances, will IVS Socials be liable for any damages, whether direct, indirect, incidental, consequential, special, punitive,
+                                    or exemplary, arising out of or in connection with your use or inability to use the Platform, including but not limited to: loss of anticipated profits, sales, business opportunities, savings, revenue, goodwill, reputation, or data; any failure of performance, denial of service, attack, interruption, defect, operator errors, inconvenience, or delay in operation; business interruption; failure of electronic or mechanical equipment or communications lines (including telephone and internet); severe weather events (including flood, earthquake, or acts of God); fire, war, insurrection, terrorism, riot, labor disputes, accidents, emergencies, or government actions; or any third-party theft, destruction, unauthorized access, alteration, or use of your information, equipment, or property.
+                                </li>
 
-                        </ol>
+                            </ol>
+
+                        </div>
 
                     </div>
 
@@ -820,88 +841,210 @@
 
 
                 <br /><br />
+                
 
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                    19. Governing Law and Dispute Resolution
+                <div id="disclaimer-warranties">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        16. Disclaimer of Warranties
 
-                </MudText>
-                <br />
+                    </MudText>
+                    <br />
 
-                <div style="font-family:Calibri; font-size:1.2rem">
+                    <div style="font-family:Calibri; font-size:1.2rem">
 
-                    <div>
+                        <div>
 
-                        <ol id="legal-listing">
-                            <li>
-                                The T&C shall be governed by and construed in accordance with the laws of the Federal Republic of Nigeria.
-                            </li>
-                            <li>
-                                Any disputes arising from or in connection with your use of the Platform (“Dispute”) shall be resolved by mutual consultation between you and IVS Socials. If the Dispute cannot be resolved within 30 (thirty) days, it shall be referred to arbitration in accordance with the Arbitration and Mediation Act, 2023.
+                            <ol id="legal-listing">
+                                <li>
+                                    You acknowledge and agree that the Platform is provided on an "as is" and "as available" basis.
+                                </li>
+                                <li>
+                                    IVS Socials does not guarantee the accuracy, reliability, completeness, or usefulness of any information on the Platform.
+                                </li>
+                                <li>
+                                    We do not warrant that the Platform will meet your needs or expectations or that it will be uninterrupted, secure, or error-free.
+                                </li>
+                                <li>
+                                    We have no responsibility for any damage that may result from your use of the Platform.
+                                </li>
 
-                                <br />
+                            </ol>
 
-                                <ol id="legal-listing">
-
-                                    <li>
-                                        The parties shall jointly appoint a sole arbitrator.
-                                    </li>
-
-                                    <li>
-                                        If the parties cannot agree on an arbitrator within 14 (fourteen) days, any party may apply to the Chairman of the Chartered Institute of Arbitrators, UK (Nigeria Branch) to appoint an arbitrator.
-                                    </li>
-
-                                    <li>The place of arbitration shall be Lagos State, Nigeria, and the proceedings will be in English.</li>
-                                    <li>The resulting arbitral award shall be final and binding.</li>
-
-                                </ol>
-                            </li>
-                            <li>
-                                IVS Socials reserves the exclusive right to institute legal proceedings regarding any Dispute in any Nigerian court of law.
-                            </li>
-                           
-                        </ol>
+                        </div>
 
                     </div>
 
                 </div>
 
 
-
-
-
                 <br /><br />
+                
 
-                <MudText Typo="Typo.h3" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
-                   20. Severability and Miscellaneous Provisions
-                </MudText>
-                <br />
+                <div id="third-party">
+                    
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        17. Third Party Service Provider(s)
 
-                <div style="font-family:Calibri; font-size:1.2rem">
+                    </MudText>
+                    <br/>
 
-                    <div>
+                    <div style="font-family:Calibri; font-size:1.2rem">
 
-                        <ol id="legal-listing">
-                            <li>
-                                If any provision of the T&C is deemed unlawful, void, or unenforceable, the remaining provisions will remain in full force and effect.
-                            </li>
-                            <li>
-                                Failure to enforce any right or provision of the T&C will not be deemed a waiver of such right or provision.
-                            </li>
-                            <li>
-                                You agree to comply with all applicable laws, rules, and regulations governing the operation and use of the Platform.
-                            </li>
+                        <div>
 
-                            <li>
-                                IVS Socials may assign its rights and obligations under the T&C without your consent.
-                            </li>
-                            <li>
-                                The relationship of the parties is that of independent contractors, and the T&C will not be construed to imply any agency, employment, or joint venture relationship.
-                            </li>
+                            <ol id="legal-listing">
+                                <li>
+                                    To enhance your use of the Platform, we may utilize third-party service providers. However, IVS Socials is not responsible for the services provided by these third-party service providers nor for their privacy policies or practices.
+                                </li>
+                                <li>
+                                    If you do not accept the terms of use of a third-party service provider, you should refrain from accepting the T&C.
+                                </li>
+                                <li>
+                                    We will ensure that any amendments to the terms of use of third-party service providers are promptly communicated to you.
+                                </li>
 
-                        </ol>
+                            </ol>
+
+                        </div>
 
                     </div>
 
+                </div>
+                
+                
+
+                <br /><br />
+                
+                
+
+                <div id="third-party-disclaimer">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        18. Third Party Service Provider(s) Disclaimer
+
+                    </MudText>
+                    <br />
+
+                    <div style="font-family:Calibri; font-size:1.2rem">
+
+                        <div>
+
+                            <ol id="legal-listing">
+                                <li>
+                                    You agree that the T&C only govern the Platform provided by IVS Socials, and not the services offered by third-party service providers.
+                                </li>
+                                <li>
+                                    IVS Socials’ decision to use third-party services is not an endorsement of their content or services.
+                                </li>
+                                <li>
+                                    By using the Platform, you agree to use third-party services at your own risk.
+                                </li>
+                                <li>IVS Socials does not control third-party services and there is no agency relationship between us and the third-party providers.</li>
+                                <li>
+                                    We expressly disclaim any responsibility for any service or information provided by third-party service providers.
+                                </li>
+                                <li>
+                                    We do not guarantee that third-party services will be secure, uninterrupted, or free from errors.
+                                </li>
+                                <li>Any claim or dispute arising from third-party services shall be resolved in accordance with the terms of use of such third-party providers.</li>
+
+                            </ol>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <br /><br />
+                
+                
+
+                <div id="dispute-resolution">
+
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        19. Governing Law and Dispute Resolution
+
+                    </MudText>
+                    <br />
+
+                    <div style="font-family:Calibri; font-size:1.2rem">
+
+                        <div>
+
+                            <ol id="legal-listing">
+                                <li>
+                                    The T&C shall be governed by and construed in accordance with the laws of the Federal Republic of Nigeria.
+                                </li>
+                                <li>
+                                    Any disputes arising from or in connection with your use of the Platform (“Dispute”) shall be resolved by mutual consultation between you and IVS Socials. If the Dispute cannot be resolved within 30 (thirty) days, it shall be referred to arbitration in accordance with the Arbitration and Mediation Act, 2023.
+
+                                    <br />
+
+                                    <ol id="legal-listing">
+
+                                        <li>
+                                            The parties shall jointly appoint a sole arbitrator.
+                                        </li>
+
+                                        <li>
+                                            If the parties cannot agree on an arbitrator within 14 (fourteen) days, any party may apply to the Chairman of the Chartered Institute of Arbitrators, UK (Nigeria Branch) to appoint an arbitrator.
+                                        </li>
+
+                                        <li>The place of arbitration shall be Lagos State, Nigeria, and the proceedings will be in English.</li>
+                                        <li>The resulting arbitral award shall be final and binding.</li>
+
+                                    </ol>
+                                </li>
+                                <li>
+                                    IVS Socials reserves the exclusive right to institute legal proceedings regarding any Dispute in any Nigerian court of law.
+                                </li>
+
+                            </ol>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                
+                <br /><br />
+                
+                
+
+                <div id="severability">
+                    <MudText Typo="Typo.h4" Style="font-family: 'Akaya Telivigala'; font-weight: 400; color: #55385c">
+                        20. Severability and Miscellaneous Provisions
+                    </MudText>
+                    <br />
+
+                    <div style="font-family:Calibri; font-size:1.2rem">
+
+                        <div>
+
+                            <ol id="legal-listing">
+                                <li>
+                                    If any provision of the T&C is deemed unlawful, void, or unenforceable, the remaining provisions will remain in full force and effect.
+                                </li>
+                                <li>
+                                    Failure to enforce any right or provision of the T&C will not be deemed a waiver of such right or provision.
+                                </li>
+                                <li>
+                                    You agree to comply with all applicable laws, rules, and regulations governing the operation and use of the Platform.
+                                </li>
+
+                                <li>
+                                    IVS Socials may assign its rights and obligations under the T&C without your consent.
+                                </li>
+                                <li>
+                                    The relationship of the parties is that of independent contractors, and the T&C will not be construed to imply any agency, employment, or joint venture relationship.
+                                </li>
+
+                            </ol>
+
+                        </div>
+
+                    </div>
                 </div>
 
 
@@ -933,4 +1076,5 @@
 
 @code {
 
+    DateTime newDate = new DateTime(2025, 4, 8);
 }
