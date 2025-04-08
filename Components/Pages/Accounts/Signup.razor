@@ -40,8 +40,11 @@
                     </MudSelect>
 
                     <br />
-                    <MudCheckBox T="bool" @bind-Value="model.hasAgreed" Size="Size.Small" Required="true" For="@(() => model.hasAgreed)" RequiredError="You must agree" Label="Agree to terms and conditions!" />
+                    <MudCheckBox T="bool" @bind-Value="model.hasAgreed" Size="Size.Small" Required="true" For="@(() => model.hasAgreed)" RequiredError="You must agree" Label="Agree to our ">
+                        <MudLink Target="_blank" Href="/terms-and-conditions"> &nbsp; Terms & Conditions</MudLink>
+                    </MudCheckBox>
 
+                  
 
                     <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#56375C" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
                         @if (_processing)
