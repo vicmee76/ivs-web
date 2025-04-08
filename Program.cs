@@ -105,13 +105,14 @@ if (!app.Environment.IsDevelopment())
 }
 
 
-app.UseStaticFiles();
-app.UseAntiforgery();
-app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
