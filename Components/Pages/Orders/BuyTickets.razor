@@ -422,11 +422,19 @@
                     var ticketQty = item.Sum(x =>x.ticketQuantity);
                     var totalTicketFee = Math.Round(item.Sum(x => x.totalTicketFee), 2);
                     var totalServiceFee = Math.Round(item.Sum(x =>x.totalTicketServiceFee), 2);
+                    var gateWayFee = Math.Round(item.Sum(x =>x.gatewayFee), 2);
+                    var charge = Math.Round(item.Sum(x =>x.ivsNetRevenue), 2);
+                    var ivsVat = Math.Round(item.Sum(x =>x.ivsVat), 2);
+                    var chargeAmount = Math.Round(item.Sum(x =>x.totalServiceFeeAfterDeduction), 2);
                     
                     generateCost.FirstOrDefault().totalTicketPurchased -= ticketQty;
                     generateCost.FirstOrDefault().totalServiceFee -= Math.Round(totalServiceFee, 2);
                     generateCost.FirstOrDefault().totalTicketFee -= Math.Round(totalTicketFee, 2);
                     generateCost.FirstOrDefault().totalAmount -= Math.Round((totalTicketFee + totalServiceFee), 2);
+                    generateCost.FirstOrDefault().gatewayFee -= gateWayFee;
+                    generateCost.FirstOrDefault().ivsNetRevenue -= charge;
+                    generateCost.FirstOrDefault().ivsVat -= ivsVat;
+                    generateCost.FirstOrDefault().totalServiceFeeAfterDeduction -= chargeAmount;
                     
                     generateCost.FirstOrDefault().tickets.RemoveAll(x => x.ticketId == ticketId);
                     
@@ -445,9 +453,7 @@
                     quantity = value.FirstOrDefault().ToString()
                 };
             TicketWithQuantity[ticketId] = generateCostVm;
-
             GenerateTicketCost(ticketId, eventTimeId, value.FirstOrDefault());
-
         }
 
         _generateCostProcessing = false;
@@ -458,7 +464,7 @@
 
 
 
-    private List<GenerateCostDto> GenerateTicketCost(string ticketId, string eventTimeId, int qty)
+    private void GenerateTicketCost(string ticketId, string eventTimeId, int qty)
     {
         // get tickets
         var eventTimes = _ticketList.Where(x => x.EventTimeId == eventTimeId);
@@ -476,11 +482,19 @@
                     var ticketQty = item.Sum(x =>x.ticketQuantity);
                     var totalTicketFee = Math.Round(item.Sum(x => x.totalTicketFee), 2);
                     var totalServiceFee = Math.Round(item.Sum(x =>x.totalTicketServiceFee), 2);
+                    var gateWayFee = Math.Round(item.Sum(x =>x.gatewayFee), 2);
+                    var charge = Math.Round(item.Sum(x =>x.ivsNetRevenue), 2);
+                    var ivsVat = Math.Round(item.Sum(x =>x.ivsVat), 2);
+                    var chargeAmount = Math.Round(item.Sum(x =>x.totalServiceFeeAfterDeduction), 2);
                     
                     generateCost.FirstOrDefault().totalTicketPurchased -= ticketQty;
                     generateCost.FirstOrDefault().totalServiceFee -= Math.Round(totalServiceFee, 2);
                     generateCost.FirstOrDefault().totalTicketFee -= Math.Round(totalTicketFee, 2);
                     generateCost.FirstOrDefault().totalAmount -= Math.Round((totalTicketFee + totalServiceFee), 2);
+                    generateCost.FirstOrDefault().gatewayFee -= gateWayFee;
+                    generateCost.FirstOrDefault().ivsNetRevenue -= charge;
+                    generateCost.FirstOrDefault().ivsVat -= ivsVat;
+                    generateCost.FirstOrDefault().totalServiceFeeAfterDeduction -= chargeAmount;
                     
                     generateCost.FirstOrDefault().tickets.RemoveAll(x => x.ticketId == ticketId);
                     
@@ -526,7 +540,11 @@
                     ticketServiceFee = Math.Round(chargeAmount, 2),
                     totalTicketServiceFee = Math.Round(serviceFeeSum, 2),
                     totalTicketFee = Math.Round(ticketFeeSum, 2),
-                    totalTicketFeeAndServiceFee = Math.Round(cummulativeTotal, 2)
+                    totalTicketFeeAndServiceFee = Math.Round(cummulativeTotal, 2),
+                    gatewayFee = flwVatAndStampDuty,
+                    ivsNetRevenue = charge,
+                    ivsVat = ivsVat,
+                    totalServiceFeeAfterDeduction = chargeAmount,
                 };
 
                 if (generateCost.Any())
@@ -537,11 +555,15 @@
                     generateCost.FirstOrDefault().totalTicketFee += Math.Round(ticketFeeSum, 2);
                     generateCost.FirstOrDefault().totalAmount += Math.Round((cummulativeTotal), 2);
                     generateCost.FirstOrDefault().percentageCharge = percentage;
+                    generateCost.FirstOrDefault().gatewayFee += flwVatAndStampDuty;
+                    generateCost.FirstOrDefault().ivsNetRevenue += charge;
+                    generateCost.FirstOrDefault().ivsVat += ivsVat;
+                    generateCost.FirstOrDefault().totalServiceFeeAfterDeduction += chargeAmount;
                 }
                 else
                 {
-                    generateCost = new List<GenerateCostDto>()
-                    {
+                    generateCost =
+                    [
                         new()
                         {
                             totalTicketPurchased = 1,
@@ -549,17 +571,21 @@
                             totalServiceFee = Math.Round(serviceFeeSum, 2),
                             totalTicketFee = Math.Round(ticketFeeSum, 2),
                             percentageCharge = percentage,
-                            tickets = new List<TicketsObjects> { tics }
+                            gatewayFee = flwVatAndStampDuty,
+                            ivsNetRevenue = charge,
+                            ivsVat = ivsVat,
+                            totalServiceFeeAfterDeduction = chargeAmount,
+                            tickets = [tics]
                         }
-                    };
+                    ];
                 }
             }
 
-            return generateCost;
+            return;
         }
         else
         {
-            return [];
+            return;
         }
     }
 
@@ -584,7 +610,6 @@
                 {
                     foreach (var c in generateCost.FirstOrDefault().tickets)
                     {
-                        var dic = TicketWithQuantity[c.ticketId];
                         var attendance = new AttendanceVm()
                         {
                             ivsEventId = id,
@@ -610,11 +635,15 @@
                         OrderRequest = new OrderRequest()
                         {
                             ivsEventId = id,
-                            totalOrderQuantity = generateCost?.FirstOrDefault()?.totalTicketPurchased.ToString(),
-                            totalServiceFee = generateCost?.FirstOrDefault()?.totalServiceFee.ToString(),
-                            totalTicketFee = generateCost?.FirstOrDefault()?.totalTicketFee.ToString(),
-                            totalFee = generateCost?.FirstOrDefault()?.totalAmount.ToString(),
-                            percentageCharge = generateCost?.FirstOrDefault()?.percentageCharge.ToString()
+                            totalOrderQuantity = generateCost?.FirstOrDefault()?.totalTicketPurchased,
+                            totalServiceFee = generateCost?.FirstOrDefault()?.totalServiceFee,
+                            totalTicketFee = generateCost?.FirstOrDefault()?.totalTicketFee,
+                            totalFee = generateCost?.FirstOrDefault()?.totalAmount,
+                            percentageCharge = generateCost?.FirstOrDefault()?.percentageCharge,
+                            gatewayFee = generateCost?.FirstOrDefault()?.gatewayFee,
+                            ivsNetRevenue = generateCost?.FirstOrDefault()?.ivsNetRevenue,
+                            ivsVat = generateCost?.FirstOrDefault()?.ivsVat,
+                            totalServiceFeeAfterDeduction = generateCost?.FirstOrDefault()?.totalServiceFeeAfterDeduction,
                         },
                         AttendeesRequest = _attendanceVms
                     };

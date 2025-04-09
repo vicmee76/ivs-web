@@ -8,6 +8,10 @@ public class GenerateCostDto
     public decimal totalServiceFee { get; set; }
     public decimal totalTicketFee { get; set; }
     public decimal totalAmount { get; set; }
+    public decimal gatewayFee { get; set; }
+    public decimal ivsNetRevenue { get; set; } 
+    public decimal ivsVat { get; set; }
+    public decimal totalServiceFeeAfterDeduction { get; set; }
     public List<TicketsObjects>? tickets { get; set; }
 }
 
@@ -23,4 +27,9 @@ public class TicketsObjects
     public decimal totalTicketServiceFee { get; set; }
     public decimal totalTicketFee { get; set; }
     public decimal totalTicketFeeAndServiceFee { get; set; }
+    
+    public decimal gatewayFee { get; set; }
+    public decimal ivsNetRevenue { get; set; } 
+    public decimal ivsVat { get; set; }
+    public decimal totalServiceFeeAfterDeduction { get; set; }
 }
