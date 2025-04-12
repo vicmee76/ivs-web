@@ -21,8 +21,21 @@
 </head>
 
 <body>
-    <Routes @rendermode="new InteractiveServerRenderMode(false)" />
-    <script src="_framework/blazor.web.js"></script>
+<Routes @rendermode="new InteractiveServerRenderMode(false)" />
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LQK7DVT6WR"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-LQK7DVT6WR');
+</script>
+
+
+<script src="_framework/blazor.web.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
     <script src="/js/eventpanel.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/d2cbc29c68.js" crossorigin="anonymous"></script>
