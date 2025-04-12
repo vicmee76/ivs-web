@@ -17,6 +17,7 @@ namespace ivs.Domain.Interfaces.Payment
         public Task<ResponseObject> GetTransferFee(decimal settlementAmount, string eventId);
         public Task<ResponseObject> PostSettlement(PostSettlementDto model);
         public Task<ResponseObject> GetSettlementByUserId(string userId, Dictionary<string, string> queryParam);
+        public Task<ResponseObject> GetAllSettlements(Dictionary<string, string> queryParam);
         public Task<ResponseObject> GetTotalSettlement();
         public Task<ResponseObject> GetSettlementByEventId(string eventId, Dictionary<string, string> queryParam);
     }
