@@ -149,6 +149,28 @@ namespace ivs_ui.Components.Data.Services.Payment
                 return new ResponseObject() { result = new ResponseContents() { message = "Error! Something went wrong trying to get settlement by event id, please try again later" } };
             }
         }
+        
+        
+        
+        public async Task<ResponseObject> GetAllSettlements(Dictionary<string, string> queryParam)
+        {
+            try
+            {
+                var headers = await _webService.GetAuthorizationHeaders();
+                var response = await _webService.Call(SettlementUrl, $"get-all-settlement/", Method.Get, null, headers, queryParam);
+                var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
+                var content = res?.result;
+                if (content?.code != ResponseCodes.ResponseCodeOk)
+                    return res;
+
+                res.result.data = JsonConvert.DeserializeObject<List<GetSettlementResponseModel>>(content?.data?.ToString());
+                return res;
+            }
+            catch (Exception ex)
+            {
+                return new ResponseObject() { result = new ResponseContents() { message = "Error! Something went wrong trying to get all settlement record, please try again later" } };
+            }
+        }
 
 
 

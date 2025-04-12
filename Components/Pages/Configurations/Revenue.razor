@@ -95,7 +95,7 @@
                                                 </MudPaper>
                                             </MudItem>
 
-                                            <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
+                                            <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
                                                 <MudPaper Class="pa-5" Outlined="true" Style="background-color:#fbecdc">
                                                     <div style="line-height:40px">
 
@@ -114,7 +114,28 @@
                                                 </MudPaper>
                                             </MudItem>
 
-                                            <MudItem xs="6" sm="6" md="6" lg="4" xl="4" xxl="4">
+                                            <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
+                                                <MudPaper Class="pa-5" Outlined="true" Style="background-color:#e8ffed">
+                                                    <div style="line-height:40px">
+
+                                                        <div id="dasboard-count-title">Avl. Balance</div>
+
+                                                        @if (_processing)
+                                                        {
+                                                            <MudSkeleton Height="22px;"/>
+                                                        }
+                                                        else
+                                                        {
+                                                            var balance = totalTicketFeeSum - totalSettlement;
+                                                            
+                                                            <div id="dasboard-count">@balance.ToString("C")</div>
+                                                        }
+
+                                                    </div>
+                                                </MudPaper>
+                                            </MudItem>
+
+                                            <MudItem xs="6" sm="6" md="6" lg="3" xl="3" xxl="3">
                                                 <MudPaper Class="pa-5" Outlined="true" Style="background-color:#F4F3FF">
                                                     <div style="line-height:40px">
 
@@ -134,7 +155,7 @@
                                             </MudItem>
 
 
-                                            <MudItem xs="6" sm="6" md="6" lg="4" xl="4" xxl="4">
+                                            <MudItem xs="6" sm="6" md="6" lg="3" xl="3" xxl="3">
                                                 <MudPaper Class="pa-5" Outlined="true" Style="background-color:#F4F3FF">
                                                     <div style="line-height:40px">
 

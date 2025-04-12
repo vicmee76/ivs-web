@@ -1,0 +1,298 @@
+@page "/configuration/settlements"
+
+<PageTitle>Iv's - Settlements</PageTitle>
+
+<br />
+
+@{
+   var nigeriaCulture = new CultureInfo("en-NG")
+   {
+      NumberFormat = { CurrencySymbol = "₦" }
+   };
+   Thread.CurrentThread.CurrentCulture = nigeriaCulture;
+   Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
+}
+
+
+
+<AuthorizeView Roles="Admin">
+
+   <NotAuthorized>
+      No Access
+   </NotAuthorized>
+
+
+   <Authorized Context="cntx">
+
+      <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+
+         <MudPaper Elevation="0">
+            <MudToolBar>
+               <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+            </MudToolBar>
+         </MudPaper>
+
+         <MudCard Elevation="0" Style="padding:5px">
+            <MudCardHeader>
+               <CardHeaderContent>
+                  <MudText id="discovery-title-mid">Settlements</MudText>
+               </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+
+               <br />
+
+               <MudGrid Spacing="5">
+                  <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
+                     <MudPaper Class="pa-10" Outlined="true" Style="background-color:#fff6ff">
+                        <div style="line-height:40px">
+
+                           <div style="font-size:17px;">Total Settlement</div>
+
+                           @if (_getSettlementProcessing)
+                           {
+                              <MudSkeleton Height="22px;" />
+                           }
+                           else
+                           {
+                              <h1>@totalSettlement.ToString("C")</h1>
+                           }
+
+                        </div>
+                     </MudPaper>
+                  </MudItem>
+
+
+               </MudGrid>
+
+               <br /><br />
+               <div>
+
+                  <MudText Typo="Typo.body2" Color="Color.Secondary"><b>Showing all settlements</b> </MudText>
+
+               </div>
+               <br /><br />
+
+               <MudDataGrid @ref="settlementDataGrid" T="GetSettlementData" Dense="false" RowsPerPage="50" ServerData="GetSettlementServerReload" Filterable="false" Hover="true" Loading="@_getSettlementProcessing" LoadingProgressColor="Color.Secondary" Striped="true" Bordered="true">
+                  <ToolBarContent>
+
+                     <MudSpacer />
+                     <MudTextField T="string" ValueChanged="@(s=>OnSettlementSearch(s))" Placeholder="Search with status, account name and number" Adornment="Adornment.Start"
+                                   AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                  </ToolBarContent>
+                  <Columns>
+
+                     <PropertyColumn Property="x => x.paymentGateWayTransactionId" Title="TranId" />
+                     <PropertyColumn Property="x => x.eventName" Title="Event" />
+
+                     <TemplateColumn Title="Payout" Sortable="false" Filterable="false">
+                        <CellTemplate Context="ctx">
+                           @ctx.Item.amountSettled.ToString("C")
+                        </CellTemplate>
+                     </TemplateColumn>
+
+                     <TemplateColumn Title="Fee" Sortable="false" Filterable="false">
+                        <CellTemplate Context="ctx">
+                           @ctx.Item.totalServiceFee.ToString("C")
+                        </CellTemplate>
+                     </TemplateColumn>
+
+                     <TemplateColumn Title="Total Settlement" Sortable="false" Filterable="false">
+                        <CellTemplate Context="ctx">
+                           @ctx.Item.totalAmountSettled.ToString("C")
+                        </CellTemplate>
+                     </TemplateColumn>
+
+                     <TemplateColumn Title="Status" Sortable="false" Filterable="false">
+                        <CellTemplate Context="ctx">
+
+                           @if (ctx.Item.paymentGateWayTransactionStatus.Equals(Helpers.NewStatus, StringComparison.OrdinalIgnoreCase))
+                           {
+                              <MudText Color="Color.Warning"><b>@Helpers.PendingStatus</b></MudText>
+                           }
+                           else if (ctx.Item.paymentGateWayTransactionStatus.Equals(Helpers.FailedStatus, StringComparison.OrdinalIgnoreCase))
+                           {
+                              <MudText Color="Color.Error"><b>@Helpers.FailedStatus</b></MudText>
+                           }
+                           else if (ctx.Item.paymentGateWayTransactionStatus.Equals(Helpers.SuccessStatus, StringComparison.OrdinalIgnoreCase))
+                           {
+                              <MudText Color="Color.Success"><b>@Helpers.SuccessStatus</b></MudText>
+                           }
+                           else
+                           {
+                              <MudText Color="Color.Primary"><b>@ctx.Item.paymentGateWayTransactionStatus</b></MudText>
+                           }
+                        </CellTemplate>
+                     </TemplateColumn>
+
+                     <PropertyColumn Property="x => x.bankName" Title="Bank Name" />
+                     
+                     <PropertyColumn Property="x => x.accountName" Title="Account Name" />
+                     
+                     <TemplateColumn Title="Account Number" Sortable="false" Filterable="false">
+                        <CellTemplate Context="ctx">
+                          @MaskNumber(ctx.Item.accountNumber)
+                        </CellTemplate>
+                     </TemplateColumn>
+
+                     <TemplateColumn Title="Trans Date" Sortable="false" Filterable="false">
+                        <CellTemplate Context="ctx">@Convert.ToDateTime(ctx.Item.createdAt).ToString("ddd, dd MMM yyyy, HH:mm tt") </CellTemplate>
+                     </TemplateColumn>
+
+                  </Columns>
+                  <PagerContent>
+                     <MudDataGridPager T="GetSettlementData" />
+                  </PagerContent>
+               </MudDataGrid>
+
+
+            </MudCardContent>
+         </MudCard>
+
+      </MudContainer>
+
+   </Authorized>
+
+</AuthorizeView>
+
+
+
+
+@code {
+
+   [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+   [Inject] ISnackbar? _snackbar { get; set; }
+   [Inject] NavigationManager? _navigate { get; set; }
+   [Inject] IPaymentService _paymentService { get; set; }
+   
+   MudDataGrid<GetSettlementData> settlementDataGrid;
+   AuthUser authUser = new AuthUser();
+   
+   private bool _getSettlementProcessing;
+   private string settlementSearchString = string.Empty;
+   private decimal totalSettlement { get; set; }
+   
+   private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+   {
+      new BreadcrumbItem("Configurations", href: "#", disabled: true),
+      new BreadcrumbItem("Settlements", href: "/configuration/settlements")
+   };
+   
+   
+    private async Task<GridData<GetSettlementData>> GetSettlementServerReload(GridState<GetSettlementData> state)
+    {
+        _getSettlementProcessing = true;
+        var res = new ResponseObject();
+
+        var queryParameter = new Dictionary<string, string>();
+
+        if (!string.IsNullOrWhiteSpace(settlementSearchString))
+            queryParameter.Add("searchQuery", settlementSearchString.ToLower());
+
+        res = await _paymentService.GetAllSettlements(queryParameter);
+
+        if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk)
+        {
+            var result = (List<GetSettlementResponseModel>)res.result.data;
+
+            if (result.Count == 0)
+            {
+                _getSettlementProcessing = false;
+                StateHasChanged();
+                return new GridData<GetSettlementData>
+                    {
+                        TotalItems = 0,
+                        Items = new List<GetSettlementData>()
+                    };
+            }
+
+            totalSettlement = result.FirstOrDefault().totalAmountSettledSum;
+
+            IEnumerable<GetSettlementData> data = (List<GetSettlementData>)result.FirstOrDefault().records;
+
+            data = data.Where(element =>
+            {
+                if (string.IsNullOrWhiteSpace(settlementSearchString))
+                    return true;
+                if (element.paymentGateWayTransactionStatus.Contains(settlementSearchString, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if (element.accountName.Contains(settlementSearchString, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if (element.accountNumber.Contains(settlementSearchString, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if (element.eventName.Contains(settlementSearchString, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if ($"{element.paymentGateWayTransactionStatus} {element.accountName} {element.eventName} {element.accountNumber}".Contains(settlementSearchString))
+                    return true;
+                return false;
+            }).ToArray();
+
+            var sortDefinition = state.SortDefinitions.FirstOrDefault();
+
+            if (sortDefinition != null)
+            {
+                switch (sortDefinition.SortBy)
+                {
+                    case nameof(GetSalesDataDto.firstName):
+                        data = data.OrderByDirection(
+                            sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
+                            o => o.accountName
+                        );
+                        break;
+                    case nameof(GetSalesDataDto.lastName):
+                        data = data.OrderByDirection(
+                            sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
+                            o => o.paymentGateWayTransactionStatus
+                        );
+                        break;
+                    case nameof(GetSalesDataDto.phoneNumber):
+                        data = data.OrderByDirection(
+                            sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
+                            o => o.accountNumber
+                        );
+                        break;
+                }
+            }
+
+            var pagedData = data.ToArray();
+
+            _getSettlementProcessing = false;
+            StateHasChanged();
+            return new GridData<GetSettlementData>
+                {
+                    TotalItems = pagedData.Count(),
+                    Items = pagedData
+                };
+        }
+        else
+        {
+            _getSettlementProcessing = false;
+            StateHasChanged();
+            return new GridData<GetSettlementData>
+                {
+                    TotalItems = 0,
+                    Items = new List<GetSettlementData>()
+                };
+        }
+    }
+
+
+    
+    private Task OnSettlementSearch(string text)
+    {
+       settlementSearchString = text;
+       return settlementDataGrid.ReloadServerData();
+    }
+
+    private string MaskNumber(string number)
+    {
+       if (number.Length <= 4)
+          return number; // If the number is too short, just return it as-is.
+
+       var lengthToMask = number.Length - 4;
+       var maskedPart = new string('*', lengthToMask);
+       var visiblePart = number.Substring(lengthToMask);
+       return maskedPart + visiblePart;
+    }
+    
+}
