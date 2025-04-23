@@ -1,0 +1,141 @@
+@page "/events/create-event-discount/{id}"
+@page "/events/update-event-discount/{id}"
+
+@{
+   CultureInfo nigeriaCulture = new CultureInfo("en-NG");
+   nigeriaCulture.NumberFormat.CurrencySymbol = "₦";
+   Thread.CurrentThread.CurrentCulture = nigeriaCulture;
+   Thread.CurrentThread.CurrentUICulture = nigeriaCulture;
+}
+
+<PageTitle>Iv's - Create Event Discount</PageTitle>
+
+<br />
+
+<AuthorizeView Roles="User,Admin">
+   <NotAuthorized>
+      No Access
+   </NotAuthorized>
+
+   <Authorized Context="cntx">
+
+      <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
+
+         <MudPaper Elevation="0">
+            <MudToolBar>
+               <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
+               <MudSpacer />
+
+               @if (!_getEventprocessing)
+               {
+                  <MudSkeleton Animation="Animation.Wave" Width="20%" />
+               }
+               else
+               {
+                  <MudText><b style="color:#56375C">Create Event Tickets for -- <b>@eventName</b></b></MudText>
+               }
+
+            </MudToolBar>
+         </MudPaper>
+
+         <br />
+
+         <MudTimeline TimelineOrientation="TimelineOrientation.Horizontal" TimelinePosition="TimelinePosition.Bottom">
+            <MudTimelineItem Color="Color.Success" Variant="Variant.Outlined">
+               <ItemContent>
+                  <MudAlert Severity="Severity.Success" Dense="true" ContentAlignment="HorizontalAlignment.Center" NoIcon="false" ><b>Event Details</b></MudAlert>
+               </ItemContent>
+            </MudTimelineItem>
+
+            <MudTimelineItem Color="Color.Default" Variant="Variant.Outlined">
+               <ItemContent>
+                  <MudAlert Severity="Severity.Normal" Dense="true" ContentAlignment="HorizontalAlignment.Center" NoIcon="false"><b>Tickets & Discounts</b></MudAlert>
+               </ItemContent>
+            </MudTimelineItem>
+
+            <MudTimelineItem Color="Color.Default" Variant="Variant.Outlined">
+               <ItemContent>
+                  <MudAlert Severity="Severity.Normal" Dense="true" ContentAlignment="HorizontalAlignment.Center" NoIcon="false"><b>Publish</b></MudAlert>
+               </ItemContent>
+            </MudTimelineItem>
+         </MudTimeline>
+
+
+      </MudContainer>
+      
+      
+   </Authorized>
+   
+</AuthorizeView>
+
+@code {
+
+   [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
+   [Inject] IEventService _eventService { get; set; }
+   [Inject] NavigationManager? _navigate { get; set; }
+   [Inject] ISnackbar? _snackbar { get; set; }
+   [Parameter] public string? id { get; set; }
+
+   AuthUser authUser = new AuthUser();
+   private string userId { get; set; }
+   private string eventName { get; set; }
+   private string activateUrl { get; set; }
+   private string dasboardUrl { get; set; }
+
+   private bool _getEventprocessing { get; set; } = false;
+   private bool _isActive { get; set; } = false;
+
+   
+   private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+   {
+      new BreadcrumbItem("Events", href: "/events/my-events"),
+      new BreadcrumbItem("Create Discount", href: null, disabled: true)
+   };
+
+
+   protected async override void OnInitialized()
+   {
+      _getEventprocessing = false;
+     // model = new CreateTicketVM();
+      var state = await _authStateProvider.GetAuthenticationStateAsync();
+
+      if (!state.User.Identity.IsAuthenticated)
+      {
+         _navigate.NavigateTo("/accounts/login");
+      }
+      else
+      {
+         var auth = await authUser.GetAuthUserAsync(state);
+         userId = auth.Id;
+         await InitializeComponent();
+      }
+
+      _getEventprocessing = true;
+      StateHasChanged();
+   }
+
+
+
+   private async Task InitializeComponent()
+   {
+      var res = await _eventService.GetEventMetaData(id);
+      if (res.result.code == ResponseCodes.ResponseCodeOk)
+      {
+         if (res?.result?.data.status == Helpers.Active)
+         {
+            _isActive = true;
+            dasboardUrl = "/events/dashboard";
+            _snackbar.Add("Event is already active", Severity.Info);
+         }
+
+         eventName = res.result.data.eventName;
+         activateUrl = $"/events/activate-event/{id}";
+      }
+      else
+      {
+         _snackbar.Add(res.result.message, Severity.Error);
+      }
+
+   }
+
+}
