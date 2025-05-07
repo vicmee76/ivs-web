@@ -92,7 +92,7 @@
 
                                     <MudItem xs="12" sm="12" md="12" lg="4" Style="padding:5px">
 
-                                        <MudText Typo="Typo.body2"><b>Banner</b>  <MudIconButton Href="@editBanner" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton> </MudText>
+                                        <MudText Typo="Typo.body2"><b>Banner</b>  <MudIconButton Href="@editBanner" Color="Color.Secondary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton> </MudText>
 
                                         <br />
 
@@ -105,15 +105,15 @@
 
                                     <MudItem xs="12" sm="12" md="12" lg="7" xl="7" xxl="7" Style="padding:5px">
 
-                                        <MudText Typo="Typo.body2"><b>Event Details</b> <MudIconButton Href="@editEvent" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton></MudText>
-                                       
+                                        <MudText Typo="Typo.body2"><b>Event Details</b> <MudIconButton Href="@editEvent" Color="Color.Secondary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton></MudText>
+                                        <br/>
                                         <MudText Typo="Typo.h6">
                                             <span><b>@_events.eventName</b></span> <span id="title-bag"> <b>@_events.EventType.FirstOrDefault().name </b> </span>
                                         </MudText>
                                         <br/><br/>
                                         
                                         <MudText Typo="Typo.body2"><b>Description</b></MudText>
-                                       
+                                        <br/>
                                         <div style="line-height:35px; font-size:14px">
                                             <span>@_events.eventDescription</span>
                                         </div>
@@ -123,7 +123,7 @@
                                         <div>
 
                                             <MudText Typo="Typo.body2"><b>Address</b></MudText>
-                                           
+                                            <br/>
                                             <div> @_events.eventAddress</div>
                                             <div> @_events.eventState</div>
                                             <br />
@@ -145,11 +145,11 @@
                                         <br />
 
                                         <MudGrid>
-                                            <MudItem xs="12" sm="12" md="12" lg="8" xl="8" xxl="8">
+                                            <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
                                                 
                                                 <div>
-                                                    <MudText Typo="Typo.body2"><b>Event Time</b> <MudIconButton Href="@editTime" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton> </MudText>
-                                                   
+                                                    <MudText Typo="Typo.body2"><b>Event Time</b> <MudIconButton Href="@editTime" Color="Color.Secondary" Icon="@Icons.Material.Filled.Edit" Size="Size.Small"></MudIconButton> </MudText>
+                                                   <br/>
                                                     @if (_events.EventTime.Any())
                                                     {
                                                         foreach (var t in _events.EventTime)
@@ -164,7 +164,7 @@
 
                                                 <div>
                                                     <MudText Typo="Typo.body2"><b>Social Links</b></MudText>
-                                                  
+                                                    <br/>
                                                     <div>
                                                         <MudGrid>
                                                             @if (!string.IsNullOrWhiteSpace(_events.instagramLink))
@@ -223,16 +223,43 @@
                                                 <br/><br/>
                                             </MudItem>
 
-                                            <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
+                                            <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
 
                                                 <div style="text-align:center">
                                                     <MudText Typo="Typo.body2"><b>QR Code</b></MudText>
 
                                                     <br />
-                                                    <MudImage Src="@_events.qrCodeLink"></MudImage>
+                                                    <MudImage Height="150" Width="150" Src="@_events.qrCodeLink"></MudImage>
                                                     <br /><br/>
-                                                    <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="@((e) => ActionShareEvent(_events.eventShortLink, _events.eventName))" StartIcon="@Icons.Material.Filled.Share" Color="Color.Error" Style="text-transform:none">
+                                                    <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="@((e) => ActionShareEvent(_events.eventShortLink, _events.eventName))" StartIcon="@Icons.Material.Filled.Share" Color="Color.Dark" Style="text-transform:none">
                                                         Share
+                                                    </MudButton>
+                                                </div>
+
+                                                <br />
+                                            </MudItem>
+
+                                            <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
+
+                                                <div style="text-align:center">
+                                                <MudText Typo="Typo.body2"><b>Self Admit QR Code</b>
+                                                    <MudTooltip>
+                                                        <ChildContent>
+                                                            <MudIconButton Icon="@Icons.Material.Filled.Info" Color="Color.Warning" Size="Size.Small" />
+                                                        </ChildContent>
+                                                        <TooltipContent>
+                                                            <MudText Typo="Typo.caption">
+                                                                Download this QR code so when attendees come for your event, they can scan it and admit themselves.
+                                                            </MudText>
+                                                        </TooltipContent>
+                                                    </MudTooltip>
+                                                </MudText>
+
+                                                    <br />
+                                                    <MudImage Height="150" Width="150" Src="@_events.selfAdmitQrCodeLink"></MudImage>
+                                                    <br /><br/>
+                                                    <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="@((e) => DownloadSelfAdmit(_events.selfAdmitQrCodeLink))" StartIcon="@Icons.Material.Filled.Download" Color="Color.Dark" Style="text-transform:none">
+                                                        Download
                                                     </MudButton>
                                                 </div>
 
@@ -268,12 +295,44 @@
                     else
                     {
                         var editTickets = $"/events/update-event-tickets/{_events._id}";
+                        var discountLink = $"/events/update-event-discount/{_events._id}";
 
                         <MudPaper Elevation="0">
 
-                            <MudText Typo="Typo.body1"><b>Event Tickest</b>  <MudIconButton Href="@editTickets" Color="Color.Default" Icon="@Icons.Material.Filled.Edit" Title="Edit tickets" Size="Size.Small"></MudIconButton> </MudText>
+                            @* <MudText Typo="Typo.body1"><b>Discount Code</b> <MudIconButton Href="@discountLink" Color="Color.Secondary" Icon="@Icons.Material.Filled.Edit" Title="Edit Discount" Size="Size.Small"></MudIconButton> </MudText> *@
+                            @* *@
+                            @* <br/> *@
+                            @* *@
+                            @* @if (_events.Discounts.Any()) *@
+                            @* { *@
+                            @*     <MudGrid Spacing="5"> *@
+                            @*         @foreach (var t in _events.Discounts) *@
+                            @*         { *@
+                            @*             <MudItem xs="12" sm="12" md="6" lg="2" xl="2" xxl="2"> *@
+                            @* *@
+                            @*                 <div style="padding:20px; border:1px dashed black; background-color: #fdf9f3; line-height:30px;"> *@
+                            @*                     <div><b>Code : </b><b>@t.discountCode</b></div> *@
+                            @*                     <div><b>Type : </b><span>@t.discountType</span></div> *@
+                            @*                     <div><b>Percent Value : </b><span>@t.discountValue</span></div> *@
+                            @*                 </div> *@
+                            @* *@
+                            @*             </MudItem> *@
+                            @*         } *@
+                            @*     </MudGrid> *@
+                            @* } *@
+                            @* else *@
+                            @* { *@
+                            @*     <MudAlert Severity="Severity.Info"> No discount code for this event yet.</MudAlert> *@
+                            @* } *@
+                            @* *@
+                            @* *@
+                            @* <br/><br/> *@
+                            @* <MudDivider></MudDivider> *@
+                            <br/><br/>
 
-                            <br />
+                            <MudText Typo="Typo.body1"><b>Event Tickest</b> <MudIconButton Href="@editTickets" Color="Color.Secondary" Icon="@Icons.Material.Filled.Edit" Title="Edit tickets" Size="Size.Small"></MudIconButton> </MudText>
+
+                            <br/>
 
 
                             @if (_ticketList.Any())
@@ -314,19 +373,13 @@
                                                                             <MudText Style="font-size:medium" Color="Color.Dark"><b>@tic.ticketName</b></MudText>
                                                                         </CardHeaderContent>
                                                                         <CardHeaderActions>
-
-                                                                            <MudMenu Icon="@Icons.Material.Filled.Settings" Size="Size.Small" Color="Color.Default">
-                                                                                <MudMenuItem Href="">Add Coupon</MudMenuItem>
-                                                                                <MudMenuItem Href="">View Coupon</MudMenuItem>
-                                                                            </MudMenu>
-
                                                                         </CardHeaderActions>
                                                                     </MudCardHeader>
                                                                     <MudCardContent>
 
                                                                         <div style="line-height:30px;">
 
-                                                                            <p> <b>Ticket Kind : </b> @tic.ticketKind  - Admits @tic.groupSize</p>
+                                                                            <p> <b>Ticket Kind : </b> @tic.ticketKind - Admits @tic.groupSize</p>
                                                                             <p> <b>Stock : </b>
                                                                                 @if (tic.ticketInStock >= Int32.MaxValue)
                                                                                 {
@@ -336,14 +389,14 @@
                                                                                 {
                                                                                     <span>@tic.ticketInStock.ToString("#,##") in stock</span>
                                                                                 }
-                                                                            
-                                                                                </p>
+
+                                                                            </p>
                                                                             <p><b>Sales Date : </b> @tic.ticketSalesStartDateAndTime?.ToString("dd-MMM-yyyy") to @tic.ticketSalesEndDateAndTime?.ToString("dd-MMM-yyyy")</p>
-                                                                            
+
                                                                             <MudDivider DividerType="DividerType.FullWidth" Class="my-4"></MudDivider>
-                                                                            
+
                                                                             <p> <b>Description : </b> @tic.ticketDescription </p>
-                                                                            
+
                                                                         </div>
                                                                     </MudCardContent>
                                                                     <MudCardActions>
@@ -368,9 +421,9 @@
                                         </MudCardActions>
                                     </MudCard>
 
-                                    <br />
+                                    <br/>
 
-                                    <br />
+                                    <br/>
 
                                 }
                             }
@@ -934,7 +987,6 @@
 
                                         <br />
 
-
                                         <MudDataGrid @ref="settlementDataGrid" T="GetSettlementData" Dense="false" RowsPerPage="50" ServerData="GetSettlementServerReload" Filterable="false" Hover="true" Loading="@_getSettlementProcessing" LoadingProgressColor="Color.Secondary" Striped="true" Bordered="true">
                                             <ToolBarContent>
 
@@ -1040,6 +1092,7 @@
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] IDialogService DialogService { get; set; }
     [Inject] IJSRuntime _jsRuntime { get; set; }
+    [Inject] public HttpClient Http { get; set; }
     
     [Parameter] public string? id { get; set; }
 
@@ -1755,6 +1808,15 @@
         {
             _snackbar.Add("Something went wrong trying to download transactions data, please try again later", Severity.Error);
         }
+    }
+
+
+    private async Task DownloadSelfAdmit(string selfAdmitLink)
+    {
+        var imageBytes = await Http.GetByteArrayAsync(selfAdmitLink);
+        var base64 = Convert.ToBase64String(imageBytes);
+        await _jsRuntime.InvokeVoidAsync("downloadSelfAdmitCode", $"self-admit-{id}", base64);
+        
     }
 
 }

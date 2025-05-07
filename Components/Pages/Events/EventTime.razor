@@ -36,31 +36,24 @@
             <br />
 
             <MudTimeline TimelineOrientation="TimelineOrientation.Horizontal" TimelinePosition="TimelinePosition.Bottom">
-                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                <MudTimelineItem Color="Color.Secondary" Variant="Variant.Outlined">
                     <ItemContent>
-                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Information</b></MudAlert>
+                        <MudAlert Severity="Severity.Normal" Dense="true" ContentAlignment="HorizontalAlignment.Center" NoIcon="false" ><b>Event Details</b></MudAlert>
                     </ItemContent>
                 </MudTimelineItem>
 
-                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Outlined">
                     <ItemContent>
-                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Photo</b></MudAlert>
+                        <MudAlert Severity="Severity.Normal" Dense="true" ContentAlignment="HorizontalAlignment.Center" NoIcon="false"><b>Tickets & Discounts</b></MudAlert>
                     </ItemContent>
                 </MudTimelineItem>
 
-                <MudTimelineItem Color="Color.Primary" Variant="Variant.Filled">
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Outlined">
                     <ItemContent>
-                        <MudAlert Severity="Severity.Info" NoIcon="true"><b>Time</b></MudAlert>
-                    </ItemContent>
-                </MudTimelineItem>
-
-                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
-                    <ItemContent>
-                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Tickets</b></MudAlert>
+                        <MudAlert Severity="Severity.Normal" Dense="true" ContentAlignment="HorizontalAlignment.Center" NoIcon="false"><b>Publish</b></MudAlert>
                     </ItemContent>
                 </MudTimelineItem>
             </MudTimeline>
-
         </MudContainer>
 
         <br />
@@ -221,7 +214,7 @@
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
-        new BreadcrumbItem("Events", href: "/events/dashboard"),
+        new BreadcrumbItem("Events", href: "/events/my-events"),
         new BreadcrumbItem("Create Time", href: null, true)
     };
 

@@ -1,7 +1,7 @@
 ﻿<MudDialog Style="width: 300px">
     <TitleContent>
         <MudText Typo="Typo.h6">
-            <b>QR Code</b>
+            <b>@qrCodeName</b>
         </MudText>
     </TitleContent>
     <DialogContent>
@@ -20,5 +20,6 @@
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     [Parameter] public string qrCodeData { get; set; }
+    [Parameter] public string qrCodeName { get; set; }
     private void Cancel() { MudDialog.Cancel(); }
 }

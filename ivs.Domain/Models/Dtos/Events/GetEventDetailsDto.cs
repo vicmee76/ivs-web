@@ -16,6 +16,9 @@ public class GetEventDetailsDto
     public string eventLongLink { get; set; }
     public string eventShortLink { get; set; }
     public string qrCodeLink { get; set; }
+    public string selfAdmitCode {get; set;}
+    public string selfAdmitLink {get; set;}
+    public string selfAdmitQrCodeLink {get; set;}
     public string updatedAt { get; set; }
     public string webLink { get; set; }
     public string facebookLink { get; set; }
@@ -27,6 +30,7 @@ public class GetEventDetailsDto
     public List<EventType> EventType { get; set; }
     public List<EventTime> EventTime { get; set; }
     public List<Ticket> Tickets { get; set; }
+    public List<DiscountResponseDto> Discounts { get; set; }
 }
 
 public class EventTime

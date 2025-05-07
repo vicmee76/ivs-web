@@ -76,6 +76,7 @@ builder.Services.AddTransient<ITicketService, TicketService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IAttendanceService, AttendanceService>();
 builder.Services.AddTransient<IPaymentService, PaymentService>();
+builder.Services.AddTransient<IDiscountService, DiscountService>();
 
 
 var app = builder.Build();

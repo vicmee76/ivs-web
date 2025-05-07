@@ -247,6 +247,7 @@
                                                 TicketFee = g.Sum(x => x.ticketPrice)
                                             }).OrderBy(x=> x.TicketFee).ToList();
                                     }
+                                    
                                     @foreach (var t in groupedCost)
                                     {
                                         <MudItem xs="7" sm="7" md="7" lg="9" xl="9" xxl="9">
@@ -270,6 +271,15 @@
                                 <MudGrid>
 
                                     <MudItem xs="7" sm="7" md="7" lg="8" xl="8" xxl="8">
+                                        <p style="font-size: medium;">Sub Total</p>
+                                    </MudItem>
+                                    <MudItem xs="5" sm="5" md="5" lg="4" xl="4" xxl="4">
+                                        <div style="font-size: medium; text-align: end">
+                                            @generateCost.FirstOrDefault().totalTicketFee.ToString("C")
+                                        </div>
+                                    </MudItem>
+                                    
+                                    <MudItem xs="7" sm="7" md="7" lg="8" xl="8" xxl="8">
                                         <p style="font-size: medium;">Fees</p>
                                     </MudItem>
                                     <MudItem xs="5" sm="5" md="5" lg="4" xl="4" xxl="4">
@@ -277,7 +287,20 @@
                                             @generateCost.FirstOrDefault().totalServiceFee.ToString("C")
                                         </div>
                                     </MudItem>
-                                    <br/><br/>
+                                   
+                                    @* <MudItem  xs="12" sm="12" md="12" lg="12" xl="12" xxl="12"> *@
+                                    @*     <br/> *@
+                                    @*     @if (isDiscountApplied) *@
+                                    @*     { *@
+                                    @*         <MudAlert Severity="Severity.Success" >@discountVal% Discount code applied</MudAlert> *@
+                                    @*     } *@
+                                    @*     else *@
+                                    @*     { *@
+                                    @*         <MudTextField Label="Apply Discount Code" @bind-Value="discountCode" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.TwoTone.Send" AdornmentColor="Color.Secondary" OnAdornmentClick="@(async () => await ActionApplyDiscount())"  Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/> *@
+                                    @*     } *@
+                                    @*     <br/> *@
+                                    @* </MudItem> *@
+                                    
                                     <MudItem xs="7" sm="7" md="7" lg="8" xl="8" xxl="8">
                                         <p style="font-size: medium; font-weight: bold">Total Cost</p>
                                     </MudItem>
@@ -329,6 +352,7 @@
     [Inject] ITicketService? _ticketService { get; set; }
     [Inject] IOrderService? _orderService { get; set; }
     [Inject] IEventService _eventService { get; set; }
+    [Inject] IDiscountService _discountService { get; set; }
     [Inject] IConfiguration? _config { get; set; }
     [Inject] IPaymentOptionService _paymentOptionService { get; set; }
     [Inject] ISnackbar? _snackbar { get; set; }
@@ -350,6 +374,10 @@
     private bool _saveOrderProcessing { get; set; } = false;
     private bool hasAgreed { get; set; } = false;
     private int quantity { get; set; }
+    private decimal discountVal { get; set; }
+    private string discountCode { get; set; }
+
+    private bool isDiscountApplied { get; set; } = false;
 
 
     protected async override void OnInitialized()
@@ -408,6 +436,10 @@
     private async Task GenerateCost(string ticketId, string eventTimeId, IEnumerable<int> value)
     {
         _generateCostProcessing = true;
+        
+        isDiscountApplied = false;
+        discountCode = String.Empty;
+        
 
         if (value.FirstOrDefault() == 0)
         {
@@ -677,4 +709,35 @@
         _saveOrderProcessing = false;
     }
 
+
+    
+    /// <summary>
+    /// Will reuse
+    /// </summary>
+    private async Task ActionApplyDiscount()
+    {
+        if (!string.IsNullOrWhiteSpace(discountCode))
+        {
+            var res = await _discountService.GetDiscountByCode(discountCode);
+            if (res.result.code == ResponseCodes.ResponseCodeOk)
+            {
+                var discount = (List<DiscountResponseDto>)res.result.data;
+
+                if (discount.Any())
+                {
+                    var discountValue = discount.FirstOrDefault().discountValue;
+                    discountVal = discountValue;
+                    var percentage = discountValue / 100;
+                    var discountedAmount = generateCost.FirstOrDefault().totalTicketFee * percentage;
+                    generateCost.FirstOrDefault().totalTicketFee -= discountedAmount;
+                    generateCost.FirstOrDefault().totalAmount -= discountedAmount;
+
+                   
+                    isDiscountApplied = true;
+                    StateHasChanged();
+                }
+
+            }
+        }
+    }
 }
