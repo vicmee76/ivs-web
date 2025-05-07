@@ -68,8 +68,7 @@ namespace ivs_ui.Components.Data.Services.Orders
         {
             try
             {
-                var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"get-attendance-by-code/{eventId}/{code}", Method.Get, null, headers);
+                var response = await _webService.Call(ApiUrl, $"get-attendance-by-code/{eventId}/{code}", Method.Get, null, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -155,8 +154,7 @@ namespace ivs_ui.Components.Data.Services.Orders
         {
             try
             {
-                var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"admit-attendees/{attendanceId}", Method.Put, null, headers);
+                var response = await _webService.Call(ApiUrl, $"admit-attendees/{attendanceId}", Method.Put, null, null);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 return res;
             }

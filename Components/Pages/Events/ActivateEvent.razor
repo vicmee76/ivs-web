@@ -35,8 +35,6 @@
 
             <MudPaper Elevation="0">
                 <MudToolBar>
-
-                    
                     <MudBreadcrumbs Items="_items" Style="font-size:small; font-weight:bold;" Separator=">"></MudBreadcrumbs>
                     <MudSpacer />
                     @if (!_getEventprocessing)
@@ -64,13 +62,8 @@
 
                 <MudPaper Elevation="0" Style="padding:20px">
 
-                    <MudGrid>
+                    <MudGrid Spacing="5">
                         <MudItem xs="12" sm="12" md="12" lg="4" Style="padding:10px">
-
-                            <MudText Typo="Typo.body1"><b>Banner</b></MudText>
-
-                            <br />
-
                             <div>
                                 <MudImage Fluid="true" Src="@_events.eventImagePath" Height="500" Width="500" Alt="Swedish Farm House" Class="rounded-lg" />
                             </div>
@@ -79,17 +72,17 @@
 
                         <MudItem xs="12" sm="12" md="12" lg="8" Style="padding:10px">
 
-                            <MudText Typo="Typo.body1"><b>Event Details</b></MudText>
-
-                            <br />
+                            @* <MudText Typo="Typo.body1"><b>Event Details</b></MudText> *@
+                            @* *@
+                            @* <br /> *@
 
                             <MudGrid>
 
                                 <MudItem xs="12" sm="12" md="12" lg="9">
 
                                     <div>
-                                        <MudText Typo="Typo.h6"><b>@_events.eventName</b></MudText>
-                                        <br />
+                                        <MudText Typo="Typo.h4"><b>@_events.eventName</b></MudText>
+                                        <br /><br/>
                                         <div>
                                             <MudChip T="string" Size="Size.Medium" Color="Color.Secondary"><b>@_events.eventOption.ToUpper()</b></MudChip>
                                             <MudChip T="string" Size="Size.Medium" Color="Color.Warning"><b>@_events.EventType.FirstOrDefault().name</b></MudChip>
@@ -130,8 +123,34 @@
                                     </div>
 
                                     <br />
-
                                     
+
+                                    <div>
+
+                                        <MudText Typo="Typo.body1"><b>Qr Codes</b></MudText>
+                                        
+                                        <br/>
+                                        
+                                        <div>
+                                            You can share your QR code for others to attend your events.<br/><br/> Use the self admit QR code at your event for users 
+                                            to admit themseleves to your event.
+                                        </div>
+
+                                        <br />
+                                        
+                                        <MudButton Variant="Variant.Outlined" OnClick="@((e) => ViewQrCodeAction("Share QR Code", _events.qrCodeLink))" IconColor="Color.Secondary" EndIcon="@Icons.Material.Filled.QrCode" Color="Color.Dark" Style="text-transform:none">
+                                            Share QR Code
+                                        </MudButton>
+
+                                        &nbsp;&nbsp;
+
+                                        <MudButton Variant="Variant.Outlined" OnClick="@((e) => ViewQrCodeAction("Self Admit Code", _events.selfAdmitQrCodeLink))" IconColor="Color.Secondary" EndIcon="@Icons.Material.Filled.QrCode2" Color="Color.Dark" Style="text-transform:none">
+                                            Self Admit QR Code
+                                        </MudButton>
+                                    </div>
+                                    
+
+                                    <br /><br/><br/>
 
                                     <div>
 
@@ -165,18 +184,45 @@
 
                                     </div>
 
-                                    <br />
+                                    
+                                    <br />  <br/>
 
-                                    <div>
+                                    @* *@
+                                    @* <div> *@
+                                    @*     <MudText Typo="Typo.body1"><b>Discount Codes</b></MudText> *@
+                                    @* *@
+                                    @*     <br /> *@
+                                    @* *@
+                                    @*     @if (!_events.Discounts.Any()) *@
+                                    @*     { *@
+                                    @*         <span> *@
+                                    @*             You dont have any discount. Click <MudLink Href="@discountlink" Variant="Variant.Outlined" Color="Color.Secondary" Style="text-transform:none; cursor:pointer"><b>here</b></MudLink> to create a discount *@
+                                    @*         </span> *@
+                                    @*     } *@
+                                    @*     else *@
+                                    @*     { *@
+                                    @*         <MudGrid Spacing="5"> *@
+                                    @*             @foreach (var t in _events.Discounts) *@
+                                    @*             { *@
+                                    @*                 <MudItem xs="12" sm="12" md="6" lg="4" xl="4" xxl="4"> *@
+                                    @* *@
+                                    @*                     <div style="padding:10px; border:1px dashed black; line-height:30px;"> *@
+                                    @*                         <div><b>Code : </b><b>@t.discountCode</b></div> *@
+                                    @*                         <div><b>Type : </b><span>@t.discountType</span></div> *@
+                                    @*                         <div><b>Percent Value : </b><span>@t.discountValue</span></div> *@
+                                    @*                     </div> *@
+                                    @* *@
+                                    @*                 </MudItem> *@
+                                    @*             } *@
+                                    @*         </MudGrid> *@
+                                    @*     } *@
+                                    @* *@
+                                    @* </div> *@
+                                    @* *@
+                                    @* *@
+                                    @* <br /><br /> *@
 
-                                        <MudButton Variant="Variant.Filled" OnClick="@((e) => ViewQrCodeAction(_events.qrCodeLink))" EndIcon="@Icons.Material.Filled.QrCode" Color="Color.Warning" Style="text-transform:none">
-                                            View QR Code
-                                        </MudButton>
-
-                                    </div>
-
-                                    <br /><br />
-
+                                    
                                     <div>
                                         <MudText Typo="Typo.body1"><b>Event Tickets</b></MudText>
 
@@ -210,9 +256,11 @@
                                         }
 
                                     </div>
+                                    
+                                    
+                                    <br/> <br/>
 
-                                    <br /><br />
-
+                                    
                                     <div>
                                         <MudText Typo="Typo.body1"><b>Social Links</b></MudText>
 
@@ -328,6 +376,7 @@
     private string eventName { get; set; }
     private string timelink { get; set; }
     private string ticketlink { get; set; }
+    private string discountlink { get; set; }
     private bool _getEventprocessing { get; set; } = false;
     private bool _processing { get; set; } = false;
 
@@ -345,6 +394,7 @@
         _getEventprocessing = false;
         timelink = $"/events/create-event-time/{id}";
         ticketlink = $"/events/create-event-tickets/{id}";
+        discountlink = $"/events/create-event-discount/{id}";
         var state = await _authStateProvider.GetAuthenticationStateAsync();
 
         if (!state.User.Identity.IsAuthenticated)
@@ -381,7 +431,7 @@
     }
 
 
-    private async Task ViewQrCodeAction(string qrCode)
+    private async Task ViewQrCodeAction(string CodeName, string qrCode)
     {
         DialogOptions opts = new DialogOptions()
             {
@@ -390,8 +440,8 @@
                 CloseButton = true,
             };
 
-        var parameters = new DialogParameters<QrCodeDialog> { { x => x.qrCodeData, qrCode }};
-        var dialog = await DialogService.ShowAsync<QrCodeDialog>("QR Code", parameters, opts);
+        var parameters = new DialogParameters<QrCodeDialog> { { x => x.qrCodeData, qrCode }, {x => x.qrCodeName, CodeName}};
+        var dialog = await DialogService.ShowAsync<QrCodeDialog>(CodeName, parameters, opts);
 
         var result = await dialog.Result;
         if (!result.Canceled)

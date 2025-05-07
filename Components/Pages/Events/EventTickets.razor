@@ -47,7 +47,7 @@
                     </ItemContent>
                 </MudTimelineItem>
 
-                <MudTimelineItem Color="Color.Default" Variant="Variant.Outlined">
+                <MudTimelineItem Color="Color.Secondary" Variant="Variant.Outlined">
                     <ItemContent>
                         <MudAlert Severity="Severity.Normal" Dense="true" ContentAlignment="HorizontalAlignment.Center" NoIcon="false"><b>Tickets & Discounts</b></MudAlert>
                     </ItemContent>
@@ -293,7 +293,7 @@
                                     else
                                     {
                                         <center>
-                                            <MudButton ButtonType="ButtonType.Button" Href="@discountUrl" FullWidth="false" Style="height:50px; background-color:#56375C; width:130px" Variant="Variant.Filled" Color="Color.Warning" Class="mt-5">
+                                            <MudButton ButtonType="ButtonType.Button" Href="@activateUrl" FullWidth="false" Style="height:50px; background-color:#56375C; width:130px" Variant="Variant.Filled" Color="Color.Warning" Class="mt-5">
                                                 <MudText><b>Continue</b></MudText>
                                             </MudButton>
                                         </center>
@@ -357,6 +357,7 @@
     private string eventName { get; set; }
     private string discountUrl { get; set; }
     private string dasboardUrl { get; set; }
+    private string activateUrl { get; set; }
 
     DateTime? date = DateTime.Today;
     TimeSpan? endTime = new TimeSpan(00, 00, 00);
@@ -421,6 +422,7 @@
             }
             eventName = res.result.data.eventName;
             discountUrl = $"/events/create-event-discount/{id}";
+            activateUrl = $"/events/activate-event/{id}";
         }
         else
         {

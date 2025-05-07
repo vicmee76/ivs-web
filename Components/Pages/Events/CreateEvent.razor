@@ -30,7 +30,7 @@
             <br />
 
             <MudTimeline TimelineOrientation="TimelineOrientation.Horizontal" TimelinePosition="TimelinePosition.Bottom">
-                <MudTimelineItem Color="Color.Default" Variant="Variant.Outlined">
+                <MudTimelineItem Color="Color.Secondary" Variant="Variant.Outlined">
                     <ItemContent>
                         <MudAlert Severity="Severity.Normal" Dense="true" ContentAlignment="HorizontalAlignment.Center" NoIcon="false" ><b>Event Details</b></MudAlert>
                     </ItemContent>
@@ -103,8 +103,6 @@
 
                                     <MudText><b>Event Deatils</b></MudText>
                                     <br />
-
-                                   
                                     
                                     <br/>
                                     
@@ -302,6 +300,7 @@
                     model.adressPin = data.adressPin;
                     model.eventAddress = data.eventAddress;
                     model.eventName = data.eventName;
+                    model.eventCode = data.eventCode;
                     model.eventDescription = data.eventDescription;
                     model.eventState = data.eventState;
                     model.eventOption = data.eventOption;
