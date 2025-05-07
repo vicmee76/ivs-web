@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>ivs_ui</RootNamespace>
     <AssemblyName>$(AssemblyName.Replace(' ', '_'))</AssemblyName>
+    <UserSecretsId>7dae955a-f6fe-4586-9b37-f356f0935fbb</UserSecretsId>
   </PropertyGroup>
 
   

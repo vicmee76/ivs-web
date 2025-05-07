@@ -41,27 +41,21 @@
             <br />
 
             <MudTimeline TimelineOrientation="TimelineOrientation.Horizontal" TimelinePosition="TimelinePosition.Bottom">
-                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                <MudTimelineItem Color="Color.Success" Variant="Variant.Outlined">
                     <ItemContent>
-                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Information</b></MudAlert>
+                        <MudAlert Severity="Severity.Success" Dense="true" ContentAlignment="HorizontalAlignment.Center" NoIcon="false" ><b>Event Details</b></MudAlert>
                     </ItemContent>
                 </MudTimelineItem>
 
-                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                <MudTimelineItem Color="Color.Secondary" Variant="Variant.Outlined">
                     <ItemContent>
-                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Photo</b></MudAlert>
+                        <MudAlert Severity="Severity.Normal" Dense="true" ContentAlignment="HorizontalAlignment.Center" NoIcon="false"><b>Tickets & Discounts</b></MudAlert>
                     </ItemContent>
                 </MudTimelineItem>
 
-                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Outlined">
                     <ItemContent>
-                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Time</b></MudAlert>
-                    </ItemContent>
-                </MudTimelineItem>
-
-                <MudTimelineItem Color="Color.Primary" Variant="Variant.Filled">
-                    <ItemContent>
-                        <MudAlert Severity="Severity.Info" NoIcon="true"><b>Tickets</b></MudAlert>
+                        <MudAlert Severity="Severity.Normal" Dense="true" ContentAlignment="HorizontalAlignment.Center" NoIcon="false"><b>Publish</b></MudAlert>
                     </ItemContent>
                 </MudTimelineItem>
             </MudTimeline>
@@ -130,7 +124,7 @@
 
                                 <br />
 
-                                <MudTextField T="string" Label="Ticket Description*" @bind-Value="model.ticketDescription" For="@(() => model.ticketDescription)" HelperText="Enter ticket description" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Placeholder="Enter description here" Lines="5" />
+                                <MudTextField T="string" Label="Ticket Description" @bind-Value="model.ticketDescription" For="@(() => model.ticketDescription)" HelperText="Enter ticket description" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Placeholder="Enter description here" Lines="5" />
 
 
                                 <MudText><b>Ticket payment kind *</b></MudText>
@@ -162,12 +156,20 @@
 
                                 <br /><br />
 
-                                <MudNumericField HideSpinButtons="true" HelperText="Enter ticket in stock" @bind-Value="amount" Required="true" ErrorText="Amount is required" Disabled="@_isFreeTicket" Label="Ticket amount" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Step=".2M" />
 
-                                <br />
+                                <MudGrid>
 
-                                <MudNumericField HelperText="Select the size for groups" @bind-Value="model.groupSize" Disabled="@_isGroupTicket" For="@(() => model.groupSize)" Label="Select the size for groups" Variant="Variant.Outlined" Min="1" Max="20" HelperTextOnFocus="true" Clearable="true" />
+                                    <MudItem xs="12" sm="12" md="12" lg="6">
+                                        <MudNumericField HideSpinButtons="true" HelperText="Enter ticket in stock" @bind-Value="amount" Required="true" ErrorText="Amount is required" Disabled="@_isFreeTicket" Label="Ticket amount" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Step=".2M" />
+                                    </MudItem>
 
+                                    <MudItem xs="12" sm="12" md="12" lg="6">
+                                        <MudNumericField HelperText="Select the size for groups" @bind-Value="model.groupSize" Disabled="@_isGroupTicket" For="@(() => model.groupSize)" Label="Select the size for groups" Variant="Variant.Outlined" Min="1" Max="20" HelperTextOnFocus="true" Clearable="true" />
+                                    </MudItem>
+
+                                </MudGrid>
+
+                                
                                 <br />
 
                                 <MudGrid>
@@ -189,14 +191,14 @@
 
                                 <MudGrid>
                                     <MudItem xs="12" sm="12" md="12" lg="6">
-                                        <MudDatePicker PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Editable="false" Clearable="true" @bind-Date="model.ticketSalesStartDateAndTime" Label="Ticket Start date" />
+                                        <MudDatePicker PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Editable="false" Clearable="true" @bind-Date="model.ticketSalesStartDateAndTime" Label="Ticket sales start date" />
                                     </MudItem>
                                     <MudItem xs="12" sm="12" md="12" lg="6">
                                         <MudTimePicker Label="Select time" PickerVariant="PickerVariant.Dialog" Required="true" Editable="false" AmPm="true" @bind-Time="startTime" />
                                     </MudItem>
 
                                     <MudItem xs="12" sm="12" md="12" lg="6">
-                                        <MudDatePicker PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Editable="false" Clearable="true" @bind-Date="model.ticketSalesEndDateAndTime" Label="Ticket end date" />
+                                        <MudDatePicker PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Editable="false" Clearable="true" @bind-Date="model.ticketSalesEndDateAndTime" Label="Ticket sales end date" />
                                     </MudItem>
                                     <MudItem xs="12" sm="12" md="12" lg="6">
                                         <MudTimePicker Label="Select time" PickerVariant="PickerVariant.Dialog" Required="true" Editable="false" AmPm="true" @bind-Time="endTime" />
@@ -224,7 +226,7 @@
                                     }
                                 </MudButton>
                                 &nbsp;
-                                <MudButton ButtonType="ButtonType.Reset" OnClick="ActionReset" FullWidth="false" Style="height:50px; width:130px" Variant="Variant.Filled" Color="Color.Warning" Class="mt-5">
+                                <MudButton ButtonType="ButtonType.Reset" OnClick="ActionReset" FullWidth="false" Style="height:50px; width:130px" Variant="Variant.Filled" Color="Color.Transparent" Class="mt-5">
 
                                     <MudText><b>Reset</b></MudText>
 
@@ -292,7 +294,7 @@
                                     {
                                         <center>
                                             <MudButton ButtonType="ButtonType.Button" Href="@activateUrl" FullWidth="false" Style="height:50px; background-color:#56375C; width:130px" Variant="Variant.Filled" Color="Color.Warning" Class="mt-5">
-                                                <MudText><b>All Done</b></MudText>
+                                                <MudText><b>Continue</b></MudText>
                                             </MudButton>
                                         </center>
                                     }
@@ -353,8 +355,9 @@
     AuthUser authUser = new AuthUser();
     private string userId { get; set; }
     private string eventName { get; set; }
-    private string activateUrl { get; set; }
+    private string discountUrl { get; set; }
     private string dasboardUrl { get; set; }
+    private string activateUrl { get; set; }
 
     DateTime? date = DateTime.Today;
     TimeSpan? endTime = new TimeSpan(00, 00, 00);
@@ -375,7 +378,7 @@
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
     {
-        new BreadcrumbItem("Dashboard", href: "/events/dashboard"),
+        new BreadcrumbItem("Events", href: "/events/my-events"),
         new BreadcrumbItem("Create Tickets", href: null, disabled: true)
     };
 
@@ -418,6 +421,7 @@
                 _snackbar.Add("Event is already active", Severity.Info);
             }
             eventName = res.result.data.eventName;
+            discountUrl = $"/events/create-event-discount/{id}";
             activateUrl = $"/events/activate-event/{id}";
         }
         else

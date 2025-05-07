@@ -18,4 +18,6 @@ public class Helpers
     public static readonly string PendingStatus = "PENDING";
     public static readonly string GroupTicket = "GROUP";
     public static readonly string SingleTicket = "SINGLE";
+    public static readonly string FlatDiscount = "FLAT";
+    public static readonly string PercentageDiscount = "PERCENTAGE";
 }

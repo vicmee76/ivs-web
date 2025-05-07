@@ -30,27 +30,21 @@
             <br />
 
             <MudTimeline TimelineOrientation="TimelineOrientation.Horizontal" TimelinePosition="TimelinePosition.Bottom">
-                <MudTimelineItem Color="Color.Primary" Variant="Variant.Filled">
+                <MudTimelineItem Color="Color.Secondary" Variant="Variant.Outlined">
                     <ItemContent>
-                        <MudAlert Severity="Severity.Info" NoIcon="true"><b>Information</b></MudAlert>
+                        <MudAlert Severity="Severity.Normal" Dense="true" ContentAlignment="HorizontalAlignment.Center" NoIcon="false" ><b>Event Details</b></MudAlert>
                     </ItemContent>
                 </MudTimelineItem>
 
-                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Outlined">
                     <ItemContent>
-                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Photo</b></MudAlert>
+                        <MudAlert Severity="Severity.Normal" Dense="true" ContentAlignment="HorizontalAlignment.Center" NoIcon="false"><b>Tickets & Discounts</b></MudAlert>
                     </ItemContent>
                 </MudTimelineItem>
 
-                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
+                <MudTimelineItem Color="Color.Default" Variant="Variant.Outlined">
                     <ItemContent>
-                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Time</b></MudAlert>
-                    </ItemContent>
-                </MudTimelineItem>
-
-                <MudTimelineItem Color="Color.Default" Variant="Variant.Filled">
-                    <ItemContent>
-                        <MudAlert Severity="Severity.Normal" NoIcon="true"><b>Tickets</b></MudAlert>
+                        <MudAlert Severity="Severity.Normal" Dense="true" ContentAlignment="HorizontalAlignment.Center" NoIcon="false"><b>Publish</b></MudAlert>
                     </ItemContent>
                 </MudTimelineItem>
             </MudTimeline>
@@ -109,8 +103,6 @@
 
                                     <MudText><b>Event Deatils</b></MudText>
                                     <br />
-
-                                   
                                     
                                     <br/>
                                     
@@ -169,7 +161,7 @@
                                                     {
                                                         <MudItem xs="6" sm="6" md="6" lg="3">
                                                             <div id="eventTypesDiv">
-                                                                <MudRadio Value="@(com._id.ToString())" Color="Color.Primary"><small><b>@(com.name)</b></small></MudRadio>
+                                                                <MudRadio Value="@(com._id)" Color="Color.Primary"><small><b>@(com.name)</b></small></MudRadio>
                                                             </div>
                                                         </MudItem>
                                                     }
@@ -308,6 +300,7 @@
                     model.adressPin = data.adressPin;
                     model.eventAddress = data.eventAddress;
                     model.eventName = data.eventName;
+                    model.eventCode = data.eventCode;
                     model.eventDescription = data.eventDescription;
                     model.eventState = data.eventState;
                     model.eventOption = data.eventOption;

@@ -6,6 +6,7 @@ public class GetEventMetaDataDto
     public string? eventName { get; set; }
     public string? eventDescription { get; set; }
     public string? eventAddress { get; set; }
+    public string? eventCode { get; set; }
     public string? eventState { get; set; }
     public string? adressPin { get; set; }
     public string? status { get; set; }
