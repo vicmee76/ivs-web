@@ -75,11 +75,11 @@
                 @* </MudItem> *@
                 
                 <MudItem xs="12" sm="12" md="12" lg="3">
-                    <MudDatePicker Label="Event start date" @bind-Date="_startDate"/>
+                    <MudDatePicker IsDateDisabledFunc="@((DateTime dt) =>(dt.Date < DateTime.Today))" Label="Event start date" @bind-Date="_startDate" />
                 </MudItem>
                 
                 <MudItem xs="12" sm="12" md="12" lg="3">
-                    <MudDatePicker Label="Event end date" @bind-Date="_endDate"/>
+                    <MudDatePicker IsDateDisabledFunc="@((DateTime dt) =>(dt.Date < DateTime.Today))" Label="Event end date" @bind-Date="_endDate" />
                 </MudItem>
 
                 <MudItem xs="12" sm="12" md="12" lg="3">
@@ -239,11 +239,6 @@
             if (res.result.code == ResponseCodes.ResponseCodeOk)
             {
                 eventName = res.result.data.eventName;
-
-                if (res?.result?.data.status == Helpers.Active)
-                {
-                    _snackbar.Add("Event is already active", Severity.Info);
-                }
             }
             else
             {

@@ -191,14 +191,14 @@
 
                                 <MudGrid>
                                     <MudItem xs="12" sm="12" md="12" lg="6">
-                                        <MudDatePicker PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Editable="false" Clearable="true" @bind-Date="model.ticketSalesStartDateAndTime" Label="Ticket sales start date" />
+                                        <MudDatePicker PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt) => (dt.Date < DateTime.Today || dt.Date > Convert.ToDateTime(_eventTimes.LastOrDefault().endDateAndTime).Date) )" Editable="false" Clearable="true" @bind-Date="model.ticketSalesStartDateAndTime" Label="Ticket sales start date" />
                                     </MudItem>
                                     <MudItem xs="12" sm="12" md="12" lg="6">
                                         <MudTimePicker Label="Select time" PickerVariant="PickerVariant.Dialog" Required="true" Editable="false" AmPm="true" @bind-Time="startTime" />
                                     </MudItem>
 
                                     <MudItem xs="12" sm="12" md="12" lg="6">
-                                        <MudDatePicker PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today))" Editable="false" Clearable="true" @bind-Date="model.ticketSalesEndDateAndTime" Label="Ticket sales end date" />
+                                        <MudDatePicker PickerVariant="PickerVariant.Dialog" IsDateDisabledFunc="@((DateTime dt)=>(dt.Date < DateTime.Today || dt.Date > Convert.ToDateTime(_eventTimes.LastOrDefault().endDateAndTime).Date))" Editable="false" Clearable="true" @bind-Date="model.ticketSalesEndDateAndTime" Label="Ticket sales end date" />
                                     </MudItem>
                                     <MudItem xs="12" sm="12" md="12" lg="6">
                                         <MudTimePicker Label="Select time" PickerVariant="PickerVariant.Dialog" Required="true" Editable="false" AmPm="true" @bind-Time="endTime" />
@@ -418,7 +418,6 @@
             {
                 _isActive = true;
                 dasboardUrl = "/events/dashboard";
-                _snackbar.Add("Event is already active", Severity.Info);
             }
             eventName = res.result.data.eventName;
             discountUrl = $"/events/create-event-discount/{id}";
@@ -559,8 +558,8 @@
         model.ticketDescription = item.ticketDescription;
         model.groupSize = item.groupSize;
         amount = item.ticketAmount.numberDecimal;
-        model.ticketSalesStartDateAndTime = item.ticketSalesStartDateAndTime?.Date;
-        model.ticketSalesEndDateAndTime = item.ticketSalesEndDateAndTime?.Date;
+        model.ticketSalesStartDateAndTime = Convert.ToDateTime(item.ticketSalesStartDateAndTime).Date;
+        model.ticketSalesEndDateAndTime = Convert.ToDateTime(item.ticketSalesEndDateAndTime).Date;
         startTime = item.ticketSalesStartDateAndTime?.TimeOfDay;
         endTime = item.ticketSalesEndDateAndTime?.TimeOfDay;
 
