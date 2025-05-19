@@ -114,7 +114,7 @@
                                         </div>
                                     </MudCardContent>
                                     <MudCardActions Class="pa-5">
-                                        @if (e.paymentOptions.Any() && e.paymentOptions.Count > 1)
+                                        @if ( e.paymentOptions != null && e.paymentOptions.Count > 1)
                                         {
                                             var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
 
