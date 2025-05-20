@@ -71,13 +71,13 @@
                                                     <br />
                                                     @if ( e.paymentOptions != null && e.paymentOptions.Count > 1)
                                                     {
-                                                        var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+                                                        var amount = e.eventTickets.Any() ? e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal : 0;
 
                                                         <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Secondary"><b>@amount.ToString("C") +</b></MudText>
                                                     }
                                                     else
                                                     {
-                                                        var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+                                                        var amount = e.eventTickets.Any() ? e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal : 0;
 
                                                         <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Secondary"><b>@amount.ToString("C")</b></MudText>
                                                     }
@@ -149,13 +149,13 @@
                                         <br />
                                         @if ( e.paymentOptions != null && e.paymentOptions.Count > 1)
                                         {
-                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+                                            var amount = e.eventTickets.Any() ? e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal : 0;
 
                                             <div>  <MudIcon Icon="@Icons.Material.Filled.Payments" Size="Size.Small" Color="Color.Secondary" /> @amount.ToString("C") </div>
                                         }
                                         else
                                         {
-                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+                                            var amount = e.eventTickets.Any() ? e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal : 0;
 
                                             <div> <MudIcon Icon="@Icons.Material.Filled.Payments" Size="Size.Small" Color="Color.Secondary" /> @amount.ToString("C") </div>
                                         }
@@ -296,13 +296,13 @@
                                         <MudCardActions Class="pa-5">
                                             @if (e.paymentOptions != null && e.paymentOptions.Count > 1)
                                             {
-                                                var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+                                                var amount = e.eventTickets.Any() ? e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal : 0;
 
                                                 <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C") +</b></MudText>
                                             }
                                             else
                                             {
-                                                var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+                                                var amount = e.eventTickets.Any() ? e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal : 0;
 
                                                 <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
                                             }
@@ -436,13 +436,13 @@
                                         <MudCardActions Class="pa-5">
                                             @if ( e.paymentOptions != null && e.paymentOptions.Count > 1)
                                             {
-                                                var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+                                                var amount = e.eventTickets.Any() ? e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal : 0;
 
                                                 <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C") +</b></MudText>
                                             }
                                             else
                                             {
-                                                var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+                                                var amount = e.eventTickets.Any() ? e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal : 0;
 
                                                 <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
                                             }
@@ -576,13 +576,13 @@
                                         <MudCardActions Class="pa-5">
                                             @if ( e.paymentOptions != null && e.paymentOptions.Count > 1)
                                             {
-                                                var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+                                                var amount = e.eventTickets.Any() ? e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal : 0;
 
                                                 <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C") +</b></MudText>
                                             }
                                             else
                                             {
-                                                var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+                                                var amount = e.eventTickets.Any() ? e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal : 0;
 
                                                 <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
                                             }
