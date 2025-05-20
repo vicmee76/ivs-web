@@ -116,13 +116,13 @@
                                     <MudCardActions Class="pa-5">
                                         @if ( e.paymentOptions != null && e.paymentOptions.Count > 1)
                                         {
-                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+                                            var amount = e.eventTickets.Any() ? e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal : 0;
 
                                             <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C") +</b></MudText>
                                         }
                                         else
                                         {
-                                            var amount = e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal;
+                                            var amount = e.eventTickets.Any() ? e.eventTickets.FirstOrDefault().ticketAmount.numberDecimal : 0;
 
                                             <MudText Typo="Typo.body2" Style="font-size:14px" Color="Color.Dark"><b>@amount.ToString("C")</b></MudText>
                                         }
