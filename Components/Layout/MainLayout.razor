@@ -1,4 +1,5 @@
-﻿@inherits LayoutComponentBase
+﻿
+@inherits LayoutComponentBase
 
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -6,52 +7,52 @@
 <MudPopoverProvider />
 
 <style>
-  .mud-expand-panel, .muudstrap-navbar-expand{
-     color: var(--mud-palette-appbar-text);
-     background-color: var(--mud-palette-appbar-background);
-  }
- .muudstrap-navbar .mud-button{
+    .mud-expand-panel, .muudstrap-navbar-expand{
+    color: var(--mud-palette-appbar-text);
+    background-color: var(--mud-palette-appbar-background);
+    }
+    .muudstrap-navbar .mud-button{
     text-transform: none;
- }
- .muudstrap-navbar .mud-expand-panel-header{
+    }
+    .muudstrap-navbar .mud-expand-panel-header{
     padding:0px;
     width: 100%;
     height: 100%;
     flex:none;
- }
+    }
 
- 
+
 </style>
 
 <MudLayout Style="background-color:white">
-   
+
     <MudAppBar Fixed="true"  Elevation="0" Style="padding:12px" Dense="true" DisableGutters="true" Class="muudstrap-navbar">
-        
+
         <AuthorizeView>
-             <Authorized>
+            <Authorized>
                 <MudIconButton Icon="@Icons.Material.Filled.Notes" Color="Color.Dark" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
             </Authorized>
         </AuthorizeView>
 
 
         <div class="d-none d-md-flex align-center px-12" style="width:100%">
-           
+
             <AuthorizeView>
                 <NotAuthorized>
                     <MudImage Src="/images/logos/ivs3.png" Alt="Ivs Logo" Elevation="0" Height="44" Class=" text-center" />
                     <div id="logoTitle" class="ml-1"><a href="/home">ivs</a></div>
                 </NotAuthorized>
             </AuthorizeView>
-           
+
             <MudSpacer  />
             <MudButton Color="Color.Inherit" Href="/home" Class="ma-5" Style="font-weight:bold;">Home</MudButton>
             <MudButton Color="Color.Inherit" Href="/events/discovery" Class="ma-5" Style="font-weight:bold;">Events</MudButton>
             @* <MudButton Color="Color.Inherit" Href="/events/about" Class="ma-5" Style="font-weight:bold;">About</MudButton> *@
             <MudButton Color="Color.Inherit" Href="/events/retrieve-tickets" Class="ma-5" Style="font-weight:bold;">Retrieve ticket</MudButton>
-            
-          
 
-        <MudSpacer />
+
+
+            <MudSpacer />
             <AuthorizeView>
                 <NotAuthorized>
                     <MudButton Variant="Variant.Text" Href="/accounts/login" Style="font-weight:700;" Class="ma-5">Login</MudButton>
@@ -62,40 +63,40 @@
                 </Authorized>
             </AuthorizeView>
 
-    </div>
+        </div>
 
-     <AuthorizeView>
+        <AuthorizeView>
             <NotAuthorized>
                 <div class="d-flex d-md-none relative mud-width-full mud-height-full">
-                <MudExpansionPanels Square="true"  Elevation="0" Class="absolute mud-width-full mud-height-full" Style="top:0px;left:0; background-color:Inherit;">
+                    <MudExpansionPanels Square="true"  Elevation="0" Class="absolute mud-width-full mud-height-full" Style="top:0px;left:0; background-color:Inherit;">
                         <MudExpansionPanel HideIcon="true" IsExpanded="@_isExpanded"  Class="mud-width-full mud-height-full">
-                        <TitleContent>
-                            <div class="d-flex justify-space-between mud-width-full align-center">
+                            <TitleContent>
+                                <div class="d-flex justify-space-between mud-width-full align-center">
 
-                                        <div class="d-flex align-center">
-                                            <MudImage Src="/images/logos/ivs3.png" Alt="Ivs Logo" Elevation="0" Height="44" Class=" text-center" />
+                                    <div class="d-flex align-center">
+                                        <MudImage Src="/images/logos/ivs3.png" Alt="Ivs Logo" Elevation="0" Height="44" Class=" text-center" />
                                         <a href="/"> <div id="logoTitle" class="ml-1">ivs</div> </a>
-                                        </div>
+                                    </div>
 
                                     <MudIconButton Icon="@Icons.Material.Filled.Notes" Color="Color.Dark" Edge="Edge.Start" OnClick="@((e) => UnAuthorizedDrawerToggle())" />
 
-                            </div>
-                        </TitleContent>
-                    </MudExpansionPanel>
-                </MudExpansionPanels>
-            </div>
+                                </div>
+                            </TitleContent>
+                        </MudExpansionPanel>
+                    </MudExpansionPanels>
+                </div>
             </NotAuthorized>
 
-        <Authorized>
-               <div class="d-flex d-md-none relative mud-width-full mud-height-full">
-                <div class="d-flex align-center">
-                    <MudImage Src="/images/logos/ivs3.png" Alt="Ivs Logo" Elevation="0" Height="44" Class=" text-center" />
-                    <a href="/"> <div id="logoTitle" class="ml-1">ivs</div> </a>
+            <Authorized>
+                <div class="d-flex d-md-none relative mud-width-full mud-height-full">
+                    <div class="d-flex align-center">
+                        <MudImage Src="/images/logos/ivs3.png" Alt="Ivs Logo" Elevation="0" Height="44" Class=" text-center" />
+                        <a href="/"> <div id="logoTitle" class="ml-1">ivs</div> </a>
+                    </div>
                 </div>
-                </div>
-        </Authorized>
-    </AuthorizeView>
-</MudAppBar>
+            </Authorized>
+        </AuthorizeView>
+    </MudAppBar>
 
     <AuthorizeView>
         <Authorized>
@@ -133,13 +134,13 @@
 
         <NotAuthorized>
             <MudMainContent Class="" >
-                    @Body
+                @Body
             </MudMainContent>
         </NotAuthorized>
     </AuthorizeView>
-    
+
     <br/><br/>
-    
+
 </MudLayout>
 
 @code {
@@ -156,7 +157,7 @@
 
     protected async override void OnInitialized()
     {
-        
+
     }
 
     private void DrawerToggle()
@@ -186,20 +187,20 @@
             },
             Typography = new Typography()
             {
-                H6 = new H6()
+                H6 = new H6Typography()
                 {
                     FontFamily = new[] { "system-ui", "-apple-system", "Segoe UI", "Roboto ", "Helvetica Neue", "Arial", "Noto Sans", "Liberation Sans", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" },
                     FontSize = "1.25rem",
-                    FontWeight = 400,
-                    LineHeight = 1.7,
+                    FontWeight = "400",
+                    LineHeight = "1.7",
                     LetterSpacing = "normal"
                 },
-                Button = new Button()
+                Button = new ButtonTypography()
                 {
                     FontFamily = new[] { "system-ui", "-apple-system", "Segoe UI", "Roboto ", "Helvetica Neue", "Arial", "Noto Sans", "Liberation Sans", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" },
                     FontSize = "1rem",
-                    FontWeight = 400,
-                    LineHeight = 1.5,
+                    FontWeight = "400",
+                    LineHeight = "1.5",
                     LetterSpacing = "normal"
                 }
             }

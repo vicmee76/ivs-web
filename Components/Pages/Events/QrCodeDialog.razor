@@ -18,7 +18,7 @@
 </MudDialog>
 
 @code {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
     [Parameter] public string qrCodeData { get; set; }
     [Parameter] public string qrCodeName { get; set; }
     private void Cancel() { MudDialog.Cancel(); }
