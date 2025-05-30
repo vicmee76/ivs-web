@@ -95,6 +95,21 @@ if (!app.Environment.IsDevelopment())
 }
 
 
+// Redirect ivs.social to www.ivs.social
+app.Use(async (context, next) =>
+{
+    var host = context.Request.Host.Host;
+    if (host.Equals("ivs.social", StringComparison.OrdinalIgnoreCase))
+    {
+        var newUrl = $"https://www.ivs.social{context.Request.Path}{context.Request.QueryString}";
+        context.Response.Redirect(newUrl, permanent: true);
+        return;
+    }
+
+    await next();
+});
+
+
 app.UseAuthentication();
 app.UseAuthorization();
 
