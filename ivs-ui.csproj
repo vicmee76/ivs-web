@@ -46,6 +46,11 @@
 
   
   <ItemGroup>
+    <Content Remove="wwwroot\google4c300759b4c80043.html" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
     <_ContentIncludedByDefault Remove="ivs.Domain\bin\Debug\net8.0\ivs.Domain.deps.json" />
     <_ContentIncludedByDefault Remove="ivs.Domain\obj\Debug\net8.0\ivs.Domain.sourcelink.json" />
     <_ContentIncludedByDefault Remove="ivs.Domain\obj\ivs.Domain.csproj.nuget.dgspec.json" />
