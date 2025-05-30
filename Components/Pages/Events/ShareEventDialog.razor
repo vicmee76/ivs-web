@@ -44,7 +44,7 @@
 </MudDialog>
 
 @code {
-   [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
    [Parameter] public string eventLink { get; set; }
    [Parameter] public string eventName { get; set; }
    [Inject] IJSRuntime? js { get; set; }
