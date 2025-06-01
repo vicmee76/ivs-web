@@ -41,12 +41,9 @@
                     </MudSelect>
 
                     <br/>
-                    @* <MudCheckBox Name="terms-and-conditions" T="bool" @bind-Value="model.hasAgreed" Size="Size.Small" Required="true" For="@(() => model.hasAgreed)" RequiredError="You must agree" Label="Agree to our "> *@
-                    @*     <MudLink Target="_blank" Href="/terms-and-conditions"> &nbsp; Terms & Conditions</MudLink>, *@
-                    @*     <MudLink Target="_blank" Href="/privacy-policy"> Privacy Policy</MudLink>, *@
-                    @*     <MudLink Target="_blank" Href="/service-agreement"> Service Agreement</MudLink>, *@
-                    @*     <MudLink Target="_blank" Href="/refund-policy"> Refund Policy</MudLink> *@
-                    @* </MudCheckBox> *@
+                    <MudCheckBox Name="terms-and-conditions" T="bool" @bind-Value="model.hasAgreed" Required="true" For="@(() => model.hasAgreed)" RequiredError="You must agree" Label="Yes, I'm okay with the ">
+                        <MudLink Target="_blank" Href="/legal-stuff"> &nbsp; legal documents</MudLink>
+                    </MudCheckBox>
 
                     <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#56375C" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
                         @if (_processing)
