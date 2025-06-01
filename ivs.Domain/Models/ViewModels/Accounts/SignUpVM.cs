@@ -24,6 +24,6 @@ public class SignUpVM
 
     public string? role { get; set; } = "User";
 
-    // [Range(typeof(bool), "true", "true", ErrorMessage = "You must agree to the terms and conditions")]
-    // public bool hasAgreed { get; set; }
+    //[Range(typeof(bool), "true", "true", ErrorMessage = "You must agree to the terms and conditions")]
+    public bool hasAgreed { get; set; } = true;
 }
