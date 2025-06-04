@@ -53,76 +53,90 @@
                <br/><br/>
                
                <div>
+                  
+                 
 
-                  @if (_userAttendance.paginatedResults != null)
-                  {
-                     
-                     <MudGrid Spacing="5">
-                        <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
-                           <div>
-                              <MudText Typo="Typo.body2">Name : <b>@_userAttendance.paginatedResults.FirstOrDefault().firstName @_userAttendance.paginatedResults.FirstOrDefault().lastName </b></MudText>
-                              <br/>
-                              <MudText Typo="Typo.body2">Email : <b>@_userAttendance.paginatedResults.FirstOrDefault().email</b></MudText>
-                              <br/>
-                              <MudText Typo="Typo.body2">Phone : <b>@_userAttendance.paginatedResults.FirstOrDefault().phoneNumber</b></MudText>
-                           </div>
-                        </MudItem>
-                        <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
-                           <div>Ticket</div>
-                           <MudDivider DividerType="DividerType.FullWidth" Class="my-6"/>
+                     @if (_userAttendance.paginatedResults != null)
+                     {
 
-                           <MudGrid>
-                              @foreach (var t in _userAttendance.paginatedResults)
-                              {
-                                 <MudItem xs="7" sm="7" md="7" lg="9" xl="9" xxl="9">
-                                    <div style="line-height: 23px; font-size: small">
-                                       <b>@t.ticketQuantity X @t.ticketDetails.FirstOrDefault().ticketName</b>
-                                    </div>
-                                 </MudItem>
-                                 <MudItem xs="5" sm="5" md="5" lg="3" xl="3" xxl="3">
-                                    <div style="font-size: small; text-align: end">
-                                       <b>@Convert.ToDecimal(t.totalTicketFee).ToString("C")</b>
-                                    </div>
-                                 </MudItem>
+                        <MudGrid Spacing="5">
+                           <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+                              <div>
+                                 
+                                 @if (@_userAttendance.paginatedResults.FirstOrDefault().isActive || _isAdmitted)
+                                 {
+                                    <MudText Typo="Typo.h5" Color="Color.Success"> <b> ADMITTED </b></MudText>
+                                    <br/>
+                                 }
+                                 else
+                                 {
+                                    <MudText Typo="Typo.h5" Color="Color.Default"> <b> PENDING </b></MudText>
+                                    <br/>
+                                 }
+
+                                 <MudText Typo="Typo.body2">Name : <b>@_userAttendance.paginatedResults.FirstOrDefault().firstName @_userAttendance.paginatedResults.FirstOrDefault().lastName </b></MudText>
                                  <br/>
+                                 <MudText Typo="Typo.body2">Email : <b>@_userAttendance.paginatedResults.FirstOrDefault().email</b></MudText>
+                                 <br/>
+                                 <MudText Typo="Typo.body2">Phone : <b>@_userAttendance.paginatedResults.FirstOrDefault().phoneNumber</b></MudText>
+                              </div>
+                           </MudItem>
+                           <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+                              <div>Ticket</div>
+                              <MudDivider DividerType="DividerType.FullWidth" Class="my-6"/>
+
+                              <MudGrid>
+                                 @foreach (var t in _userAttendance.paginatedResults)
+                                 {
+                                    <MudItem xs="7" sm="7" md="7" lg="9" xl="9" xxl="9">
+                                       <div style="line-height: 23px; font-size: small">
+                                          <b>@t.ticketQuantity X @t.ticketDetails.FirstOrDefault().ticketName</b>
+                                       </div>
+                                    </MudItem>
+                                    <MudItem xs="5" sm="5" md="5" lg="3" xl="3" xxl="3">
+                                       <div style="font-size: small; text-align: end">
+                                          <b>@Convert.ToDecimal(t.totalTicketFee).ToString("C")</b>
+                                       </div>
+                                    </MudItem>
+                                    <br/>
+                                 }
+                              </MudGrid>
+
+                              <MudDivider DividerType="DividerType.FullWidth" Class="my-6"/>
+                           </MudItem>
+                        </MudGrid>
+
+                        <br/>
+
+                        <div>
+                           <MudButton Variant="Variant.Filled" OnClick="@(async () => await ActionAdmitUser(_userAttendance.paginatedResults.FirstOrDefault()._id))" FullWidth="false" Style="background-color:#56375C; height: 50px; width: 150px" Color="Color.Secondary">
+                              @if (_getTicketProcessing)
+                              {
+                                 <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                                 <MudText Class="ms-2">Processing</MudText>
                               }
-                           </MudGrid>
+                              else
+                              {
+                                 <MudText><b>Admit</b></MudText>
+                              }
+                           </MudButton>
 
-                           <MudDivider DividerType="DividerType.FullWidth" Class="my-6"/>
-                        </MudItem>
-                     </MudGrid>
-                     
-                     <br/>
-                     
-                     <div>
-                        <MudButton Variant="Variant.Filled" OnClick="@(async () => await ActionAdmitUser(_userAttendance.paginatedResults.FirstOrDefault()._id))" FullWidth="false" Style="background-color:#56375C; height: 50px; width: 150px" Color="Color.Secondary">
-                           @if (_getTicketProcessing)
-                           {
-                              <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                              <MudText Class="ms-2">Processing</MudText>
-                           }
-                           else
-                           {
-                              <MudText><b>Admit</b></MudText>
-                           }
-                        </MudButton>
-
-                     </div>
-                  }
-                  else
-                  {
-                     <div>
-
-                        <div style="text-align:center;">
-                           <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="50" Class="rounded-lg"/>
-                           <br/>
-                           <MudText Typo="Typo.body2"> <b>No user found </b></MudText>
-                           <MudText Typo="Typo.caption"> This user was not found for this event.</MudText>
                         </div>
-                     </div>
-                  }
+                     }
+                     else
+                     {
+                        <div>
+
+                           <div style="text-align:center;">
+                              <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="50" Class="rounded-lg"/>
+                              <br/>
+                              <MudText Typo="Typo.body2"> <b>No user found </b></MudText>
+                              <MudText Typo="Typo.caption"> This user was not found for this event.</MudText>
+                           </div>
+                        </div>
+                     }
                   
-                  
+
                </div>
                
                
@@ -155,6 +169,7 @@
    private bool _admitProcessing { get; set; }
    private bool _getTicketProcessing { get; set; }
    private bool _isTicketFound { get; set; }
+   private bool _isAdmitted { get; set; } = true;
    
    private string ticketCode { get; set; }
    
@@ -225,17 +240,16 @@
          if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true)
          {
             _snackbar.Add(res.result.message, Severity.Success);
-            ActionClearTicketCode();
+            _isAdmitted = true;
+            //ActionClearTicketCode();
          }
          else
          {
             _snackbar.Add(res.result.message, Severity.Error);
          }
       }
+      StateHasChanged();
    }
-   
-   
-   
 
    private void ActionClearTicketCode()
    {
