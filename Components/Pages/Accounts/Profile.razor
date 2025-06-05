@@ -116,24 +116,6 @@
                                                         <MudItem xs="12" sm="12" md="12" lg="4" xl="4" xxl="4">
                                                             <MudTextField @bind-Value="accountNumber" OnClearButtonClick="ResetAccountNumber" Margin="Margin.Dense" Clearable="true" Label="Account Number" Variant="Variant.Outlined"></MudTextField>
                                                             <br />
-
-                                                            @if (_accountVerificationProcessing)
-                                                            {
-                                                                <MudProgressCircular Size="Size.Small" Indeterminate="true" />
-                                                                <span Class="ms-2">Processing</span>
-                                                            }
-                                                            else
-                                                            {
-                                                                if (!string.IsNullOrWhiteSpace(accountName))
-                                                                {
-
-                                                                    <div style="background-color:#ecebff; padding:10px">
-                                                                        <MudText><b>@accountName</b></MudText>
-                                                                    </div>
-                                                                }
-                                                            }
-                                                               
-                                                           
                                                         </MudItem>
 
                                                         <MudItem xs="12" sm="12" md="12" lg="5" xl="5" xxl="5">
@@ -146,14 +128,45 @@
                                                                              Label="Select Banks"
                                                                              Placeholder="Search your bank banks"
                                                                              Clearable="true" 
-                                                                             OpenChanged="VerifyAccountNumber"
                                                                              OnClearButtonClick="ResetAccountNumber"
-                                                                             />
+                                                            />
                                                         </MudItem>
 
 
                                                         <MudItem xs="12" sm="12" md="12" lg="3" xl="3" xxl="3">
-                                                            <MudButton FullWidth="true" Disabled="@_createSettlementActionProcessing" OnClick="@(async () => await ActionCreateSettlementAccount())" Style="background:#54385b" Variant="Variant.Filled" Size="Size.Large" Color="Color.Primary">
+                                                            <MudButton FullWidth="true" Disabled="@_createSettlementActionProcessing" OnClick="@(async () => await VerifyAccountNumber())" Style="background:#54385b" Variant="Variant.Filled" Size="Size.Large" Color="Color.Dark">
+                                                                @if (_createSettlementActionProcessing)
+                                                                {
+                                                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                                                    <MudText Class="ms-2">Processing</MudText>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <MudText>Verify Account</MudText>
+                                                                }
+                                                            </MudButton>
+                                                        </MudItem>
+                                                    </MudGrid>
+                                                    
+                                                 
+
+                                                    @if (_accountVerificationProcessing)
+                                                    {
+                                                        <MudProgressCircular Size="Size.Small" Indeterminate="true" />
+                                                        <span Class="ms-2">Processing</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        if (!string.IsNullOrWhiteSpace(accountName))
+                                                        {
+
+                                                            <div style="background-color:#f5f5f5; padding:10px">
+                                                                <MudText><b>@accountName</b></MudText>
+                                                            </div>
+                                                            
+                                                            <br/>
+                                                            
+                                                            <MudButton FullWidth="false" Disabled="@_createSettlementActionProcessing" OnClick="@(async () => await ActionCreateSettlementAccount())" Style="background:#54385b" Variant="Variant.Filled" Size="Size.Large" Color="Color.Primary">
                                                                 @if (_createSettlementActionProcessing)
                                                                 {
                                                                     <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
@@ -164,8 +177,9 @@
                                                                     <MudText>Add Account</MudText>
                                                                 }
                                                             </MudButton>
-                                                        </MudItem>
-                                                    </MudGrid>
+                                                        }
+                                                        
+                                                    }
 
                                                 </div>
 
