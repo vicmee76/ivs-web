@@ -226,9 +226,13 @@
                   else
                   {
                      <div style="text-align:center;">
-                        <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="130" Class="rounded-lg"/>
                         <br/>
-                        <MudText Typo="Typo.h5"> <b>You haven't created an event yet!</b></MudText>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <MudImage Src="images/backgrounds/no-data.png" Alt="No data image" Elevation="0" Height="70" Class="rounded-lg"/>
+                        <br/>
+                        <MudText Typo="Typo.body1"> <b>You haven't created an event yet!</b></MudText>
                         <br>
                         <MudText> Once you create an event you will be able to visualize and track them.</MudText>
                      </div>
@@ -277,6 +281,7 @@
       if (!state.User.Identity.IsAuthenticated)
       {
          _navigate.NavigateTo("/accounts/login");
+         _processing = false;
       }
       else
       {
@@ -284,8 +289,9 @@
          userId = auth.Id;
          fullname = auth.SentenceCaseFullName;
          await GetEvents();
+         _processing = false;
       }
-      _processing = false;
+     
       StateHasChanged();
    }
 
@@ -313,7 +319,10 @@
    {
       var res2 = await _eventService.GetEventByUser(userId);
       var events  = (List<GetEventByUserDataDto>)res2.result.data ?? [];
-      _eventsDto = events.FirstOrDefault().record;
+      if (events.Count > 0)
+      {
+         _eventsDto = events.FirstOrDefault().record;
+      }
    }
 
    private async Task DeleteEventAction(string id)
