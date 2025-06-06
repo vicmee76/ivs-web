@@ -71,157 +71,160 @@
                     }
                     else
                     {
-                        <EditForm Model="@model" OnValidSubmit="ActionCreateEvent">
+                        @if (_eventTypes != null)
+                        {
+                            <EditForm Model="@model" OnValidSubmit="ActionCreateEvent">
 
-                            <MudGrid>
-                                <MudItem xs="12" sm="12" md="8" lg="12">
-                                    <DataAnnotationsValidator />
+                                <MudGrid>
+                                    <MudItem xs="12" sm="12" md="8" lg="12">
+                                        <DataAnnotationsValidator/>
 
-                                    <MudText><b>Select the event option</b></MudText>
-                                    <br />
+                                        <MudText><b>Select the event option</b></MudText>
+                                        <br/>
 
-                                    <MudRadioGroup @bind-Value="@model.eventOption" For="@(() => model.eventOption)">
+                                        <MudRadioGroup @bind-Value="@model.eventOption" For="@(() => model.eventOption)">
 
-                                        <MudGrid Style="text-align:center">
+                                            <MudGrid Style="text-align:center">
 
-                                            <MudItem xs="6" sm="6" md="6" lg="6">
-                                                <div id="public-event-div">
-                                                    <MudRadio Value="@("Public")" Color="Color.Primary"><b>@("Public Event")</b></MudRadio>
-                                                </div>
+                                                <MudItem xs="6" sm="6" md="6" lg="6">
+                                                    <div id="public-event-div">
+                                                        <MudRadio Value="@("Public")" Color="Color.Primary"><b>@("Public Event")</b></MudRadio>
+                                                    </div>
+                                                </MudItem>
+
+                                                <MudItem xs="6" sm="6" md="6" lg="6">
+                                                    <div id="private-event-div">
+                                                        <MudRadio Value="@("Private")" Color="Color.Primary"><b>@("Private Event")</b></MudRadio>
+                                                    </div>
+                                                </MudItem>
+                                            </MudGrid>
+
+                                        </MudRadioGroup>
+
+                                        <br/><br/>
+
+                                        <MudText><b>Event Deatils</b></MudText>
+                                        <br/>
+
+                                        <br/>
+
+                                        <MudGrid>
+                                            <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+                                                <br/><br/>
+                                                <MudTextField Label="Event Name*" HelperText="Enter event name" @bind-Value="model.eventName" For="@(() => model.eventName)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
                                             </MudItem>
 
-                                            <MudItem xs="6" sm="6" md="6" lg="6">
-                                                <div id="private-event-div">
-                                                    <MudRadio Value="@("Private")" Color="Color.Primary"><b>@("Private Event")</b></MudRadio>
-                                                </div>
+                                            <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
+                                                <MudChip T="string" Color="Color.Primary">@urlTag</MudChip>
+                                                <MudTextField Label="Custom url tag" TextChanged="@(async () => await MakeCustomUrl())" HelperText="Custom url tag" @bind-Value="model.eventCode" For="@(() => model.eventCode)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
                                             </MudItem>
                                         </MudGrid>
 
-                                    </MudRadioGroup>
+                                        <MudTextField T="string" Label="Event Description*" @bind-Value="model.eventDescription" For="@(() => model.eventDescription)" HelperText="Enter event description" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Placeholder="Enter description here" Lines="5"/>
 
-                                    <br /><br />
+                                        <MudGrid Spacing="5">
+                                            <MudItem xs="12" sm="6" md="6" lg="6">
+                                                <MudTextField Label="Event Address*" HelperText="Enter event address" @bind-Value="model.eventAddress" For="@(() => model.eventAddress)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
+                                            </MudItem>
 
-                                    <MudText><b>Event Deatils</b></MudText>
-                                    <br />
-                                    
-                                    <br/>
-                                    
-                                    <MudGrid>
-                                        <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
-                                            <br/><br/>
-                                            <MudTextField Label="Event Name*" HelperText="Enter event name" @bind-Value="model.eventName" For="@(() => model.eventName)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
-                                        </MudItem>
-                                        
-                                        <MudItem  xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
-                                            <MudChip T="string" Color="Color.Primary">@urlTag</MudChip>
-                                            <MudTextField Label="Custom url tag" TextChanged="@(async () => await MakeCustomUrl())" HelperText="Custom url tag" @bind-Value="model.eventCode" For="@(() => model.eventCode)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
-                                        </MudItem>
-                                    </MudGrid>
-                                    
-                                    <MudTextField T="string" Label="Event Description*" @bind-Value="model.eventDescription" For="@(() => model.eventDescription)" HelperText="Enter event description" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Placeholder="Enter description here" Lines="5" />
+                                            <MudItem xs="12" sm="6" md="6" lg="6">
+                                                <MudSelect T="string" Label="Event State*" HelperText="Select state" Variant="Variant.Outlined" @bind-Value="model.eventState" For="@(() => model.eventState)" HelperTextOnFocus="true" Clearable="true">
+                                                    @if (allState != null)
+                                                    {
+                                                        foreach (var com in allState)
+                                                        {
+                                                            <MudSelectItem Value="@(com)">@(com)</MudSelectItem>
+                                                        }
+                                                    }
+                                                </MudSelect>
+                                            </MudItem>
+                                        </MudGrid>
 
-                                    <MudGrid Spacing="5">
-                                        <MudItem  xs="12" sm="6" md="6" lg="6">
-                                            <MudTextField Label="Event Address*" HelperText="Enter event address" @bind-Value="model.eventAddress" For="@(() => model.eventAddress)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-                                        </MudItem>
+                                        <MudTextField Label="Event Google pin link" HelperText="Search for the event address on Google map, copy the link and paste it here" @bind-Value="model.adressPin" For="@(() => model.adressPin)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
 
-                                        <MudItem  xs="12" sm="6" md="6" lg="6">
-                                            <MudSelect T="string" Label="Event State*" HelperText="Select state" Variant="Variant.Outlined" @bind-Value="model.eventState" For="@(() => model.eventState)" HelperTextOnFocus="true" Clearable="true">
-                                                @if (allState != null)
+                                        <br/>
+
+                                        <br/>
+
+                                        <MudText><b>Select the event category *</b></MudText>
+                                        <br/>
+                                        @if (!_getEventprocessing)
+                                        {
+                                            <MudSkeleton Animation="Animation.Wave" Width="40%"/>
+                                            <MudSkeleton Animation="Animation.Wave" Width="60%"/>
+                                        }
+                                        else
+                                        {
+                                            <MudRadioGroup @bind-Value="@model.eventTypeId" For="@(() => model.eventTypeId)">
+                                                @if (_eventTypes != null)
                                                 {
-                                                    foreach (var com in allState)
-                                                    {
-                                                        <MudSelectItem Value="@(com)">@(com)</MudSelectItem>
-                                                    }
+                                                    <MudGrid>
+                                                        @foreach (var com in _eventTypes)
+                                                        {
+                                                            <MudItem xs="6" sm="6" md="6" lg="3">
+                                                                <div id="eventTypesDiv">
+                                                                    <MudRadio Value="@(com._id)" Color="Color.Primary"><small><b>@(com.name)</b></small></MudRadio>
+                                                                </div>
+                                                            </MudItem>
+                                                        }
+                                                    </MudGrid>
                                                 }
-                                            </MudSelect>
-                                        </MudItem>
-                                    </MudGrid>
+                                            </MudRadioGroup>
+                                        }
 
-                                    <MudTextField Label="Event Google pin link" HelperText="Search for the event address on Google map, copy the link and paste it here" @bind-Value="model.adressPin" For="@(() => model.adressPin)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
+                                        <br/><br/><br/>
 
-                                    <br />
+                                        <MudText><b>Social Links</b></MudText>
+                                        <br/>
 
-                                    <br />
+                                        <MudGrid Spacing="5">
 
-                                    <MudText><b>Select the event category *</b></MudText>
-                                    <br />
-                                    @if (!_getEventprocessing)
+                                            <MudItem xs="12" sm="6" md="6" lg="3" xl="3" xxl="3">
+                                                <MudTextField Label="Web link" HelperText="Enter your social web link here" @bind-Value="model.webLink" For="@(() => model.webLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
+                                            </MudItem>
+
+                                            <MudItem xs="12" sm="6" md="6" lg="3" xl="3" xxl="3">
+                                                <MudTextField Label="Facbook link" HelperText="Enter facebook link if you have any" @bind-Value="model.facebookLink" For="@(() => model.facebookLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
+                                            </MudItem>
+
+                                            <MudItem xs="12" sm="6" md="6" lg="3" xl="3" xxl="3">
+                                                <MudTextField Label="Instagram Link" HelperText="Enter instagram link if you have any" @bind-Value="model.instagramLink" For="@(() => model.instagramLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
+                                            </MudItem>
+
+                                            <MudItem xs="12" sm="6" md="6" lg="3" xl="3" xxl="3">
+                                                <MudTextField Label="Twitter link" HelperText="Enter twitter link if you have any" @bind-Value="model.twitterLink" For="@(() => model.twitterLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
+                                            </MudItem>
+                                        </MudGrid>
+
+                                    </MudItem>
+
+                                    <br>
+
+                                </MudGrid>
+
+                                <MudButton ButtonType="ButtonType.Submit" FullWidth="false" Disabled="@_processing" Style="height:50px; background-color:#56375C; width:200px" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
+                                    @if (_processing)
                                     {
-                                        <MudSkeleton Animation="Animation.Wave" Width="40%" />
-                                        <MudSkeleton Animation="Animation.Wave" Width="60%" />
+                                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                                        <MudText Class="ms-2">Processing</MudText>
                                     }
                                     else
                                     {
-                                        <MudRadioGroup @bind-Value="@model.eventTypeId" For="@(() => model.eventTypeId)">
-                                            @if (_eventTypes != null)
-                                            {
-                                                <MudGrid>
-                                                    @foreach (var com in _eventTypes)
-                                                    {
-                                                        <MudItem xs="6" sm="6" md="6" lg="3">
-                                                            <div id="eventTypesDiv">
-                                                                <MudRadio Value="@(com._id)" Color="Color.Primary"><small><b>@(com.name)</b></small></MudRadio>
-                                                            </div>
-                                                        </MudItem>
-                                                    }
-                                                </MudGrid>
-                                            }
-                                        </MudRadioGroup>
+                                        if (isUpdate)
+                                        {
+                                            <MudText><b>Update & Continue</b></MudText>
+                                        }
+                                        else
+                                        {
+                                            <MudText><b>Save & Continue</b></MudText>
+                                        }
                                     }
+                                </MudButton>
 
-                                    <br /><br /><br />
+                                <br/><br/><br/>
 
-                                    <MudText><b>Social Links</b></MudText>
-                                    <br />
-
-                                    <MudGrid Spacing="5">
-
-                                        <MudItem  xs="12" sm="6" md="6" lg="3" xl="3" xxl="3">
-                                            <MudTextField Label="Web link" HelperText="Enter your social web link here" @bind-Value="model.webLink" For="@(() => model.webLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-                                        </MudItem>
-
-                                        <MudItem  xs="12" sm="6" md="6" lg="3" xl="3" xxl="3">
-                                            <MudTextField Label="Facbook link" HelperText="Enter facebook link if you have any" @bind-Value="model.facebookLink" For="@(() => model.facebookLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-                                        </MudItem>
-
-                                         <MudItem  xs="12" sm="6" md="6" lg="3" xl="3" xxl="3">
-                                            <MudTextField Label="Instagram Link" HelperText="Enter instagram link if you have any" @bind-Value="model.instagramLink" For="@(() => model.instagramLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-                                        </MudItem>
-
-                                        <MudItem  xs="12" sm="6" md="6" lg="3" xl="3" xxl="3">
-                                            <MudTextField Label="Twitter link" HelperText="Enter twitter link if you have any" @bind-Value="model.twitterLink" For="@(() => model.twitterLink)" Margin="Margin.Dense" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
-                                        </MudItem>
-                                    </MudGrid>
-
-                                </MudItem>
-
-                                <br>
-
-                            </MudGrid>
-
-                            <MudButton ButtonType="ButtonType.Submit" FullWidth="false" Disabled="@_processing" Style="height:50px; background-color:#56375C; width:200px" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
-                                @if (_processing)
-                                {
-                                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                                    <MudText Class="ms-2">Processing</MudText>
-                                }
-                                else
-                                {
-                                    if (isUpdate)
-                                    {
-                                        <MudText><b>Update & Continue</b></MudText>
-                                    }
-                                    else
-                                    {
-                                        <MudText><b>Save & Continue</b></MudText>
-                                    }
-                                }
-                            </MudButton>
-
-                            <br /><br /><br />
-
-                        </EditForm>
+                            </EditForm>
+                        }
                     }
 
                 </MudCardContent>
