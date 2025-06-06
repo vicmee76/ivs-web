@@ -28,11 +28,11 @@
         <MudGrid>
             <MudItem xs="12" sm="12" md="7" lg="7" xl="7" xxl="7">
                 <div>
-                    <MudTextField T="string" Margin="Margin.Dense" @bind-Value="@eventNameString" Label="Enter an event name" Variant="Variant.Outlined" />
+                    <MudTextField T="string" @bind-Value="@eventNameString" Label="Enter an event name" Variant="Variant.Outlined" />
                 </div>
             </MudItem>
             <MudItem xs="6" sm="6" md="3" lg="3" xl="3" xxl="3">
-                <MudSelect T="string" Label="Event Types*" Margin="Margin.Dense" HelperText="Select types" Variant="Variant.Outlined" @bind-Value="@eventTypeString" HelperTextOnFocus="true" Clearable="true">
+                <MudSelect T="string" Label="Event Types*"  HelperText="Select types" Variant="Variant.Outlined" @bind-Value="@eventTypeString" HelperTextOnFocus="true" Clearable="true">
                     @if (_eventTypes != null)
                     {
                         foreach (var com in _eventTypes)
