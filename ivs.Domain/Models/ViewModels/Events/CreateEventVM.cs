@@ -11,7 +11,7 @@ public class CreateEventVM
     public string? eventName { get; set; }
     
     [MinLength(2, ErrorMessage = "Should be more than 2 characters.")]
-    [RegularExpression(@"^[a-zA-Z0-9-]+$", ErrorMessage = "Only letters, numbers, and '-' are allowed.")]
+    [RegularExpression(@"^[a-zA-Z0-9-_]+$", ErrorMessage = "Only letters, numbers, and '-', '_' are allowed.")]
     public string? eventCode { get; set; }
     
     [Required(ErrorMessage = "Event description is required")]
