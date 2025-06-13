@@ -116,7 +116,7 @@
 
                                             <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
                                                 <MudChip T="string" Color="Color.Primary">@urlTag</MudChip>
-                                                <MudTextField Label="Custom url tag" TextChanged="@(async () => await MakeCustomUrl())" HelperText="Custom url tag" @bind-Value="model.eventCode" For="@(() => model.eventCode)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
+                                                <MudTextField Label="Custom url tag" TextChanged="@(async () => await MakeCustomUrl())" HelperText="Custom url tag" Disabled="@canUpdate"  @bind-Value="model.eventCode" For="@(() => model.eventCode)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
                                             </MudItem>
                                         </MudGrid>
 
@@ -124,11 +124,11 @@
 
                                         <MudGrid Spacing="5">
                                             <MudItem xs="12" sm="6" md="6" lg="6">
-                                                <MudTextField Label="Event Address*" HelperText="Enter event address" @bind-Value="model.eventAddress" For="@(() => model.eventAddress)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
+                                                <MudTextField Label="Event Address*" HelperText="Enter event address" Disabled="@canUpdate"  @bind-Value="model.eventAddress" For="@(() => model.eventAddress)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
                                             </MudItem>
 
                                             <MudItem xs="12" sm="6" md="6" lg="6">
-                                                <MudSelect T="string" Label="Event State*" HelperText="Select state" Variant="Variant.Outlined" @bind-Value="model.eventState" For="@(() => model.eventState)" HelperTextOnFocus="true" Clearable="true">
+                                                <MudSelect T="string" Label="Event State*" Disabled="@canUpdate" HelperText="Select state" Variant="Variant.Outlined" @bind-Value="model.eventState" For="@(() => model.eventState)" HelperTextOnFocus="true" Clearable="true">
                                                     @if (allState != null)
                                                     {
                                                         foreach (var com in allState)
@@ -140,7 +140,7 @@
                                             </MudItem>
                                         </MudGrid>
 
-                                        <MudTextField Label="Event Google pin link" HelperText="Search for the event address on Google map, copy the link and paste it here" @bind-Value="model.adressPin" For="@(() => model.adressPin)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
+                                        <MudTextField Label="Event Google pin link" Disabled="@canUpdate" HelperText="Search for the event address on Google map, copy the link and paste it here" @bind-Value="model.adressPin" For="@(() => model.adressPin)" Margin="Margin.None" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
 
                                         <br/>
 
@@ -258,6 +258,7 @@
     private string userId { get; set; }
     private string urlTag { get; set; } = "https://www.ivs.social/ivs/";
     private bool isUpdate { get; set; } = false;
+    private bool canUpdate { get; set; } = false;
     private bool _processing { get; set; }
     private List<string> allState { get; set; }
     private bool _getEventprocessing { get; set; } = false;
@@ -309,6 +310,7 @@
                     model.twitterLink = data.twitterLink;
                     model.instagramLink = data.instagramLink;
                     isUpdate = true;
+                    canUpdate = data.Status == Helpers.Active;
                 }
                 else
                 {
