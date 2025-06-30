@@ -21,9 +21,6 @@ namespace ivs_ui.Components.Data.Services.Tickets
                 var headers = await webService.GetAuthorizationHeaders();
                 var response = await webService.Call(ApiUrl, "create-event-tickets", Method.Post, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
-                var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCodeCreated)
-                    return res;
                 return res;
             }
             catch (Exception ex)
@@ -47,8 +44,6 @@ namespace ivs_ui.Components.Data.Services.Tickets
                 var response = await webService.Call(ApiUrl, $"delete-event-with-tickets/{ticketId}", Method.Delete, null, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCodeOk)
-                    return res;
                 return res;
             }
             catch (Exception ex)
@@ -97,9 +92,6 @@ namespace ivs_ui.Components.Data.Services.Tickets
                 var headers = await webService.GetAuthorizationHeaders();
                 var response = await webService.Call(ApiUrl, $"update-event-with-tickets/{ticketIdd}", Method.Put, model, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
-                var content = res.result;
-                if (content?.code != ResponseCodes.ResponseCodeOk)
-                    return res;
                 return res;
             }
             catch (Exception ex)

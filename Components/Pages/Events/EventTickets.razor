@@ -226,7 +226,7 @@
                                     }
                                 </MudButton>
                                 &nbsp;
-                                <MudButton ButtonType="ButtonType.Reset" OnClick="ActionReset" FullWidth="false" Style="height:50px; width:130px" Variant="Variant.Filled" Color="Color.Transparent" Class="mt-5">
+                                <MudButton ButtonType="ButtonType.Reset" OnClick="ActionReset" FullWidth="false" Style="height:50px; width:130px" Variant="Variant.Filled" Color="Color.Secondary" Class="mt-5">
 
                                     <MudText><b>Reset</b></MudText>
 
@@ -272,8 +272,16 @@
                                                             </div>
                                                         </CardHeaderContent>
                                                         <CardHeaderActions>
-                                                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Title="Edit ticket" OnClick="@( () =>  ActionEditTicket(item))" Color="Color.Default" aria-label="edit"></MudIconButton>
-                                                            <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Title="Delete ticket" OnClick="@(async () => await ActionDeleteTicket(item._id))" Color="Color.Error" aria-label="delete"></MudIconButton>
+                                                            
+                                                            @{
+                                                                var isSpecialTicket = _specialPaymentOptions.Any(x => x._id == item._id);
+                                                            }
+
+                                                            @if (!isSpecialTicket)
+                                                            {
+                                                                <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Title="Edit ticket" OnClick="@(() => ActionEditTicket(item))" Color="Color.Default" aria-label="edit"></MudIconButton>
+                                                                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Title="Delete ticket" OnClick="@(async () => await ActionDeleteTicket(item._id))" Color="Color.Error" aria-label="delete"></MudIconButton>
+                                                            }
                                                         </CardHeaderActions>
                                                     </MudCardHeader>
                                                 </MudCard>
@@ -349,6 +357,7 @@
     private IEnumerable<string> timeOptions { get; set; } = new HashSet<string>() {};
 
     IEnumerable<GetPaymentOptionsDto> _paymentOptions = new List<GetPaymentOptionsDto>();
+    IEnumerable<GetPaymentOptionsDto> _specialPaymentOptions = new List<GetPaymentOptionsDto>();
     IEnumerable<TicketDto> _ticketList = new List<TicketDto>();
     IEnumerable<EventTimeDto> _eventTimes = new List<EventTimeDto>();
 
@@ -430,6 +439,12 @@
 
         var res2 = await _paymentOptionService.GetAllPaymentOptions();
         _paymentOptions = res2.result.data ?? new List<GetPaymentOptionsDto>();
+        if (_paymentOptions.Any())
+        {
+            _specialPaymentOptions = _paymentOptions.Where(x => x.isSpecial);
+            _paymentOptions = _paymentOptions.Where(x => !x.isSpecial);
+        }
+       
 
         var res3 = await _ticketService.GetTicketByEventId(id);
         _ticketList = res3.result.data ?? new List<TicketDto>();
