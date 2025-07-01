@@ -59,6 +59,21 @@
                     <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Href="/accounts/signup" Style="font-weight:700;" Class="ma-3">Sign up</MudButton>
                 </NotAuthorized>
                 <Authorized>
+                    <MudText> <MudButton Variant="Variant.Text" Href="/user/profile" Style="font-weight:700; color: #55385c" Class="ma-2">@fullname</MudButton></MudText>
+                    <MudMenu>
+                        <ActivatorContent>
+                            <MudAvatar>
+                                <MudAvatar Color="Color.Secondary"><small><b>@nameInitials</b></small></MudAvatar>
+                            </MudAvatar>
+                        </ActivatorContent>
+                        <ChildContent>
+                            <MudMenuItem Label="Account" Href="/user/profile"/>
+                            <MudMenuItem Label="My Events" Href="/events/my-events"/>
+                            <MudMenuItem Label="Create Event" Href="/events/create-event"/>
+                        </ChildContent>
+                    </MudMenu>
+
+
                     <MudButton Variant="Variant.Text" OnClick="ActionLogOut" Style="font-weight:700; color:#D2654C" Class="ma-3">Log out</MudButton>
                 </Authorized>
             </AuthorizeView>
@@ -153,12 +168,26 @@
     private bool _UnAuthorizedDrawerOpen = false;
     private bool _isExpanded = false;
 
+    AuthUser authUser = new AuthUser();
 
-
+    private string fullname { get; set; }
+    private string nameInitials { get; set; }
+    private string userId { get; set; }
+    
     protected async override void OnInitialized()
     {
-
+        var state = await _authStateProvider.GetAuthenticationStateAsync();
+        if (state.User.Identity.IsAuthenticated)
+        {
+            var auth = await authUser.GetAuthUserAsync(state);
+            fullname = auth.SentenceCaseFullName;
+            nameInitials = auth.NameInitials;
+        }
+        StateHasChanged();
     }
+
+
+   
 
     private void DrawerToggle()
     {

@@ -251,21 +251,21 @@
 
                                 <div>
 
-                                    <MudDataGrid @ref="revenueDataGrid" T="Order" Dense="false" RowsPerPage="10"  ServerData="GetRevenueServerReload" Filterable="false" Hover="true" Loading="@_processing" LoadingProgressColor="Color.Secondary" Striped="true" Bordered="true">
+                                    <MudDataGrid @ref="revenueDataGrid" T="Order" Dense="true" RowsPerPage="10"  ServerData="GetRevenueServerReload" Filterable="false" Hover="false" Loading="@_processing" LoadingProgressColor="Color.Secondary" Striped="true" Bordered="false">
                                         <ToolBarContent>
                                             
-                                            <MudIconButton Icon="@Icons.Material.Filled.ReplayCircleFilled" Color="Color.Dark" Size="Size.Large" OnClick="@(() => OnReload())"></MudIconButton>
+                                            <MudIconButton Icon="@Icons.Material.Filled.ReplayCircleFilled" Color="Color.Secondary" Size="Size.Large" OnClick="@(() => OnReload())"></MudIconButton>
 
                                             <MudSpacer/>
                                             <MudTextField T="string" ValueChanged="@(s => OnSalesSearch(s))" Placeholder="Search with code, name, email, phone, tran id, tran ref " Adornment="Adornment.Start"
-                                                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                                                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Small" Class="mt-0"></MudTextField>
 
                                         </ToolBarContent>
                                         <Columns>
 
                                             <TemplateColumn Title="" Sortable="false" Filterable="false">
                                                 <CellTemplate Context="ctx">
-                                                    <MudIconButton Icon="@Icons.Material.Filled.ArrowDropDownCircle" OnClick="@(() => ShowDetails(ctx.Item.orderId))" Title="View event" Size="Size.Medium" Color="Color.Dark" />
+                                                    <MudIconButton Icon="@Icons.Material.Filled.ArrowDropDownCircle" OnClick="@(() => ShowDetails(ctx.Item.orderId))" Title="View event" Size="Size.Small" Color="Color.Secondary" />
                                                 </CellTemplate>
                                             </TemplateColumn>
 
@@ -344,36 +344,40 @@
 
                                           @if (context.Item.open)
                                           {
-                                              <br/>
-                                              <MudText> <b>@context.Item.paymentGateWayTransactionRef</b></MudText>
-                                              
-                                              <br/>
-                                              
-                                                <MudTable Items="@context.Item.attendees" Context="AttendanceContext" Elevation="0" Dense="false" Hover="false" Bordered="false" Striped="false">
-                                                    <HeaderContent>
-                                                        <MudTh>Code</MudTh>
-                                                        <MudTh>First Name</MudTh>
-                                                        <MudTh>Last Name</MudTh>
-                                                        <MudTh>Email</MudTh>
-                                                        <MudTh>Phone</MudTh>
-                                                        <MudTh>Ticket</MudTh>
-                                                        <MudTh>Ticket Amount</MudTh>
+                                              <div style="padding: 20px;">
+                                                  <br/>
+                                                  <MudText Style="color: #55385c"> <b>@context.Item.paymentGateWayTransactionRef</b></MudText>
 
-                                                    </HeaderContent>
+                                                 <br/>
 
-                                                    <RowTemplate>
-                                                        <MudTd DataLabel="First Name"><small>@AttendanceContext.code</small></MudTd>
-                                                        <MudTd DataLabel="First Name"><small>@AttendanceContext.firstName</small></MudTd>
-                                                        <MudTd DataLabel="Last Name"><small>@AttendanceContext.lastName</small></MudTd>
-                                                        <MudTd DataLabel="Email"><small>@AttendanceContext.email</small></MudTd>
-                                                        <MudTd DataLabel="Phone"><small>@AttendanceContext.phoneNumber</small></MudTd>
-                                                        <MudTd DataLabel="Ticket Kind"><small>@AttendanceContext.ticketDetails.ticketName - @AttendanceContext.ticketQuantity </small></MudTd>
-                                                        <MudTd DataLabel="Ticket Fee"><small>@AttendanceContext.totalTicketFee.ToString("C")</small></MudTd>
-                                                    </RowTemplate>
-                                                    
-                                              </MudTable>
+                                                  <MudTable Items="@context.Item.attendees" Context="AttendanceContext" Elevation="0" Dense="false"  Hover="false" Bordered="false" Striped="false">
+                                                      <HeaderContent>
+                                                          <MudTh>Code</MudTh>
+                                                          <MudTh>Event</MudTh>
+                                                          <MudTh>First Name</MudTh>
+                                                          <MudTh>Last Name</MudTh>
+                                                          <MudTh>Email</MudTh>
+                                                          <MudTh>Phone</MudTh>
+                                                          <MudTh>Ticket</MudTh>
+                                                          <MudTh>Ticket Amount</MudTh>
 
-                                              <br/>
+                                                      </HeaderContent>
+
+                                                      <RowTemplate>
+                                                          <MudTd DataLabel="Code"><small>@AttendanceContext.code</small></MudTd>
+                                                          <MudTd DataLabel="Event"><small>@AttendanceContext.eventDetails.eventName</small></MudTd>
+                                                          <MudTd DataLabel="First Name"><small>@AttendanceContext.firstName</small></MudTd>
+                                                          <MudTd DataLabel="Last Name"><small>@AttendanceContext.lastName</small></MudTd>
+                                                          <MudTd DataLabel="Email"><small>@AttendanceContext.email</small></MudTd>
+                                                          <MudTd DataLabel="Phone"><small>@AttendanceContext.phoneNumber</small></MudTd>
+                                                          <MudTd DataLabel="Ticket Kind"><small>@AttendanceContext.ticketDetails.ticketName - @AttendanceContext.ticketQuantity </small></MudTd>
+                                                          <MudTd DataLabel="Ticket Fee"><small>@AttendanceContext.totalTicketFee.ToString("C")</small></MudTd>
+                                                      </RowTemplate>
+
+                                                  </MudTable>
+
+                                                  <br/>
+                                              </div>
                                           }
                                         </ChildRowContent>
                                         

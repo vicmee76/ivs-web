@@ -25,7 +25,7 @@ namespace ivs_ui.Components.Data.Services.Payment
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
-                    return res;
+                    return new ResponseObject();
 
                 var myJsonResponse = content?.data?.ToString().Trim().TrimStart('{').TrimEnd('}');
                 res.result.data = JsonConvert.DeserializeObject<List<GetPaymentOptionsDto>>(myJsonResponse);
@@ -54,7 +54,8 @@ namespace ivs_ui.Components.Data.Services.Payment
                     maxUsers = model.maxUsers,
                     metaAmountPercentage = model.metaAmountPercentage.ToString(),
                     amount = model.amount.ToString(),
-                    capAmount = model.capAmount
+                    capAmount = model.capAmount,
+                    isSpecial = model.isSpecial,
                 };
 
                 var headers = await _webService.GetAuthorizationHeaders();
@@ -85,7 +86,8 @@ namespace ivs_ui.Components.Data.Services.Payment
                     maxUsers = model.maxUsers,
                     metaAmountPercentage = model.metaAmountPercentage.ToString(),
                     amount = model.amount.ToString(),
-                    capAmount = model.capAmount
+                    capAmount = model.capAmount,
+                    isSpecial = model.isSpecial
                 };
 
                 var headers = await _webService.GetAuthorizationHeaders();

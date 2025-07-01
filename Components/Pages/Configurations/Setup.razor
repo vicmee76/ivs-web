@@ -329,20 +329,20 @@
                                         <EditForm Model="@paymentOptionModel" OnValidSubmit="ActionPaymentOptions">
                                             <DataAnnotationsValidator />
 
+                                            <MudSwitch @bind-Value="paymentOptionModel.isSpecial" Label="Special Ticket" Margin="Margin.Dense" LabelPlacement="Placement.Right" Color="Color.Success" For="@(() => paymentOptionModel.isSpecial)"  />
+                                    <br/>
                                             <MudTextField InputType="InputType.Text" Label="Name" Margin="Margin.Dense" HelperText="Enter payment option name" @bind-Value="paymentOptionModel.name" For="@(() => paymentOptionModel.name)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
 
                                             <MudTextField InputType="InputType.Text" Label="Description" Margin="Margin.Dense" HelperText="Enter description" @bind-Value="paymentOptionModel.description" For="@(() => paymentOptionModel.description)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true" />
 
                                             <MudNumericField HideSpinButtons="true" HelperText="Enter amount" Margin="Margin.Dense" @bind-Value="paymentOptionModel.amount" For="@(() => paymentOptionModel.amount)" Required="true" ErrorText="Amount is required" Label="Amount" HelperTextOnFocus="true" Clearable="true" Variant="Variant.Outlined" Step=".2M" />
 
-                                            <MudNumericField HelperText="Enter percentage" Margin="Margin.Dense" @bind-Value="paymentOptionModel.metaAmountPercentage" For="@(() => paymentOptionModel.metaAmountPercentage)" Label="Percentage" Variant="Variant.Outlined" Min="1" Max="10" HelperTextOnFocus="true" Clearable="true" Step=".1M" />
+                                            <MudNumericField HelperText="Enter percentage" Margin="Margin.Dense" @bind-Value="paymentOptionModel.metaAmountPercentage" For="@(() => paymentOptionModel.metaAmountPercentage)" Label="Percentage" Variant="Variant.Outlined" Min="0" Max="10" HelperTextOnFocus="true" Clearable="true" Step=".1M" />
 
-                                            <MudNumericField HelperText="Enter maximum users" Margin="Margin.Dense" @bind-Value="paymentOptionModel.maxUsers" For="@(() => paymentOptionModel.maxUsers)" Label="Max User" Variant="Variant.Outlined" Min="1" Max="@int.MaxValue" HelperTextOnFocus="true" Clearable="true" />
-
-
-                                            <MudNumericField HelperText="Enter cap amount" Margin="Margin.Dense" @bind-Value="paymentOptionModel.capAmount" For="@(() => paymentOptionModel.capAmount)" Label="Cap. Amount" Variant="Variant.Outlined" Min="1" Max="2000" HelperTextOnFocus="true" Clearable="true" />
-
-
+                                            <MudNumericField HelperText="Enter maximum users" Margin="Margin.Dense" @bind-Value="paymentOptionModel.maxUsers" For="@(() => paymentOptionModel.maxUsers)" Label="Max User" Variant="Variant.Outlined" Min="0" Max="@int.MaxValue" HelperTextOnFocus="true" Clearable="true" />
+                                            
+                                            <MudNumericField HelperText="Enter cap amount" Margin="Margin.Dense" @bind-Value="paymentOptionModel.capAmount" For="@(() => paymentOptionModel.capAmount)" Label="Cap. Amount" Variant="Variant.Outlined" Min="0" Max="2000" HelperTextOnFocus="true" Clearable="true" />
+                                            
                                             <MudButton ButtonType="ButtonType.Submit" Disabled="@_processing" Style="background:#56375C" Variant="Variant.Filled" Color="Color.Primary" Class="mt-2">
                                                 @if (_processing)
                                                 {
@@ -482,10 +482,10 @@
 
 
     private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
-   {
-      new BreadcrumbItem("Configurations", href: "#", disabled: true),
-      new BreadcrumbItem("Set up", href: "/configuration/set-up")
-   };
+    {
+        new BreadcrumbItem("Configurations", href: "#", disabled: true),
+        new BreadcrumbItem("Set up", href: "/configuration/set-up")
+    };
 
     [Inject] AuthenticationStateProvider _authStateProvider { get; set; }
     [Inject] IOrganizationService _organizationService { get; set; }
@@ -561,19 +561,23 @@
     #region Organisation Set up
 
     private Func<GetOrganisationsDto, bool> _organisationQuickFilter => x =>
-       {
-           if (string.IsNullOrWhiteSpace(_organisationSearchString))
-               return true;
-
-           return x.name.Contains(_organisationSearchString, StringComparison.OrdinalIgnoreCase);
-       };
+    {
+        return string.IsNullOrWhiteSpace(_organisationSearchString) || x.name.Contains(_organisationSearchString, StringComparison.OrdinalIgnoreCase);
+    };
 
 
     private async Task GetOrganisation()
     {
-        var res = await _organizationService.GetOrganizations();
-        var data = res.result.data ?? new List<GetOrganisationsDto>();
-        _orgsDto = data;
+        try
+        {
+            var res = await _organizationService.GetOrganizations();
+            var data = res.result.data ?? new List<GetOrganisationsDto>();
+            _orgsDto = data;
+        }
+        catch (Exception e)
+        {
+            _orgsDto = new List<GetOrganisationsDto>();
+        }
     }
 
 
@@ -584,7 +588,7 @@
         {
             userAction = "Create";
 
-            bool? result = await organisationActionMessageBox.ShowAsync();
+            var result = await organisationActionMessageBox.ShowAsync();
             if (result == true)
             {
                 var res = await _organizationService.CreateOrganizations(organisationModel);
@@ -602,7 +606,7 @@
         else
         {
             userAction = "Update";
-            bool? result = await organisationActionMessageBox.ShowAsync();
+            var result = await organisationActionMessageBox.ShowAsync();
             if (result == true)
             {
                 var res = await _organizationService.UpdateOrganizations(organisationId, organisationModel);
@@ -625,10 +629,10 @@
         isOrganisationUpdate = true;
         organisationId = model._id;
         organisationModel = new CreateOrganizationDto()
-            {
-                description = model.description,
-                name = model.name,
-            };
+        {
+            description = model.description,
+            name = model.name,
+        };
         StateHasChanged();
     }
 
@@ -637,7 +641,7 @@
     {
         userAction = "Remove";
 
-        bool? result = await organisationActionMessageBox.ShowAsync();
+        var result = await organisationActionMessageBox.ShowAsync();
         if (result == true)
         {
             var res = await _organizationService.RemoveOrganizations(id);
@@ -683,19 +687,23 @@
 
     private async Task GetEventTypes()
     {
-        var res = await _eventTypeService.GetEventTypes();
-        var data = res.result.data ?? new List<GetEventTypesDto>();
-        _eventTypesDto = data;
+        try
+        {
+            var res = await _eventTypeService.GetEventTypes();
+            var data = res.result.data ?? new List<GetEventTypesDto>();
+            _eventTypesDto = data;
+        }
+        catch (Exception e)
+        {
+            _eventTypesDto = new List<GetEventTypesDto>();
+        }
     }
 
 
     private Func<GetEventTypesDto, bool> _eventTypesQuickFilter => x =>
-      {
-          if (string.IsNullOrWhiteSpace(_eventTypeSearchString))
-              return true;
-
-          return x.name.Contains(_eventTypeSearchString, StringComparison.OrdinalIgnoreCase);
-      };
+    {
+        return string.IsNullOrWhiteSpace(_eventTypeSearchString) || x.name.Contains(_eventTypeSearchString, StringComparison.OrdinalIgnoreCase);
+    };
 
 
     private async Task ActionUpdateEvenTypes(GetEventTypesDto model)
@@ -703,9 +711,9 @@
         isEventTypeUpdate = true;
         eventTypeId = model._id;
         eventTypeModel = new CreateEentTypesDto()
-            {
-                name = model.name,
-            };
+        {
+            name = model.name,
+        };
         StateHasChanged();
     }
 
@@ -717,7 +725,7 @@
         {
             userAction = "Create";
 
-            bool? result = await eventTypeActionMessageBox.ShowAsync();
+            var result = await eventTypeActionMessageBox.ShowAsync();
             if (result == true)
             {
                 var res = await _eventTypeService.CreateEventTypes(eventTypeModel);
@@ -735,7 +743,7 @@
         else
         {
             userAction = "Update";
-            bool? result = await eventTypeActionMessageBox.ShowAsync();
+            var result = await eventTypeActionMessageBox.ShowAsync();
             if (result == true)
             {
                 var res = await _eventTypeService.UpdateEventTypes(eventTypeId, eventTypeModel);
@@ -758,7 +766,7 @@
     {
         userAction = "Remove";
 
-        bool? result = await eventTypeActionMessageBox.ShowAsync();
+        var result = await eventTypeActionMessageBox.ShowAsync();
         if (result == true)
         {
             var res = await _eventTypeService.RemoveEventTypes(id);
@@ -779,7 +787,7 @@
     {
         userAction = "Switch";
 
-        bool? result = await eventTypeActionMessageBox.ShowAsync();
+        var result = await eventTypeActionMessageBox.ShowAsync();
         if (result == true)
         {
             var model = new SwitchEventTypeDto()
@@ -819,19 +827,23 @@
 
     private async Task GetPaymentOptions()
     {
-        var res = await _paymentOptionService.GetAllPaymentOptions();
-        var data = res.result.data ?? new List<GetPaymentOptionsDto>();
-        _paymentOptionDto = data;
+        try
+        {
+            var res = await _paymentOptionService.GetAllPaymentOptions();
+            var data = res.result.data ?? new List<GetPaymentOptionsDto>();
+            _paymentOptionDto = data;
+        }
+        catch (Exception e)
+        {
+            _paymentOptionDto = new List<GetPaymentOptionsDto>();;
+        }
     }
 
 
     private Func<GetPaymentOptionsDto, bool> _paymentOptionQuickFilter => x =>
-      {
-          if (string.IsNullOrWhiteSpace(_paymentOptionSearchString))
-              return true;
-
-          return x.name.Contains(_paymentOptionSearchString, StringComparison.OrdinalIgnoreCase);
-      };
+    {
+        return string.IsNullOrWhiteSpace(_paymentOptionSearchString) || x.name.Contains(_paymentOptionSearchString, StringComparison.OrdinalIgnoreCase);
+    };
 
 
     private async Task ActionUpdatePaymentOption(GetPaymentOptionsDto model)
@@ -845,7 +857,8 @@
                 maxUsers = (int)model.maxUsers,
                 metaAmountPercentage = Convert.ToDecimal(model.metaAmountPercentage.numberDecimal),
                 capAmount = (int)model.capAmount,
-                amount = Convert.ToDecimal(model.amount.numberDecimal)
+                amount = Convert.ToDecimal(model.amount.numberDecimal),
+                isSpecial = model.isSpecial
             };
         StateHasChanged();
     }
@@ -858,7 +871,7 @@
         {
             userAction = "Create";
 
-            bool? result = await paymentOptionActionMessageBox.ShowAsync();
+            var result = await paymentOptionActionMessageBox.ShowAsync();
             if (result == true)
             {
                 var res = await _paymentOptionService.CreatePaymentOptions(paymentOptionModel);
@@ -876,7 +889,7 @@
         else
         {
             userAction = "Update";
-            bool? result = await paymentOptionActionMessageBox.ShowAsync();
+            var result = await paymentOptionActionMessageBox.ShowAsync();
             if (result == true)
             {
                 var res = await _paymentOptionService.UpdatePaymentOptions(paymentOptionId, paymentOptionModel);
@@ -899,7 +912,7 @@
     {
         userAction = "Remove";
 
-        bool? result = await paymentOptionActionMessageBox.ShowAsync();
+        var result = await paymentOptionActionMessageBox.ShowAsync();
         if (result == true)
         {
             var res = await _paymentOptionService.RemovePaymentOptions(id);

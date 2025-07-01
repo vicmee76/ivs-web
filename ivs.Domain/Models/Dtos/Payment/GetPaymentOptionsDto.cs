@@ -11,6 +11,7 @@ public class GetPaymentOptionsDto
     public int? maxUsers { get; set; }
     public int? capAmount { get; set; }
     public bool? isDeleted { get; set; }
+    public bool isSpecial { get; set; }
     public Amount? amount { get; set; }
     public MetaAmountPercentage? metaAmountPercentage { get; set; }
 }
