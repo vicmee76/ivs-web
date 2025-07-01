@@ -8,7 +8,7 @@ namespace ivs_ui.Components.Data.Helpers
 
         public static string ToSentenceCase(string input)
         {
-            TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+            var textInfo = new CultureInfo("en-US", false).TextInfo;
             return textInfo.ToTitleCase(input.ToLower());
         }
         
@@ -19,7 +19,7 @@ namespace ivs_ui.Components.Data.Helpers
 
             var lengthToMask = number.Length - 4;
             var maskedPart = new string('*', lengthToMask);
-            var visiblePart = number.Substring(lengthToMask);
+            var visiblePart = number[lengthToMask..];
             return maskedPart + visiblePart;
         }
         
@@ -28,7 +28,7 @@ namespace ivs_ui.Components.Data.Helpers
             if (string.IsNullOrWhiteSpace(email))
                 return false;
 
-            string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             return Regex.IsMatch(email, emailPattern);
         }
     }

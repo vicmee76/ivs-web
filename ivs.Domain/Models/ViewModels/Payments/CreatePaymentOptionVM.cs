@@ -19,5 +19,6 @@ namespace ivs.Domain.Models.ViewModels.Payments
 
         public int? maxUsers { get; set; }
         public int? capAmount { get; set; }
+        public bool isSpecial { get; set; }
     }
 }
