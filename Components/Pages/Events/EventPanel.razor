@@ -1293,7 +1293,7 @@
                 }
             }
 
-            var pagedData = data.ToArray();
+            var pagedData = data.OrderByDescending(x => x.createdAt).ToArray();
 
             _attendanceProcessing = false;
             StateHasChanged();
@@ -1395,7 +1395,7 @@
                 }
             }
 
-            var pagedData = data.ToArray();
+            var pagedData = data.OrderByDescending(x => x.paymentDetails.paymentGateWayTransactionDate).ToArray();
 
             _salesProcessing = false;
             StateHasChanged();
@@ -1490,7 +1490,7 @@
                 }
             }
 
-            var pagedData = data.ToArray();
+            var pagedData = data.OrderByDescending(x => x.createdAt).ToArray();
 
             _getSettlementProcessing = false;
             StateHasChanged();
