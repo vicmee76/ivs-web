@@ -367,7 +367,7 @@
                                                             var amount = Convert.ToDecimal(tic.ticketAmount.numberDecimal).ToString("C");
                                                             <MudItem xs="12" sm="12" md="4" lg="4" xl="4" xxl="4">
 
-                                                                <MudCard Elevation="0" Style="border: 3px dashed darkgray">
+                                                                <MudCard Elevation="0" Style="border: 3px dashed darkgray; padding: 10px;">
                                                                     <MudCardHeader>
                                                                         <CardHeaderContent>
                                                                             <MudText Style="font-size:medium" Color="Color.Dark"><b>@tic.ticketName</b></MudText>
@@ -400,7 +400,13 @@
                                                                         </div>
                                                                     </MudCardContent>
                                                                     <MudCardActions>
-                                                                        <MudButton Variant="Variant.Text" Color="Color.Error" Style="font-weight:bold; font-size:medium">@amount</MudButton>
+                                                                        <MudButton Variant="Variant.Text" Color="Color.Secondary" Style="font-weight:bold; font-size:medium">@amount</MudButton>
+                                                                        @if (tic.ticketName.Contains("Special", StringComparison.OrdinalIgnoreCase))
+                                                                        {
+                                                                            var buyLink = $"/orders/buy-tickets/{_events._id}/{tic.paymentOptionId}";
+                                                                            <MudSpacer></MudSpacer>
+                                                                            <MudButton Variant="Variant.Filled" Color="Color.Secondary" Href="@buyLink" Target="_blank" Style="background-color: #55385c; " Size="Size.Small">Send Special Ticket</MudButton>
+                                                                        }
                                                                     </MudCardActions>
                                                                 </MudCard>
 
@@ -1192,7 +1198,7 @@
                                     EventTimeId = group.Key._id,
                                     StartDateAndTime = group.Key.startDateAndTime,
                                     Tickets = group.ToList()
-                                }).ToList();
+                                }).OrderBy(x => x.StartDateAndTime).ToList();
                         }
                     }
                     else

@@ -1,4 +1,5 @@
 ﻿@page "/orders/buy-tickets/{id}"
+@page "/orders/buy-tickets/{id}/{specialTicketId}"
 
 <PageTitle>Iv's - Buy Your Tickets</PageTitle>
 
@@ -30,163 +31,168 @@
             {
                 if (_ticketList.Any())
                 {
-                    <br/>
-                    <span id="discovery-title-mid">Contact Information</span>
-                    <br/>
-                    <br/>
-                   
-                    <div style="font-size:13px; line-height:25px">
-                        Enter your contact info; We will send all the tickets you selected to the email details provided below after a successful purchase.
-                    </div>
-
-                    <br/>
-
                     <div>
+                        <br/>
+                        <span id="discovery-title-mid">Buy Your Tickets</span>
+                        <br/>
+                        <br/>
 
-                        <MudGrid>
+                        <div>
+                            @foreach (var com in _ticketList)
+                            {
+                                var title = $"{Convert.ToDateTime(com.StartDateAndTime).ToString("ddd, d MMM. yyyy, HH:mm tt")}";
 
-                            <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
-                                <label>Email</label>
-                                <MudTextField InputType="InputType.Email" Label="Email" Margin="Margin.Dense" @bind-Value="model.email" For="@(() => model.email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
-                            </MudItem>
+                                <div style="font-size: 18px; color: #1e0a3c; background-color: #fdf6fdfc; font-weight: bolder; padding: 20px">@title</div>
 
-                            <MudItem xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
-                                <label>First name</label>
-                                <MudTextField Label="First Name" Margin="Margin.Dense" @bind-Value="model.firstName" For="@(() => model.firstName)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
-                            </MudItem>
+                                <div style="padding: 20px">
 
-                            <MudItem xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
-                                <label>Last name</label>
-                                <MudTextField Label="Last Name" Margin="Margin.Dense" @bind-Value="model.lastName" For="@(() => model.lastName)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
-                            </MudItem>
+                                    @if (com.Tickets.Any())
+                                    {
+                                        var date = DateTime.Now;
+                                        <MudGrid>
+                                            @foreach (var tic in com.Tickets)
+                                            {
+                                                var amount = tic.ticketAmount.numberDecimal.ToString("C");
+                                                <MudItem xs="8" sm="8" md="8" lg="9" xl="9" xxl="9">
+                                                    <div>
+                                                        <div><b>@tic.ticketName</b> &nbsp;
 
-                            <MudItem xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
-                                <label>Phone number</label>
-                                <MudTextField Label="Phone" Margin="Margin.Dense" @bind-Value="model.phoneNumber" For="@(() => model.phoneNumber)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
-                            </MudItem>
+                                                            @if(tic.ticketKind == Helpers.GroupTicket)
+                                                            {
+                                                                <MudChip T="string" Size="Size.Small" Color="Color.Error"><b>@tic.ticketKind</b></MudChip>
+                                                            }
 
-                            <MudItem xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
-                                <label>Gender</label>
-                                <MudSelect Label="Gender" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="model.gender" For="@(() => model.gender)">
-                                    <MudSelectItem Value="@("M")">M</MudSelectItem>
-                                    <MudSelectItem Value="@("F")">F</MudSelectItem>
-                                </MudSelect>
-                            </MudItem>
+                                                        </div>
+                                                        <br/>
+                                                        <div><b style="color: #e1901d">@amount</b></div>
+                                                        <br/>
 
-                        </MudGrid>
 
-                        <br />
+                                                        <div style="">
+                                                            <div><small style="text-align: center"><b>Available : @tic.ticketInStock</b></small></div>
 
-                        <MudCheckBox T="bool" @bind-Value="hasAgreed" Size="Size.Small" Required="true">
-                            Agree to
-                            <MudLink Target="_blank" Href="/terms-and-conditions"> Terms & Conditions </MudLink>,
-                            <MudLink Target="_blank" Href="/privacy-policy" Typo="Typo.body2"> Privacy Policy </MudLink>,
-                            <MudLink Target="_blank" Href="/service-agreement" Typo="Typo.body2"> Service Agreement </MudLink> and
-                            <MudLink Target="_blank" Href="/refund-policy" Typo="Typo.body2"> Refund Policy </MudLink>
-                        </MudCheckBox>
-
-                    </div>
-                    
-                    
-                    <br/>   
-                    <br/>   
-                    <br/>
-                    <span id="discovery-title-mid">Buy Your Tickets</span>
-                    <br/>
-                    <br/>
-
-                    <div>
-                        @foreach (var com in _ticketList)
-                        {
-                            var title = $"{Convert.ToDateTime(com.StartDateAndTime).ToString("ddd, d MMM. yyyy, HH:mm tt")}";
-
-                            <div style="font-size: 18px; color: #1e0a3c; background-color: #fdf6fdfc; font-weight: bolder; padding: 20px">@title</div>
-
-                            <div style="padding: 20px">
-
-                                @if (com.Tickets.Any())
-                                {
-                                    var date = DateTime.Now;
-                                    <MudGrid>
-                                        @foreach (var tic in com.Tickets)
-                                        {
-                                            var amount = tic.ticketAmount.numberDecimal.ToString("C");
-                                            <MudItem xs="8" sm="8" md="8" lg="9" xl="9" xxl="9">
-                                                <div>
-                                                    <div><b>@tic.ticketName</b> &nbsp;
-
-                                                        @if(tic.ticketKind == Helpers.GroupTicket)
-                                                        {
-                                                            <MudChip T="string" Size="Size.Small" Color="Color.Error"><b>@tic.ticketKind</b></MudChip>
-                                                        }
+                                                            <small> @tic.ticketDescription <br/>
+                                                                Admits @tic.groupSize person(s) each</small>
+                                                        </div>
 
                                                     </div>
-                                                    <br/>
-                                                    <div><b style="color: #e1901d">@amount</b></div>
-                                                    <br/>
+                                                </MudItem>
 
+                                                <MudItem xs="4" sm="4" md="4" lg="3" xl="3" xxl="3">
 
-                                                    <div style="">
-                                                        <div><small style="text-align: center"><b>Available : @tic.ticketInStock</b></small></div>
-
-                                                        <small> @tic.ticketDescription <br/> 
-                                                            Admits @tic.groupSize person(s) each</small>
-                                                    </div>
-
-                                                </div>
-                                            </MudItem>
-
-                                            <MudItem xs="4" sm="4" md="4" lg="3" xl="3" xxl="3">
-
-                                                @if (tic.ticketInStock == 0 || date > tic.ticketSalesEndDateAndTime)
-                                                {
-                                                    var notAvailable = tic.ticketInStock == 0 ? "Out of Stock" :
-                                                        date > tic.ticketSalesEndDateAndTime ? "Sales Ended" : "";
-
-                                                    <b style="color:crimson">@notAvailable</b>
-                                                }
-                                                else
-                                                {
-                                                    @if (tic.ticketKind == Helpers.GroupTicket)
+                                                    @if (tic.ticketInStock == 0 || date > tic.ticketSalesEndDateAndTime)
                                                     {
-                                                        <MudSelect T="int" Label="Quantity" bind-Value="quantity" Disabled="@_generateCostProcessing" Margin="Margin.Dense" SelectedValuesChanged="@(async (value) => await GenerateCost(tic._id, com.EventTimeId, value))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
-                                                            <MudSelectItem T="int" Value="0" />
-                                                            <MudSelectItem T="int" Value="1" />
-                                                            <MudSelectItem T="int" Value="2" />
-                                                        </MudSelect>
+                                                        var notAvailable = tic.ticketInStock == 0 ? "Out of Stock" :
+                                                            date > tic.ticketSalesEndDateAndTime ? "Sales Ended" : "";
+
+                                                        <b style="color:crimson">@notAvailable</b>
                                                     }
                                                     else
                                                     {
-                                                        <MudSelect T="int" Label="Quantity" bind-Value="quantity" Disabled="@_generateCostProcessing" Margin="Margin.Dense" SelectedValuesChanged="@(async (value) => await GenerateCost(tic._id, com.EventTimeId, value))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
-                                                            <MudSelectItem T="int" Value="0" />
-                                                            <MudSelectItem T="int" Value="1" />
-                                                            <MudSelectItem T="int" Value="2" />
-                                                            <MudSelectItem T="int" Value="3" />
-                                                            <MudSelectItem T="int" Value="4" />
-                                                            <MudSelectItem T="int" Value="5" />
-                                                        </MudSelect>
+                                                        @if (tic.ticketKind == Helpers.GroupTicket)
+                                                        {
+                                                            <MudSelect T="int" Label="Quantity" bind-Value="quantity" Disabled="@_generateCostProcessing" Margin="Margin.Dense" SelectedValuesChanged="@(async (value) => await GenerateCost(tic._id, com.EventTimeId, value))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                                                                <MudSelectItem T="int" Value="0" />
+                                                                <MudSelectItem T="int" Value="1" />
+                                                                <MudSelectItem T="int" Value="2" />
+                                                            </MudSelect>
+                                                        }
+                                                        else
+                                                        {
+                                                            <MudSelect T="int" Label="Quantity" bind-Value="quantity" Disabled="@_generateCostProcessing" Margin="Margin.Dense" SelectedValuesChanged="@(async (value) => await GenerateCost(tic._id, com.EventTimeId, value))" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                                                                <MudSelectItem T="int" Value="0" />
+                                                                <MudSelectItem T="int" Value="1" />
+                                                                <MudSelectItem T="int" Value="2" />
+                                                                <MudSelectItem T="int" Value="3" />
+                                                                <MudSelectItem T="int" Value="4" />
+                                                                <MudSelectItem T="int" Value="5" />
+                                                            </MudSelect>
+                                                        }
+
+                                                        <br/>
+
                                                     }
 
-                                                    <br/>
+                                                </MudItem>
 
-                                                }
+                                                <MudDivider></MudDivider>
+                                                <br/>
+                                            }
 
-                                            </MudItem>
+                                        </MudGrid>
+                                    }
+                                    else
+                                    {
+                                        <b>No Ticket found</b>
+                                    }
+                                </div>
 
-                                            <MudDivider></MudDivider>
-                                            <br/>
-                                        }
+                                <br/>
+                            }
+                        </div>
+                    </div>
+                    
+                     <br/>
+                     <br/>
+                   
+                    <div>
 
-                                    </MudGrid>
-                                }
-                                else
-                                {
-                                    <b>No Ticket found</b>
-                                }
-                            </div>
-                            
-                            <br/> 
-                        }
+                        <span id="discovery-title-mid">Contact Information</span>
+                        <br/>
+                        <br/>
+
+                        <div style="font-size:13px; line-height:25px">
+                            Enter your contact info; We will send all the tickets you selected to the email details provided below after a successful purchase.
+                        </div>
+
+                        <br/>
+
+                        <div>
+
+                            <MudGrid>
+
+                                <MudItem xs="12" sm="12" md="12" lg="12" xl="12" xxl="12">
+                                    <label>Email</label>
+                                    <MudTextField InputType="InputType.Email" Label="Email" Margin="Margin.Dense" @bind-Value="model.email" For="@(() => model.email)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
+                                </MudItem>
+
+                                <MudItem xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
+                                    <label>First name</label>
+                                    <MudTextField Label="First Name" Margin="Margin.Dense" @bind-Value="model.firstName" For="@(() => model.firstName)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
+                                </MudItem>
+
+                                <MudItem xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
+                                    <label>Last name</label>
+                                    <MudTextField Label="Last Name" Margin="Margin.Dense" @bind-Value="model.lastName" For="@(() => model.lastName)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
+                                </MudItem>
+
+                                <MudItem xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
+                                    <label>Phone number</label>
+                                    <MudTextField Label="Phone" Margin="Margin.Dense" @bind-Value="model.phoneNumber" For="@(() => model.phoneNumber)" Variant="Variant.Outlined" HelperTextOnFocus="true" Clearable="true"/>
+                                </MudItem>
+
+                                <MudItem xs="6" sm="6" md="6" lg="6" xl="6" xxl="6">
+                                    <label>Gender</label>
+                                    <MudSelect Label="Gender" Variant="Variant.Outlined" Margin="Margin.Dense" @bind-Value="model.gender" For="@(() => model.gender)">
+                                        <MudSelectItem Value="@("M")">M</MudSelectItem>
+                                        <MudSelectItem Value="@("F")">F</MudSelectItem>
+                                    </MudSelect>
+                                </MudItem>
+
+                            </MudGrid>
+
+                            <br />
+
+                            <MudCheckBox T="bool" @bind-Value="hasAgreed" Size="Size.Small" Required="true">
+                                Agree to
+                                <MudLink Target="_blank" Href="/terms-and-conditions"> Terms & Conditions </MudLink>,
+                                <MudLink Target="_blank" Href="/privacy-policy" Typo="Typo.body2"> Privacy Policy </MudLink>,
+                                <MudLink Target="_blank" Href="/service-agreement" Typo="Typo.body2"> Service Agreement </MudLink> and
+                                <MudLink Target="_blank" Href="/refund-policy" Typo="Typo.body2"> Refund Policy </MudLink>
+                            </MudCheckBox>
+
+                        </div>
+                        
                     </div>
                     
                 }
@@ -348,6 +354,7 @@
 
 @code {
     [Parameter] public string? id { get; set; }
+    [Parameter] public string? specialTicketId { get; set; }
     [Inject] NavigationManager? _navigate { get; set; }
     [Inject] ITicketService? _ticketService { get; set; }
     [Inject] IOrderService? _orderService { get; set; }
@@ -387,7 +394,10 @@
         _processing = true;
         var res = await _ticketService.GetTicketByEventId(id);
         
+        await GetPaymentOptions();
+        
         var res2 = await _eventService.GetEventDetails(id);
+        
         if (res.result.code == ResponseCodes.ResponseCodeOk)
         {
             _events = res2.result.data;
@@ -397,6 +407,21 @@
             {
                 if (res.result.data is List<TicketDto> result)
                 {
+                    // For sending special ticket to special guest.
+                    if (!string.IsNullOrWhiteSpace(specialTicketId))
+                    {
+                        result = result.Where(x => x.paymentOptionId == specialTicketId).ToList();
+                    }
+                    else
+                    {
+                        var specialPaymentOptionIds = _paymentOptionDto
+                            .Where(x => x.isSpecial)
+                            .Select(x => x._id)
+                            .ToHashSet(); // optional for performance
+
+                        result = result.Where(x => !specialPaymentOptionIds.Contains(x.paymentOptionId)).ToList();
+                    }
+                    
                     _ticketList = result
                         .GroupBy(ticket => new { ticket.eventTimeDetails._id, ticket.eventTimeDetails.startDateAndTime })
                         .Select(group => new TimeAndTicketGroupingDto
@@ -407,7 +432,7 @@
                         }).ToList();
                 }
 
-                await GetPaymentOptions();
+                
             }
             else
             {

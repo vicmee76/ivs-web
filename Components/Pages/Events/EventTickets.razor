@@ -263,18 +263,18 @@
                                                 <MudCard Outlined="true" Elevation="25">
                                                     <MudCardHeader>
                                                         <CardHeaderContent>
-                                                            <MudText Typo="Typo.body1"><b>@item.ticketKind Ticket</b></MudText>
+                                                            <MudText Typo="Typo.body1"><b>@item.ticketName</b></MudText>
                                                            <br />
                                                             <div>
-                                                                <div><b>Ticket Name : </b><span>@item.ticketName</span></div>
                                                                 <div><b>Ticket Price : </b><span>@item.ticketAmount.numberDecimal.ToString("C")</span></div>
                                                                 <div><b>Event Date : </b><span>@eventDate</span></div>
+                                                                <div><b>Description : </b><small>@item.ticketDescription</small></div>
                                                             </div>
                                                         </CardHeaderContent>
                                                         <CardHeaderActions>
                                                             
                                                             @{
-                                                                var isSpecialTicket = _specialPaymentOptions.Any(x => x._id == item._id);
+                                                                var isSpecialTicket = _specialPaymentOptions.Any(x => x._id == item.paymentOptionId);
                                                             }
 
                                                             @if (!isSpecialTicket)

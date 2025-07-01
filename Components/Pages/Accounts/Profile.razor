@@ -311,15 +311,11 @@
                                         <DataAnnotationsValidator />
 
                                         <MudTextField InputType="@PasswordInput" Label="Old password" Margin="Margin.Dense" HelperText="Enter your old password" @bind-Value="model.OldPassword" For="@(() => model.OldPassword)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
-                                        <div class="sign-up-form-div-space"></div>
-
+                                       
                                         <MudTextField InputType="@PasswordInput" Label="New password" Margin="Margin.Dense" HelperText="Enter your new password" @bind-Value="model.NewPassword" For="@(() => model.NewPassword)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
-                                        <div class="sign-up-form-div-space"></div>
-
+                                        
                                         <MudTextField InputType="@PasswordInput" Label="Confirm new password" Margin="Margin.Dense" HelperText="Confirm your new password" @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" Variant="Variant.Outlined" HelperTextOnFocus="true" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtoShowPasswordClick" AdornmentAriaLabel="Show Password" />
-                                        <div class="sign-up-form-div-space"></div>
-
-
+                                        
                                         <MudButton ButtonType="ButtonType.Submit" FullWidth="true" Disabled="@_processing" Style="height:50px; background:#56375C" Variant="Variant.Filled" Color="Color.Primary" Class="mt-5">
                                             @if (_changePasswordProcessing)
                                             {
