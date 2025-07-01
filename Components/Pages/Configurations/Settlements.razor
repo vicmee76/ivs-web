@@ -254,7 +254,7 @@
                 }
             }
 
-            var pagedData = data.ToArray();
+            var pagedData = data.OrderByDescending(x => x.createdAt).ToArray();
 
             _getSettlementProcessing = false;
             StateHasChanged();
