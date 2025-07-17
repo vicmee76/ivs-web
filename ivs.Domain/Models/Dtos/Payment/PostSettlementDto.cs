@@ -11,5 +11,7 @@ namespace ivs.Domain.Models.Dtos.Payment
         public string userId { get; set; }
         public string eventId { get; set; }
         public string amountSettled { get; set; }
+        
+        public string password { get; set; }
     }
 }

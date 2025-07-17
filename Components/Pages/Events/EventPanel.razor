@@ -30,16 +30,24 @@
             </CancelButton>
         </MudMessageBox>
 
-        <MudMessageBox @ref="postSettlementMessageBox" Title="Request for settlement" CancelText="Cancel" YesText="Confirm" Style="padding:20px;">
+        <MudMessageBox @ref="postSettlementMessageBox" Title="Request for settlement" CancelText="Cancel" YesText="Confirm" Style="padding:50px;">
             <MessageContent>
-                Are you sure you want to perform this settlement transfer? <br /> When done, you can request for another settlement in the next 7 days
+                Are you sure you want to perform this settlement transfer? <br /> When done, you can request for another settlement in the next 3 days
+                
+                <br/> <br/>
+                
+                <div><b>Enter your password to confirm this settlement.</b></div>
+               
+                <MudTextField InputType="InputType.Password" Margin="Margin.Dense" Label="Password" HelperText="Enter your password" @bind-Value="passwordValue" Variant="Variant.Filled" HelperTextOnFocus="true" />
+
             </MessageContent>
             <YesButton>
-                <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Secondary">Confirm</MudButton>
+                <MudButton Variant="Variant.Filled" Size="Size.Small" Color="Color.Success">Confirm</MudButton>
             </YesButton>
             <CancelButton>
-                <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Default">Cancel</MudButton>
+                <MudButton Variant="Variant.Text" Size="Size.Small" Color="Color.Default">Cancel</MudButton> &nbsp;
             </CancelButton>
+
         </MudMessageBox>
 
         <MudContainer Fixed="true" MaxWidth="MaxWidth.Large">
@@ -951,7 +959,7 @@
 
                                                 <MudDivider Class="my-4" />
 
-                                                <div style="font-size:small">Request for a portion or all of your sales. After the first successful request, your next request will be in 7 days time. Minimum withdrawal amount is NGN 50 </div>
+                                                <div style="font-size:small">Request for a portion or all of your sales. After the first successful request, your next request will be in 3 days time. Minimum withdrawal amount is NGN 100 </div>
                                             </div>
 
                                             <br />
@@ -990,7 +998,6 @@
                                         <MudText Style="text-align:left;">Total Settlement : <b style="color: green; font-size:20px"> @totalSettledAmount.ToString("C")</b></MudText>
                                         
                                         <br/>
-
                                         <br />
 
                                         <MudDataGrid @ref="settlementDataGrid" T="GetSettlementData" Dense="false" RowsPerPage="50" ServerData="GetSettlementServerReload" Filterable="false" Hover="true" Loading="@_getSettlementProcessing" LoadingProgressColor="Color.Secondary" Striped="true" Bordered="true">
@@ -1135,6 +1142,7 @@
 
     private decimal settlementAmount { get; set; }
     private string serviceFee { get; set; }
+    private string passwordValue { get; set; }
 
     private bool _processing { get; set; } = false;
     private bool _attendanceProcessing { get; set; }
@@ -1144,6 +1152,8 @@
     private bool _settlementRequestAction { get; set; } = true;
     private bool _settlementProcessing { get; set; } = false;
     private bool _getSettlementProcessing { get; set; } = false;
+    
+   
 
     private decimal totalSales { get; set; }
     private int totalSalesTicketQuantity { get; set; }
@@ -1154,10 +1164,7 @@
         new BreadcrumbItem("Events", href: "#"),
         new BreadcrumbItem("Details", href: null, disabled: true)
     };
-
-   
-
-
+    
     protected async override void OnInitialized()
     {
         _processing = true;
@@ -1530,13 +1537,18 @@
 
     private Task OnSettlementSearch(string text)
     {
-        settlementSearchString = text;
+        settlementSearchString = text;  
         return settlementDataGrid.ReloadServerData();
     }
 
     private async Task GetFeeAction()
     {
-        if (settlementAmount >= Helpers.MinimumWithdrawalAmount)
+       if (settlementAmount < Helpers.MinimumWithdrawalAmount)
+        {
+            _snackbar.Add($"Minimum deposit amount is {Helpers.MinimumWithdrawalAmount}", Severity.Error);
+            _settlementRequestAction = true;
+        }
+        else
         {
             var res = await _paymentService.GetTransferFee(settlementAmount, id);
             if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true){
@@ -1550,11 +1562,6 @@
                 _settlementRequestAction = true;
                 _snackbar.Add(res.result.message, Severity.Error);
             }
-        }
-        else
-        {
-            _snackbar.Add($"Minimum deposit amount is {Helpers.MinimumWithdrawalAmount}", Severity.Error);
-            _settlementRequestAction = true;
         }
     }
 
@@ -1572,7 +1579,8 @@
                     {
                         userId = userId,
                         eventId = id,
-                        amountSettled = settlementAmount.ToString()
+                        amountSettled = settlementAmount.ToString(),
+                        password = passwordValue
                     };
 
                 var res = await _paymentService.PostSettlement(postSettlement);
@@ -1585,6 +1593,10 @@
                 {
                     _snackbar.Add(res.result.message, Severity.Error);
                 }
+            }
+            else
+            {
+                passwordValue = string.Empty;
             }
         }
         else
@@ -1601,6 +1613,7 @@
         _settlementRequestAction = true;
         serviceFee = string.Empty;
         settlementAmount = 0.00M;
+        passwordValue = string.Empty;
         settlementDataGrid.ReloadServerData();
         StateHasChanged();
     }
@@ -1634,6 +1647,7 @@
         return attendanceDataGrid.ReloadServerData();
     }
 
+    
     private Task ActionResetAttendance()
     {
         attendanceOptions = false;
@@ -1642,6 +1656,7 @@
         return attendanceDataGrid.ReloadServerData();
     }
 
+    
     private Task ActionGetSalesByEventTime(string eventTimeId, string tableDescription)
     {
         salesOptions = true;
@@ -1651,6 +1666,7 @@
         return salesDataGrid.ReloadServerData();
     }
 
+    
     private Task ActionResetSales()
     {
         salesOptions = false;
