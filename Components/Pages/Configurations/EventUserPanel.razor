@@ -1222,7 +1222,11 @@
             totalSales = result.totalTicketSum;
             totalSalesTicketQuantity = result.totalTicketQuantity;
             totalAmountSettled = result.totalAmountSettled;
-            averageSalesRevenue = (result.totalTicketSum / result.totalTicketQuantity).ToString("C");
+            averageSalesRevenue =
+                (result.totalTicketQuantity > 0
+                    ? result.totalTicketSum / result.totalTicketQuantity
+                    : 0m
+                ).ToString("C");
 
             var sortDefinition = state.SortDefinitions.FirstOrDefault();
 
