@@ -251,7 +251,12 @@
                                                     </TemplateColumn>
 
                                                     <TemplateColumn Title="TransDate" Sortable="false" Filterable="false">
-                                                        <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.paymentDetails.paymentGateWayTransactionDate).ToString("dd MMM yyyy, HH:mm tt") </CellTemplate>
+                                                        <CellTemplate Context="ctx">
+                                                            @if (ctx.Item.paymentDetails != null)
+                                                            {
+                                                                @Convert.ToDateTime(ctx.Item.paymentDetails.paymentGateWayTransactionDate).ToString("dd MMM yyyy, HH:mm tt")
+                                                            }
+                                                        </CellTemplate>
                                                     </TemplateColumn>
 
                                                 </Columns>
