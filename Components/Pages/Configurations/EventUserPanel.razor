@@ -1252,10 +1252,16 @@
                             o => o.phoneNumber
                         );
                         break;
+                    case nameof(GetSalesDataDto.paymentDetails.paymentGateWayTransactionDate):
+                        data = data.OrderByDirection(
+                            sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
+                            o => o.paymentDetails.paymentGateWayTransactionDate
+                        );
+                        break;
                 }
             }
 
-            var pagedData = data.ToArray();
+            var pagedData = data.OrderByDescending(x => x.createdAt).ToArray();
 
             _salesProcessing = false;
             StateHasChanged();
@@ -1350,7 +1356,7 @@
                 }
             }
 
-            var pagedData = data.ToArray();
+            var pagedData = data.OrderByDescending(x => x.createdAt).ToArray();
 
             _getSettlementProcessing = false;
             StateHasChanged();
