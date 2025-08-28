@@ -234,18 +234,18 @@
                                                         <CellTemplate Context="ctx">
                                                             @if (ctx.Item.paymentDetails != null)
                                                             {
-                                                                @if (ctx.Item.paymentDetails.paymentGateWayTransactionStatus.ToUpper() == Helpers.SuccessStatus)
+                                                                @if (ctx.Item.paymentDetails.paymentGateWayTransactionStatus.Equals("successful", StringComparison.OrdinalIgnoreCase))
                                                                 {
-                                                                    <MudChip T="string" Variant="Variant.Text" Color="Color.Success"><b>@ctx.Item.paymentDetails.paymentGateWayTransactionStatus</b></MudChip>
+                                                                    <MudChip T="string" Variant="Variant.Text" Color="Color.Success"><b>@ctx.Item.paymentDetails.paymentGateWayTransactionStatus.ToLower()</b></MudChip>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary"><b>@ctx.Item.paymentDetails.paymentGateWayTransactionStatus</b></MudChip>
+                                                                    <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary"><b>@ctx.Item.paymentDetails.paymentGateWayTransactionStatus.ToLower()</b></MudChip>
                                                                 }
                                                             }
                                                             else
                                                             {
-                                                                <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary">Pending</MudChip>
+                                                                <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary">pending</MudChip>
                                                             }
                                                         </CellTemplate>
                                                     </TemplateColumn>

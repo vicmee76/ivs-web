@@ -867,16 +867,16 @@
                                                     {
                                                         if (ctx.Item.paymentDetails.paymentGateWayTransactionStatus.Equals("successful", StringComparison.OrdinalIgnoreCase))
                                                         {
-                                                            <MudChip T="string" Variant="Variant.Text" Color="Color.Success">@ctx.Item.paymentDetails.paymentGateWayTransactionStatus</MudChip>
+                                                            <MudChip T="string" Variant="Variant.Text" Color="Color.Success">@ctx.Item.paymentDetails.paymentGateWayTransactionStatus.ToLower()</MudChip>
                                                         }
                                                         else
                                                         {
-                                                            <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary">@ctx.Item.paymentDetails.paymentGateWayTransactionStatus</MudChip>
+                                                            <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary">@ctx.Item.paymentDetails.paymentGateWayTransactionStatus.ToLower()</MudChip>
                                                         }
                                                     }
                                                     else
                                                     {
-                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary">Pending</MudChip>
+                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary">pending</MudChip>
                                                     }
                                                 </CellTemplate>
                                             </TemplateColumn>
@@ -1491,7 +1491,7 @@
                     case nameof(GetSalesDataDto.lastName):
                         data = data.OrderByDirection(
                             sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
-                            o => o.paymentGateWayTransactionStatus
+                            o => o.accountName
                         );
                         break;
                     case nameof(GetSalesDataDto.phoneNumber):
@@ -1799,7 +1799,7 @@
                         var amount = Convert.ToDecimal(x.totalTicketFee).ToString("C");
                         var eventDate = Convert.ToDateTime(x.ticketDetails.FirstOrDefault().startDateAndTime).ToString("G");
                         var TransactionDate = x.paymentDetails != null ? Convert.ToDateTime(x.paymentDetails.paymentGateWayTransactionDate).ToString("G") : "";
-                        var TransactionStatus = x.paymentDetails != null ? x.paymentDetails.paymentGateWayTransactionStatus : "Pending";
+                        var TransactionStatus = x.paymentDetails != null ? x.paymentDetails.paymentGateWayTransactionStatus : "pending";
                         var TransactionReference = x.paymentDetails != null ? x.paymentDetails.paymentGateWayTransactionRef : "";
 
                         csvBuilder.AppendLine($"{eventName};" +

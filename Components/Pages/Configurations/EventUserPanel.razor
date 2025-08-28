@@ -784,13 +784,25 @@
                                             <PropertyColumn Property="x => x.email" Title="Email" />
                                             <PropertyColumn Property="x => x.phoneNumber" Title="PhoneNo" />
                                             <PropertyColumn Property="x => x.paymentDetails.paymentGateWayTransactionRef" Title="TransRef" />
-                                            <PropertyColumn Property="x => x.paymentDetails.paymentGateWayTransactionStatus" Title="Status" />
+                                            
+                                            <TemplateColumn Title="Status" Sortable="true" Filterable="true">
+                                                <CellTemplate Context="ctx">  
+                                                    @if (ctx.Item.paymentDetails.paymentGateWayTransactionStatus.Equals("successful", StringComparison.OrdinalIgnoreCase))
+                                                    {
+                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Success"><b>@ctx.Item.paymentDetails.paymentGateWayTransactionStatus.ToLower()</b></MudChip>
+                                                    }
+                                                    else
+                                                    {
+                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary"><b>@ctx.Item.paymentDetails.paymentGateWayTransactionStatus.ToLower()</b></MudChip>
+                                                    }
+                                                </CellTemplate>
+                                            </TemplateColumn>
 
                                             <TemplateColumn Title="TransDate" Sortable="false" Filterable="false">
                                                 <CellTemplate Context="ctx"> @Convert.ToDateTime(ctx.Item.paymentDetails.paymentGateWayTransactionDate).ToString("dd MMM yyyy, HH:mm tt") </CellTemplate>
                                             </TemplateColumn>
 
-                                            <TemplateColumn Title="Ticket" Sortable="false" Filterable="false">
+                                            <TemplateColumn Title="Ticket" Sortable="true" Filterable="false">
                                                 <CellTemplate Context="ctx">
                                                     <small>@ctx.Item.ticketDetails.FirstOrDefault().ticketName - @ctx.Item.ticketDetails.FirstOrDefault().ticketKind</small>
                                                 </CellTemplate>
@@ -1344,7 +1356,7 @@
                     case nameof(GetSalesDataDto.lastName):
                         data = data.OrderByDirection(
                             sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
-                            o => o.paymentGateWayTransactionStatus
+                            o => o.accountName
                         );
                         break;
                     case nameof(GetSalesDataDto.phoneNumber):
