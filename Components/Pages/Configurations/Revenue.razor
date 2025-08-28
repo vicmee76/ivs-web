@@ -301,11 +301,11 @@
                                                 <CellTemplate Context="ctx">
                                                     @if (ctx.Item.paymentGateWayTransactionStatus.Equals("successful", StringComparison.OrdinalIgnoreCase))
                                                     {
-                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Success"><b>@ctx.Item.paymentGateWayTransactionStatus</b></MudChip>
+                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Success"><b>@ctx.Item.paymentGateWayTransactionStatus.ToLower()</b></MudChip>
                                                     }
                                                     else
                                                     {
-                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary"><b>@ctx.Item.paymentGateWayTransactionStatus</b></MudChip>
+                                                        <MudChip T="string" Variant="Variant.Text" Color="Color.Secondary"><b>@ctx.Item.paymentGateWayTransactionStatus.ToLower()</b></MudChip>
                                                     }
                                                 </CellTemplate>
                                             </TemplateColumn>
