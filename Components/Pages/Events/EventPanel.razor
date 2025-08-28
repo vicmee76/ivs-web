@@ -881,7 +881,7 @@
                                                 </CellTemplate>
                                             </TemplateColumn>
 
-                                            <TemplateColumn Title="TransDate" Sortable="false" Filterable="false">
+                                            <TemplateColumn Title="TransDate" Sortable="true" Filterable="false">
                                                 <CellTemplate Context="ctx">
                                                     @if (ctx.Item.paymentDetails != null)
                                                     {
@@ -1397,6 +1397,12 @@
                         data = data.OrderByDirection(
                             sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
                             o => o.phoneNumber
+                        );
+                        break;
+                    case nameof(GetSalesDataDto.paymentDetails.paymentGateWayTransactionDate):
+                        data = data.OrderByDirection(
+                            sortDefinition.Descending ? SortDirection.Descending : SortDirection.Ascending,
+                            o => o.paymentDetails.paymentGateWayTransactionDate
                         );
                         break;
                 }
