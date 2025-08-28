@@ -537,17 +537,28 @@
                 if (item.Any())
                 {
                     var ticketQty = item.Sum(x =>x.ticketQuantity);
-                    var totalTicketFee = Math.Round(item.Sum(x => x.totalTicketFee), 2);
-                    var totalServiceFee = Math.Round(item.Sum(x =>x.totalTicketServiceFee), 2);
-                    var gateWayFee = Math.Round(item.Sum(x =>x.gatewayFee), 2);
-                    var charge = Math.Round(item.Sum(x =>x.ivsNetRevenue), 2);
-                    var ivsVat = Math.Round(item.Sum(x =>x.ivsVat), 2);
-                    var chargeAmount = Math.Round(item.Sum(x =>x.totalServiceFeeAfterDeduction), 2);
+                    // var totalTicketFee = Math.Round(item.Sum(x => x.totalTicketFee), 2);
+                    // var totalServiceFee = Math.Round(item.Sum(x =>x.totalTicketServiceFee), 2);
+                    // var gateWayFee = Math.Round(item.Sum(x =>x.gatewayFee), 2);
+                    // var charge = Math.Round(item.Sum(x =>x.ivsNetRevenue), 2);
+                    // var ivsVat = Math.Round(item.Sum(x =>x.ivsVat), 2);
+                    // var chargeAmount = Math.Round(item.Sum(x =>x.totalServiceFeeAfterDeduction), 2);
+                    
+                    var totalTicketFee   = Math.Ceiling(item.Sum(x => x.totalTicketFee) * 100) / 100;
+                    var totalServiceFee  = Math.Ceiling(item.Sum(x => x.totalTicketServiceFee) * 100) / 100;
+                    var gateWayFee       = Math.Ceiling(item.Sum(x => x.gatewayFee) * 100) / 100;
+                    var charge           = Math.Ceiling(item.Sum(x => x.ivsNetRevenue) * 100) / 100;
+                    var ivsVat           = Math.Ceiling(item.Sum(x => x.ivsVat) * 100) / 100;
+                    var chargeAmount     = Math.Ceiling(item.Sum(x => x.totalServiceFeeAfterDeduction) * 100) / 100;
                     
                     generateCost.FirstOrDefault().totalTicketPurchased -= ticketQty;
-                    generateCost.FirstOrDefault().totalServiceFee -= Math.Round(totalServiceFee, 2);
-                    generateCost.FirstOrDefault().totalTicketFee -= Math.Round(totalTicketFee, 2);
-                    generateCost.FirstOrDefault().totalAmount -= Math.Round((totalTicketFee + totalServiceFee), 2);
+                    // generateCost.FirstOrDefault().totalServiceFee -= Math.Round(totalServiceFee, 2);
+                    // generateCost.FirstOrDefault().totalTicketFee -= Math.Round(totalTicketFee, 2);
+                    // generateCost.FirstOrDefault().totalAmount -= Math.Round((totalTicketFee + totalServiceFee), 2);
+                    
+                    generateCost.FirstOrDefault().totalServiceFee -= Math.Ceiling(totalServiceFee * 100) / 100;
+                    generateCost.FirstOrDefault().totalTicketFee -= Math.Ceiling(totalTicketFee * 100) / 100;
+                    generateCost.FirstOrDefault().totalAmount -= Math.Ceiling((totalTicketFee + totalServiceFee) * 100) / 100;
                     generateCost.FirstOrDefault().gatewayFee -= gateWayFee;
                     generateCost.FirstOrDefault().ivsNetRevenue -= charge;
                     generateCost.FirstOrDefault().ivsVat -= ivsVat;
@@ -568,23 +579,40 @@
                 var StampDuty = 0.00M;
                 var capAmount = 0.00M;
 
-                var ticketAmt = Math.Round(Convert.ToDecimal(tickets.ticketAmount.numberDecimal), 2);
-                var charge = Math.Round(ticketAmt * percentage, 2);
-                var ivsVat = Math.Round(charge * vatPercentage, 2);
-                var chargeAmount = Math.Round((charge + ivsVat), 2);
+                // var ticketAmt = Math.Round(Convert.ToDecimal(tickets.ticketAmount.numberDecimal), 2);
+                // var charge = Math.Round(ticketAmt * percentage, 2);
+                // var ivsVat = Math.Round(charge * vatPercentage, 2);
+                // var chargeAmount = Math.Round((charge + ivsVat), 2);
+                
+                var ticketAmt = Math.Ceiling(Convert.ToDecimal(tickets.ticketAmount.numberDecimal) * 100) / 100;
+                var charge = Math.Ceiling(ticketAmt * percentage * 100) / 100;
+                var ivsVat = Math.Ceiling(charge * vatPercentage * 100) / 100;
+                var chargeAmount = Math.Ceiling((charge + ivsVat) * 100) / 100;
 
-                var cummulativeTotal = Math.Round((ticketAmt * 1) + (chargeAmount * 1), 2);
+                var cummulativeTotal =Math.Ceiling((ticketAmt + chargeAmount) * 100) / 100;  //Math.Round((ticketAmt * 1) + (chargeAmount * 1), 2);
 
                 if (cummulativeTotal >= _config.GetValue<int>("Fees:StampDutyAmount")) StampDuty = _config.GetValue<int>("Fees:StampDutyFee");
-                var flwFee = Math.Round((cummulativeTotal * (_config.GetValue<decimal>("Fees:FlwPercentage") / 100)), 2);
-                if (flwFee >= _config.GetValue<int>("Fees:FlwFeeCapAmount")) flwFee = _config.GetValue<int>("Fees:FlwFeeCapAmount");
+               // var flwFee = Math.Round((cummulativeTotal * (_config.GetValue<decimal>("Fees:FlwPercentage") / 100)), 2);
+               
+               var flwFee = Math.Ceiling(cummulativeTotal * (_config.GetValue<decimal>("Fees:FlwPercentage") / 100) * 100) / 100;
 
-                var flwVatAndStampDuty = Math.Round((flwFee * vatPercentage), 2);
+               
+               if (flwFee >= _config.GetValue<int>("Fees:FlwFeeCapAmount")) flwFee = _config.GetValue<int>("Fees:FlwFeeCapAmount");
+
+                // var flwVatAndStampDuty = Math.Round((flwFee * vatPercentage), 2);
+                // flwVatAndStampDuty += StampDuty;
+                //
+                // cummulativeTotal += flwVatAndStampDuty;
+                // var serviceFeeSum = Math.Round(((1 * chargeAmount) + flwVatAndStampDuty), 2);
+                // var ticketFeeSum = Math.Round((ticketAmt * 1), 2);
+                
+
+                var flwVatAndStampDuty = Math.Ceiling((flwFee * vatPercentage) * 100) / 100; //Math.Round(flwFee * vatPercentage, 2, MidpointRounding.AwayFromZero);
                 flwVatAndStampDuty += StampDuty;
-
                 cummulativeTotal += flwVatAndStampDuty;
-                var serviceFeeSum = Math.Round(((1 * chargeAmount) + flwVatAndStampDuty), 2);
-                var ticketFeeSum = Math.Round((ticketAmt * 1), 2);
+                var serviceFeeSum = Math.Ceiling((chargeAmount + flwVatAndStampDuty) * 100) / 100;
+                var ticketFeeSum = Math.Ceiling(ticketAmt * 100) / 100;
+
 
                 var tics = new TicketsObjects()
                 {
@@ -593,11 +621,18 @@
                     ticketKind = tickets.ticketKind,
                     ticketName = tickets.ticketName,
                     ticketQuantity = 1,
-                    ticketPrice = Math.Round(ticketAmt, 2),
-                    ticketServiceFee = Math.Round(chargeAmount, 2),
-                    totalTicketServiceFee = Math.Round(serviceFeeSum, 2),
-                    totalTicketFee = Math.Round(ticketFeeSum, 2),
-                    totalTicketFeeAndServiceFee = Math.Round(cummulativeTotal, 2),
+                    // ticketPrice = Math.Round(ticketAmt, 2, MidpointRounding.AwayFromZero),
+                    // ticketServiceFee = Math.Round(chargeAmount, 2, MidpointRounding.AwayFromZero),
+                    // totalTicketServiceFee = Math.Round(serviceFeeSum, 2, MidpointRounding.AwayFromZero),
+                    // totalTicketFee = Math.Round(ticketFeeSum, 2, MidpointRounding.AwayFromZero),
+                    // totalTicketFeeAndServiceFee = Math.Round(cummulativeTotal, 2, MidpointRounding.AwayFromZero),
+                    
+                    ticketPrice = Math.Ceiling(ticketAmt * 100) / 100,
+                    ticketServiceFee = Math.Ceiling(chargeAmount * 100) / 100,
+                    totalTicketServiceFee = Math.Ceiling(serviceFeeSum * 100) / 100,
+                    totalTicketFee = Math.Ceiling(ticketFeeSum * 100) / 100,
+                    totalTicketFeeAndServiceFee = Math.Ceiling(cummulativeTotal * 100) / 100,
+                    
                     gatewayFee = flwVatAndStampDuty,
                     ivsNetRevenue = charge,
                     ivsVat = ivsVat,
@@ -608,9 +643,14 @@
                 {
                     generateCost.FirstOrDefault().tickets.Add(tics);
                     generateCost.FirstOrDefault().totalTicketPurchased += 1;
-                    generateCost.FirstOrDefault().totalServiceFee += Math.Round(serviceFeeSum, 2);
-                    generateCost.FirstOrDefault().totalTicketFee += Math.Round(ticketFeeSum, 2);
-                    generateCost.FirstOrDefault().totalAmount += Math.Round((cummulativeTotal), 2);
+                    // generateCost.FirstOrDefault().totalServiceFee += Math.Round(serviceFeeSum, 2, MidpointRounding.AwayFromZero);
+                    // generateCost.FirstOrDefault().totalTicketFee += Math.Round(ticketFeeSum, 2, MidpointRounding.AwayFromZero);
+                    // generateCost.FirstOrDefault().totalAmount += Math.Round((cummulativeTotal), 2, MidpointRounding.AwayFromZero);
+                    
+                    generateCost.FirstOrDefault().totalServiceFee += Math.Ceiling(serviceFeeSum * 100) / 100;
+                    generateCost.FirstOrDefault().totalTicketFee += Math.Ceiling(ticketFeeSum * 100) / 100;
+                    generateCost.FirstOrDefault().totalAmount += Math.Ceiling(cummulativeTotal * 100) / 100;
+
                     generateCost.FirstOrDefault().percentageCharge = percentage;
                     generateCost.FirstOrDefault().gatewayFee += flwVatAndStampDuty;
                     generateCost.FirstOrDefault().ivsNetRevenue += charge;
@@ -624,9 +664,14 @@
                         new()
                         {
                             totalTicketPurchased = 1,
-                            totalAmount = Math.Round((cummulativeTotal), 2),
-                            totalServiceFee = Math.Round(serviceFeeSum, 2),
-                            totalTicketFee = Math.Round(ticketFeeSum, 2),
+                            // totalAmount = Math.Round((cummulativeTotal), 2, MidpointRounding.AwayFromZero),
+                            // totalServiceFee = Math.Round(serviceFeeSum, 2, MidpointRounding.AwayFromZero),
+                            // totalTicketFee = Math.Round(ticketFeeSum, 2, MidpointRounding.AwayFromZero),
+                            
+                            totalAmount = Math.Ceiling(cummulativeTotal * 100) / 100,
+                            totalServiceFee = Math.Ceiling(serviceFeeSum * 100) / 100,
+                            totalTicketFee = Math.Ceiling(ticketFeeSum * 100) / 100,
+
                             percentageCharge = percentage,
                             gatewayFee = flwVatAndStampDuty,
                             ivsNetRevenue = charge,
