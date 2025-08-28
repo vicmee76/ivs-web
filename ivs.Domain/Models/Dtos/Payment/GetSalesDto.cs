@@ -28,6 +28,7 @@ namespace ivs.Domain.Models.Dtos.Payment
         public string? phoneNumber { get; set; }
         public int ticketQuantity { get; set; }
         public string? code { get; set; }
+        public DateTime? createdAt { get; set; }
         public bool isActive { get; set; }
         public decimal totalTicketFee { get; set; }
         public decimal ticketServiceFee { get; set; }
