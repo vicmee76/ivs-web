@@ -1032,21 +1032,21 @@
                                                 <TemplateColumn Title="Status" Sortable="false" Filterable="false">
                                                     <CellTemplate Context="ctx">
 
-                                                        @if (ctx.Item.paymentGateWayTransactionStatus.Equals(Helpers.NewStatus, StringComparison.OrdinalIgnoreCase))
+                                                        @if (ctx.Item.paymentGateWayTransactionStatus.Equals(Helpers.PendingStatus, StringComparison.OrdinalIgnoreCase))
                                                         {
-                                                            <MudText Color="Color.Warning"><b>@Helpers.PendingStatus</b></MudText>
+                                                            <MudChip T="string" Variant="Variant.Text" Color="Color.Warning">@Helpers.PendingStatus.ToLower()</MudChip>
                                                         }
                                                         else if (ctx.Item.paymentGateWayTransactionStatus.Equals(Helpers.FailedStatus, StringComparison.OrdinalIgnoreCase))
                                                         {
-                                                            <MudText Color="Color.Error"><b>@Helpers.FailedStatus</b></MudText>
+                                                            <MudChip T="string" Variant="Variant.Text" Color="Color.Error">@Helpers.FailedStatus.ToLower()</MudChip>
                                                         }
                                                         else if (ctx.Item.paymentGateWayTransactionStatus.Equals(Helpers.SuccessStatus, StringComparison.OrdinalIgnoreCase))
                                                         {
-                                                            <MudText Color="Color.Success"><b>@Helpers.SuccessStatus</b></MudText>
+                                                            <MudChip T="string" Variant="Variant.Text" Color="Color.Success">@Helpers.SuccessStatus.ToLower()</MudChip>
                                                         }
                                                         else
                                                         {
-                                                            <MudText Color="Color.Primary"><b>@ctx.Item.paymentGateWayTransactionStatus</b></MudText>
+                                                            <MudChip T="string" Variant="Variant.Text" Color="Color.Error">@ctx.Item.paymentGateWayTransactionStatus.ToLower()</MudChip>
                                                         }
                                                     </CellTemplate>
                                                 </TemplateColumn>

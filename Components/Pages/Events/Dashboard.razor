@@ -57,7 +57,7 @@
 
                     <div>
 
-                        <MudGrid Spacing="1">
+                        <MudGrid Spacing="5">
                             <MudItem xs="6" sm="6" md="6" lg="3" xl="3" xxl="3">
                                 <MudPaper Class="pa-5" Outlined="true" Style="background-color:#ffedf7">
                                     <div style="line-height:25px">
@@ -152,18 +152,6 @@
                                                   AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                                 </ToolBarContent>
                                 <Columns>
-                                    <TemplateColumn Title="Actions" Sortable="false" Filterable="false">
-                                        <CellTemplate Context="ctx">
-                                            @{
-                                                var eventPanelUrl = $"/events/event-panel/{ctx.Item.ivsEventId}";
-                                                var updateUrl = $"/events/update-event/{ctx.Item.ivsEventId}";
-                                            }
-                                            <MudMenu Icon="@Icons.Material.Filled.Settings" Size="Size.Small" Color="Color.Default">
-                                                <MudMenuItem Href="@eventPanelUrl">View event</MudMenuItem>
-                                                <MudMenuItem Href="@updateUrl">Edit event</MudMenuItem>
-                                            </MudMenu>
-                                        </CellTemplate>
-                                    </TemplateColumn>
                                     <PropertyColumn Property="x => x.eventOption" Title="Privacy" Sortable="true" Filterable="true" />
 
                                     <PropertyColumn Property="x => x.eventName" Title="Event Name" Sortable="true" Filterable="true" />
