@@ -15,10 +15,9 @@
 <MudContainer Fixed="false" MaxWidth="MaxWidth.Large" Style="background-color:white">
 <br/>
     <center>
-        <MudPaper Elevation="0" Outlined="false" MaxWidth="500px" Square="false" Class="ma-1 pa-2">
-            <div style="text-align:left">
-                <br />
-                <br />
+        <MudPaper Elevation="1" Outlined="false" MaxWidth="500px" Square="false" Class="ma-1 pa-2">
+            <div style="text-align:left; padding: 20px">
+                
                 <div id="reg-title">Choose a payment method.</div>
                 <br />
                <br />
@@ -98,10 +97,10 @@
                                 <div style=" padding:5px">
 
                                     <MudRadioGroup @bind-Value="@paymentGateWay">
-                                        <MudRadio Value="@("PAYSTACK")" Color="Color.Secondary">
-                                            <div style="display: flex; align-items: center; padding:20px">
-                                                <MudImage Src="images/backgrounds/paystack-logo.jpg" Alt="Paystack logo" Elevation="0" Height="30" Class="rounded-circle" />
-                                                <span style="font-size:13px; font-weight:bold; margin-left: 10px;">Pay with Paystack</span>
+                                        <MudRadio Value="@("PAYSTACK")" Color="Color.Surface">
+                                            <div style="display: flex; align-items: center; padding:10px">
+                                                <MudImage Src="images/backgrounds/pay.png" Alt="Paystack logo" Elevation="0" Height="30" Class="rounded-circle" />
+                                                <span style="font-size:14px; font-weight:bold; margin-left: 5px;">Pay with Paystack</span>
                                             </div>
                                         </MudRadio>
                                         

@@ -28,15 +28,15 @@
                             <span id="event-title">@_events.eventName</span>
                             <br /><br />
                             <div>
-                                <MudChip T="string" Size="Size.Small" Color="Color.Error"><b>@_events.eventOption.ToUpper()</b></MudChip>
-                                <MudChip T="string" Size="Size.Small" Color="Color.Error"><b>@_events.EventType.FirstOrDefault().name</b></MudChip>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Surface">@_events.eventOption.ToUpper()</MudChip>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Surface">@_events.EventType.FirstOrDefault().name</MudChip>
 
-                                <MudChip T="string" Size="Size.Small" Color="Color.Default" OnClick="@((e) => ActionShareEvent(_events.eventShortLink))" Icon="@Icons.Material.Filled.Share">
-                                    <b> Share</b>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Secondary" OnClick="@((e) => ActionShareEvent(_events.eventShortLink))" Icon="@Icons.Material.Filled.Share">
+                                    Share
                                 </MudChip>
 
-                                <MudChip T="string" Size="Size.Small" Color="Color.Default" OnClick="@((e) => ViewQrCodeAction(_events.qrCodeLink))" Icon="@Icons.Material.Filled.QrCodeScanner">
-                                    <b> Scan </b>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Surface" OnClick="@((e) => ViewQrCodeAction(_events.qrCodeLink))" Icon="@Icons.Material.Filled.QrCodeScanner">
+                                    Scan 
                                 </MudChip>
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                                 <div>
                                     @foreach (var t in _events.EventTime)
                                     {
-                                        <MudNavLink Icon="@Icons.Material.TwoTone.DateRange" IconColor="Color.Default">
+                                        <MudNavLink Icon="@Icons.Material.TwoTone.DateRange" IconColor="Color.Primary">
                                             @Convert.ToDateTime(t.startDateAndTime).ToString("ddd, dd MMM yyyy, HH:mm tt")
                                         </MudNavLink>
                                        

@@ -21,7 +21,7 @@
                     <br />
                     Please wait....
                     <br /><br />
-                    <MudIcon Icon="@Icons.Material.Filled.PendingActions" Size="Size.Large" Style="height:100px;width:100px;" Color="Color.Primary"></MudIcon>
+                    <MudIcon Icon="@Icons.Material.Filled.PendingActions" Size="Size.Large" Style="height:70px;width:70px;" Color="Color.Primary"></MudIcon>
                     <br />
                     <br />
                     <h3>
@@ -29,7 +29,7 @@
                         @trxref
                     </h3>
                     <br />
-                    <div style="font-size:medium">Your payment is processing. Do not close this page till you get confirmation.</div>
+                    <div style="font-size:medium">Payment processing. Don't close this page till you get confirmation.</div>
                 </div>
             }
             else
@@ -39,22 +39,25 @@
                     <div style="">
                         <div id="reg-title">Payment Successful.</div>
                         <br />
-                        <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Large" Style="height:150px;width:150px;" Color="Color.Success"></MudIcon>
+                        <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Medium" Style="height:70px;width:70px;" Color="Color.Success"></MudIcon>
                         <br /><br />
-                        <h3>
+                        <h4>
                             Order ID <br />
                             @trxref
-                        </h3>
+                        </h4>
                         <br />
-                        <div style="font-size:16px; line-height:30px">Your payment is successful, <br />you will get an email with your tickets</div>
+                        <div style="font-size:15px; line-height:30px"> Thank you for your purchase!</div>
+                        <br/>
+                        <br/>
+                        <MudButton Href="/events/discovery" Color="Color.Secondary" Variant="Variant.Filled" ButtonType="ButtonType.Button"> Explore events </MudButton>
                     </div>
                 }
                 else if (_isSuccessful == "failed")
                 {
                     <div>
-                        <div id="reg-title">Payment Successful.</div>
+                        <div id="reg-title">Payment Failed.</div>
                         <br />
-                        <MudIcon Icon="@Icons.Material.Filled.Cancel" Size="Size.Large" Style="height:150px;width:150px;" Color="Color.Error"></MudIcon>
+                        <MudIcon Icon="@Icons.Material.Filled.Cancel" Size="Size.Large" Style="height:70px;width:70px;" Color="Color.Error"></MudIcon>
                         <br />
                         <br />
                         <h3>
@@ -62,7 +65,13 @@
                             @trxref
                         </h3>
                         <br />
-                        <div style="font-size:medium">Opps... Your payment failed!</div>
+                        <div style="font-size:medium">Sorry... Payment failed!</div>
+                        
+                        <br />
+                        <br />
+                        
+                        <MudButton Href="/events/discovery" Color="Color.Secondary" Variant="Variant.Filled" ButtonType="ButtonType.Button"> Explore events </MudButton>
+
                     </div>
 
                 }
@@ -77,7 +86,7 @@
                         <br />
                         Please wait....
                         <br /><br />
-                        <MudIcon Icon="@Icons.Material.Filled.PendingActions" Size="Size.Large" Style="height:150px;width:150px;" Color="Color.Primary"></MudIcon>
+                        <MudIcon Icon="@Icons.Material.Filled.PendingActions" Size="Size.Large" Style="height:70px;width:70px;" Color="Color.Primary"></MudIcon>
                         <br />
                         <br />
                         <h3>
@@ -85,7 +94,7 @@
                             @trxref
                         </h3>
                         <br />
-                        <div style="font-size:medium">Your payment is pending. Do not close this page till you get confirmation or you get your ticket via email.</div>
+                        <div style="font-size:medium">Payment pending. Do not close this page till you get confirmation or you get your ticket via email.</div>
                     </div>
                 }
             }

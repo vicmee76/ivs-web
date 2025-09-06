@@ -42,7 +42,7 @@
                             {
                                 var title = $"{Convert.ToDateTime(com.StartDateAndTime).ToString("ddd, d MMM. yyyy, HH:mm tt")}";
 
-                                <div style="font-size: 18px; color: #1e0a3c; background-color: #fdf6fdfc; font-weight: bolder; padding: 20px">@title</div>
+                                <div style="font-size: 12px; color: #1e0a3c; background-color: #fdf6fdfc; font-weight: bolder; padding: 20px">@title</div>
 
                                 <div style="padding: 20px">
 
@@ -55,7 +55,7 @@
                                                 var amount = tic.ticketAmount.numberDecimal.ToString("C");
                                                 <MudItem xs="8" sm="8" md="8" lg="9" xl="9" xxl="9">
                                                     <div>
-                                                        <div><b>@tic.ticketName</b> &nbsp;
+                                                        <div>@tic.ticketName &nbsp;
 
                                                             @if(tic.ticketKind == Helpers.GroupTicket)
                                                             {
@@ -64,7 +64,7 @@
 
                                                         </div>
                                                         <br/>
-                                                        <div><b style="color: #e1901d">@amount</b></div>
+                                                        <div><MudText Typo="Typo.subtitle1" Style="font-weight: bold" Color="Color.Secondary">@amount </MudText></div>
                                                         <br/>
 
 
@@ -115,7 +115,6 @@
 
                                                 </MudItem>
 
-                                                <MudDivider></MudDivider>
                                                 <br/>
                                             }
 
@@ -135,7 +134,7 @@
                      <br/>
                      <br/>
                    
-                    <div>
+                    <div style="padding: 20px">
 
                         <span id="discovery-title-mid">Contact Information</span>
                         <br/>
@@ -184,11 +183,7 @@
                             <br />
 
                             <MudCheckBox T="bool" @bind-Value="hasAgreed" Size="Size.Small" Required="true">
-                                Agree to
-                                <MudLink Target="_blank" Href="/terms-and-conditions"> Terms & Conditions </MudLink>,
-                                <MudLink Target="_blank" Href="/privacy-policy" Typo="Typo.body2"> Privacy Policy </MudLink>,
-                                <MudLink Target="_blank" Href="/service-agreement" Typo="Typo.body2"> Service Agreement </MudLink> and
-                                <MudLink Target="_blank" Href="/refund-policy" Typo="Typo.body2"> Refund Policy </MudLink>
+                                Agree to the <MudLink Target="_blank" Href="/legal-stuff"> legal stuff </MudLink>
                             </MudCheckBox>
 
                         </div>
