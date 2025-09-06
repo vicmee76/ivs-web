@@ -750,8 +750,8 @@
             // Gateway settings (from config)
             var gatewayPercent = _config.GetValue<decimal>("Fees:FlwPercentage") / 100; // e.g. 1.5% -> 0.015
             var gatewayCap = _config.GetValue<decimal>("Fees:FlwFeeCapAmount");        // cap for percent
-            var fixedGatewayFee = _config.GetValue<decimal?>("Fees:FlwFixed") ?? 100m; // default ₦100
-            var fixedFeeThreshold = _config.GetValue<decimal?>("Fees:FlwFixedWaiveThreshold") ?? 2500m; // default ₦2,500
+            var fixedGatewayFee = _config.GetValue<decimal>("Fees:FixedFee"); // default ₦100
+            var fixedFeeThreshold = _config.GetValue<decimal?>("Fees:FixedThreshold"); // default ₦2,500
 
             // ---------- TWO-STEP fixed-fee logic ----------
             // Since gateway does NOT charge VAT on its fee, denom uses only (1 - p)
