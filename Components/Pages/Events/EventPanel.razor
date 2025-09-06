@@ -1549,25 +1549,39 @@
 
     private async Task GetFeeAction()
     {
-       if (settlementAmount < Helpers.MinimumWithdrawalAmount)
+        if (settlementAmount < Helpers.MinimumWithdrawalAmount)
         {
             _snackbar.Add($"Minimum deposit amount is {Helpers.MinimumWithdrawalAmount}", Severity.Error);
             _settlementRequestAction = true;
         }
         else
         {
-            var res = await _paymentService.GetTransferFee(settlementAmount, id);
-            if (res.result != null && res.result.code == ResponseCodes.ResponseCodeOk && res.result.success == true){
-                var result = (GetTransferFeeDto)res.result.data;
-                serviceFee = $"Fee : {result.totalDeduction.ToString("C")}; Payout Amount : {result.payoutAmount.ToString("C")}";
-                _settlementRequestAction = false;
-                StateHasChanged();
+            var fee = 0.00M;
+            var payout = 0.00M;
+
+            if (settlementAmount >= Helpers.MinimumWithdrawalAmount && settlementAmount <= 5000)
+            {
+                fee = 10.00M;
+            }
+            else if (settlementAmount is > 5000 and <= 50000)
+            {
+                fee = 25.00M;
+            }
+            else if (settlementAmount > 50000)
+            {
+                fee = 50.00M;
             }
             else
             {
-                _settlementRequestAction = true;
-                _snackbar.Add(res.result.message, Severity.Error);
+                _snackbar.Add($"Something went wrong calculating fees, please try again later.", Severity.Error);
+                return;
             }
+
+            payout = settlementAmount - fee;
+            serviceFee = $"Fee : {fee.ToString("C")}; Payout Amount : {payout.ToString("C")}";
+            _settlementRequestAction = false;
+            StateHasChanged();
+
         }
     }
 
@@ -1681,7 +1695,7 @@
         return salesDataGrid.ReloadServerData();
     }
 
-    
+
     private async Task ActionShareEvent(string link, string eventName)
     {
         DialogOptions opts = new DialogOptions()
@@ -1701,9 +1715,8 @@
             StateHasChanged();
         }
     }
-    
-    
-    
+
+
     private async Task DownloadAttendanceCsv()
     {
         try

@@ -26,7 +26,7 @@
                     <br />
                     <h3>
                         Order ID <br />
-                        @tx_ref
+                        @trxref
                     </h3>
                     <br />
                     <div style="font-size:medium">Your payment is processing. Do not close this page till you get confirmation.</div>
@@ -43,7 +43,7 @@
                         <br /><br />
                         <h3>
                             Order ID <br />
-                            @tx_ref
+                            @trxref
                         </h3>
                         <br />
                         <div style="font-size:16px; line-height:30px">Your payment is successful, <br />you will get an email with your tickets</div>
@@ -59,7 +59,7 @@
                         <br />
                         <h3>
                             Order ID <br />
-                            @tx_ref
+                            @trxref
                         </h3>
                         <br />
                         <div style="font-size:medium">Opps... Your payment failed!</div>
@@ -82,7 +82,7 @@
                         <br />
                         <h3>
                             Order ID <br />
-                            @tx_ref
+                            @trxref
                         </h3>
                         <br />
                         <div style="font-size:medium">Your payment is pending. Do not close this page till you get confirmation or you get your ticket via email.</div>
@@ -105,16 +105,12 @@
     public string? type { get; set; }
 
     [Parameter]
-    [SupplyParameterFromQuery(Name = "status")]
-    public string? status { get; set; }
+    [SupplyParameterFromQuery(Name = "trxref")]
+    public string? trxref { get; set; }
 
     [Parameter]
-    [SupplyParameterFromQuery(Name = "tx_ref")]
-    public string? tx_ref { get; set; }
-
-    [Parameter]
-    [SupplyParameterFromQuery(Name = "transaction_id")]
-    public string? transaction_id { get; set; }
+    [SupplyParameterFromQuery(Name = "reference")]
+    public string? reference { get; set; }
 
     public bool _processing { get; set; } = false;
     public string _isSuccessful { get; set; } = "pending";
@@ -130,11 +126,10 @@
         else
         {
             var queryParams = new Dictionary<string, string?>();
-            queryParams.Add("status", status);
-            queryParams.Add("tx_ref", tx_ref);
-            queryParams.Add("transaction_id", transaction_id);
+            queryParams.Add("trxref", trxref);
+            queryParams.Add("reference", reference);
 
-            if (string.IsNullOrEmpty(transaction_id) || string.IsNullOrEmpty(tx_ref) || string.IsNullOrEmpty(status))
+            if (string.IsNullOrEmpty(reference) || string.IsNullOrEmpty(trxref))
             {
                 _isSuccessful = "failed";
             }
