@@ -13,5 +13,7 @@ namespace ivs.Domain.Models.Dtos.Accounts
         public string accountNumber { get; set; }
         public string bankCode { get; set; }
         public string bankName { get; set; }
+        
+        public string recipientCode { get; set; }
     }
 }

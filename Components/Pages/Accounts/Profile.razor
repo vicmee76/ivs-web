@@ -426,7 +426,7 @@
             }
 
 
-            var banks = await _paymentService.GetBanks("NG");
+            var banks = await _paymentService.GetBanks("nigeria");
             if (banks.result.code == ResponseCodes.ResponseCodeOk)
             {
                 banksDtos = (List<GetBanksDto>)banks.result.data;

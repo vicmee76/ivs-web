@@ -45,13 +45,13 @@ namespace ivs_ui.Components.Data.Services.Payment
         }
 
 
-        public async Task<ResponseObject> GetBanks(string country = "NG")
+        public async Task<ResponseObject> GetBanks(string country = "nigeria")
         {
             try
             {
                 var queryParam = new Dictionary<string, string> { { "country", country } };
                 var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"flutterwave-get-banks/", Method.Get, null, headers, queryParam);
+                var response = await _webService.Call(ApiUrl, $"get-banks/", Method.Get, null, headers, queryParam);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -308,7 +308,7 @@ namespace ivs_ui.Components.Data.Services.Payment
             {
                 var req = new { account_number = accountNumber, account_bank = bankCode };
                 var headers = await _webService.GetAuthorizationHeaders();
-                var response = await _webService.Call(ApiUrl, $"flutterwave-verify-account-number/", Method.Post, req, headers);
+                var response = await _webService.Call(ApiUrl, $"verify-account-number/", Method.Post, req, headers);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)
@@ -330,7 +330,7 @@ namespace ivs_ui.Components.Data.Services.Payment
         {
             try
             {
-                var response = await _webService.Call(ApiUrl, $"verify-flutterwave-payment", Method.Post, null, null, model);
+                var response = await _webService.Call(ApiUrl, $"verify-payment", Method.Post, null, null, model);
                 var res = JsonConvert.DeserializeObject<ResponseObject>(response.Content ?? "");
                 var content = res?.result;
                 if (content?.code != ResponseCodes.ResponseCodeOk)

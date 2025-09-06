@@ -27,7 +27,7 @@
     justify-content: center; /* Horizontally center */
     height: 100vh;
     /* Background Image */
-    background-image: url('../images/backgrounds/dash-4.jpg');
+    background-image: url('../images/backgrounds/dash-2.jpg');
     background-size: cover; /* Ensures the image covers the entire div */
     background-position: center; /* Centers the image */
     background-repeat: no-repeat; /* Prevents repeating */
@@ -454,7 +454,7 @@
 
 #discovery-title-mid {
     font-family: "Akaya Telivigala", system-ui;
-    font-size: 35px;
+    font-size: 25px;
     color: #56375C;
 }
 
