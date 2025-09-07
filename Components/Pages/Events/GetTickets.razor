@@ -28,44 +28,32 @@
                             <span id="event-title">@_events.eventName</span>
                             <br /><br />
                             <div>
-                                <MudChip T="string" Size="Size.Small" Color="Color.Surface">@_events.eventOption.ToUpper()</MudChip>
-                                <MudChip T="string" Size="Size.Small" Color="Color.Surface">@_events.EventType.FirstOrDefault().name</MudChip>
-
-                                <MudChip T="string" Size="Size.Small" Color="Color.Secondary" OnClick="@((e) => ActionShareEvent(_events.eventShortLink))" Icon="@Icons.Material.Filled.Share">
-                                    Share
-                                </MudChip>
-
-                                <MudChip T="string" Size="Size.Small" Color="Color.Surface" OnClick="@((e) => ViewQrCodeAction(_events.qrCodeLink))" Icon="@Icons.Material.Filled.QrCodeScanner">
-                                    Scan 
-                                </MudChip>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Error">@_events.eventOption.ToUpper()</MudChip>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Secondary">@_events.EventType.FirstOrDefault().name</MudChip>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Warning" OnClick="@((e) => ActionShareEvent(_events.eventShortLink))" Icon="@Icons.Material.Filled.Share"> Share </MudChip>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Warning" OnClick="@((e) => ViewQrCodeAction(_events.qrCodeLink))" Icon="@Icons.Material.Filled.QrCodeScanner"> Scan </MudChip>
                             </div>
                         </div>
 
-                        <br />
-
                         <div class="image-lisiting-mobile">
                             <br/>
-                            <MudImage Fluid="true" Src="@_events.eventImagePath" Height="400" Width="400"/>
+                            <MudImage Fluid="true" Style="border-radius: 20px" Src="@_events.eventImagePath" Height="400" Width="400"/>
                             <br/>
                             <br/>
                         </div>
                         
                         <br/>
 
-                        <MudText Typo="Typo.h6"><b>About this event</b></MudText>
+                        <MudText Typo="Typo.subtitle1"><b>About this event</b></MudText>
                         <br/>
-                        <div style="line-height:35px; font-size:14px">
-                            <div>@_events.eventDescription</div>
+                        <div style="line-height:35px; font-size:13px">
+                           @_events.eventDescription
                         </div>
 
-                        <br /><br/>
+                        <br />
 
                         <div>
-
-                            <MudText Typo="Typo.h6"><b>Location</b></MudText>
-
-                            <br />
-
+                            <MudText Typo="Typo.subtitle1"><b>Location</b></MudText>
                             <MudNavLink Icon="@Icons.Material.TwoTone.LocationOn" IconColor="Color.Error">
                                 @_events.eventAddress | @_events.eventState
                             </MudNavLink>
@@ -83,7 +71,6 @@
                                 </MudButton>
                                 <br />
                             }
-                           
                         </div>
 
                         <br />
@@ -93,7 +80,7 @@
                             
                             <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
 
-                                <MudText Typo="Typo.h6"> <b>Date and time</b></MudText>
+                                <MudText Typo="Typo.subtitle1"> <b>Date and time</b></MudText>
                                 <br />
 
                                 <div>
@@ -110,7 +97,7 @@
                             
                             <MudItem xs="12" sm="12" md="12" lg="6" xl="6" xxl="6">
                                 
-                                <MudText Typo="Typo.h6"><b>Socials</b></MudText>
+                                <MudText Typo="Typo.subtitle1"><b>Socials</b></MudText>
                                 <br/>
 
                                 <MudGrid>
