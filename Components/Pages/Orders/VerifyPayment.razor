@@ -24,12 +24,12 @@
                     <MudIcon Icon="@Icons.Material.Filled.PendingActions" Size="Size.Large" Style="height:70px;width:70px;" Color="Color.Primary"></MudIcon>
                     <br />
                     <br />
-                    <h3>
+                    <h4>
                         Order ID <br />
                         @trxref
-                    </h3>
+                    </h4>
                     <br />
-                    <div style="font-size:medium">Payment processing. Don't close this page till you get confirmation.</div>
+                    <div style="font-size:13px">Payment processing. Don't close this page till you get confirmation.</div>
                 </div>
             }
             else
@@ -49,7 +49,7 @@
                         <div style="font-size:15px; line-height:30px"> Thank you for your purchase!</div>
                         <br/>
                         <br/>
-                        <MudButton Href="/events/discovery" Color="Color.Secondary" Variant="Variant.Filled" ButtonType="ButtonType.Button"> Explore events </MudButton>
+                        <MudButton Href="/events/discovery" Color="Color.Secondary" Size="Size.Small" Variant="Variant.Filled" ButtonType="ButtonType.Button"> Explore events </MudButton>
                     </div>
                 }
                 else if (_isSuccessful == "failed")
