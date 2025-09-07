@@ -55,7 +55,7 @@
                                                 var amount = tic.ticketAmount.numberDecimal.ToString("C");
                                                 <MudItem xs="8" sm="8" md="8" lg="9" xl="9" xxl="9">
                                                     <div>
-                                                        <div>@tic.ticketName &nbsp;
+                                                        <div> <b>@tic.ticketName</b> &nbsp;
 
                                                             @if(tic.ticketKind == Helpers.GroupTicket)
                                                             {
@@ -65,14 +65,14 @@
                                                         </div>
                                                         <br/>
                                                         <div><MudText Typo="Typo.subtitle1" Style="font-weight: bold" Color="Color.Secondary">@amount </MudText></div>
-                                                        <br/>
-
-
                                                         <div style="">
                                                             @* <div><small style="text-align: center"><b>Available : @tic.ticketInStock</b></small></div> *@
 
-                                                            <small> @tic.ticketDescription <br/>
-                                                                Admits @tic.groupSize person(s) each</small>
+                                                            <small>
+                                                                @tic.ticketDescription 
+                                                                <br/>
+                                                                Admits @tic.groupSize person(s) each
+                                                            </small>
                                                         </div>
 
                                                     </div>
@@ -108,13 +108,11 @@
                                                                 <MudSelectItem T="int" Value="5" />
                                                             </MudSelect>
                                                         }
-
                                                         <br/>
-
                                                     }
 
                                                 </MudItem>
-
+                                                <MudDivider></MudDivider>
                                                 <br/>
                                             }
 
