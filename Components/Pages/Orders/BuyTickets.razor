@@ -281,7 +281,10 @@
                                     </MudItem>
                                     <MudItem xs="5" sm="5" md="5" lg="4" xl="4" xxl="4">
                                         <div style="font-size: medium; text-align: end">
-                                            @generateCost.FirstOrDefault().totalServiceFee.ToString("C")
+                                            @{
+                                                var totalFee = generateCost.FirstOrDefault().totalServiceFee + generateCost.FirstOrDefault().gatewayFee;
+                                            }
+                                            @totalFee.ToString("C")
                                         </div>
                                     </MudItem>
                                    
